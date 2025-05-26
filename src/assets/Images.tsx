@@ -15,7 +15,7 @@ export const IMAGES = {
   apple: require('./icon/apple.png'),
   headerLogo: require('./icon/logo.png'),
   welcome: require('./image/welcome.png'),
-   visibility_off: require('./image/visibility_off.png'),
+  visibility_off: require('./image/visibility_off.png'),
   visibility: require('./image/visibility.png'),
   bg: require('./image/bg.png'),
   calnder: require('./image/calnder.png'),
@@ -26,4 +26,9 @@ export const IMAGES = {
   tick: require('./image/tick.png'),
   right: require('./image/right.png'),
   check1: require('./image/check1.png'),
+  intro1: require('./image/info1.png'),
+  intro2: require('./image/info2.png'),
+  intro3: require('./image/info3.png'),
+  intro4: require('./image/info4.png'),
+  intro5: require('./image/info5.png'),
 };
