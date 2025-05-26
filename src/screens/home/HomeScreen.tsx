@@ -19,10 +19,9 @@ import {SCREENS} from '../../navigation/screenNames';
 import CustomHeader from '../../component/common/CustomHeader';
 import {Loader} from '../../component';
 import {useGetDashboardQuery} from '../../api/dashboardApi';
+import { navigateTo } from '../../utils/commonFunction';
 
 type Props = {};
-
-
 
 const HomeScreen = (props: Props) => {
   const {
@@ -68,8 +67,28 @@ const HomeScreen = (props: Props) => {
         onShare={() => shareContent('Share via WhatsApp')}
         mainHeader
       />
-    
-  
+
+      <TouchableOpacity
+       onPress={()=>{
+        navigateTo(SCREENS.SignupScreen)
+       }}
+        style={{alignItems: 'center', justifyContent: 'center', top: 20}}>
+        <Text>Sign up</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+       onPress={()=>{
+        navigateTo(SCREENS.SigninScreen)
+       }}
+        style={{alignItems: 'center', justifyContent: 'center', top: 20}}>
+        <Text>Sign in</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+       onPress={()=>{
+        navigateTo(SCREENS.UserNameScreen)
+       }}
+        style={{alignItems: 'center', justifyContent: 'center', top: 20}}>
+        <Text>User Name</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };

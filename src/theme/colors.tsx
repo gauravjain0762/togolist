@@ -1,7 +1,10 @@
 export const colors = {
-  black: '#000000',
-  white: '#ffffff',
-  mainColor: 'orange',
+  black: "#000000",
+  white: "#ffffff",
+  mainColor: "orange",
+  primary:"#AE1927",
+  border:"#7878801F",
+  error:"#BD2332",
 
   _25201a: '#25201a',
   containerBGColor: 'rgba(51, 50, 50, 0.4)',

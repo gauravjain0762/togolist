@@ -3,20 +3,22 @@ import React from 'react';
 import {IMAGES} from '../../assets/Images';
 import {hp, wp} from '../../theme/fonts';
 import ProgressBar from 'react-native-animated-progress';
+import { navigateTo } from '../../utils/commonFunction';
+import { navigationRef } from '../../navigation/RootContainer';
 
 const AuthHeader = () => {
   return (
     <View style={styles.header}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={()=>{navigationRef.goBack()}}>
         <Image source={IMAGES.back} style={styles.back} />
       </TouchableOpacity>
       <View style={styles.bar}>
-        <ProgressBar
+        {/* <ProgressBar
           progress={1}
           height={4}
           backgroundColor="#1B1515"
           trackColor="#78788033"
-        />
+        /> */}
       </View>
     </View>
   );

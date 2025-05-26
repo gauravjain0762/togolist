@@ -3,19 +3,17 @@ import { RFValue } from "react-native-responsive-fontsize";
 
 export function getFontType(fontWeight: any) {
   if (fontWeight == 600) {
-    return 'Inter-SemiBold';
+    return 'InstrumentSans-Medium';
   } else if (fontWeight == 400) {
-    return 'Inter-Regular';
+    return 'InstrumentSans-Regular';
   } else if (fontWeight == 700) {
-    return 'Inter-Bold';
+    return 'InstrumentSans-Bold';
   } else if (fontWeight == 800) {
-    return 'Inter-Black';
+    return 'InstrumentSans-Bold';
   } else if (fontWeight == 500) {
-    return 'Inter-Medium';
-  } else if (fontWeight == 300) {
-    return 'Inter-Light';
-  } else {
-    return 'Inter-Regular';
+    return 'InstrumentSans-SemiBold';
+  }  else {
+    return 'InstrumentSans-Regular';
   }
 }
 

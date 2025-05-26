@@ -4,6 +4,7 @@ import {
   StatusBar,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useEffect} from 'react';
@@ -13,20 +14,27 @@ import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {Button, SocialBtn} from '../../component';
 import {IMAGES} from '../../assets/Images';
 import {navigateTo} from '../../utils/commonFunction';
-import {SCREEN_NAMES} from '../../navigation/screenNames';
+import {SCREEN_NAMES, SCREENS} from '../../navigation/screenNames';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const WelcomeScreen = () => {
   return (
-    <View style={[AppStyles.flex, styles.mainContainer]}>
+    <SafeAreaView
+      edges={['top']}
+      style={[AppStyles.flex, styles.mainContainer]}>
       <StatusBar barStyle={'light-content'} backgroundColor={colors.black} />
       <View style={styles.header}>
         <View style={AppStyles.flex} />
         <View style={[AppStyles.flex, AppStyles.Hcenter]}>
           <Image source={IMAGES.headerLogo} style={styles.headerlogo} />
         </View>
-        <View style={[AppStyles.flex, styles.login]}>
+        <TouchableOpacity
+          onPress={() => {
+            navigateTo(SCREENS.SigninScreen);
+          }}
+          style={[AppStyles.flex, styles.login]}>
           <Text style={styles.headerBtn}>{'Log in'}</Text>
-        </View>
+        </TouchableOpacity>
       </View>
       <ImageBackground source={IMAGES.welcome} style={styles.container}>
         <View style={styles.btns}>
@@ -34,8 +42,20 @@ const WelcomeScreen = () => {
             onPress={() => navigateTo(SCREEN_NAMES.IntroScreen)}
             title={'Sign up with Email'}
           />
-          <SocialBtn img={IMAGES.google} title={'Sign up with Google'} />
-          <SocialBtn img={IMAGES.apple} title={'Sign up with Apple'} />
+          <SocialBtn
+            img={IMAGES.google}
+            title={'Sign up with Google'}
+            onPress={() => {
+              navigateTo(SCREENS.UserNameScreen);
+            }}
+          />
+          <SocialBtn
+            img={IMAGES.apple}
+            title={'Sign up with Apple'}
+            onPress={() => {
+              navigateTo(SCREENS.UserNameScreen);
+            }}
+          />
         </View>
         <Text style={styles.footertext}>
           {
@@ -43,7 +63,7 @@ const WelcomeScreen = () => {
           }
         </Text>
       </ImageBackground>
-    </View>
+    </SafeAreaView>
   );
 };
 

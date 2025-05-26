@@ -5,6 +5,9 @@ export const SCREENS = {
   PanditProfileScreen: 'PanditProfileScreen',
   WelcomeScreen: 'WelcomeScreen',
   IntroScreen: 'IntroScreen',
+    SignupScreen: "SignupScreen",
+  SigninScreen: "SigninScreen",
+  UserNameScreen: "UserNameScreen",
 };
 
 export interface ScreenNames {
@@ -14,6 +17,9 @@ export interface ScreenNames {
   SplashScreen: string;
   PanditProfileScreen: string;
   IntroScreen: string;
+  SignupScreen: string;
+  SigninScreen: string;
+  UserNameScreen: string;
 }
 
 export const SCREEN_NAMES: ScreenNames = {

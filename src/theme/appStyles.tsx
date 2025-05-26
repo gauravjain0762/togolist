@@ -5,6 +5,7 @@ import {hp} from './fonts';
 export const AppStyles = StyleSheet.create({
   flex: {
     flex: 1,
+    backgroundColor: colors.white,
   },
   side: {
     paddingHorizontal: 20,

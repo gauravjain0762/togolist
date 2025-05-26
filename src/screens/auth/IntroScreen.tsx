@@ -3,13 +3,14 @@ import React, {useEffect} from 'react';
 import {colors} from '../../theme/colors';
 import {AuthHeader} from '../../component';
 import {AppStyles} from '../../theme/appStyles';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const IntroScreen = () => {
   return (
-    <View style={AppStyles.flex}>
+    <SafeAreaView edges={['top']} style={AppStyles.flex}>
       <StatusBar barStyle={'dark-content'} backgroundColor={colors.white} />
       <AuthHeader />
-    </View>
+    </SafeAreaView>
   );
 };
 

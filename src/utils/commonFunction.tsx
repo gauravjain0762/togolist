@@ -21,6 +21,15 @@ export const emailCheck = (email: string) => {
   }
 };
 
+ export const validatePassword = (password: string) => {
+  return {
+    length: password.length >= 8,
+    number: /\d/.test(password),
+    uppercase: /[A-Z]/.test(password),
+    specialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+  };
+};
+
 export const nameCheck = (name: string) => {
   let reg = /^([a-zA-Z ]){2,30}$/;
   if (reg.test(name) === false) {
