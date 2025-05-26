@@ -1,131 +1,80 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import { StyleSheet, Text, View, SafeAreaView, Animated, Easing } from 'react-native';
+import React, { useRef } from 'react';
+import { Provider } from 'react-redux';
+// import store from './src/redux';
+import Toast from 'react-native-toast-message';
+import { colors } from './src/theme/colors';
+import { hp, commonFontStyle, SCREEN_WIDTH } from './src/theme/fonts';
+import StackNavigator from './src/navigation/StackNavigator';
+import RootContainer from './src/navigation/RootContainer';
+import ToastComponent from './src/component/common/ToastComponent';
+import {PersistGate} from 'redux-persist/integration/react';
+import { persistor, store } from './src/store';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+type Props = {};
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const App = (props: Props) => {
+  
+  const lineAnim = useRef(new Animated.Value(1)).current;
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+  const startLineAnimation = () => {
+    // Reset the animation value to 1 before starting it
+    lineAnim.setValue(1);
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    Animated.timing(lineAnim, {
+      toValue: 0,
+      duration: 3000,
+      easing: Easing.linear,
+      useNativeDriver: false, // width anim can't use native driver
+    }).start();
   };
 
-  /*
-   * To keep the template simple and small we're adding padding to prevent view
-   * from rendering under the System UI.
-   * For bigger apps the recommendation is to use `react-native-safe-area-context`:
-   * https://github.com/AppAndFlow/react-native-safe-area-context
-   *
-   * You can read more about it here:
-   * https://github.com/react-native-community/discussions-and-proposals/discussions/827
-   */
-  const safePadding = '5%';
+  const toastConfig = {
+    success: ({text1, ...rest}: any) => (
+      <ToastComponent type="success" text1={text1} lineAnim={lineAnim} />
+    ),
+    error: ({text1, ...rest}: any) => (
+      <ToastComponent type="error" text1={text1} lineAnim={lineAnim} />
+    ),
+  };
 
   return (
-    <View style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        style={backgroundStyle}>
-        <View style={{paddingRight: safePadding}}>
-          <Header/>
-        </View>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-            paddingHorizontal: safePadding,
-            paddingBottom: safePadding,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </View>
+    <Provider store={store}>
+     <PersistGate loading={null} persistor={persistor}>
+      <View style={{ flex: 1 }}>
+        <RootContainer />
+        <Toast
+            config={toastConfig}
+            position="bottom"
+            topOffset={0}
+            visibilityTime={3000}
+            onShow={() => {
+              startLineAnimation(); // Reset and trigger the animation
+            }}
+          />
+      </View>
+      </PersistGate>
+      </Provider>
   );
-}
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+};
 
 export default App;
+
+const styles = StyleSheet.create({
+  toastStyle: {
+    backgroundColor: 'red',
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    width: SCREEN_WIDTH,
+  },
+  textStyleToastSuccess: {
+    backgroundColor: 'green',
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    width: SCREEN_WIDTH,
+  },
+  textStyleToast: {
+    ...commonFontStyle(500, 14, colors.white),
+    textAlign: 'center'
+  },
+});

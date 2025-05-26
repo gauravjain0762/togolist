@@ -21,7 +21,7 @@ const CustomHeader = ({onBack, onShare, mainHeader}: any) => {
         />
         <View />
         {/* <Image source={IMAGES.logo} style={{width:30,height:30}}/> */}
-        <Text style={[styles.title, {marginLeft: 0}]}>{'Mangal Bhav'}</Text>
+        <Text style={[styles.title, {marginLeft: 0}]}>{'Togolist'}</Text>
         {/* <TouchableOpacity onPress={onShare} style={styles.shareButton}>
         <Image source={IMAGES.ic_share} style={{width:28,height:28,tintColor:colors.white}}/>
   
