@@ -1,5 +1,5 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import type {RootState} from '../store';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import type { RootState } from '../store';
 
 interface LoaderState {
   pendingRequests: number;
@@ -23,9 +23,9 @@ const loaderSlice = createSlice({
     },
     setLoadingState(
       state,
-      action: PayloadAction<{key: string; isLoading: boolean}>,
+      action: PayloadAction<{ key: string; isLoading: boolean }>,
     ) {
-      const {key, isLoading} = action.payload;
+      const { key, isLoading } = action.payload;
       state.loadingStates[key] = isLoading;
     },
     resetLoadingStates(state) {
@@ -49,7 +49,7 @@ export const selectIsLoading = (state: RootState) =>
 // Per-feature loading flag
 export const selectLoadingState =
   (key: string) =>
-  (state: RootState): boolean =>
-    state.loader.loadingStates[key] ?? false;
+    (state: RootState): boolean =>
+      state.loader.loadingStates[key] ?? false;
 
 export default loaderSlice.reducer;

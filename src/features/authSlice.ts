@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {persistReducer} from 'redux-persist';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { persistReducer } from 'redux-persist';
 
 interface AppState {
   isLoading: boolean;
@@ -41,14 +41,14 @@ const authPersistConfig = {
   storage: AsyncStorage,
   // Only persist these fields
   whitelist: [
-    
-    
+
+
 
     'loginModal',
     'flashModal',
 
-    
-    
+
+
   ],
 };
 
