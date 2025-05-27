@@ -24,22 +24,22 @@ const WelcomeScreen = () => {
       style={[AppStyles.flex, styles.mainContainer]}>
       <StatusBar barStyle={'light-content'} backgroundColor={colors.black} />
       <View style={styles.header}>
-        <View style={AppStyles.flex} />
-        <View style={[AppStyles.flex, AppStyles.Hcenter]}>
+        <View style={AppStyles.flex1} />
+        <View style={[AppStyles.flex1, AppStyles.Hcenter]}>
           <Image source={IMAGES.headerLogo} style={styles.headerlogo} />
         </View>
         <TouchableOpacity
           onPress={() => {
             navigateTo(SCREENS.SigninScreen);
           }}
-          style={[AppStyles.flex, styles.login]}>
+          style={[styles.login]}>
           <Text style={styles.headerBtn}>{'Log in'}</Text>
         </TouchableOpacity>
       </View>
       <ImageBackground source={IMAGES.welcome} style={styles.container}>
         <View style={styles.btns}>
           <Button
-            onPress={() => navigateTo(SCREEN_NAMES.IntroScreen)}
+            onPress={() => navigateTo(SCREEN_NAMES.SignupScreen)}
             title={'Sign up with Email'}
           />
           <SocialBtn
@@ -108,5 +108,6 @@ const styles = StyleSheet.create({
   },
   login: {
     alignItems: 'flex-end',
+    flex:1
   },
 });

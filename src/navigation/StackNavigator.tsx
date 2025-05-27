@@ -14,6 +14,7 @@ import SigninScreen from "../screens/auth/SigninScreen";
 import UserNameScreen from "../screens/auth/UserNameScreen";
 import WelcomeScreen from "../screens/auth/WelcomeScreen";
 import IntroScreen from "../screens/auth/IntroScreen";
+import TabNavigator from "./TabNavigator";
 
 export type RootStackParamList = {
   HomeScreen: undefined;
@@ -146,7 +147,7 @@ const StackNavigator: FC = () => {
   // }
 
   return (
-    <Stack.Navigator initialRouteName={SCREENS.WelcomeScreen}>
+    <Stack.Navigator initialRouteName={SCREENS.IntroScreen}>
       <Stack.Screen
         options={({navigation}) => ({headerShown: false})}
         name={SCREENS.SplashScreen}
@@ -157,16 +158,12 @@ const StackNavigator: FC = () => {
         name={SCREENS.LoginScreen}
         component={LoginScreen}
       />
-      <Stack.Screen
+       <Stack.Screen
         options={({navigation}) => ({headerShown: false})}
-        name={SCREENS.HomeScreen}
-        component={HomeScreen}
+        name={SCREENS.TabNavigator}
+        component={TabNavigator}
       />
-      <Stack.Screen
-        options={({navigation}) => ({headerShown: false})}
-        name={SCREENS.PanditProfileScreen}
-        component={PanditProfileScreen}
-      />
+    
       <Stack.Screen
         options={({navigation}) => ({headerShown: false})}
         name={SCREENS.WelcomeScreen}

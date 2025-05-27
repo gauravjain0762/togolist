@@ -22,7 +22,8 @@ import {
 import {colors} from '../../theme/colors';
 import CustomBtn from '../../component/common/CustomBtn';
 import {CustomTextInput} from '../../component';
-import {emailCheck, validatePassword} from '../../utils/commonFunction';
+import {emailCheck, navigateTo, validatePassword} from '../../utils/commonFunction';
+import { SCREENS } from '../../navigation/screenNames';
 
 const steps = [
   {
@@ -110,13 +111,13 @@ const SigninScreen = ({navigation}: any) => {
     }
 
     setEmailErr(''); // Clear error if valid
-
-    if (stepIndex < steps.length - 1) {
-      setStepIndex(stepIndex + 1);
-    } else {
-      console.log('Form complete', formData);
-      // Submit or navigate here
-    }
+    navigateTo(SCREENS.TabNavigator)
+    // if (stepIndex < steps.length - 1) {
+    //   setStepIndex(stepIndex + 1);
+    // } else {
+    //   console.log('Form complete', formData);
+    //   // Submit or navigate here
+    // }
   };
 
   return (

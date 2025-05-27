@@ -10,7 +10,7 @@ const SplashScreen = (props: Props) => {
   const navigation = useNavigation();
   useEffect(() => {
     setTimeout(() => {
-      resetNavigation(SCREENS.LoginScreen);
+      resetNavigation(SCREENS.IntroScreen);
     }, 1000);
   }, []);
 

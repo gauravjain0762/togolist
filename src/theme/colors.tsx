@@ -3,6 +3,7 @@ export const colors = {
   white: "#ffffff",
   mainColor: "orange",
   primary:"#AE1927",
+  primary1:"#BD2332",
   border:"#7878801F",
   error:"#BD2332",
 

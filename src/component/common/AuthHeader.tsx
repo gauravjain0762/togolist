@@ -21,12 +21,12 @@ const AuthHeader: FC<header> = ({
   console.log('proggress', proggress);
   return (
     <View style={styles.header}>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => {
           navigationRef.goBack();
         }}>
         <Image source={IMAGES.back} style={styles.back} />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <View style={styles.bar}>
         <ProgressBar
           progress={proggress}

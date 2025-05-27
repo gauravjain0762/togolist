@@ -7,6 +7,9 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import Swiper from 'react-native-swiper';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {IMAGES} from '../../assets/Images';
+import CustomBtn from '../../component/common/CustomBtn';
+import { navigateTo } from '../../utils/commonFunction';
+import { SCREENS } from '../../navigation/screenNames';
 
 let data = [
   {
@@ -44,9 +47,10 @@ let data = [
 const IntroScreen = () => {
   const [stap, setStap] = useState(0);
   return (
-    <View style={[AppStyles.flex, styles.mainContainor]}>
+    <SafeAreaView style={[AppStyles.flex, styles.mainContainor]}>
       <StatusBar barStyle={'dark-content'} backgroundColor={colors.white} />
       <AuthHeader proggress={stap} />
+        <View style={[styles.lineStyle,{marginTop:10}]}/>
       <View style={styles.sliderContainer}>
         <Swiper
           onIndexChanged={i => setStap((i + 1) * 20)}
@@ -63,7 +67,17 @@ const IntroScreen = () => {
           ))}
         </Swiper>
       </View>
-    </View>
+      <View style={styles.lineStyle}/>
+        <CustomBtn
+          style={styles.button}
+          buttonText={styles.buttonText}
+          onPress={() => {
+            // handleNext();
+            navigateTo(SCREENS.WelcomeScreen)
+          }}
+          title={'Create Account'}
+        />
+    </SafeAreaView>
   );
 };
 
@@ -93,4 +107,15 @@ const styles = StyleSheet.create({
     ...commonFontStyle(700, 40, colors.white),
     marginBottom: hp(120),
   },
+  button:{
+    marginTop:10,
+  },
+   buttonText: {
+    ...commonFontStyle(700, 18, colors.white),
+  },
+  lineStyle:{
+    borderWidth:0.7,
+    width:"100%",
+    borderColor:"#1B15151A"
+  }
 });

@@ -31,4 +31,23 @@ export const IMAGES = {
   intro3: require('./image/info3.png'),
   intro4: require('./image/info4.png'),
   intro5: require('./image/info5.png'),
+
+  //create
+  trip_bg: require('./icon/create/trip_bg.png'),
+  requestHost_bg: require('./icon/create/requestHost_bg.png'),
+  list_bg: require('./icon/create/list_bg.png'),
+  Itinerary_bg: require('./icon/create/Itinerary_bg.png'),
+  experience_bg: require('./icon/create/experience_bg.png'),
+  event_bg: require('./icon/create/event_bg.png'),
+  canlder: require('./icon/create/canlder.png'),
+  camera: require('./icon/create/camera.png'),
+  bucketList_bg: require('./icon/create/bucketList_bg.png'),
+    location: require('./icon/create/location.png'),
+
+  //tab
+  trips: require('./icon/tab/trips.png'),
+  profile: require('./icon/tab/profile.png'),
+  newList: require('./icon/tab/newList.png'),
+  shape: require('./icon/tab/shape.png'),
+  search: require('./icon/tab/search.png'),
 };
