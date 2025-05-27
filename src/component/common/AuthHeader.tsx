@@ -1,5 +1,5 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {FC} from 'react';
+import React, {FC, memo} from 'react';
 import {IMAGES} from '../../assets/Images';
 import {hp, wp} from '../../theme/fonts';
 import ProgressBar from 'react-native-animated-progress';
@@ -18,6 +18,7 @@ const AuthHeader: FC<header> = ({
   height,
   onBackPress = () => {},
 }) => {
+  console.log('proggress', proggress);
   return (
     <View style={styles.header}>
       <TouchableOpacity
@@ -40,7 +41,7 @@ const AuthHeader: FC<header> = ({
   );
 };
 
-export default AuthHeader;
+export default memo(AuthHeader);
 
 const styles = StyleSheet.create({
   back: {

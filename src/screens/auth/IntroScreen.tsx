@@ -48,12 +48,14 @@ const IntroScreen = () => {
       <StatusBar barStyle={'dark-content'} backgroundColor={colors.white} />
       <AuthHeader proggress={stap} />
       <View style={styles.sliderContainer}>
-        <Swiper onIndexChanged={i => setStap(stap * 20)} style={styles.wrapper}>
+        <Swiper
+          onIndexChanged={i => setStap((i + 1) * 20)}
+          style={styles.wrapper}>
           {data?.map((i, index) => (
             <ImageBackground
-              key={i?.id}
               source={i?.images}
               resizeMode="cover"
+              key={i?.name}
               style={styles.slide1}>
               <Text style={styles.title}>{i?.name}</Text>
               <Text style={styles.text}>{i?.info}</Text>
