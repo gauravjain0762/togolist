@@ -1,6 +1,5 @@
 import {StyleSheet} from 'react-native';
 import {colors} from './colors';
-import {hp} from './fonts';
 
 export const AppStyles = StyleSheet.create({
   flex: {
@@ -9,6 +8,9 @@ export const AppStyles = StyleSheet.create({
   },
   flex1: {
     flex: 1,
+  },
+  flexGrow: {
+    flexGrow: 1,
   },
   side: {
     paddingHorizontal: 10,

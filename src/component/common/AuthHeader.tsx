@@ -1,5 +1,5 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {FC, memo} from 'react';
+import React, {FC, memo, useRef} from 'react';
 import {IMAGES} from '../../assets/Images';
 import {hp, wp} from '../../theme/fonts';
 import ProgressBar from 'react-native-animated-progress';
@@ -11,24 +11,26 @@ type header = {
   proggress?: number;
   height?: number;
   onBackPress?: () => void;
-  showBack:any
+  showBack?: any;
 };
 
 const AuthHeader: FC<header> = ({
   proggress = 0,
   height,
   onBackPress = () => {},
-  showBack
+  showBack = true,
 }) => {
   console.log('proggress', proggress);
   return (
     <View style={styles.header}>
-     {showBack && <TouchableOpacity
-        onPress={() => {
-        onBackPress ? onBackPress() :  navigationRef.goBack();
-        }}>
-        <Image source={IMAGES.back} style={styles.back} />
-      </TouchableOpacity>}
+      {showBack && (
+        <TouchableOpacity
+          onPress={() => {
+            onBackPress ? onBackPress() : navigationRef.goBack();
+          }}>
+          <Image source={IMAGES.back2} style={styles.back} />
+        </TouchableOpacity>
+      )}
       <View style={styles.bar}>
         <ProgressBar
           progress={proggress}
@@ -47,8 +49,8 @@ export default memo(AuthHeader);
 
 const styles = StyleSheet.create({
   back: {
-    width: wp(16),
-    height: wp(16),
+    width: wp(24),
+    height: wp(24),
     resizeMode: 'contain',
   },
   header: {
@@ -60,8 +62,8 @@ const styles = StyleSheet.create({
   },
   bar: {
     flexGrow: 1,
-    paddingLeft: wp(64),
-    paddingRight: wp(80),
+    paddingLeft: wp(40),
+    paddingRight: wp(64),
     // paddingHorizontal: wp(80),
   },
 });

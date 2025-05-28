@@ -1,21 +1,22 @@
-import { FC } from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import { useAppDispatch } from "../redux/hooks";
-import { colors } from "../theme/colors";
-import { Text } from "react-native";
-import HomeScreen from "../screens/home/HomeScreen";
-import { ScreenNames, SCREENS } from "./screenNames";
-import LoginScreen from "../screens/auth/LoginScreen";
-import { SET_FCM_TOKEN } from "../redux/actionTypes";
-import SplashScreen from "../screens/auth/SplashScreen";
-import PanditProfileScreen from "../screens/home/PanditProfileScreen";
-import SignupScreen from "../screens/auth/SignupScreen";
-import SigninScreen from "../screens/auth/SigninScreen";
-import UserNameScreen from "../screens/auth/UserNameScreen";
-import WelcomeScreen from "../screens/auth/WelcomeScreen";
-import IntroScreen from "../screens/auth/IntroScreen";
-import TabNavigator from "./TabNavigator";
-import VerifyAccountScreen from "../screens/auth/VerifyAccountScreen";
+import {FC} from 'react';
+import {createStackNavigator} from '@react-navigation/stack';
+import {useAppDispatch} from '../redux/hooks';
+import {colors} from '../theme/colors';
+import {Text} from 'react-native';
+import HomeScreen from '../screens/home/HomeScreen';
+import {ScreenNames, SCREENS} from './screenNames';
+import LoginScreen from '../screens/auth/LoginScreen';
+import {SET_FCM_TOKEN} from '../redux/actionTypes';
+import SplashScreen from '../screens/auth/SplashScreen';
+import PanditProfileScreen from '../screens/home/PanditProfileScreen';
+import SignupScreen from '../screens/auth/SignupScreen';
+import SigninScreen from '../screens/auth/SigninScreen';
+import UserNameScreen from '../screens/auth/UserNameScreen';
+import WelcomeScreen from '../screens/auth/WelcomeScreen';
+import IntroScreen from '../screens/auth/IntroScreen';
+import TabNavigator from './TabNavigator';
+import VerifyAccountScreen from '../screens/auth/VerifyAccountScreen';
+import PlaceDetails from '../screens/newList/PlaceDetails';
 
 export type RootStackParamList = {
   HomeScreen: undefined;
@@ -159,12 +160,12 @@ const StackNavigator: FC = () => {
         name={SCREENS.LoginScreen}
         component={LoginScreen}
       />
-       <Stack.Screen
+      <Stack.Screen
         options={({navigation}) => ({headerShown: false})}
         name={SCREENS.TabNavigator}
         component={TabNavigator}
       />
-    
+
       <Stack.Screen
         options={({navigation}) => ({headerShown: false})}
         name={SCREENS.WelcomeScreen}
@@ -176,25 +177,29 @@ const StackNavigator: FC = () => {
         component={IntroScreen}
       />
       <Stack.Screen
-              options={({ navigation }) => ({ headerShown: false })}
+        options={({navigation}) => ({headerShown: false})}
         name={SCREENS.SignupScreen}
         component={SignupScreen}
-       
       />
       <Stack.Screen
-        options={({ navigation }) => ({ headerShown: false })}
+        options={({navigation}) => ({headerShown: false})}
         name={SCREENS.SigninScreen}
         component={SigninScreen}
       />
       <Stack.Screen
-        options={({ navigation }) => ({ headerShown: false })}
+        options={({navigation}) => ({headerShown: false})}
         name={SCREENS.UserNameScreen}
         component={UserNameScreen}
       />
       <Stack.Screen
-        options={({ navigation }) => ({ headerShown: false })}
+        options={({navigation}) => ({headerShown: false})}
         name={SCREENS.VerifyAccountScreen}
         component={VerifyAccountScreen}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.PlaceDetails}
+        component={PlaceDetails}
       />
     </Stack.Navigator>
   );

@@ -115,14 +115,13 @@ const VerifyAccountScreen = ({navigation}: any) => {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
     justifyContent: 'center',
-    height: SCREEN_HEIGHT * 0.855,
     marginHorizontal: 20,
     borderRadius: 20,
     overflow: 'hidden',
-    // padding:hp(24)
     paddingVertical: 20,
+    marginBottom: hp(21),
   },
 
   title: {

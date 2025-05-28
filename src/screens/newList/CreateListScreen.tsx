@@ -10,13 +10,15 @@ import {
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
-import {commonFontStyle, SCREEN_HEIGHT} from '../../theme/fonts';
+import {commonFontStyle, hp, SCREEN_HEIGHT, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {IMAGES} from '../../assets/Images';
 import {Loader} from '../../component';
 import {useGetDashboardQuery} from '../../api/dashboardApi';
 import CustomBtn from '../../component/common/CustomBtn';
 import RenderPrivacyOption from '../../component/createNew/RenderPrivacyOption';
+import {navigateTo} from '../../utils/commonFunction';
+import {SCREENS} from '../../navigation/screenNames';
 
 const options = [
   'List',
@@ -64,29 +66,31 @@ const CreateListScreen = () => {
   };
 
   return (
-    <SafeAreaView style={[AppStyles.mainWhiteContainer, AppStyles.side]}>
+    <SafeAreaView style={[AppStyles.mainWhiteContainer, styles.containor]}>
       <Loader visible={dashboardLoading} />
 
-      <Text style={styles.heading}>{'Create New'}</Text>
+      <View style={styles.header}>
+        <Text style={styles.heading}>{'Create New'}</Text>
 
-      <View style={styles.optionsWrapper}>
-        {options.map(option => (
-          <TouchableOpacity
-            key={option}
-            onPress={() => setActiveOption(option)}
-            style={[
-              styles.optionItem,
-              activeOption === option && styles.activeOption,
-            ]}>
-            <Text
+        <View style={styles.optionsWrapper}>
+          {options.map(option => (
+            <TouchableOpacity
+              key={option}
+              onPress={() => setActiveOption(option)}
               style={[
-                styles.optionText,
-                activeOption === option && styles.activeOptionText,
+                styles.optionItem,
+                activeOption === option && styles.activeOption,
               ]}>
-              {option}
-            </Text>
-          </TouchableOpacity>
-        ))}
+              <Text
+                style={[
+                  styles.optionText,
+                  activeOption === option && styles.activeOptionText,
+                ]}>
+                {option}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
 
       <ImageBackground
@@ -182,7 +186,7 @@ const CreateListScreen = () => {
           <CustomBtn
             style={styles.button}
             onPress={() => {
-              // handleNext();
+              navigateTo(SCREENS.PlaceDetails);
             }}
             buttonText={styles.buttonText}
             title={'Next'}
@@ -196,6 +200,9 @@ const CreateListScreen = () => {
 export default CreateListScreen;
 
 const styles = StyleSheet.create({
+  containor: {
+    paddingHorizontal: wp(16),
+  },
   heading: {
     marginVertical: 10,
     ...commonFontStyle(600, 20, colors.black),
@@ -204,14 +211,16 @@ const styles = StyleSheet.create({
     marginTop: 4,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 4,
+    gap: 5,
   },
   optionItem: {
     borderWidth: 1,
     borderColor: colors.primary1,
     borderRadius: 12,
-    paddingHorizontal: 18,
+    paddingHorizontal: wp(12),
     paddingVertical: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   optionText: {
     ...commonFontStyle(500, 14, colors.primary1),
@@ -224,11 +233,12 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     justifyContent: 'center',
-    height: SCREEN_HEIGHT * 0.68,
     borderRadius: 20,
     overflow: 'hidden',
     paddingVertical: 20,
     marginTop: 20,
+    flex: 1,
+    marginBottom: hp(18),
   },
   button: {
     position: 'absolute',
@@ -359,5 +369,8 @@ const styles = StyleSheet.create({
   },
   buttonText1: {
     ...commonFontStyle(600, 12, colors.black),
+  },
+  header: {
+    paddingHorizontal: wp(8),
   },
 });

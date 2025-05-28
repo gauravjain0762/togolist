@@ -1,19 +1,20 @@
 export const SCREENS = {
   HomeScreen: 'HomeScreen',
   LoginScreen: 'LoginScreen',
-    TabNavigator: 'TabNavigator',
+  TabNavigator: 'TabNavigator',
   SplashScreen: 'SplashScreen',
   PanditProfileScreen: 'PanditProfileScreen',
   WelcomeScreen: 'WelcomeScreen',
   IntroScreen: 'IntroScreen',
-    SignupScreen: "SignupScreen",
-  SigninScreen: "SigninScreen",
-  UserNameScreen: "UserNameScreen",
-  SearchScreen:"SearchScreen",
-  CreateListScreen:"CreateListScreen",
-  ShapeScreen:"ShapeScreen",
-  ProfileScreen:"ProfileScreen",
-  VerifyAccountScreen:"VerifyAccountScreen"
+  SignupScreen: 'SignupScreen',
+  SigninScreen: 'SigninScreen',
+  UserNameScreen: 'UserNameScreen',
+  SearchScreen: 'SearchScreen',
+  CreateListScreen: 'CreateListScreen',
+  ShapeScreen: 'ShapeScreen',
+  ProfileScreen: 'ProfileScreen',
+  VerifyAccountScreen: 'VerifyAccountScreen',
+  PlaceDetails: 'PlaceDetails',
 };
 
 export interface ScreenNames {
@@ -26,12 +27,13 @@ export interface ScreenNames {
   SignupScreen: string;
   SigninScreen: string;
   UserNameScreen: string;
-  SearchScreen:string
-  CreateListScreen:string
-  ShapeScreen:string
-  ProfileScreen:string
-  TabNavigator:string
-  VerifyAccountScreen:string
+  SearchScreen: string;
+  CreateListScreen: string;
+  ShapeScreen: string;
+  ProfileScreen: string;
+  TabNavigator: string;
+  VerifyAccountScreen: string;
+  PlaceDetails: string;
 }
 
 export const SCREEN_NAMES: ScreenNames = {

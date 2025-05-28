@@ -60,7 +60,7 @@ const CustomTabBar = ({state, navigation}: any) => {
                 defaultSource={iconName}
                 style={styles.carImage}
                 resizeMode="contain"
-                tintColor={isFocused ? "#BD2332" : colors.black}
+                tintColor={isFocused ? '#BD2332' : colors.black}
               />
             ) : (
               <FastImage
@@ -105,17 +105,15 @@ const styles = StyleSheet.create({
   },
   tabBarContainer: {
     flexDirection: 'row',
-    position: 'absolute',
-    bottom: 0,
     gap: 15,
     alignSelf: 'center',
-    height: hp(60),
     alignItems: 'center',
     justifyContent: 'space-around',
     paddingHorizontal: 10,
-    borderTopWidth:1,
-    borderColor:"#E3E3E3",
-    backgroundColor:colors.white
+    borderTopWidth: 1,
+    borderColor: '#E3E3E3',
+    backgroundColor: colors.white,
+    paddingVertical: hp(6),
   },
   tabButton: {
     width: wp(65),
