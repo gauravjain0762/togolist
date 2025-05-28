@@ -141,18 +141,18 @@ const ProfileScreen = (props: Props) => {
   };
 
   return (
-    <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
+    <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader onSearchPress={() => {}} onMorePress={() => {}} />
       <Loader visible={false} />
       <ScrollView showsVerticalScrollIndicator={false} style={[AppStyles.mainSide, AppStyles.flex]}>
-        <View style={styles.searchContainer}>
+        {/* <View style={styles.searchContainer}>
           <Image source={IMAGES.search} style={styles.searchIcon} />
           <TextInput
             placeholder="Search Profile"
             placeholderTextColor={colors.gray}
             style={styles.searchInput}
           />
-        </View>
+        </View> */}
 
         <View style={styles.profileContainer}>
           <View style={styles.avatarView}>
@@ -295,7 +295,7 @@ const ProfileScreen = (props: Props) => {
             </TouchableOpacity>
           </View>
         </ImageBackground>
-        <View style={{height: 70}} />
+        {/* <View style={{height: 70}} /> */}
       </ScrollView>
     </SafeAreaView>
   );

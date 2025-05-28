@@ -10,6 +10,7 @@ import {
   Image,
   FlatList,
   Keyboard,
+  Alert,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {IMAGES} from '../../assets/Images';
@@ -31,6 +32,7 @@ import {
 import LocationSearch from '../../component/common/LocationSearch';
 import RenderPrivacyOption from '../../component/createNew/RenderPrivacyOption';
 import {SCREENS} from '../../navigation/screenNames';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const steps = [
   {
@@ -101,6 +103,9 @@ const SignupScreen = ({navigation}: any) => {
 
   const [selected1, setSelected1] = useState<string[]>([]);
 
+  console.log('====================================');
+  console.log('selected1', selected1?.length);
+  console.log('====================================');
   const toggleSelect = (id: string) => {
     setSelected1(prev =>
       prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id],
@@ -177,140 +182,147 @@ const SignupScreen = ({navigation}: any) => {
         <View />
       </View>
 
-      {currentStep.key == 'Enable permissions' ? (
-        <View style={{marginHorizontal: 20, flex: 1}}>
-          {/* Title */}
-          <Text style={styles.title1}>
-            Enable permissions and boost Togolist’s functionality
-          </Text>
-          <Text style={styles.subtitle}>
-            Togolist works best with access to the following permissions
-          </Text>
+        {currentStep.key == 'Enable permissions' ? (
+          <View style={{marginHorizontal: 20, flex: 1}}>
+            {/* Title */}
+            <Text style={styles.title1}>
+              Enable permissions and boost Togolist’s functionality
+            </Text>
+            <Text style={styles.subtitle}>
+              Togolist works best with access to the following permissions
+            </Text>
 
-          {/* Permission Cards */}
-          <FlatList
-            data={permissions}
-            keyExtractor={item => item.id}
-            renderItem={({item}) => {
-              const isSelected = selected1.includes(item.id);
-              return (
-                <TouchableOpacity
-                  onPress={() => toggleSelect(item.id)}
-                  style={styles.card}>
-                  <Image source={item.icon} style={styles.icon1} />
-                  <View style={styles.cardText}>
-                    <Text style={styles.cardTitle}>{item.title}</Text>
-                    <Text style={styles.cardDesc}>{item.description}</Text>
-                  </View>
-                  <View
-                    style={[styles.radio, isSelected && styles.radioSelected]}>
-                    {isSelected && (
-                      <Image
-                        source={IMAGES.check1}
-                        style={{width: 11, height: 9, resizeMode: 'contain'}}
-                      />
-                    )}
-                  </View>
-                </TouchableOpacity>
-              );
-            }}
-          />
-          <CustomBtn
-            style={styles.button2}
-            onPress={() => {
-              navigateTo(SCREENS.VerifyAccountScreen);
-            }}
-            title={'Finish sign up'}
-          />
-        </View>
-      ) : (
-        <ImageBackground
-          source={IMAGES.bg} // replace with your actual image path
-          style={styles.container}>
-          {/* Title */}
-          <View style={{position: 'absolute', top: 20}}>
-            <Text style={styles.title}>{currentStep.title}</Text>
-            {currentStep.key === 'password' && (
-              <View style={{marginLeft: 24, marginBottom: 10}}>
-                <Text style={styles.checkTitle}>
-                  Please include Each of the Following
-                </Text>
-                <Text style={styles.checkItem}>
-                  {passwordChecks.length ? '✅' : '◽'} Eight characters
-                </Text>
-                <Text style={styles.checkItem}>
-                  {passwordChecks.number ? '✅' : '◽'} One number
-                </Text>
-                <Text style={styles.checkItem}>
-                  {passwordChecks.uppercase ? '✅' : '◽'} One uppercase letter
-                </Text>
-                <Text style={styles.checkItem}>
-                  {passwordChecks.specialChar ? '✅' : '◽'} One special
-                  character
-                </Text>
+            {/* Permission Cards */}
+            <FlatList
+              data={permissions}
+              keyExtractor={item => item.id}
+              renderItem={({item}) => {
+                const isSelected = selected1.includes(item.id);
+                return (
+                  <TouchableOpacity
+                    onPress={() => toggleSelect(item.id)}
+                    style={styles.card}>
+                    <Image source={item.icon} style={styles.icon1} />
+                    <View style={styles.cardText}>
+                      <Text style={styles.cardTitle}>{item.title}</Text>
+                      <Text style={styles.cardDesc}>{item.description}</Text>
+                    </View>
+                    <View
+                      style={[
+                        styles.radio,
+                        isSelected && styles.radioSelected,
+                      ]}>
+                      {isSelected && (
+                        <Image
+                          source={IMAGES.check1}
+                          style={{width: 11, height: 9, resizeMode: 'contain'}}
+                        />
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                );
+              }}
+            />
+            <CustomBtn
+              style={styles.button2}
+              onPress={() => {
+                navigateTo(SCREENS.VerifyAccountScreen);
+              }}
+              title={selected1?.length !== 3 ? 'Next' : 'Finish sign up'}
+            />
+          </View>
+        ) : (
+                <KeyboardAwareScrollView keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator={false}>
+
+          <ImageBackground
+            source={IMAGES.bg} // replace with your actual image path
+            style={styles.container}>
+            {/* Title */}
+            <View style={{position: 'absolute', top: 20}}>
+              <Text style={styles.title}>{currentStep.title}</Text>
+              {currentStep.key === 'password' && (
+                <View style={{marginLeft: 24, marginBottom: 10}}>
+                  <Text style={styles.checkTitle}>
+                    Please include Each of the Following
+                  </Text>
+                  <Text style={styles.checkItem}>
+                    {passwordChecks.length ? '✅' : '◽'} Eight characters
+                  </Text>
+                  <Text style={styles.checkItem}>
+                    {passwordChecks.number ? '✅' : '◽'} One number
+                  </Text>
+                  <Text style={styles.checkItem}>
+                    {passwordChecks.uppercase ? '✅' : '◽'} One uppercase
+                    letter
+                  </Text>
+                  <Text style={styles.checkItem}>
+                    {passwordChecks.specialChar ? '✅' : '◽'} One special
+                    character
+                  </Text>
+                </View>
+              )}
+            </View>
+            {/* Input */}
+            <View style={{top: showKeyboard ? -100 : 0}}>
+              {currentStep.key == 'location' ? (
+                <LocationSearch
+                  value={formData?.location}
+                  onChangeText={text => {
+                    setFormData({...formData, ['location']: text});
+                  }}
+                />
+              ) : (
+                <CustomTextInput
+                  placeholder={currentStep.placeholder}
+                  placeholderTextColor="#3C3C4399"
+                  errorMsg={emailErr}
+                  value={formData[currentStep.key]}
+                  keyValue={currentStep.key}
+                  onChangeText={text => {
+                    if (currentStep.key == 'email') {
+                      setEmailErr('');
+                    } else if (currentStep.key == 'password') {
+                      text?.length !== '' && setEmailErr('');
+                      setPasswordChecks(validatePassword(text));
+                    }
+                    setFormData({...formData, [currentStep.key]: text});
+                  }}
+                  keyboardType={currentStep.keyboardType || 'default'}
+                  secureTextEntry={!passwordVisible}
+                  showToggle={currentStep.key == 'password' ? true : false}
+                  isSecureVisible={!passwordVisible}
+                  onToggleSecure={() => setPasswordVisible(!passwordVisible)}
+                />
+              )}
+            </View>
+
+            {currentStep.key == 'location' && (
+              <View style={styles.container1}>
+                {/* Public Option */}
+                <RenderPrivacyOption
+                  type="public"
+                  selected={selected}
+                  setSelected={setSelected}
+                />
+
+                <View style={{height: 16}} />
+                <RenderPrivacyOption
+                  type="private"
+                  selected={selected}
+                  setSelected={setSelected}
+                />
               </View>
             )}
-          </View>
-          {/* Input */}
-          <View style={{top: showKeyboard ? -100 : 0}}>
-            {currentStep.key == 'location' ? (
-              <LocationSearch
-                value={formData?.location}
-                onChangeText={text => {
-                  setFormData({...formData, ['location']: text});
-                }}
-              />
-            ) : (
-              <CustomTextInput
-                placeholder={currentStep.placeholder}
-                placeholderTextColor="#3C3C4399"
-                errorMsg={emailErr}
-                value={formData[currentStep.key]}
-                keyValue={currentStep.key}
-                onChangeText={text => {
-                  if (currentStep.key == 'email') {
-                    setEmailErr('');
-                  } else if (currentStep.key == 'password') {
-                    text?.length !== '' && setEmailErr('');
-                    setPasswordChecks(validatePassword(text));
-                  }
-                  setFormData({...formData, [currentStep.key]: text});
-                }}
-                keyboardType={currentStep.keyboardType || 'default'}
-                secureTextEntry={!passwordVisible}
-                showToggle={currentStep.key == 'password' ? true : false}
-                isSecureVisible={!passwordVisible}
-                onToggleSecure={() => setPasswordVisible(!passwordVisible)}
-              />
-            )}
-          </View>
-
-          {currentStep.key == 'location' && (
-            <View style={styles.container1}>
-              {/* Public Option */}
-              <RenderPrivacyOption
-                type="public"
-                selected={selected}
-                setSelected={setSelected}
-              />
-
-              <View style={{height: 16}} />
-              <RenderPrivacyOption
-                type="private"
-                selected={selected}
-                setSelected={setSelected}
-              />
-            </View>
-          )}
-          <CustomBtn
-            style={styles.button}
-            onPress={() => {
-              handleNext();
-            }}
-            title={'Next'}
-          />
-        </ImageBackground>
-      )}
+            <CustomBtn
+              style={styles.button}
+              onPress={() => {
+                handleNext();
+              }}
+              title={'Next'}
+            />
+          </ImageBackground>
+      </KeyboardAwareScrollView>
+        )}
     </SafeAreaView>
   );
 };

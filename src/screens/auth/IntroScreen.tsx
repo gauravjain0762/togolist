@@ -70,7 +70,7 @@ const IntroScreen = () => {
   return (
     <SafeAreaView style={[AppStyles.flex, styles.mainContainor]}>
       <StatusBar barStyle={'dark-content'} backgroundColor={colors.white} />
-      <AuthHeader proggress={stap} />
+      <AuthHeader showBack={false} proggress={stap} />
       <View style={[styles.lineStyle, {marginTop: 10}]} />
       <View style={styles.sliderContainer}>
         <Swiper

@@ -94,7 +94,7 @@ const VerifyAccountScreen = ({navigation}: any) => {
           <TouchableOpacity
             onPress={() => {
               setShowImageScreen(false);
-              navigationRef.navigate(SCREENS.TabNavigator);
+               navigationRef.navigate(SCREENS.TabNavigator);
             }}
             style={styles.skipView}>
             <Text style={styles.skipText}>Skip for now.</Text>

@@ -83,6 +83,7 @@ export default function TabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={{headerShown: false}}
+      initialRouteName={SCREENS.ProfileScreen}
       tabBar={(props: any) => <CustomTabBar {...props} />}>
       <Tab.Screen name={SCREENS.SearchScreen} component={SearchScreen} />
       <Tab.Screen name={SCREENS.HomeScreen} component={HomeScreen} />
@@ -125,11 +126,12 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: hp(24),
-    height: hp(24),
+    width: hp(28),
+    height: hp(28),
   },
   carImage: {
-    width: hp(28),
+    width: hp(26),
     height: hp(37),
+    resizeMode:'contain'
   },
 });

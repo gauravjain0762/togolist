@@ -1,5 +1,6 @@
 export const IMAGES = {
   user: require('./image/user.png'),
+  user_location: require('./icon/user_location.png'),
   pen: require('./image/pen.png'),
   ic_down: require('./image/ic_down.png'),
   ic_share: require('./image/ic_share.png'),

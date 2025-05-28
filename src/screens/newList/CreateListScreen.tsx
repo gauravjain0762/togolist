@@ -67,7 +67,7 @@ const CreateListScreen = () => {
 
   return (
     <SafeAreaView style={[AppStyles.mainWhiteContainer, styles.containor]}>
-      <Loader visible={dashboardLoading} />
+      {/* <Loader visible={dashboardLoading} /> */}
 
       <View style={styles.header}>
         <Text style={styles.heading}>{'Create New'}</Text>
@@ -132,7 +132,7 @@ const CreateListScreen = () => {
             <View style={styles.row}>
               <TouchableOpacity style={styles.card1}>
                 <Image source={IMAGES.canlder} style={styles.icon1} />
-                <Text style={styles.cardText}>Trip Dates</Text>
+                <Text style={styles.cardText}>Event Dates</Text>
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.card}>
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     marginTop: 20,
     flex: 1,
-    marginBottom: hp(18),
+    // marginBottom: hp(18),
   },
   button: {
     position: 'absolute',
@@ -272,6 +272,7 @@ const styles = StyleSheet.create({
     width: 22,
     resizeMode: 'contain',
     marginRight: 5,
+    tintColor:"#3C3C4399"
   },
   inputBox: {
     backgroundColor: colors.white,
@@ -336,7 +337,7 @@ const styles = StyleSheet.create({
     flex: 0.3,
   },
   cardText: {
-    ...commonFontStyle(500, 16, '#555'),
+    ...commonFontStyle(500, 16, '#3C3C4399'),
   },
 
   content: {

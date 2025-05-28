@@ -60,7 +60,7 @@ const HomeScreen = (props: Props) => {
 
   return (
     <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
-      <Loader visible={dashboardLoading} />
+      {/* <Loader visible={dashboardLoading} /> */}
       <Text style={styles.heading}>{'Home'}</Text>
     </SafeAreaView>
   );

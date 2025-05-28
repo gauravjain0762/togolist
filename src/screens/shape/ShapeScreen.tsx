@@ -60,7 +60,7 @@ const ShapeScreen = (props: Props) => {
 
   return (
     <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
-      <Loader visible={dashboardLoading} />
+      {/* <Loader visible={dashboardLoading} /> */}
       <Text style={styles.heading}>{"ShapeScreen"}</Text>
     </SafeAreaView>
   );

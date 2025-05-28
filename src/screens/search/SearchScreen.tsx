@@ -60,7 +60,7 @@ const SearchScreen = (props: Props) => {
 
   return (
     <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
-      <Loader visible={dashboardLoading} />
+      {/* <Loader visible={dashboardLoading} /> */}
       <Text style={styles.heading}>{"Search"}</Text>
     </SafeAreaView>
   );

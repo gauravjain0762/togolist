@@ -6,9 +6,11 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
+  Image,
 } from 'react-native';
 import {commonFontStyle} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
+import {IMAGES} from '../../assets/Images';
 
 const MOCK_RESULTS = [
   'Toronto, ON, Canada',
@@ -16,12 +18,12 @@ const MOCK_RESULTS = [
   'Toledo, OH, United States',
 ];
 
-const LocationSearch = ({value,onChangeText}) => {
+const LocationSearch = ({value, onChangeText}) => {
   const [filteredResults, setFilteredResults] = useState(MOCK_RESULTS);
   const [autoFod, setAutoFod] = useState(false);
 
   const handleSearch = (text: string) => {
-    setAutoFod(true)
+    setAutoFod(true);
     onChangeText(text);
     const filtered = MOCK_RESULTS.filter(item =>
       item.toLowerCase().includes(text.toLowerCase()),
@@ -30,10 +32,12 @@ const LocationSearch = ({value,onChangeText}) => {
   };
 
   const renderItem = ({item}: {item: string}) => (
-    <TouchableOpacity onPress={()=>{
-      onChangeText(item.toString())
-      setAutoFod(false)
-    }} style={styles.item}>
+    <TouchableOpacity
+      onPress={() => {
+        onChangeText(item.toString());
+        setAutoFod(false);
+      }}
+      style={styles.item}>
       <Text style={styles.itemText}>{item}</Text>
     </TouchableOpacity>
   );
@@ -46,21 +50,26 @@ const LocationSearch = ({value,onChangeText}) => {
         placeholder="Location"
         style={styles.input}
         placeholderTextColor="#3C3C4399"
-        onFocus={()=>{
-          setAutoFod(true)
+        onFocus={() => {
+          setAutoFod(true);
         }}
-        onBlur={()=>{
-           setAutoFod(false)
+        onBlur={() => {
+          setAutoFod(false);
         }}
       />
 
-      {(autoFod) && (
+      {autoFod && (
         <>
           <View style={styles.divider} />
 
           <TouchableOpacity style={styles.item}>
-            {/* <MaterialIcons name="my-location" size={18} color="#666" style={{ marginRight: 8 }} /> */}
-            <Text style={styles.itemText}>Use Current Location</Text>
+            <Image
+              source={IMAGES.user_location}
+              style={{width: 22, height: 22, resizeMode: 'contain'}}
+            />
+            <Text style={[styles.itemText, {marginLeft: 6}]}>
+              Use Current Location
+            </Text>
           </TouchableOpacity>
 
           <FlatList
@@ -100,6 +109,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   itemText: {
-        ...commonFontStyle(400, 18, "#3C3C4399"),
+    ...commonFontStyle(400, 18, '#3C3C4399'),
   },
 });
