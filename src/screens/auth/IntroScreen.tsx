@@ -5,7 +5,7 @@ import {AuthHeader, Button} from '../../component';
 import {AppStyles} from '../../theme/appStyles';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Swiper from 'react-native-swiper';
-import {commonFontStyle, hp, wp} from '../../theme/fonts';
+import {SCREEN_WIDTH, commonFontStyle, hp, wp} from '../../theme/fonts';
 import {IMAGES} from '../../assets/Images';
 import CustomBtn from '../../component/common/CustomBtn';
 import {navigateTo} from '../../utils/commonFunction';
@@ -84,6 +84,7 @@ const IntroScreen = () => {
           //     </View>
           //   );
           // }}
+          dotColor={colors._BD2332_0_3}
           activeDotColor={colors._BD2332}
           style={styles.wrapper}>
           {slides}
@@ -108,9 +109,10 @@ const styles = StyleSheet.create({
   wrapper: {},
   slide1: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     paddingHorizontal: wp(26),
+    gap: hp(120),
   },
   text: {
     ...commonFontStyle(700, 32, colors.white),
@@ -127,7 +129,7 @@ const styles = StyleSheet.create({
   },
   title: {
     ...commonFontStyle(700, 40, colors.white),
-    marginBottom: hp(120),
+    marginTop: hp(113),
   },
   button: {
     marginTop: 10,
@@ -145,9 +147,12 @@ const styles = StyleSheet.create({
     borderColor: '#1B15151A',
   },
   paginationStyle: {
-    backgroundColor: 'yellow',
-    flex: 1,
-    position: 'relative',
+    backgroundColor: 'rgba(255, 255, 255, 0.75)',
+    left: wp(SCREEN_WIDTH / 2 - 64),
+    right: wp(SCREEN_WIDTH / 2 - 64),
+    paddingVertical: hp(6),
+    borderRadius: 100,
+    bottom: hp(30),
     // alignSelf: 'center',
   },
 });

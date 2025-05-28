@@ -26,7 +26,7 @@ const AuthHeader: FC<header> = ({
       {showBack && (
         <TouchableOpacity
           onPress={() => {
-            onBackPress ? onBackPress() : navigationRef.goBack();
+            onBackPress() || navigationRef.goBack();
           }}>
           <Image source={IMAGES.back2} style={styles.back} />
         </TouchableOpacity>

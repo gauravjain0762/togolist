@@ -14,16 +14,16 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {IMAGES} from '../../assets/Images';
 import {AppStyles} from '../../theme/appStyles';
-import {
-  commonFontStyle,
-  hp,
-  SCREEN_HEIGHT,
-} from '../../theme/fonts';
+import {commonFontStyle, hp, SCREEN_HEIGHT} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import CustomBtn from '../../component/common/CustomBtn';
 import {CustomTextInput} from '../../component';
-import {emailCheck, navigateTo, validatePassword} from '../../utils/commonFunction';
-import { SCREENS } from '../../navigation/screenNames';
+import {
+  emailCheck,
+  navigateTo,
+  validatePassword,
+} from '../../utils/commonFunction';
+import {SCREENS} from '../../navigation/screenNames';
 
 const steps = [
   {
@@ -111,7 +111,7 @@ const SigninScreen = ({navigation}: any) => {
     }
 
     setEmailErr(''); // Clear error if valid
-    navigateTo(SCREENS.TabNavigator)
+    navigateTo(SCREENS.TabNavigator);
     // if (stepIndex < steps.length - 1) {
     //   setStepIndex(stepIndex + 1);
     // } else {
@@ -123,6 +123,11 @@ const SigninScreen = ({navigation}: any) => {
   return (
     <SafeAreaView edges={['top']} style={AppStyles.flex}>
       {/* Header with back icon and progress bar */}
+      <StatusBar
+        barStyle={'dark-content'}
+        animated
+        backgroundColor={colors.white}
+      />
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => {

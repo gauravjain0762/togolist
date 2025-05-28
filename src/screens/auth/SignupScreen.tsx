@@ -23,10 +23,14 @@ import {
 import {colors} from '../../theme/colors';
 import CustomBtn from '../../component/common/CustomBtn';
 import {CustomTextInput} from '../../component';
-import {emailCheck, navigateTo, validatePassword} from '../../utils/commonFunction';
+import {
+  emailCheck,
+  navigateTo,
+  validatePassword,
+} from '../../utils/commonFunction';
 import LocationSearch from '../../component/common/LocationSearch';
 import RenderPrivacyOption from '../../component/createNew/RenderPrivacyOption';
-import { SCREENS } from '../../navigation/screenNames';
+import {SCREENS} from '../../navigation/screenNames';
 
 const steps = [
   {
@@ -50,7 +54,6 @@ const steps = [
     key: 'Enable permissions',
   },
 ];
-
 
 const permissions = [
   {
@@ -77,7 +80,7 @@ const SignupScreen = ({navigation}: any) => {
   const [stepIndex, setStepIndex] = useState(0);
   const [formData, setFormData] = useState({
     email: __DEV__ ? 'test@gmail.com' : '',
-    password: __DEV__ ?  'Test@123' : "",
+    password: __DEV__ ? 'Test@123' : '',
     name: '',
     username: '',
     location: '',
@@ -151,6 +154,11 @@ const SignupScreen = ({navigation}: any) => {
   return (
     <SafeAreaView edges={['top']} style={AppStyles.flex}>
       {/* Header with back icon and progress bar */}
+      <StatusBar
+        barStyle={'dark-content'}
+        animated
+        backgroundColor={colors.white}
+      />
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => {

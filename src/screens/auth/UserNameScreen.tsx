@@ -132,6 +132,11 @@ const UserNameScreen = ({navigation}: any) => {
   return (
     <SafeAreaView edges={['top']} style={AppStyles.flex}>
       {/* Header with back icon and progress bar */}
+      <StatusBar
+        barStyle={'dark-content'}
+        animated
+        backgroundColor={colors.white}
+      />
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => {

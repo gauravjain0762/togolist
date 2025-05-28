@@ -1,14 +1,15 @@
 export const colors = {
-  black: "#000000",
-  white: "#ffffff",
-  mainColor: "orange",
-  primary:"#AE1927",
-  primary1:"#BD2332",
-  border:"#7878801F",
-  error:"#BD2332",
-  _787878:"#787878",
-  lightGray:"#78788029",
-  gray:"#3C3C4399",
+  black: '#000000',
+  white: '#ffffff',
+  mainColor: 'orange',
+  primary: '#AE1927',
+  primary1: '#BD2332',
+  border: '#7878801F',
+  error: '#BD2332',
+  _787878: '#787878',
+  lightGray: '#78788029',
+  gray: '#3C3C4399',
+  _1B1B1B: '#1B1B1B',
 
   _25201a: '#25201a',
   containerBGColor: 'rgba(51, 50, 50, 0.4)',
@@ -19,6 +20,7 @@ export const colors = {
   green: 'orange',
   greenOpacity: '#BEB130',
   _BD2332: '#BD2332',
+  _BD2332_0_3: 'rgba(189, 35, 50, 0.3)',
 };
 
 export const darkThemeColors = {

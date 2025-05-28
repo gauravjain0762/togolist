@@ -22,7 +22,11 @@ const WelcomeScreen = () => {
     <SafeAreaView
       edges={['top']}
       style={[AppStyles.flex, styles.mainContainer]}>
-      <StatusBar barStyle={'light-content'} backgroundColor={colors.black} />
+      <StatusBar
+        barStyle={'light-content'}
+        animated
+        backgroundColor={colors._1B1B1B}
+      />
       <View style={styles.header}>
         <View style={AppStyles.flex1} />
         <View style={[AppStyles.flex1, AppStyles.Hcenter]}>
@@ -71,7 +75,7 @@ export default WelcomeScreen;
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: colors.black,
+    backgroundColor: colors._1B1B1B,
     paddingHorizontal: wp(16),
     borderBottomWidth: 1,
     borderColor: '#FAE8D140',
@@ -108,6 +112,6 @@ const styles = StyleSheet.create({
   },
   login: {
     alignItems: 'flex-end',
-    flex:1
+    flex: 1,
   },
 });
