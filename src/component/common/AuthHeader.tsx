@@ -11,22 +11,24 @@ type header = {
   proggress?: number;
   height?: number;
   onBackPress?: () => void;
+  showBack:any
 };
 
 const AuthHeader: FC<header> = ({
   proggress = 0,
   height,
   onBackPress = () => {},
+  showBack
 }) => {
   console.log('proggress', proggress);
   return (
     <View style={styles.header}>
-      {/* <TouchableOpacity
+     {showBack && <TouchableOpacity
         onPress={() => {
-          navigationRef.goBack();
+        onBackPress ? onBackPress() :  navigationRef.goBack();
         }}>
         <Image source={IMAGES.back} style={styles.back} />
-      </TouchableOpacity> */}
+      </TouchableOpacity>}
       <View style={styles.bar}>
         <ProgressBar
           progress={proggress}

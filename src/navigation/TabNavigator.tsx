@@ -114,7 +114,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     paddingHorizontal: 10,
     borderTopWidth:1,
-    borderColor:"#E3E3E3"
+    borderColor:"#E3E3E3",
+    backgroundColor:colors.white
   },
   tabButton: {
     width: wp(65),

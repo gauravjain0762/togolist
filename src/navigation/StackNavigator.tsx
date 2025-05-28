@@ -15,6 +15,7 @@ import UserNameScreen from "../screens/auth/UserNameScreen";
 import WelcomeScreen from "../screens/auth/WelcomeScreen";
 import IntroScreen from "../screens/auth/IntroScreen";
 import TabNavigator from "./TabNavigator";
+import VerifyAccountScreen from "../screens/auth/VerifyAccountScreen";
 
 export type RootStackParamList = {
   HomeScreen: undefined;
@@ -189,6 +190,11 @@ const StackNavigator: FC = () => {
         options={({ navigation }) => ({ headerShown: false })}
         name={SCREENS.UserNameScreen}
         component={UserNameScreen}
+      />
+      <Stack.Screen
+        options={({ navigation }) => ({ headerShown: false })}
+        name={SCREENS.VerifyAccountScreen}
+        component={VerifyAccountScreen}
       />
     </Stack.Navigator>
   );

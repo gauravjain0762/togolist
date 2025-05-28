@@ -11,50 +11,38 @@ import {IMAGES} from '../../assets/Images';
 import {colors} from '../../theme/colors';
 import {commonFontStyle} from '../../theme/fonts';
 
-const CustomHeader = ({onBack, onShare, mainHeader}: any) => {
-  if (mainHeader) {
-    return (
-      <View style={styles.header}>
-        <StatusBar
-          barStyle={'dark-content'}
-          backgroundColor={colors.mainColor}
-        />
-        <View />
-        {/* <Image source={IMAGES.logo} style={{width:30,height:30}}/> */}
-        <Text style={[styles.title, {marginLeft: 0}]}>{'Togolist'}</Text>
-        {/* <TouchableOpacity onPress={onShare} style={styles.shareButton}>
-        <Image source={IMAGES.ic_share} style={{width:28,height:28,tintColor:colors.white}}/>
-  
-        </TouchableOpacity> */}
-        <View />
-      </View>
-    );
-  }
+const CustomHeader = ({
+  onBack,
+  onShare,
+  mainHeader,
+  title = 'Back',
+  onSearchPress,
+  onMorePress,
+  searchIconStyle
+}: any) => {
   return (
     <View style={styles.header}>
       <TouchableOpacity onPress={onBack} style={styles.left}>
-        <Image
-          source={IMAGES.back}
-          style={{width: 20, height: 20, tintColor: colors.white}}
-        />
-        <Text style={styles.title}>{'Details'}</Text>
+        <Image source={IMAGES.back} style={styles.backIcon} />
+        <Text style={styles.title}>{title}</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={onShare} style={styles.shareButton}>
-        <Image
-          source={IMAGES.ic_share}
-          style={{width: 28, height: 28, tintColor: colors.white}}
-        />
-      </TouchableOpacity>
+      <View style={styles.row}>
+        <TouchableOpacity onPress={onSearchPress} style={styles.searchButton}>
+          <Image source={IMAGES.search} style={[styles.searchIcon,searchIconStyle]} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onMorePress} style={{}}>
+          <Image source={IMAGES.more_icon} style={styles.moreIcon} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: colors.mainColor, // Orange
     paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingHorizontal: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -65,22 +53,30 @@ const styles = StyleSheet.create({
   },
   title: {
     marginLeft: 8,
-    ...commonFontStyle(700, 24, colors.white),
+    ...commonFontStyle(600, 17, colors._787878),
   },
-  shareButton: {
-    // flexDirection: 'row',
-    // alignItems: 'center',
-    // borderColor: '#000',
-    // borderWidth: 1,
-    // borderRadius: 16,
-    // paddingVertical: 4,
-    // paddingHorizontal: 10,
-    // backgroundColor: '#fff',
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  shareText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#000',
+  searchButton: {
+    marginRight: 10,
+  },
+  searchIcon: {
+    width: 18,
+    height: 18,
+    tintColor: colors.black,
+  },
+  moreIcon: {
+    width: 18,
+    height: 18,
+    tintColor: colors.black,
+  },
+  backIcon: {
+    width: 11,
+    height: 24,
+    tintColor: colors._787878,
+    resizeMode: 'contain',
   },
 });
 

@@ -13,6 +13,7 @@ export const SCREENS = {
   CreateListScreen:"CreateListScreen",
   ShapeScreen:"ShapeScreen",
   ProfileScreen:"ProfileScreen",
+  VerifyAccountScreen:"VerifyAccountScreen"
 };
 
 export interface ScreenNames {
@@ -30,6 +31,7 @@ export interface ScreenNames {
   ShapeScreen:string
   ProfileScreen:string
   TabNavigator:string
+  VerifyAccountScreen:string
 }
 
 export const SCREEN_NAMES: ScreenNames = {

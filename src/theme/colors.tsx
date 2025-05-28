@@ -6,6 +6,9 @@ export const colors = {
   primary1:"#BD2332",
   border:"#7878801F",
   error:"#BD2332",
+  _787878:"#787878",
+  lightGray:"#78788029",
+  gray:"#3C3C4399",
 
   _25201a: '#25201a',
   containerBGColor: 'rgba(51, 50, 50, 0.4)',

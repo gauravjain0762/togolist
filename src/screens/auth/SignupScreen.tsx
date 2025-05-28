@@ -23,8 +23,10 @@ import {
 import {colors} from '../../theme/colors';
 import CustomBtn from '../../component/common/CustomBtn';
 import {CustomTextInput} from '../../component';
-import {emailCheck, validatePassword} from '../../utils/commonFunction';
+import {emailCheck, navigateTo, validatePassword} from '../../utils/commonFunction';
 import LocationSearch from '../../component/common/LocationSearch';
+import RenderPrivacyOption from '../../component/createNew/RenderPrivacyOption';
+import { SCREENS } from '../../navigation/screenNames';
 
 const steps = [
   {
@@ -48,6 +50,7 @@ const steps = [
     key: 'Enable permissions',
   },
 ];
+
 
 const permissions = [
   {
@@ -74,7 +77,7 @@ const SignupScreen = ({navigation}: any) => {
   const [stepIndex, setStepIndex] = useState(0);
   const [formData, setFormData] = useState({
     email: __DEV__ ? 'test@gmail.com' : '',
-    password: '',
+    password: __DEV__ ?  'Test@123' : "",
     name: '',
     username: '',
     location: '',
@@ -207,7 +210,7 @@ const SignupScreen = ({navigation}: any) => {
           <CustomBtn
             style={styles.button2}
             onPress={() => {
-              handleNext();
+              navigateTo(SCREENS.VerifyAccountScreen);
             }}
             title={'Finish sign up'}
           />
@@ -241,118 +244,54 @@ const SignupScreen = ({navigation}: any) => {
             )}
           </View>
           {/* Input */}
-          <View style={{top:showKeyboard ? -100 : 0}}>
-
-          {currentStep.key == 'location' ? (
-            <LocationSearch />
-          ) : (
-            <CustomTextInput
-              placeholder={currentStep.placeholder}
-              placeholderTextColor="#3C3C4399"
-              errorMsg={emailErr}
-              value={formData[currentStep.key]}
-              keyValue={currentStep.key}
-              onChangeText={text => {
-                if (currentStep.key == 'email') {
-                  setEmailErr('');
-                } else if (currentStep.key == 'password') {
-                  text?.length !== '' && setEmailErr('');
-                  setPasswordChecks(validatePassword(text));
-                }
-                setFormData({...formData, [currentStep.key]: text});
-              }}
-              keyboardType={currentStep.keyboardType || 'default'}
-              secureTextEntry={!passwordVisible}
-              showToggle={currentStep.key == 'password' ? true : false}
-              isSecureVisible={!passwordVisible}
-              onToggleSecure={() => setPasswordVisible(!passwordVisible)}
-            />
-          )}
+          <View style={{top: showKeyboard ? -100 : 0}}>
+            {currentStep.key == 'location' ? (
+              <LocationSearch
+                value={formData?.location}
+                onChangeText={text => {
+                  setFormData({...formData, ['location']: text});
+                }}
+              />
+            ) : (
+              <CustomTextInput
+                placeholder={currentStep.placeholder}
+                placeholderTextColor="#3C3C4399"
+                errorMsg={emailErr}
+                value={formData[currentStep.key]}
+                keyValue={currentStep.key}
+                onChangeText={text => {
+                  if (currentStep.key == 'email') {
+                    setEmailErr('');
+                  } else if (currentStep.key == 'password') {
+                    text?.length !== '' && setEmailErr('');
+                    setPasswordChecks(validatePassword(text));
+                  }
+                  setFormData({...formData, [currentStep.key]: text});
+                }}
+                keyboardType={currentStep.keyboardType || 'default'}
+                secureTextEntry={!passwordVisible}
+                showToggle={currentStep.key == 'password' ? true : false}
+                isSecureVisible={!passwordVisible}
+                onToggleSecure={() => setPasswordVisible(!passwordVisible)}
+              />
+            )}
           </View>
 
           {currentStep.key == 'location' && (
             <View style={styles.container1}>
               {/* Public Option */}
-              <TouchableOpacity
-                activeOpacity={1}
-                style={[styles.option, {marginBottom: 16}]}
-                onPress={() => setSelected('public')}>
-                <Image
-                  source={IMAGES.public}
-                  style={{
-                    height: 20,
-                    width: 20,
-                    resizeMode: 'contain',
-                    tintColor: selected === 'public' ? '#fff' : '#D1D1D1',
-                  }}
-                />
-                <Text
-                  style={[
-                    styles.label,
-                    {color: selected === 'public' ? '#fff' : '#D1D1D1'},
-                  ]}>
-                  Public
-                </Text>
-                <View
-                  style={[
-                    styles.radioOuter,
-                    {
-                      borderColor:
-                        selected !== 'public' ? '#D1D1D1' : colors.white,
-                    },
-                  ]}>
-                  <View
-                    style={[
-                      styles.radioInner,
-                      {
-                        backgroundColor:
-                          selected !== 'public' ? '#D1D1D1' : colors.white,
-                      },
-                    ]}
-                  />
-                </View>
-              </TouchableOpacity>
+              <RenderPrivacyOption
+                type="public"
+                selected={selected}
+                setSelected={setSelected}
+              />
 
-              {/* Private Option */}
-              <TouchableOpacity
-                activeOpacity={1}
-                style={styles.option}
-                onPress={() => setSelected('private')}>
-                <Image
-                  source={IMAGES.lock}
-                  style={{
-                    height: 18,
-                    width: 20,
-                    resizeMode: 'contain',
-                    tintColor: selected === 'private' ? '#fff' : '#D1D1D1',
-                  }}
-                />
-                <Text
-                  style={[
-                    styles.label,
-                    {color: selected === 'private' ? '#fff' : '#D1D1D1'},
-                  ]}>
-                  Private
-                </Text>
-                <View
-                  style={[
-                    styles.radioOuter,
-                    {
-                      borderColor:
-                        selected !== 'private' ? '#D1D1D1' : colors.white,
-                    },
-                  ]}>
-                  <View
-                    style={[
-                      styles.radioInner,
-                      {
-                        backgroundColor:
-                          selected !== 'private' ? '#D1D1D1' : colors.white,
-                      },
-                    ]}
-                  />
-                </View>
-              </TouchableOpacity>
+              <View style={{height: 16}} />
+              <RenderPrivacyOption
+                type="private"
+                selected={selected}
+                setSelected={setSelected}
+              />
             </View>
           )}
           <CustomBtn
@@ -478,7 +417,7 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#fff',
     borderRadius: 12,
     marginBottom: 12,
     borderWidth: 1,

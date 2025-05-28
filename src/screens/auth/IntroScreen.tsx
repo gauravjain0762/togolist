@@ -41,7 +41,7 @@ let data = [
     name: 'Listings',
     info: 'Create itineraries and experiences to earn with Togolist.',
     images: IMAGES.intro5,
-  },
+  }
 ];
 
 const IntroScreen = () => {

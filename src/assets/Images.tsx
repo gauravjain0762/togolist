@@ -50,4 +50,25 @@ export const IMAGES = {
   newList: require('./icon/tab/newList.png'),
   shape: require('./icon/tab/shape.png'),
   search: require('./icon/tab/search.png'),
+
+  //profile
+    more_icon: require('./icon/profile/more_icon.png'),
+    add_icon: require('./icon/profile/add_icon.png'),
+    been: require('./icon/profile/been.png'),
+    bg1: require('./icon/profile/bg1.png'),
+    bg2: require('./icon/profile/bg2.png'),
+    collocation_bg: require('./icon/profile/collocation_bg.png'),
+    down: require('./icon/profile/down.png'),
+    favorite: require('./icon/profile/favorite.png'),
+    go: require('./icon/profile/go.png'),
+    list1: require('./icon/profile/list1.png'),
+    lists_icon: require('./icon/profile/lists_icon.png'),
+    save_cion: require('./icon/profile/save_cion.png'),
+    share1: require('./icon/profile/share.png'),
+    ToglistCircleIcon: require('./icon/profile/ToglistCircleIcon.png'),
+    wordWide: require('./icon/profile/wordWide.png'),
+    bg3: require('./icon/profile/bg3.png'),
+    bg4: require('./icon/profile/bg4.png'),
+    bg5: require('./icon/profile/bg5.png'),
+
 };

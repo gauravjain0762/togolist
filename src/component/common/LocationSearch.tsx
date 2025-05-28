@@ -31,7 +31,7 @@ const LocationSearch = ({value,onChangeText}) => {
 
   const renderItem = ({item}: {item: string}) => (
     <TouchableOpacity onPress={()=>{
-      onChangeText(item)
+      onChangeText(item.toString())
       setAutoFod(false)
     }} style={styles.item}>
       <Text style={styles.itemText}>{item}</Text>
