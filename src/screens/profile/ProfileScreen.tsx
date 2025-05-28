@@ -28,6 +28,7 @@ type Props = {};
 
 const ProfileScreen = (props: Props) => {
   const [selectedTab, setSelectedTab] = useState('Lists');
+  const [searchShow, setSearchShow] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('Favorites');
 
   const categories = [
@@ -143,7 +144,7 @@ const ProfileScreen = (props: Props) => {
     <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader onSearchPress={() => {}} onMorePress={() => {}} />
       <Loader visible={false} />
-      <ScrollView style={[AppStyles.mainSide,AppStyles.flex]}>
+      <ScrollView showsVerticalScrollIndicator={false} style={[AppStyles.mainSide, AppStyles.flex]}>
         <View style={styles.searchContainer}>
           <Image source={IMAGES.search} style={styles.searchIcon} />
           <TextInput
@@ -259,21 +260,42 @@ const ProfileScreen = (props: Props) => {
         </ImageBackground>
         <View
           style={{flexDirection: 'row', alignItems: 'center', marginTop: 24}}>
-          <View style={{flexDirection: 'row', alignItems: 'center',flex:1}}>
+          <View style={{flexDirection: 'row', alignItems: 'center', flex: 1}}>
             <Text style={[commonFontStyle(700, 20, colors.black)]}>
               Collections
             </Text>
             <Image source={IMAGES.down} style={styles.downIcon} />
           </View>
-            <Image source={IMAGES.add_icon} style={styles.addIcon} />
+          <Image source={IMAGES.add_icon} style={styles.addIcon} />
         </View>
 
-         <ImageBackground
-              source={IMAGES.collocation_bg}
-              resizeMode="contain"
-              style={styles.collocation_bg}>
-              <Text style={styles.chipText}>Worldwide</Text>
-            </ImageBackground>
+        <ImageBackground
+          source={IMAGES.collocation_bg}
+          resizeMode="contain"
+          imageStyle={{borderRadius: 20}}
+          style={styles.collocation_bg}>
+          <Text style={styles.chipText1}>No collections yet!</Text>
+          <Text style={styles.chipText2}>
+            {'Start saving places to create your \nfirst collection.'}
+          </Text>
+        </ImageBackground>
+
+        <ImageBackground source={IMAGES.bg2} style={styles.card}>
+          <TouchableOpacity style={styles.closeIcon}>
+            <Text style={{fontSize: 16, color: '#f9a8b7'}}>✕</Text>
+          </TouchableOpacity>
+
+          <View style={styles.content}>
+            <Text style={styles.title1}>Togolist Pro</Text>
+            <Text style={styles.subtitle}>
+              Use AI to help you plan your next adventure.
+            </Text>
+            <TouchableOpacity style={styles.tryProButton}>
+              <Text style={styles.tryProText}>Try Pro</Text>
+            </TouchableOpacity>
+          </View>
+        </ImageBackground>
+        <View style={{height: 70}} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -358,6 +380,14 @@ const styles = StyleSheet.create({
   buttonText: {
     ...commonFontStyle(600, 12, colors.white),
   },
+  chipText1: {
+    ...commonFontStyle(700, 20, colors.white),
+    marginBottom: 4,
+  },
+  chipText2: {
+    ...commonFontStyle(700, 20, colors.white),
+    textAlign: 'center',
+  },
 
   tabContainer: {
     flexDirection: 'row',
@@ -413,7 +443,7 @@ const styles = StyleSheet.create({
     width: 18,
     height: 18,
     resizeMode: 'contain',
-    marginRight:8
+    marginRight: 8,
   },
 
   container: {
@@ -447,8 +477,53 @@ const styles = StyleSheet.create({
     ...commonFontStyle(500, 13, '#FAE8D1'),
   },
 
-  collocation_bg:{
-    width:wp(370),
-    height:wp(370)
-  }
+  collocation_bg: {
+    width: wp(370),
+    height: wp(370),
+    marginTop: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  card: {
+    borderRadius: 24,
+    padding: 20,
+    alignSelf: 'center',
+    position: 'relative',
+    overflow: 'hidden',
+    marginTop: 20,
+  },
+  closeIcon: {
+    position: 'absolute',
+    top: 12,
+    right: 30,
+    zIndex: 1,
+  },
+  content: {
+    paddingRight: 80, // space for button
+  },
+  title1: {
+    ...commonFontStyle(700, 18, colors.white),
+  },
+  subtitle: {
+    marginVertical: 8,
+    ...commonFontStyle(400, 16, colors.white),
+  },
+  tryProButton: {
+    position: 'absolute',
+    right: 0,
+    bottom: 12,
+    backgroundColor: colors.white,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    shadowOffset: {width: 0, height: 2},
+    elevation: 3,
+  },
+  tryProText: {
+    ...commonFontStyle(600, 12, "#444444"),
+  },
 });

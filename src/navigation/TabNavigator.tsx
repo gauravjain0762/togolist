@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   tabBarContainer: {
     flexDirection: 'row',
     position: 'absolute',
-    bottom: 20,
+    bottom: 0,
     gap: 15,
     alignSelf: 'center',
     height: hp(60),
