@@ -76,14 +76,6 @@ const IntroScreen = () => {
         <Swiper
           onIndexChanged={handleIndexChanged}
           paginationStyle={styles.paginationStyle}
-          // renderPagination={(index, total, swiper) => {
-          //   console.log('index, total, number', index, total, swiper);
-          //   return (
-          //     <View style={{backgroundColor: 'yellow', width: 20, height: 20}}>
-          //       <Text>2</Text>
-          //     </View>
-          //   );
-          // }}
           dotColor={colors._BD2332_0_3}
           activeDotColor={colors._BD2332}
           style={styles.wrapper}>

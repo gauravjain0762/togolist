@@ -8,7 +8,6 @@ import {ScreenNames, SCREENS} from './screenNames';
 import LoginScreen from '../screens/auth/LoginScreen';
 import {SET_FCM_TOKEN} from '../redux/actionTypes';
 import SplashScreen from '../screens/auth/SplashScreen';
-import PanditProfileScreen from '../screens/home/PanditProfileScreen';
 import SignupScreen from '../screens/auth/SignupScreen';
 import SigninScreen from '../screens/auth/SigninScreen';
 import UserNameScreen from '../screens/auth/UserNameScreen';
@@ -17,6 +16,7 @@ import IntroScreen from '../screens/auth/IntroScreen';
 import TabNavigator from './TabNavigator';
 import VerifyAccountScreen from '../screens/auth/VerifyAccountScreen';
 import PlaceDetails from '../screens/newList/PlaceDetails';
+import Experience from '../screens/profile/Experience';
 
 export type RootStackParamList = {
   HomeScreen: undefined;
@@ -200,6 +200,11 @@ const StackNavigator: FC = () => {
         options={({navigation}) => ({headerShown: false})}
         name={SCREENS.PlaceDetails}
         component={PlaceDetails}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.Experience}
+        component={Experience}
       />
     </Stack.Navigator>
   );

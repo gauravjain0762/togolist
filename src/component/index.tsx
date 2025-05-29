@@ -5,6 +5,7 @@ import Button from './common/Button';
 import SocialBtn from './common/SocialBtn';
 import AuthHeader from './common/AuthHeader';
 import CustomHeader from './common/CustomHeader';
+import LinearView from './common/LinearView';
 
 export {
   Loader,
@@ -14,4 +15,5 @@ export {
   SocialBtn,
   AuthHeader,
   CustomHeader,
+  LinearView,
 };

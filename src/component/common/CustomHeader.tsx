@@ -14,6 +14,7 @@ import {
 import {IMAGES} from '../../assets/Images';
 import {colors} from '../../theme/colors';
 import {commonFontStyle} from '../../theme/fonts';
+import {navigationRef} from '../../navigation/RootContainer';
 
 type header = {
   onBack?: () => void;
@@ -34,7 +35,7 @@ type header = {
 };
 
 const CustomHeader: FC<header> = ({
-  onBack,
+  onBack = () => {},
   onShare,
   mainHeader,
   title = 'Back',
@@ -52,7 +53,9 @@ const CustomHeader: FC<header> = ({
 }) => {
   return (
     <View style={[styles.header, headerStyle]}>
-      <TouchableOpacity onPress={onBack} style={styles.left}>
+      <TouchableOpacity
+        onPress={() => onBack() || navigationRef.goBack()}
+        style={styles.left}>
         <Image
           source={backImg || IMAGES.back}
           style={[styles.backIcon, backIconStyle]}

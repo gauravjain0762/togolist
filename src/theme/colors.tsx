@@ -10,6 +10,9 @@ export const colors = {
   lightGray: '#78788029',
   gray: '#3C3C4399',
   _1B1B1B: '#1B1B1B',
+  _1B1515: '#1B1515',
+  _444444: '#444444',
+  _AE1927: '#AE1927',
 
   _25201a: '#25201a',
   containerBGColor: 'rgba(51, 50, 50, 0.4)',
@@ -21,6 +24,7 @@ export const colors = {
   greenOpacity: '#BEB130',
   _BD2332: '#BD2332',
   _BD2332_0_3: 'rgba(189, 35, 50, 0.3)',
+  _99999: '#999999',
 };
 
 export const darkThemeColors = {

@@ -28,4 +28,8 @@ export const AppStyles = StyleSheet.create({
   Hcenter: {
     alignItems: 'center',
   },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
 });

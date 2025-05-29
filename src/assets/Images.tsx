@@ -51,6 +51,10 @@ export const IMAGES = {
   arrow: require('./icon/create/arrow.png'),
   world: require('./icon/create/world.png'),
   follower: require('./icon/create/follower.png'),
+  fav: require('./icon/create/fav.png'),
+  event: require('./icon/create/event.png'),
+  emoji: require('./icon/create/emoji.png'),
+  dropdown: require('./icon/create/dropdown.png'),
 
   //tab
   trips: require('./icon/tab/trips.png'),

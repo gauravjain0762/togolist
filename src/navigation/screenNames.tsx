@@ -15,6 +15,7 @@ export const SCREENS = {
   ProfileScreen: 'ProfileScreen',
   VerifyAccountScreen: 'VerifyAccountScreen',
   PlaceDetails: 'PlaceDetails',
+  Experience: 'Experience',
 };
 
 export interface ScreenNames {
@@ -34,6 +35,7 @@ export interface ScreenNames {
   TabNavigator: string;
   VerifyAccountScreen: string;
   PlaceDetails: string;
+  Experience: string;
 }
 
 export const SCREEN_NAMES: ScreenNames = {

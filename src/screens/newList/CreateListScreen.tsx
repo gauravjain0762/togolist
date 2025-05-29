@@ -155,7 +155,9 @@ const CreateListScreen = () => {
                 opportunities
               </Text>
 
-              <TouchableOpacity style={styles.button1}>
+              <TouchableOpacity
+                onPress={() => navigateTo(SCREENS.Experience)}
+                style={styles.button1}>
                 <Text style={styles.buttonText1}>Learn More</Text>
               </TouchableOpacity>
             </View>
@@ -272,7 +274,7 @@ const styles = StyleSheet.create({
     width: 22,
     resizeMode: 'contain',
     marginRight: 5,
-    tintColor:"#3C3C4399"
+    tintColor: '#3C3C4399',
   },
   inputBox: {
     backgroundColor: colors.white,
