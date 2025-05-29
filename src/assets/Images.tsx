@@ -82,4 +82,7 @@ export const IMAGES = {
   bg3: require('./icon/profile/bg3.png'),
   bg4: require('./icon/profile/bg4.png'),
   bg5: require('./icon/profile/bg5.png'),
+  locationWhite: require('./icon/profile/locationWhite.png'),
+  user_icon: require('./icon/profile/user_icon.png'),
+  loca_icon: require('./icon/profile/loca_icon.png'),
 };

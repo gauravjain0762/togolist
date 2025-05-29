@@ -1,4 +1,6 @@
 import {
+  Dimensions,
+  FlatList,
   Image,
   ImageBackground,
   RefreshControl,
@@ -19,12 +21,102 @@ import {IMAGES} from '../../assets/Images';
 import {navigationRef} from '../../navigation/RootContainer';
 import {SCREENS} from '../../navigation/screenNames';
 import CustomHeader from '../../component/common/CustomHeader';
-import {Loader} from '../../component';
+import {LinearView, Loader} from '../../component';
 import {useGetDashboardQuery} from '../../api/dashboardApi';
 import {navigateTo} from '../../utils/commonFunction';
 import CustomBtn from '../../component/common/CustomBtn';
+import TogolistPro from '../../component/common/TogolistPro';
+import CardImage from '../../component/common/CardImage';
+import CardImageText from '../../component/common/CardImageText';
+import HeaderTextIcon from '../../component/common/HeaderTextIcon';
+import CardBottomText from '../../component/common/CardBottomText';
+import CardImageBtn from '../../component/common/CardImageBtn';
+import Calendar from '../../component/common/Calendar';
+import TravelCard from '../../component/common/TravelCard';
+import TravelCardLock from '../../component/common/TravelCardLock';
 
 type Props = {};
+
+const mockData = [
+  {
+    title: 'Aesthetics',
+    location: 'World Wide',
+    image: 'https://via.placeholder.com/300x200?text=Aesthetics',
+    users: [
+      {avatar: 'https://randomuser.me/api/portraits/men/1.jpg'},
+      {avatar: 'https://randomuser.me/api/portraits/women/2.jpg'},
+      {avatar: 'https://randomuser.me/api/portraits/men/3.jpg'},
+      {avatar: 'https://randomuser.me/api/portraits/women/4.jpg'},
+      {avatar: 'https://randomuser.me/api/portraits/men/5.jpg'},
+    ],
+  },
+  {
+    title: 'Tropical Explorations',
+    location: 'South America',
+    image: 'https://via.placeholder.com/300x200?text=Tropical',
+    users: [{avatar: 'https://randomuser.me/api/portraits/men/1.jpg'}],
+  },
+  {
+    title: 'Golf Courses',
+    location: 'South America',
+    image: 'https://via.placeholder.com/300x200?text=Golf',
+    users: [{avatar: 'https://randomuser.me/api/portraits/men/1.jpg'}],
+  },
+  {
+    title: 'Vibes',
+    location: 'South America',
+    image: 'https://via.placeholder.com/300x200?text=Vibes',
+    users: [{avatar: 'https://randomuser.me/api/portraits/men/1.jpg'}],
+  },
+  {
+    title: 'Golf Courses',
+    location: 'South America',
+    image: 'https://via.placeholder.com/300x200?text=Golf',
+    users: [{avatar: 'https://randomuser.me/api/portraits/men/1.jpg'}],
+  },
+  {
+    title: 'Vibes',
+    location: 'South America',
+    image: 'https://via.placeholder.com/300x200?text=Vibes',
+    users: [{avatar: 'https://randomuser.me/api/portraits/men/1.jpg'}],
+  },
+];
+
+
+const events = [
+  {
+    date: 'April 23',
+    title: 'BBQ Festival',
+    location: 'San Diego',
+    attendees: '428',
+    image: 'https://your-cdn.com/bbq.jpg',
+    isPrivate: false,
+  },
+  {
+    date: 'May 2',
+    title: 'Jazz Night',
+    location: 'San Diego',
+    attendees: '752',
+    image: 'https://your-cdn.com/jazz.jpg',
+    isPrivate: true,
+  },
+  {
+    date: 'May 10',
+    title: 'Lafayette',
+    location: 'San Diego',
+    attendees: '103',
+    image: 'https://your-cdn.com/lafayette.jpg',
+    isPrivate: false,
+  },
+  {
+    date: 'May 26',
+    title: 'CRSSD',
+    location: 'San Diego',
+    attendees: '1.2K',
+    image: 'https://your-cdn.com/crssd.jpg',
+    isPrivate: true,
+  },
+];
 
 const ProfileScreen = (props: Props) => {
   const [selectedTab, setSelectedTab] = useState('Lists');
@@ -142,18 +234,29 @@ const ProfileScreen = (props: Props) => {
 
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
-      <CustomHeader onSearchPress={() => {}} onMorePress={() => {}} />
+      <CustomHeader
+        searchIconStyle={{
+          tintColor: searchShow ? colors.primary1 : colors.black,
+        }}
+        onSearchPress={() => {
+          setSearchShow(!searchShow);
+        }}
+        onMorePress={() => {}}
+      />
       <Loader visible={false} />
-      <ScrollView showsVerticalScrollIndicator={false} style={[AppStyles.mainSide, AppStyles.flex]}>
-        {/* <View style={styles.searchContainer}>
-          <Image source={IMAGES.search} style={styles.searchIcon} />
-          <TextInput
-            placeholder="Search Profile"
-            placeholderTextColor={colors.gray}
-            style={styles.searchInput}
-          />
-        </View> */}
-
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={[AppStyles.mainSide, AppStyles.flex]}>
+        {searchShow && (
+          <View style={styles.searchContainer}>
+            <Image source={IMAGES.search} style={styles.searchIcon} />
+            <TextInput
+              placeholder="Search Profile"
+              placeholderTextColor={colors.gray}
+              style={styles.searchInput}
+            />
+          </View>
+        )}
         <View style={styles.profileContainer}>
           <View style={styles.avatarView}>
             <Image
@@ -181,9 +284,8 @@ const ProfileScreen = (props: Props) => {
           onPress={() => {}}
           title={'Follow'}
         />
-
-        <View style={styles.tabContainer1}>
-          <ImageBackground source={IMAGES.bg3} style={styles.tabContainer}>
+        <LinearView linearViewStyle={{marginTop: 18, paddingVertical: 20}}>
+          <View style={styles.tabContainer}>
             {tabs.map(tab => (
               <TouchableOpacity
                 key={tab.key}
@@ -204,98 +306,146 @@ const ProfileScreen = (props: Props) => {
                 </Text>
               </TouchableOpacity>
             ))}
-          </ImageBackground>
-        </View>
-        <View
-          style={{flexDirection: 'row', alignItems: 'center', marginTop: 24}}>
-          <Text style={[commonFontStyle(700, 20, colors.black)]}>
-            Personal Lists
-          </Text>
-          <Image source={IMAGES.down} style={styles.downIcon} />
-        </View>
-
-        <View style={styles.categoryRow}>
-          {categories.map(category => {
-            return (
-              <TouchableOpacity
-                key={category.key}
-                onPress={() => setSelectedCategory(category.key)}
-                style={[styles.categoryButton, styles.categoryButtonActive]}>
-                {category.icon}
-                <Text
-                  style={[
-                    commonFontStyle(500, 14, colors.black),
-                    {marginLeft: 6},
-                  ]}>
-                  {category.key}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-
-        <ImageBackground
-          source={IMAGES.bg1} // Replace with actual pyramid image URL
-          style={styles.container}
-          imageStyle={styles.image}>
-          <Text style={styles.title}>For You</Text>
-
-          <View style={styles.bottomRow}>
-            <ImageBackground
-              source={IMAGES.bg5}
-              resizeMode="cover"
-              style={styles.chip}>
-              <Image source={IMAGES.ToglistCircleIcon} style={styles.forIcon} />
-              <Text style={styles.chipText}>Togolist</Text>
-            </ImageBackground>
-
-            <ImageBackground
-              source={IMAGES.bg5}
-              resizeMode="cover"
-              style={styles.chip}>
-              <Image source={IMAGES.wordWide} style={styles.forIcon1} />
-              <Text style={styles.chipText}>Worldwide</Text>
-            </ImageBackground>
           </View>
-        </ImageBackground>
-        <View
-          style={{flexDirection: 'row', alignItems: 'center', marginTop: 24}}>
-          <View style={{flexDirection: 'row', alignItems: 'center', flex: 1}}>
-            <Text style={[commonFontStyle(700, 20, colors.black)]}>
-              Collections
-            </Text>
-            <Image source={IMAGES.down} style={styles.downIcon} />
-          </View>
-          <Image source={IMAGES.add_icon} style={styles.addIcon} />
-        </View>
+          {/* <Text style={styles.description}>{'Add a description...'}</Text> */}
+        </LinearView>
 
-        <ImageBackground
-          source={IMAGES.collocation_bg}
-          resizeMode="contain"
-          imageStyle={{borderRadius: 20}}
-          style={styles.collocation_bg}>
-          <Text style={styles.chipText1}>No collections yet!</Text>
-          <Text style={styles.chipText2}>
-            {'Start saving places to create your \nfirst collection.'}
-          </Text>
-        </ImageBackground>
+        {selectedTab == 'Lists' && (
+          <>
+            <HeaderTextIcon title={'Personal Lists'} />
+            <View style={styles.categoryRow}>
+              {categories.map(category => {
+                return (
+                  <LinearView>
+                    <TouchableOpacity
+                      key={category.key}
+                      onPress={() => setSelectedCategory(category.key)}
+                      style={[
+                        styles.categoryButton,
+                        styles.categoryButtonActive,
+                      ]}>
+                      {category.icon}
+                      <Text
+                        style={[
+                          commonFontStyle(500, 14, colors.black),
+                          {marginLeft: 6},
+                        ]}>
+                        {category.key}
+                      </Text>
+                    </TouchableOpacity>
+                  </LinearView>
+                );
+              })}
+            </View>
+            <CardImage
+              onCardPress={() => {
+                navigateTo(SCREENS.CreatedForYou);
+              }}
+              title={'For You'}
+              Togolist
+              Worldwide
+            />
+            <HeaderTextIcon title={'Collections'} showAddIcon={true} />
 
-        <ImageBackground source={IMAGES.bg2} style={styles.card}>
-          <TouchableOpacity style={styles.closeIcon}>
-            <Text style={{fontSize: 16, color: '#f9a8b7'}}>✕</Text>
-          </TouchableOpacity>
+            <FlatList
+              data={mockData}
+              numColumns={2}
+              keyExtractor={(_, index) => index.toString()}
+              columnWrapperStyle={{
+                justifyContent: 'space-between',
+                marginBottom: 16,
+              }}
+              style={{marginTop: 10}}
+              renderItem={({item}) => <TravelCard {...item} />}
+            />
 
-          <View style={styles.content}>
-            <Text style={styles.title1}>Togolist Pro</Text>
-            <Text style={styles.subtitle}>
-              Use AI to help you plan your next adventure.
-            </Text>
-            <TouchableOpacity style={styles.tryProButton}>
-              <Text style={styles.tryProText}>Try Pro</Text>
-            </TouchableOpacity>
-          </View>
-        </ImageBackground>
-        {/* <View style={{height: 70}} /> */}
+            <CardImageText
+              title={'No collections yet!'}
+              subText={'Start saving places to create your \nfirst collection.'}
+            />
+            <TogolistPro />
+          </>
+        )}
+        {selectedTab == 'Saved' && (
+          <>
+            <TogolistPro />
+
+            <View style={styles.headerView}>
+              <Text style={[commonFontStyle(700, 20, colors.black)]}>
+                Saved Collections
+              </Text>
+              <Image source={IMAGES.down} style={styles.downIcon} />
+            </View>
+
+            <CardBottomText title={'Explore Collections'} />
+
+            <FlatList
+              data={mockData}
+              numColumns={2}
+              keyExtractor={(_, index) => index.toString()}
+              columnWrapperStyle={{
+                justifyContent: 'space-between',
+                marginBottom: 16,
+              }}
+              style={{marginTop: 10}}
+              renderItem={({item}) => <TravelCard {...item} />}
+            />
+          </>
+        )}
+        {selectedTab == 'Listings' && (
+          <>
+            <CardImageBtn
+              text1={'Coming Soon...'}
+              text2={'Monetize Your Account'}
+              text3={
+                'Create experiences & trip itineraries for account monetization opportunities'
+              }
+              btnText={'Learn More'}
+              onBtnPress={() => {}}
+            />
+          </>
+        )}
+
+        {selectedTab == 'Going' && (
+          <>
+            <HeaderTextIcon title={'Calendar View'} />
+            <View style={{flex: 1, justifyContent: 'center'}}>
+              <Calendar />
+            </View>
+            <HeaderTextIcon title={'Upcoming '} />
+            <CardBottomText title={'Start Planning...'} />
+            <FlatList
+              data={events}
+              numColumns={2}
+              keyExtractor={(_, index) => index.toString()}
+              columnWrapperStyle={{
+                justifyContent: 'space-between',
+                marginBottom: 16,
+              }}
+              style={{marginTop: 10}}
+              renderItem={({item}) => <TravelCardLock {...item} />}
+            />
+            <HeaderTextIcon title={'Past '} />
+            <CardImageText
+              // title={'No collections yet!'}
+              subText={
+                'Nothing yet! Find activities or start planning trips to view your goings history!'
+              }
+            />
+
+            <FlatList
+              data={events}
+              numColumns={2}
+              keyExtractor={(_, index) => index.toString()}
+              columnWrapperStyle={{
+                justifyContent: 'space-between',
+                marginBottom: 16,
+              }}
+              style={{marginTop: 10}}
+              renderItem={({item}) => <TravelCardLock {...item} />}
+            />
+          </>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -392,9 +542,9 @@ const styles = StyleSheet.create({
   tabContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    backgroundColor: '#7878800D',
+    // backgroundColor: '#7878800D',
     borderRadius: 12,
-    paddingVertical: 20,
+    // paddingVertical: 20,
   },
   tabContainer1: {
     backgroundColor: '#7878800D',
@@ -411,17 +561,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 16,
+    gap: 4,
   },
   categoryButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f8f8f8',
+    // backgroundColor: '#f8f8f8',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 24,
   },
   categoryButtonActive: {
-    backgroundColor: '#f1f1f1',
+    // backgroundColor: '#f1f1f1',
   },
   downIcon: {
     width: 10,
@@ -446,37 +597,6 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
 
-  container: {
-    height: 116,
-    borderRadius: 18,
-    overflow: 'hidden',
-    justifyContent: 'space-between',
-    padding: 10,
-    marginTop: 12,
-  },
-  image: {
-    borderRadius: 25,
-  },
-  title: {
-    ...commonFontStyle(700, 24, colors.white),
-  },
-  bottomRow: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    gap: 10,
-  },
-  chip: {
-    flexDirection: 'row',
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    alignItems: 'center',
-  },
-  chipText: {
-    marginLeft: 6,
-    ...commonFontStyle(500, 13, '#FAE8D1'),
-  },
-
   collocation_bg: {
     width: wp(370),
     height: wp(370),
@@ -485,45 +605,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  card: {
-    borderRadius: 24,
-    padding: 20,
-    alignSelf: 'center',
-    position: 'relative',
-    overflow: 'hidden',
-    marginTop: 20,
-  },
-  closeIcon: {
-    position: 'absolute',
-    top: 12,
-    right: 30,
-    zIndex: 1,
-  },
-  content: {
-    paddingRight: 80, // space for button
-  },
-  title1: {
-    ...commonFontStyle(700, 18, colors.white),
-  },
-  subtitle: {
-    marginVertical: 8,
-    ...commonFontStyle(400, 16, colors.white),
-  },
-  tryProButton: {
-    position: 'absolute',
-    right: 0,
-    bottom: 12,
-    backgroundColor: colors.white,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 8,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    shadowOffset: {width: 0, height: 2},
-    elevation: 3,
-  },
-  tryProText: {
-    ...commonFontStyle(600, 12, "#444444"),
+  headerView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 24,
   },
 });

@@ -16,6 +16,7 @@ export const SCREENS = {
   VerifyAccountScreen: 'VerifyAccountScreen',
   PlaceDetails: 'PlaceDetails',
   Experience: 'Experience',
+  CreatedForYou:"CreatedForYou"
 };
 
 export interface ScreenNames {
@@ -36,6 +37,7 @@ export interface ScreenNames {
   VerifyAccountScreen: string;
   PlaceDetails: string;
   Experience: string;
+  CreatedForYou: string;
 }
 
 export const SCREEN_NAMES: ScreenNames = {

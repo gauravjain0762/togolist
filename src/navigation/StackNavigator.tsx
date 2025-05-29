@@ -17,6 +17,7 @@ import TabNavigator from './TabNavigator';
 import VerifyAccountScreen from '../screens/auth/VerifyAccountScreen';
 import PlaceDetails from '../screens/newList/PlaceDetails';
 import Experience from '../screens/profile/Experience';
+import CreatedForYou from '../screens/profile/CreatedForYou';
 
 export type RootStackParamList = {
   HomeScreen: undefined;
@@ -149,7 +150,7 @@ const StackNavigator: FC = () => {
   // }
 
   return (
-    <Stack.Navigator initialRouteName={SCREENS.IntroScreen}>
+    <Stack.Navigator initialRouteName={SCREENS.TabNavigator}>
       <Stack.Screen
         options={({navigation}) => ({headerShown: false})}
         name={SCREENS.SplashScreen}
@@ -205,6 +206,11 @@ const StackNavigator: FC = () => {
         options={({navigation}) => ({headerShown: false})}
         name={SCREENS.Experience}
         component={Experience}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.CreatedForYou}
+        component={CreatedForYou}
       />
     </Stack.Navigator>
   );
