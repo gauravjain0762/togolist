@@ -1,8 +1,0 @@
-{
-    "workbench.editor.enablePreview": false,
-    "workbench.colorCustomizations": {
-        "editorError.foreground":   "#00000000",
-        "editorWarning.foreground": "#00000000",
-        "editorInfo.foreground":    "#00000000"
-    }
-}

@@ -18,6 +18,7 @@ import VerifyAccountScreen from '../screens/auth/VerifyAccountScreen';
 import PlaceDetails from '../screens/newList/PlaceDetails';
 import Experience from '../screens/profile/Experience';
 import CreatedForYou from '../screens/profile/CreatedForYou';
+import GuideRequest from '../screens/profile/GuideRequest';
 
 export type RootStackParamList = {
   HomeScreen: undefined;
@@ -211,6 +212,11 @@ const StackNavigator: FC = () => {
         options={({navigation}) => ({headerShown: false})}
         name={SCREENS.CreatedForYou}
         component={CreatedForYou}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.GuideRequest}
+        component={GuideRequest}
       />
     </Stack.Navigator>
   );

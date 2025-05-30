@@ -31,7 +31,7 @@ export default LinearView;
 
 const styles = StyleSheet.create({
   linearView: {
-    flex: 1,
+    // flex: 1,
     borderRadius: 20,
   },
 });

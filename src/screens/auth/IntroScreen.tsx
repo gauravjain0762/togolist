@@ -10,39 +10,7 @@ import {IMAGES} from '../../assets/Images';
 import CustomBtn from '../../component/common/CustomBtn';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
-
-let data = [
-  {
-    id: 1,
-    name: 'Togolists',
-    info: 'Discover new spots, save places to go with Togolists.',
-    images: IMAGES.intro1,
-  },
-  {
-    id: 2,
-    name: 'Experiences',
-    info: 'Know whats on, find events and activities near you.',
-    images: IMAGES.intro2,
-  },
-  {
-    id: 3,
-    name: 'Trips',
-    info: 'Plan trips with lists, itineraries & more.',
-    images: IMAGES.intro3,
-  },
-  {
-    id: 4,
-    name: 'Hosts',
-    info: 'Find local hosts for unique experiences.',
-    images: IMAGES.intro4,
-  },
-  {
-    id: 5,
-    name: 'Listings',
-    info: 'Create itineraries and experiences to earn with Togolist.',
-    images: IMAGES.intro5,
-  },
-];
+import {SwiperData} from '../../utils/constents';
 
 const IntroScreen = () => {
   const [stap, setStap] = useState(20);
@@ -50,7 +18,7 @@ const IntroScreen = () => {
   const slides = useMemo(() => {
     // This will only re-compute if `data` changes.
     // If `data` is static, this will run only once.
-    return data?.map((item, index) => (
+    return SwiperData?.map((item, index) => (
       <ImageBackground
         source={item?.images} // Ensure `item.images` is a valid image source
         resizeMode="cover"
@@ -60,7 +28,7 @@ const IntroScreen = () => {
         <Text style={styles.text}>{item?.info}</Text>
       </ImageBackground>
     ));
-  }, [data]);
+  }, [SwiperData]);
 
   const handleIndexChanged = useCallback(i => {
     // Swiper index `i` is 0-based

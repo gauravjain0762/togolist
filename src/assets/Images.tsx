@@ -55,6 +55,14 @@ export const IMAGES = {
   event: require('./icon/create/event.png'),
   emoji: require('./icon/create/emoji.png'),
   dropdown: require('./icon/create/dropdown.png'),
+  avatar: require('./icon/create/avatar.png'),
+  pin: require('./icon/create/pin.png'),
+  rating: require('./icon/create/rating.png'),
+  ratingfill: require('./icon/create/ratingfill.png'),
+  perks1: require('./icon/create/perks1.png'),
+  perks2: require('./icon/create/perks2.png'),
+  perks3: require('./icon/create/perks3.png'),
+  perks4: require('./icon/create/perks4.png'),
 
   //tab
   trips: require('./icon/tab/trips.png'),

@@ -15,7 +15,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
-import {commonFontStyle, wp} from '../../theme/fonts';
+import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {IMAGES} from '../../assets/Images';
 import {navigationRef} from '../../navigation/RootContainer';
@@ -81,7 +81,6 @@ const mockData = [
     users: [{avatar: 'https://randomuser.me/api/portraits/men/1.jpg'}],
   },
 ];
-
 
 const events = [
   {
@@ -257,6 +256,15 @@ const ProfileScreen = (props: Props) => {
             />
           </View>
         )}
+        {/* <View style={styles.searchContainer}>
+          <Image source={IMAGES.search} style={styles.searchIcon} />
+          <TextInput
+            placeholder="Search Profile"
+            placeholderTextColor={colors.gray}
+            style={styles.searchInput}
+          />
+        </View> */}
+
         <View style={styles.profileContainer}>
           <View style={styles.avatarView}>
             <Image
@@ -609,5 +617,47 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 24,
+  },
+  card: {
+    borderRadius: 24,
+    padding: 20,
+    alignSelf: 'center',
+    position: 'relative',
+    overflow: 'hidden',
+    marginTop: 20,
+    marginBottom: hp(50),
+  },
+  closeIcon: {
+    position: 'absolute',
+    top: 12,
+    right: 30,
+    zIndex: 1,
+  },
+  content: {
+    paddingRight: 80, // space for button
+  },
+  title1: {
+    ...commonFontStyle(700, 18, colors.white),
+  },
+  subtitle: {
+    marginVertical: 8,
+    ...commonFontStyle(400, 16, colors.white),
+  },
+  tryProButton: {
+    position: 'absolute',
+    right: 0,
+    bottom: 12,
+    backgroundColor: colors.white,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    shadowOffset: {width: 0, height: 2},
+    elevation: 3,
+  },
+  tryProText: {
+    ...commonFontStyle(600, 12, '#444444'),
   },
 });

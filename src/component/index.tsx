@@ -6,6 +6,7 @@ import SocialBtn from './common/SocialBtn';
 import AuthHeader from './common/AuthHeader';
 import CustomHeader from './common/CustomHeader';
 import LinearView from './common/LinearView';
+import GradientBtn from './common/GradientBtn';
 
 export {
   Loader,
@@ -16,4 +17,5 @@ export {
   AuthHeader,
   CustomHeader,
   LinearView,
+  GradientBtn,
 };
