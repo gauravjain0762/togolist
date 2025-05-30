@@ -6,7 +6,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, {FC} from 'react';
+import React, {FC, memo} from 'react';
 import {colors} from '../../theme/colors';
 import {commonFontStyle, hp} from '../../theme/fonts';
 import LinearGradient from 'react-native-linear-gradient';
@@ -38,7 +38,7 @@ const GradientBtn: FC<button> = ({
   );
 };
 
-export default GradientBtn;
+export default memo(GradientBtn);
 
 const styles = StyleSheet.create({
   btn: {

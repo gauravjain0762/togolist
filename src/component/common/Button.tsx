@@ -1,4 +1,6 @@
 import {
+  Image,
+  ImageProps,
   StyleSheet,
   Text,
   TextStyle,
@@ -8,13 +10,15 @@ import {
 } from 'react-native';
 import React, {FC, memo} from 'react';
 import {colors} from '../../theme/colors';
-import {commonFontStyle, hp} from '../../theme/fonts';
+import {commonFontStyle, hp, wp} from '../../theme/fonts';
 
 type button = {
   title: string;
   onPress?: () => void;
   BtnStyle?: ViewStyle;
   titleStyle?: TextStyle;
+  type?: 'fill' | 'outline';
+  leftImg?: ImageProps;
 };
 
 const Button: FC<button> = ({
@@ -22,10 +26,21 @@ const Button: FC<button> = ({
   BtnStyle,
   onPress = () => {},
   titleStyle,
+  type = 'fill',
+  leftImg,
 }) => {
-  return (
+  return type == 'fill' ? (
     <TouchableOpacity onPress={() => onPress()} style={[styles.btn, BtnStyle]}>
+      {leftImg && <Image source={leftImg} style={styles.leftimg} />}
+
       <Text style={[styles.title, titleStyle]}>{title}</Text>
+    </TouchableOpacity>
+  ) : (
+    <TouchableOpacity
+      onPress={() => onPress()}
+      style={[styles.outlinebtn, BtnStyle]}>
+      {leftImg && <Image source={leftImg} style={styles.leftimg} />}
+      <Text style={[styles.outlinetitle, titleStyle]}>{title}</Text>
     </TouchableOpacity>
   );
 };
@@ -39,8 +54,28 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: hp(18),
+    gap: wp(8),
+    flexDirection: 'row',
   },
   title: {
     ...commonFontStyle(700, 18, colors.white),
+  },
+  outlinebtn: {
+    borderWidth: 1,
+    borderColor: colors._BD2332,
+    paddingVertical: hp(18),
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 14,
+    gap: wp(8),
+    flexDirection: 'row',
+  },
+  outlinetitle: {
+    ...commonFontStyle(700, 18, colors._BD2332),
+  },
+  leftimg: {
+    width: wp(30),
+    height: wp(30),
+    resizeMode: 'contain',
   },
 });

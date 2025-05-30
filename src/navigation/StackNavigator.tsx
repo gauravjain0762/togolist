@@ -19,6 +19,9 @@ import PlaceDetails from '../screens/newList/PlaceDetails';
 import Experience from '../screens/profile/Experience';
 import CreatedForYou from '../screens/profile/CreatedForYou';
 import GuideRequest from '../screens/profile/GuideRequest';
+import Favorites from '../screens/profile/Favorites';
+import BeenThere from '../screens/profile/BeenThere';
+import Shared from '../screens/profile/Shared';
 
 export type RootStackParamList = {
   HomeScreen: undefined;
@@ -217,6 +220,21 @@ const StackNavigator: FC = () => {
         options={({navigation}) => ({headerShown: false})}
         name={SCREENS.GuideRequest}
         component={GuideRequest}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.Favorites}
+        component={Favorites}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.BeenThere}
+        component={BeenThere}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.Shared}
+        component={Shared}
       />
     </Stack.Navigator>
   );

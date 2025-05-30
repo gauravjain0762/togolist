@@ -1,20 +1,27 @@
-import { StyleSheet, Text, View, SafeAreaView, Animated, Easing } from 'react-native';
-import React, { useRef } from 'react';
-import { Provider } from 'react-redux';
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  Animated,
+  Easing,
+} from 'react-native';
+import React, {useRef} from 'react';
+import {Provider} from 'react-redux';
 // import store from './src/redux';
 import Toast from 'react-native-toast-message';
-import { colors } from './src/theme/colors';
-import { hp, commonFontStyle, SCREEN_WIDTH } from './src/theme/fonts';
+import {colors} from './src/theme/colors';
+import {hp, commonFontStyle, SCREEN_WIDTH} from './src/theme/fonts';
 import StackNavigator from './src/navigation/StackNavigator';
 import RootContainer from './src/navigation/RootContainer';
 import ToastComponent from './src/component/common/ToastComponent';
 import {PersistGate} from 'redux-persist/integration/react';
-import { persistor, store } from './src/store';
+import {persistor, store} from './src/store';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 type Props = {};
 
 const App = (props: Props) => {
-  
   const lineAnim = useRef(new Animated.Value(1)).current;
 
   const startLineAnimation = () => {
@@ -39,22 +46,24 @@ const App = (props: Props) => {
   };
 
   return (
-    <Provider store={store}>
-     <PersistGate loading={null} persistor={persistor}>
-      <View style={{ flex: 1 }}>
-        <RootContainer />
-        <Toast
-            config={toastConfig}
-            position="bottom"
-            topOffset={0}
-            visibilityTime={3000}
-            onShow={() => {
-              startLineAnimation(); // Reset and trigger the animation
-            }}
-          />
-      </View>
-      </PersistGate>
+    <GestureHandlerRootView>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <View style={{flex: 1}}>
+            <RootContainer />
+            <Toast
+              config={toastConfig}
+              position="bottom"
+              topOffset={0}
+              visibilityTime={3000}
+              onShow={() => {
+                startLineAnimation(); // Reset and trigger the animation
+              }}
+            />
+          </View>
+        </PersistGate>
       </Provider>
+    </GestureHandlerRootView>
   );
 };
 
@@ -75,6 +84,6 @@ const styles = StyleSheet.create({
   },
   textStyleToast: {
     ...commonFontStyle(500, 14, colors.white),
-    textAlign: 'center'
+    textAlign: 'center',
   },
 });

@@ -135,6 +135,7 @@ const ProfileScreen = (props: Props) => {
           }}
         />
       ),
+      onPress: () => navigateTo(SCREENS.Favorites),
     },
     {
       key: 'Been There',
@@ -148,6 +149,7 @@ const ProfileScreen = (props: Props) => {
           }}
         />
       ),
+      onPress: () => navigateTo(SCREENS.BeenThere),
     },
     {
       key: 'Shared',
@@ -161,6 +163,7 @@ const ProfileScreen = (props: Props) => {
           }}
         />
       ),
+      onPress: () => navigateTo(SCREENS.Shared),
     },
   ];
   const tabs = [
@@ -327,7 +330,10 @@ const ProfileScreen = (props: Props) => {
                   <LinearView>
                     <TouchableOpacity
                       key={category.key}
-                      onPress={() => setSelectedCategory(category.key)}
+                      onPress={() => (
+                        setSelectedCategory(category.key),
+                        category?.onPress && category?.onPress()
+                      )}
                       style={[
                         styles.categoryButton,
                         styles.categoryButtonActive,

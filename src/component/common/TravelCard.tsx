@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, {memo} from 'react';
 import {
   View,
   ImageBackground,
@@ -26,30 +26,30 @@ const TravelCard = ({title, location, image, avatar, users}) => {
         colors={['transparent', 'rgba(0,0,0,0.6)']}
         style={styles.overlay}>
         {/* <View style={styles.overlay}> */}
-          <Text style={styles.title}>{title}</Text>
-          <View style={styles.footer}>
-            <View style={styles.locationRow}>
-              <Image
-                source={IMAGES.locationWhite}
-                style={{width: 16, height: 16}}
-              />
-              <Text style={styles.location}>{location}</Text>
-            </View>
-            <View style={styles.avatarStack}>
-              {visibleUsers.map((user, index) => (
-                <Image
-                  key={index}
-                  source={{uri: user.avatar}}
-                  style={[styles.avatar, {marginLeft: index === 0 ? -10 : -10}]}
-                />
-              ))}
-              {extraUserCount > 0 && (
-                <View style={[styles.avatar1, styles.extraAvatar]}>
-                  <Text style={styles.extraText}>+{extraUserCount}</Text>
-                </View>
-              )}
-            </View>
+        <Text style={styles.title}>{title}</Text>
+        <View style={styles.footer}>
+          <View style={styles.locationRow}>
+            <Image
+              source={IMAGES.locationWhite}
+              style={{width: 16, height: 16}}
+            />
+            <Text style={styles.location}>{location}</Text>
           </View>
+          <View style={styles.avatarStack}>
+            {visibleUsers.map((user, index) => (
+              <Image
+                key={index}
+                source={{uri: user.avatar}}
+                style={[styles.avatar, {marginLeft: index === 0 ? -10 : -10}]}
+              />
+            ))}
+            {extraUserCount > 0 && (
+              <View style={[styles.avatar1, styles.extraAvatar]}>
+                <Text style={styles.extraText}>+{extraUserCount}</Text>
+              </View>
+            )}
+          </View>
+        </View>
         {/* </View> */}
       </LinearGradient>
     </ImageBackground>

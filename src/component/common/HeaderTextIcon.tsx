@@ -20,19 +20,22 @@ const HeaderTextIcon: FC<button> = ({
   Lists,
   onDownPress,
   onAddPress,
-  showAddIcon
+  showAddIcon,
+  headerStyle,
 }: any) => {
   return (
-    <View style={styles.headerView}>
+    <View style={[styles.headerView, headerStyle]}>
       <TouchableOpacity
         onPress={onDownPress}
         style={{flexDirection: 'row', alignItems: 'center', flex: 1}}>
         <Text style={[commonFontStyle(700, 20, colors.black)]}>{title}</Text>
         <Image source={IMAGES.down} style={styles.downIcon} />
       </TouchableOpacity>
-     {showAddIcon && <TouchableOpacity onPress={onAddPress}>
-        <Image source={IMAGES.add_icon} style={styles.addIcon} />
-      </TouchableOpacity>}
+      {showAddIcon && (
+        <TouchableOpacity onPress={onAddPress}>
+          <Image source={IMAGES.add_icon} style={styles.addIcon} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

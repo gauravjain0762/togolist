@@ -18,6 +18,9 @@ export const SCREENS = {
   Experience: 'Experience',
   CreatedForYou: 'CreatedForYou',
   GuideRequest: 'GuideRequest',
+  Favorites: 'Favorites',
+  BeenThere: 'BeenThere',
+  Shared: 'Shared',
 };
 
 export interface ScreenNames {
@@ -39,6 +42,9 @@ export interface ScreenNames {
   PlaceDetails: string;
   Experience: string;
   CreatedForYou: string;
+  Favorites: string;
+  BeenThere: string;
+  Shared: string;
 }
 
 export const SCREEN_NAMES: ScreenNames = {

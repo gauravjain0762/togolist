@@ -7,15 +7,28 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
 import {colors} from '../../theme/colors';
-import {Button, CustomHeader, LinearView} from '../../component';
+import {
+  Button,
+  CustomHeader,
+  EventBottomSheet,
+  LinearView,
+} from '../../component';
 import {IMAGES} from '../../assets/Images';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 const PlaceDetails = () => {
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+  const handleSheetChanges = useCallback((index: number) => {
+    console.log('handleSheetChanges', index);
+  }, []);
   return (
     <SafeAreaView style={[AppStyles.flex, styles.container]}>
       <CustomHeader
@@ -126,7 +139,9 @@ const PlaceDetails = () => {
                 {'FAQ’s'}
               </Text>
             </View>
-            <TouchableOpacity style={styles.postbtn}>
+            <TouchableOpacity
+              onPress={() => handlePresentModalPress()}
+              style={styles.postbtn}>
               <Text style={styles.btntxt}>{'Post'}</Text>
             </TouchableOpacity>
           </LinearView>
@@ -138,6 +153,10 @@ const PlaceDetails = () => {
           </LinearView>
         </View>
       </ScrollView>
+      <EventBottomSheet
+        bottomSheetModalRef={bottomSheetModalRef}
+        handleSheetChanges={e => handleSheetChanges(e)}
+      />
     </SafeAreaView>
   );
 };

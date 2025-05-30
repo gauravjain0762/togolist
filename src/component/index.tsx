@@ -7,6 +7,12 @@ import AuthHeader from './common/AuthHeader';
 import CustomHeader from './common/CustomHeader';
 import LinearView from './common/LinearView';
 import GradientBtn from './common/GradientBtn';
+import EventBottomSheet from './createNew/EventBottomSheet';
+import GetCheckboxImage from './createNew/GetCheckboxImage';
+import SearchBar from './common/SearchBar';
+import PlacesCard from './profile/PlacesCard';
+import SharedCard from './profile/SharedCard';
+import ShareBottomSheet from './profile/ShareBottomSheet';
 
 export {
   Loader,
@@ -18,4 +24,10 @@ export {
   CustomHeader,
   LinearView,
   GradientBtn,
+  EventBottomSheet,
+  GetCheckboxImage,
+  SearchBar,
+  PlacesCard,
+  SharedCard,
+  ShareBottomSheet,
 };

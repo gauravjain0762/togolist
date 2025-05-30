@@ -1,6 +1,7 @@
 import {
   Image,
   ImageBackground,
+  ImageStyle,
   StyleSheet,
   Text,
   TextStyle,
@@ -13,20 +14,33 @@ import {colors} from '../../theme/colors';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {IMAGES} from '../../assets/Images';
 
-const CardImage: FC<button> = ({
+type card = {
+  Togolist?: boolean;
+  title: string;
+  Worldwide?: boolean;
+  Lists?: boolean;
+  onCardPress: () => void;
+  listCount?: number;
+  BgImgStyle?: ImageStyle;
+  BGStyle?: ImageStyle;
+};
+
+const CardImage: FC<card> = ({
   Togolist,
   title,
   Worldwide,
   Lists,
   onCardPress,
   listCount,
+  BgImgStyle,
+  BGStyle,
 }: any) => {
   return (
     <TouchableOpacity onPress={onCardPress}>
       <ImageBackground
         source={IMAGES.bg1} // Replace with actual pyramid image URL
-        style={styles.container}
-        imageStyle={styles.image}>
+        style={[styles.container, BGStyle]}
+        imageStyle={[styles.image, BgImgStyle]}>
         <Text style={styles.title}>{title}</Text>
 
         <View style={styles.bottomRow}>

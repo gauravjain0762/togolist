@@ -63,6 +63,10 @@ export const IMAGES = {
   perks2: require('./icon/create/perks2.png'),
   perks3: require('./icon/create/perks3.png'),
   perks4: require('./icon/create/perks4.png'),
+  send: require('./icon/create/send.png'),
+  admin: require('./icon/create/admin.png'),
+  edit: require('./icon/create/edit.png'),
+  report: require('./icon/create/report.png'),
 
   //tab
   trips: require('./icon/tab/trips.png'),
@@ -93,4 +97,8 @@ export const IMAGES = {
   locationWhite: require('./icon/profile/locationWhite.png'),
   user_icon: require('./icon/profile/user_icon.png'),
   loca_icon: require('./icon/profile/loca_icon.png'),
+  worldwide: require('./icon/profile/world.png'),
+  search1: require('./icon/profile/search.png'),
+  food: require('./icon/profile/food.png'),
+  addlist: require('./icon/profile/addlist.png'),
 };
