@@ -21,6 +21,13 @@ export const SCREENS = {
   Favorites: 'Favorites',
   BeenThere: 'BeenThere',
   Shared: 'Shared',
+  ProfileSettingScreen:"ProfileSettingScreen",
+  SubscriptionScreen:"SubscriptionScreen",
+  PersonalInformation:"PersonalInformation",
+  BillingScreen:"BillingScreen",
+  NotificationsSetting:"NotificationsSetting",
+  SecurityScreen:"SecurityScreen",
+  SubscriptionScreenSetting:"SubscriptionScreenSetting",
 };
 
 export interface ScreenNames {
@@ -45,6 +52,13 @@ export interface ScreenNames {
   Favorites: string;
   BeenThere: string;
   Shared: string;
+  ProfileSettingScreen: string;
+  SubscriptionScreen: string;
+  PersonalInformation: string;
+  BillingScreen: string;
+  NotificationsSetting: string;
+  SecurityScreen: string;
+  SubscriptionScreenSetting: string;
 }
 
 export const SCREEN_NAMES: ScreenNames = {

@@ -243,7 +243,9 @@ const ProfileScreen = (props: Props) => {
         onSearchPress={() => {
           setSearchShow(!searchShow);
         }}
-        onMorePress={() => {}}
+        onMorePress={() => {
+          navigateTo(SCREENS.ProfileSettingScreen)
+        }}
       />
       <Loader visible={false} />
       <ScrollView

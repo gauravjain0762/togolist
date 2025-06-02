@@ -22,6 +22,13 @@ import GuideRequest from '../screens/profile/GuideRequest';
 import Favorites from '../screens/profile/Favorites';
 import BeenThere from '../screens/profile/BeenThere';
 import Shared from '../screens/profile/Shared';
+import ProfileSettingScreen from '../screens/profile/profileSetting/ProfileSettingScreen';
+import SubscriptionScreen from '../screens/profile/profileSetting/SubscriptionScreen';
+import PersonalInformation from '../screens/profile/profileSetting/PersonalInformation';
+import NotificationsSetting from '../screens/profile/profileSetting/NotificationsSetting';
+import BillingScreen from '../screens/profile/profileSetting/BillingScreen';
+import SubscriptionScreenSetting from '../screens/profile/profileSetting/SubscriptionScreenSetting';
+import SecurityScreen from '../screens/profile/profileSetting/SecurityScreen';
 
 export type RootStackParamList = {
   HomeScreen: undefined;
@@ -235,6 +242,41 @@ const StackNavigator: FC = () => {
         options={({navigation}) => ({headerShown: false})}
         name={SCREENS.Shared}
         component={Shared}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.ProfileSettingScreen}
+        component={ProfileSettingScreen}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.SubscriptionScreen}
+        component={SubscriptionScreen}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.PersonalInformation}
+        component={PersonalInformation}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.BillingScreen}
+        component={BillingScreen}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.NotificationsSetting}
+        component={NotificationsSetting}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.SecurityScreen}
+        component={SecurityScreen}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.SubscriptionScreenSetting}
+        component={SubscriptionScreenSetting}
       />
     </Stack.Navigator>
   );

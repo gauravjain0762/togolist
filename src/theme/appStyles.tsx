@@ -32,4 +32,7 @@ export const AppStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  onlyRow: {
+    flexDirection: 'row',
+  },
 });
