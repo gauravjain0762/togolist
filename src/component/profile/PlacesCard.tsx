@@ -4,6 +4,7 @@ import {
   ImageStyle,
   StyleSheet,
   Text,
+  TextStyle,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -20,6 +21,8 @@ type card = {
   BgImgStyle?: ImageStyle;
   BGStyle?: ImageStyle;
   location?: string;
+  locationIcon?: boolean;
+  locationStyle?: TextStyle;
 };
 
 const PlacesCard: FC<card> = ({
@@ -29,6 +32,8 @@ const PlacesCard: FC<card> = ({
   BgImgStyle,
   likeCount,
   location,
+  locationIcon = false,
+  locationStyle,
 }) => {
   return (
     <TouchableOpacity onPress={onCardPress}>
@@ -36,9 +41,14 @@ const PlacesCard: FC<card> = ({
         source={IMAGES.bg1} // Replace with actual pyramid image URL
         style={[styles.container, BGStyle]}
         imageStyle={[styles.image, BgImgStyle]}>
-        <View>
+        <View style={[{gap: wp(4)}]}>
           <Text style={styles.title}>{title}</Text>
-          <Text style={styles.location}>{location}</Text>
+          <View style={[AppStyles.row, {gap: wp(4)}]}>
+            {locationIcon && (
+              <Image source={IMAGES.wordWide} style={styles.pin} />
+            )}
+            <Text style={[styles.location, locationStyle]}>{location}</Text>
+          </View>
         </View>
         <View style={[AppStyles.row, styles.footer]}>
           <Image source={IMAGES.food} style={styles.food} />
@@ -70,7 +80,6 @@ const styles = StyleSheet.create({
   },
   location: {
     ...commonFontStyle(500, 12, colors._E4E4E4),
-    marginTop: hp(4),
   },
   fav: {
     width: wp(22),
@@ -85,5 +94,10 @@ const styles = StyleSheet.create({
   footer: {
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  pin: {
+    width: wp(18),
+    height: wp(18),
+    resizeMode: 'contain',
   },
 });

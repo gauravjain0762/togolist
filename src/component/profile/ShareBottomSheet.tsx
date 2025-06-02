@@ -7,9 +7,10 @@ import {
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
 import {IMAGES} from '../../assets/Images';
-import {commonFontStyle, hp, wp} from '../../theme/fonts';
+import {SCREEN_WIDTH, commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {Button, GetCheckboxImage} from '..';
+import ColorPicker, {HueSlider, Panel1, Preview} from 'reanimated-color-picker';
 
 type sheet = {
   bottomSheetModalRef?: Ref<BottomSheetModal>;
@@ -29,10 +30,17 @@ const ShareBottomSheet: FC<sheet> = ({
   const [short, setshort] = useState(false);
   const [short1, setshort1] = useState(false);
   const [short2, setshort2] = useState(false);
+
+  const onSelectColor = ({hex}) => {
+    'worklet';
+    // do something with the selected color.
+    console.log(hex);
+  };
   return (
     <BottomSheetModalProvider>
       <BottomSheetModal
         ref={bottomSheetModalRef}
+        maxDynamicContentSize={450}
         onChange={e => handleSheetChanges(e)}>
         <BottomSheetScrollView
           style={scrollviewStyle}
@@ -48,6 +56,23 @@ const ShareBottomSheet: FC<sheet> = ({
               <Image source={IMAGES.worldwide} style={styles.icon} />
             </View>
             <View style={styles.divider1} />
+            <ColorPicker
+              style={styles.colorPicker}
+              value="red"
+              onComplete={onSelectColor}>
+              <Panel1
+                style={styles.panel}
+                thumbSize={20}
+                thumbStyle={styles.thumbStyle}
+              />
+              <HueSlider
+                sliderThickness={12}
+                thumbStyle={styles.thumbStyle}
+                style={styles.HueSlider}
+                thumbSize={20}
+              />
+            </ColorPicker>
+            {/* <View style={styles.divider1} /> */}
             <View style={styles.row}>
               <Text style={styles.sheetlabel}>{'Edit Event'}</Text>
               <Image source={IMAGES.edit} style={styles.icon} />
@@ -132,5 +157,20 @@ const styles = StyleSheet.create({
   btnStyle: {
     backgroundColor: colors.black,
     marginVertical: hp(28),
+  },
+  colorPicker: {
+    width: SCREEN_WIDTH - wp(64),
+    alignSelf: 'center',
+    margin: wp(7),
+  },
+  panel: {
+    height: hp(422),
+  },
+  thumbStyle: {
+    borderWidth: wp(11),
+    borderRadius: 100,
+  },
+  HueSlider: {
+    borderRadius: 100,
   },
 });

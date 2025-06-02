@@ -15,6 +15,8 @@ import {IMAGES} from '../../assets/Images';
 import {Fs, commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import HeaderTextIcon from '../../component/common/HeaderTextIcon';
+import {navigateTo} from '../../utils/commonFunction';
+import {SCREENS} from '../../navigation/screenNames';
 
 const cards = [
   {
@@ -22,6 +24,7 @@ const cards = [
     location: 'Egypt',
     lists: 31,
     image: 'https://source.unsplash.com/600x400/?egypt,pyramids',
+    onPress: () => navigateTo(SCREENS.FoodPlace),
   },
   {
     title: 'Samuri Japanese Restaurant',
@@ -115,7 +118,7 @@ const BeenThere = () => {
                 return (
                   <PlacesCard
                     onCardPress={() => {
-                      // navigateTo(SCREENS.CreatedForYou);
+                      item?.onPress && item?.onPress();
                     }}
                     title={item?.title}
                     location={item?.location}

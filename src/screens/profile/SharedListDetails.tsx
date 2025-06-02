@@ -10,49 +10,48 @@ import {
 import React, {useCallback, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
-import {colors} from '../../theme/colors';
 import {
   Button,
   CustomHeader,
+  OptionBar,
+  PlacesCard,
   SearchBar,
   ShareBottomSheet,
   SharedCard,
 } from '../../component';
 import {IMAGES} from '../../assets/Images';
+import {colors} from '../../theme/colors';
 import {Fs, commonFontStyle, hp, wp} from '../../theme/fonts';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import {navigateTo} from '../../utils/commonFunction';
-import {SCREENS} from '../../navigation/screenNames';
 
 const cards = [
   {
-    title: 'Fav Food Spots',
-    location: 'Egypt',
+    title: 'Samuri Japanese Restaurant',
+    location: '979 Lomas Santa Fe Dr, Solana Beach...',
     lists: 31,
     image: 'https://source.unsplash.com/600x400/?egypt,pyramids',
-    onPress: () => navigateTo(SCREENS.SharedListDetails),
   },
   {
-    title: 'Things to Do',
-    location: 'Worldwide',
+    title: 'Mt. Hood Timber Lodge',
+    location: 'National park in California',
     lists: 23,
     image: 'https://source.unsplash.com/600x400/?unesco,heritage',
   },
   {
-    title: 'Hiking',
-    location: 'London',
+    title: 'Samuri Japanese Restaurant',
+    location: '979 Lomas Santa Fe Dr, Solana Beach...',
     lists: 6,
     image: 'https://source.unsplash.com/600x400/?london,big-ben',
   },
   {
-    title: 'Best Coffee Spots',
-    location: 'Peru',
+    title: 'Mt. Hood Timber Lodge',
+    location: 'National park in California',
     lists: 11,
     image: 'https://source.unsplash.com/600x400/?peru,mountains',
   },
 ];
 
-const Shared = () => {
+const SharedListDetails = () => {
   const [select, setSelect] = useState('List View');
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -62,7 +61,6 @@ const Shared = () => {
   const handleSheetChanges = useCallback((index: number) => {
     console.log('handleSheetChanges', index);
   }, []);
-
   return (
     <SafeAreaView style={[AppStyles.flex, styles.mainContainer]}>
       <CustomHeader
@@ -76,10 +74,9 @@ const Shared = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.containter}>
           <View style={styles.info}>
-            <Text style={styles.title}>{'North America'}</Text>
-            <View style={styles.userinfo}>
-              <Image source={IMAGES.avatar} style={styles.user} />
-              <Text style={styles.username}>{'@ray'}</Text>
+            <View>
+              <Text style={styles.graytitle}>{'North America'}</Text>
+              <Text style={styles.title}>{'Fav Food Spots'}</Text>
             </View>
             <View style={styles.network}>
               <View style={styles.infoRow}>
@@ -90,15 +87,7 @@ const Shared = () => {
                 <Image source={IMAGES.world} style={styles.icon} />
                 <Text style={[styles.text, styles.textWithIcon]}>Public</Text>
               </View>
-              <View style={styles.bookmarkRow}>
-                <Image
-                  source={IMAGES.save_cion}
-                  style={[styles.icon, {width: wp(16), height: wp(16)}]}
-                />
-                <Text style={styles.text}>1.2K</Text>
-              </View>
             </View>
-            <Text style={styles.travel}>{'Travel around North America.'}</Text>
           </View>
           <SearchBar
             container={{marginHorizontal: 0}}
@@ -133,6 +122,7 @@ const Shared = () => {
               </Text>
             </TouchableOpacity>
           </View>
+          <OptionBar container={styles.optioncontainer} />
           <FlatList
             data={cards}
             showsVerticalScrollIndicator={false}
@@ -142,16 +132,15 @@ const Shared = () => {
             )}
             renderItem={({item}) => {
               return (
-                <SharedCard
+                <PlacesCard
                   onCardPress={() => {
-                    item?.onPress && item?.onPress();
+                    // navigateTo(SCREENS.CreatedForYou);
                   }}
                   title={item?.title}
+                  location={item?.location}
                   likeCount={item.lists}
-                  account
-                  address
-                  place
-                  listCount={item?.lists}
+                  locationIcon
+                  locationStyle={styles.location}
                 />
               );
             }}
@@ -159,7 +148,7 @@ const Shared = () => {
           <Button
             leftImg={IMAGES.addlist}
             type="outline"
-            title="Add a new list"
+            title="Add a new place"
             BtnStyle={styles.btn}
             onPress={() => handlePresentModalPress()}
           />
@@ -173,7 +162,7 @@ const Shared = () => {
   );
 };
 
-export default Shared;
+export default SharedListDetails;
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -194,29 +183,16 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: wp(16),
   },
-  title: {
-    ...commonFontStyle(700, 32, colors.black),
-  },
   containter: {
     paddingHorizontal: wp(16),
   },
   info: {
-    paddingHorizontal: wp(24),
+    paddingHorizontal: wp(8),
     marginTop: hp(10),
     gap: hp(12),
   },
-  user: {
-    resizeMode: 'contain',
-    width: wp(24),
-    height: wp(24),
-  },
-  username: {
-    ...commonFontStyle(500, 15, colors.black),
-  },
-  userinfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: wp(7),
+  title: {
+    ...commonFontStyle(700, 32, colors.black),
   },
   container: {
     flexDirection: 'row',
@@ -227,11 +203,6 @@ const styles = StyleSheet.create({
   infoRow: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  bookmarkRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
   },
   text: {
     ...commonFontStyle(500, 18, colors._999999),
@@ -265,12 +236,22 @@ const styles = StyleSheet.create({
     marginVertical: 12,
     ...commonFontStyle(600, 15, '#999999'),
   },
-  Listcontainer: {},
-  liastseparator: {
-    height: hp(8),
+  graytitle: {
+    ...commonFontStyle(700, 32, colors._999999),
   },
   btn: {
     marginVertical: hp(16),
     paddingVertical: hp(12),
+  },
+  Listcontainer: {},
+  liastseparator: {
+    height: hp(8),
+  },
+  location: {
+    ...commonFontStyle(600, 12, colors.white),
+    marginTop: 0,
+  },
+  optioncontainer: {
+    marginBottom: hp(8),
   },
 });

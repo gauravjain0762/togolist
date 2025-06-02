@@ -122,4 +122,9 @@ export const IMAGES = {
   Tracking: require('./icon/profileSetting/Tracking.png'),
   Verified: require('./icon/profileSetting/Verified.png'),
   workspace_premium: require('./icon/profileSetting/workspace_premium.png'),
+  checkbox: require('./icon/profile/checkbox.png'),
+  remove: require('./icon/profile/close.png'),
+  top: require('./icon/profile/top.png'),
+  distance: require('./icon/profile/distance.png'),
+  star: require('./icon/profile/star.png'),
 };

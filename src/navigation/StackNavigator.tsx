@@ -29,6 +29,8 @@ import NotificationsSetting from '../screens/profile/profileSetting/Notification
 import BillingScreen from '../screens/profile/profileSetting/BillingScreen';
 import SubscriptionScreenSetting from '../screens/profile/profileSetting/SubscriptionScreenSetting';
 import SecurityScreen from '../screens/profile/profileSetting/SecurityScreen';
+import SharedListDetails from '../screens/profile/SharedListDetails';
+import FoodPlace from '../screens/profile/FoodPlace';
 
 export type RootStackParamList = {
   HomeScreen: undefined;
@@ -277,6 +279,16 @@ const StackNavigator: FC = () => {
         options={({navigation}) => ({headerShown: false})}
         name={SCREENS.SubscriptionScreenSetting}
         component={SubscriptionScreenSetting}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.FoodPlace}
+        component={FoodPlace}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.SharedListDetails}
+        component={SharedListDetails}
       />
     </Stack.Navigator>
   );
