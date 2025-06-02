@@ -23,6 +23,8 @@ import {IMAGES} from '../../assets/Images';
 import {colors} from '../../theme/colors';
 import {Fs, commonFontStyle, hp, wp} from '../../theme/fonts';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {navigateTo} from '../../utils/commonFunction';
+import {SCREENS} from '../../navigation/screenNames';
 
 const cards = [
   {
@@ -30,6 +32,7 @@ const cards = [
     location: '979 Lomas Santa Fe Dr, Solana Beach...',
     lists: 31,
     image: 'https://source.unsplash.com/600x400/?egypt,pyramids',
+    onPress: () => navigateTo(SCREENS.EventDetails),
   },
   {
     title: 'Mt. Hood Timber Lodge',
@@ -134,7 +137,7 @@ const SharedListDetails = () => {
               return (
                 <PlacesCard
                   onCardPress={() => {
-                    // navigateTo(SCREENS.CreatedForYou);
+                    item?.onPress && item?.onPress();
                   }}
                   title={item?.title}
                   location={item?.location}

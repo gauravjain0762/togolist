@@ -14,6 +14,7 @@ import PlacesCard from './profile/PlacesCard';
 import SharedCard from './profile/SharedCard';
 import ShareBottomSheet from './profile/ShareBottomSheet';
 import OptionBar from './profile/OptionBar';
+import CommonSheet from './common/CommonSheet';
 
 export {
   Loader,
@@ -32,4 +33,5 @@ export {
   SharedCard,
   ShareBottomSheet,
   OptionBar,
+  CommonSheet,
 };

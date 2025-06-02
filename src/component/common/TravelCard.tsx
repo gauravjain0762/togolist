@@ -14,13 +14,20 @@ import LinearGradient from 'react-native-linear-gradient';
 
 const {width} = Dimensions.get('window');
 const CARD_WIDTH = (width - 48) / 2; // 16 padding + 16 gap
-const TravelCard = ({title, location, image, avatar, users}) => {
+const TravelCard = ({
+  title = '',
+  location = '',
+  image = '',
+  avatar = '',
+  users = [],
+  BGStyle,
+}) => {
   const visibleUsers = users?.slice(0, 2);
   const extraUserCount = users.length - visibleUsers.length;
   return (
     <ImageBackground
       source={IMAGES.bg}
-      style={styles.card}
+      style={[styles.card, BGStyle]}
       imageStyle={styles.image}>
       <LinearGradient
         colors={['transparent', 'rgba(0,0,0,0.6)']}
@@ -29,10 +36,12 @@ const TravelCard = ({title, location, image, avatar, users}) => {
         <Text style={styles.title}>{title}</Text>
         <View style={styles.footer}>
           <View style={styles.locationRow}>
-            <Image
-              source={IMAGES.locationWhite}
-              style={{width: 16, height: 16}}
-            />
+            {location && (
+              <Image
+                source={IMAGES.locationWhite}
+                style={{width: 16, height: 16}}
+              />
+            )}
             <Text style={styles.location}>{location}</Text>
           </View>
           <View style={styles.avatarStack}>

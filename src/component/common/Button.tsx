@@ -1,6 +1,8 @@
 import {
   Image,
   ImageProps,
+  ImageSize,
+  ImageStyle,
   StyleSheet,
   Text,
   TextStyle,
@@ -19,6 +21,7 @@ type button = {
   titleStyle?: TextStyle;
   type?: 'fill' | 'outline';
   leftImg?: ImageProps;
+  leftImgStyle?: ImageStyle;
 };
 
 const Button: FC<button> = ({
@@ -28,10 +31,13 @@ const Button: FC<button> = ({
   titleStyle,
   type = 'fill',
   leftImg,
+  leftImgStyle,
 }) => {
   return type == 'fill' ? (
     <TouchableOpacity onPress={() => onPress()} style={[styles.btn, BtnStyle]}>
-      {leftImg && <Image source={leftImg} style={styles.leftimg} />}
+      {leftImg && (
+        <Image source={leftImg} style={[styles.leftimg, leftImgStyle]} />
+      )}
 
       <Text style={[styles.title, titleStyle]}>{title}</Text>
     </TouchableOpacity>
@@ -39,7 +45,9 @@ const Button: FC<button> = ({
     <TouchableOpacity
       onPress={() => onPress()}
       style={[styles.outlinebtn, BtnStyle]}>
-      {leftImg && <Image source={leftImg} style={styles.leftimg} />}
+      {leftImg && (
+        <Image source={leftImg} style={[styles.leftimg, leftImgStyle]} />
+      )}
       <Text style={[styles.outlinetitle, titleStyle]}>{title}</Text>
     </TouchableOpacity>
   );

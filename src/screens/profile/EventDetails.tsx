@@ -12,14 +12,13 @@ import {
 import React, {useCallback, useMemo, useRef} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
-import {Button, CommonSheet, CustomHeader, LinearView} from '../../component';
 import {IMAGES} from '../../assets/Images';
+import {Button, CustomHeader, LinearView} from '../../component';
 import {SCREEN_WIDTH, commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
-import Swiper from 'react-native-swiper';
-import {SwiperData} from '../../utils/constents';
 import HeaderTextIcon from '../../component/common/HeaderTextIcon';
 import TravelCard from '../../component/common/TravelCard';
+import {SwiperData} from '../../utils/constents';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 const photos = [
@@ -48,7 +47,7 @@ const reference = [
   },
 ];
 
-const FoodPlace = () => {
+const EventDetails = () => {
   const slides = useMemo(() => {
     // This will only re-compute if `data` changes.
     return SwiperData?.map((item, index) => (
@@ -86,7 +85,6 @@ const FoodPlace = () => {
   const handlePresentUploadModalPress = useCallback(() => {
     bottomSheetUploadModalRef.current?.present();
   }, []);
-
   return (
     <SafeAreaView style={[AppStyles.flex, styles.maincontainer]}>
       <CustomHeader
@@ -97,112 +95,69 @@ const FoodPlace = () => {
         moreIconStyle={styles.more}
         headerStyle={styles.header}
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.container}>
-          <Text style={styles.title}>La Perla Cocina</Text>
-          <View style={styles.locationContainer}>
-            <Image
-              source={IMAGES.location}
-              style={{width: wp(24), height: wp(24), resizeMode: 'contain'}}
-            />
-            <Text style={styles.locationText}>
-              7007 Friars Rd. San Diego, CA
+      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
+        <ImageBackground
+          source={IMAGES.bbq}
+          imageStyle={styles.placeimges}
+          style={styles.place}>
+          <Text style={styles.placeTitle}>{'BBQ Festival'}</Text>
+          <View style={styles.location}>
+            <Image source={IMAGES.wordWide} style={styles.pin} />
+            <Text style={styles.address}>
+              {'7007 Friars Rd. San Diego, CA'}
             </Text>
           </View>
-
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button}>
-              <Image
-                source={IMAGES.location}
-                style={{width: wp(18), height: wp(18), resizeMode: 'contain'}}
-              />
-              <Text style={styles.buttonText}>Place</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.emoji}>🧑‍🍳</Text>
-              <Text style={styles.buttonText}>Food</Text>
-            </TouchableOpacity>
+          <View style={styles.timecontainer}>
+            <Text style={styles.time}>{'May 10'}</Text>
+            <Image source={IMAGES.arrow} style={styles.arrow} />
+            <Text style={styles.time}>{'May 11'}</Text>
           </View>
-          <View style={styles.sliderContainer}>
-            <Swiper
-              paginationStyle={styles.paginationStyle}
-              dotColor={colors._BD2332_0_3}
-              activeDotColor={colors._BD2332}
-              style={styles.wrapper}>
-              {slides}
-            </Swiper>
+        </ImageBackground>
+        <View style={[AppStyles.row, styles.eventContainor]}>
+          <View style={[AppStyles.row, styles.eventrow]}>
+            <Image source={IMAGES.world} style={styles.eventicon} />
+            <Text style={styles.graylabel}>{'Public Event'}</Text>
           </View>
-          <View style={[AppStyles.row, styles.features]}>
-            <TouchableOpacity style={[styles.optionItem]}>
-              <Image style={styles.check} source={IMAGES.been} />
-              <Text style={[styles.optionText]}>{'Been There'}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.optionItem]}>
-              <Image style={styles.add} source={IMAGES.newList} />
-              <Text style={[styles.optionText]}>{'Add to list'}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.optionItem]}>
-              <Image style={styles.fav} source={IMAGES.fav} />
-              <Text style={[styles.optionText]}>{'Favs'}</Text>
-            </TouchableOpacity>
+          <View style={styles.divider} />
+          <View style={[AppStyles.row, styles.eventrow]}>
+            <Image source={IMAGES.follower} style={[styles.followe]} />
+            <Text style={styles.graylabel}>{'1.2K Follows'}</Text>
           </View>
-          <View style={styles.BusinessInfoBar}>
-            {/* HOURS */}
-            <View style={styles.infoBlock}>
-              <Text style={styles.label}>HOURS</Text>
-              <Text style={styles.openText}>OPEN</Text>
-            </View>
+        </View>
+        <Button
+          titleStyle={styles.btn}
+          BtnStyle={styles.event}
+          title="Follow Event"
+        />
+        <View style={[AppStyles.row, styles.features]}>
+          <TouchableOpacity style={[styles.optionItem]}>
+            <Image style={styles.add} source={IMAGES.newList} />
+            <Text style={[styles.optionText]}>{'Add to list'}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.optionItem]}>
+            <Image style={styles.check} source={IMAGES.been} />
+            <Text style={[styles.optionText]}>{'Been There'}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.optionItem]}>
+            <Image style={styles.fav} source={IMAGES.fav} />
+            <Text style={[styles.optionText]}>{'Favs'}</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button}>
+            <Image
+              source={IMAGES.location}
+              style={{width: wp(18), height: wp(18), resizeMode: 'contain'}}
+            />
+            <Text style={styles.buttonText}>Place</Text>
+          </TouchableOpacity>
 
-            {/* Divider */}
-            <View style={styles.divider} />
-
-            {/* RANK */}
-            <View style={styles.infoBlock}>
-              <Text style={styles.label}>RANK</Text>
-              <View style={styles.inlineRow}>
-                <Image
-                  source={IMAGES.top}
-                  style={{width: wp(17), height: hp(24), resizeMode: 'contain'}}
-                />
-                <Text style={styles.rankText}>Top</Text>
-              </View>
-            </View>
-
-            <View style={styles.divider} />
-
-            {/* LIST ADDS */}
-            <View style={styles.infoBlock}>
-              <Text style={styles.label}>LIST ADDS</Text>
-              <View style={styles.inlineRow}>
-                <Image
-                  source={IMAGES.newList}
-                  resizeMode="contain"
-                  style={{
-                    width: wp(18),
-                    height: hp(25),
-                    tintColor: colors.black,
-                  }}
-                />
-                <Text style={styles.listCount}>276</Text>
-              </View>
-            </View>
-
-            <View style={styles.divider} />
-
-            {/* DISTANCE */}
-            <View style={styles.infoBlock}>
-              <Text style={styles.label}>DISTANCE</Text>
-              <View style={styles.inlineRow}>
-                <Image
-                  source={IMAGES.distance}
-                  resizeMode="contain"
-                  style={{width: wp(20), height: wp(20)}}
-                />
-                <Text style={styles.distance}>14 mi</Text>
-              </View>
-            </View>
-          </View>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.emoji}>🧑‍🍳</Text>
+            <Text style={styles.buttonText}>Food</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.container}>
           <LinearView containerStyle={styles.linearview}>
             <Text style={styles.review}>
               Fashion Valley is an upscale, open-air shopping mall in Mission
@@ -241,8 +196,8 @@ const FoodPlace = () => {
             <Text style={styles.headerTitle}>{'Hours'}</Text>
             <View style={[AppStyles.row, styles.dateContainor]}>
               <View>
-                <Text style={styles.day}>{'9:00am - 8:00pm'}</Text>
-                <Text style={styles.Open}>{'Open'}</Text>
+                <Text style={styles.day}>{'Saturday May 10, 2025'}</Text>
+                <Text style={styles.addlabel}>{'10am - 9pm'}</Text>
               </View>
               <TouchableOpacity>
                 <Image source={IMAGES.dropdown} style={styles.down} />
@@ -380,64 +335,13 @@ const FoodPlace = () => {
           </LinearView>
         </View>
       </ScrollView>
-      <CommonSheet
-        bottomSheetModalRef={bottomSheetModalRef}
-        title="Add Social Link"
-        children={
-          <View style={styles.sheet}>
-            <View style={styles.inputContainer}>
-              <Image source={IMAGES.link} style={styles.link} />
-              <TextInput placeholder="Paste link..." style={styles.linkInput} />
-            </View>
-            <Button
-              title="Done"
-              onPress={() => bottomSheetModalRef.current?.dismiss()}
-            />
-          </View>
-        }
-      />
-      <CommonSheet
-        bottomSheetModalRef={bottomSheetUploadModalRef}
-        title="Upload Photos"
-        children={
-          <View style={styles.sheet}>
-            <Button
-              title="From Camera Roll"
-              onPress={() => bottomSheetUploadModalRef.current?.dismiss()}
-              leftImg={IMAGES.upload}
-              leftImgStyle={{
-                width: wp(24),
-                height: wp(24),
-                resizeMode: 'contain',
-              }}
-            />
-            <Button
-              title="Take Photo"
-              type="outline"
-              leftImg={IMAGES.camera}
-              leftImgStyle={{
-                width: wp(24),
-                height: wp(24),
-                resizeMode: 'contain',
-                tintColor: colors.black,
-              }}
-              BtnStyle={styles.uploadBtn}
-              titleStyle={styles.uploadTitle}
-              onPress={() => bottomSheetUploadModalRef.current?.dismiss()}
-            />
-          </View>
-        }
-      />
     </SafeAreaView>
   );
 };
 
-export default FoodPlace;
+export default EventDetails;
 
 const styles = StyleSheet.create({
-  maincontainer: {
-    backgroundColor: colors.white,
-  },
   back: {
     resizeMode: 'contain',
     width: wp(24),
@@ -453,62 +357,89 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: wp(16),
   },
-  container: {
-    padding: wp(16),
+  placeimges: {
+    borderRadius: 20,
+  },
+  placeTitle: {
+    ...commonFontStyle(700, 32, colors.white),
+  },
+  maincontainer: {
     backgroundColor: colors.white,
-    gap: hp(10),
+  },
+  place: {
+    width: 'auto',
+    resizeMode: 'contain',
+    height: hp(555),
+    marginBottom: wp(18),
+    marginTop: hp(21),
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  location: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: wp(4),
+    marginTop: hp(12),
+  },
+  arrow: {
+    resizeMode: 'contain',
+    width: wp(12),
+    height: wp(12),
+  },
+  time: {
+    ...commonFontStyle(500, 14, colors.white),
+  },
+  timecontainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: wp(8),
+    paddingBottom: hp(38),
+    marginTop: hp(4),
+  },
+  pin: {
+    resizeMode: 'contain',
+    width: wp(24),
+    height: wp(24),
+    tintColor: colors.white,
+  },
+  address: {
+    ...commonFontStyle(600, 14, colors.white),
+  },
+  scroll: {
     flex: 1,
-  },
-  title: {
-    ...commonFontStyle(700, 32, colors.black),
-  },
-  locationContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: hp(4),
-  },
-  locationText: {
-    ...commonFontStyle(600, 14, colors._999999),
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    gap: wp(10),
-  },
-  button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.white,
-    borderRadius: 12,
-    paddingVertical: hp(10),
     paddingHorizontal: wp(16),
-    borderWidth: 1,
-    borderColor: '#1B151533',
   },
-  buttonText: {
-    marginLeft: 6,
-    ...commonFontStyle(600, 15, colors.black),
+  eventContainor: {
+    gap: wp(8),
   },
-  emoji: {
-    fontSize: 18,
+  eventrow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: wp(4),
   },
-  sliderContainer: {
-    height: hp(500),
+  divider: {
+    width: wp(2),
+    backgroundColor: colors._99999,
+    height: '80%',
   },
-  paginationStyle: {
-    backgroundColor: 'rgba(255, 255, 255, 0.75)',
-    left: wp(SCREEN_WIDTH / 2 - 80),
-    right: wp(SCREEN_WIDTH / 2 - 80),
-    paddingVertical: hp(6),
-    borderRadius: 100,
-    bottom: hp(30),
+  eventicon: {
+    resizeMode: 'contain',
+    width: wp(24),
+    height: wp(24),
   },
-  wrapper: {},
-  slider: {
-    flex: 1,
-    width: SCREEN_WIDTH,
+  graylabel: {
+    ...commonFontStyle(500, 18, colors._99999),
   },
-  optionText: {
-    ...commonFontStyle(500, 14, colors.primary1),
+  followe: {
+    resizeMode: 'contain',
+    width: wp(19),
+    height: wp(19),
+  },
+  btn: {
+    ...commonFontStyle(600, 16, colors.white),
+  },
+  event: {
+    marginVertical: hp(8),
   },
   features: {
     gap: wp(4),
@@ -539,43 +470,30 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: wp(4),
   },
-  BusinessInfoBar: {
+  optionText: {
+    ...commonFontStyle(500, 14, colors.primary1),
+  },
+  buttonContainer: {
     flexDirection: 'row',
+    gap: wp(10),
+    marginTop: hp(8),
+  },
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: colors.white,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: hp(8),
+    borderRadius: 12,
+    paddingVertical: hp(10),
+    paddingHorizontal: wp(16),
+    borderWidth: 1,
+    borderColor: '#1B151533',
   },
-  infoBlock: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: hp(4),
+  buttonText: {
+    marginLeft: 6,
+    ...commonFontStyle(600, 15, colors.black),
   },
-  label: {
-    ...commonFontStyle(600, 12, colors._999999),
-  },
-  openText: {
-    ...commonFontStyle(700, 14, 'green'),
-  },
-  rankText: {
-    ...commonFontStyle(600, 14, 'crimson'),
-  },
-  listCount: {
-    ...commonFontStyle(600, 14, colors.black),
-  },
-  distance: {
-    ...commonFontStyle(600, 14, colors.black),
-  },
-  divider: {
-    height: '70%',
-    width: 1,
-    backgroundColor: colors.lightGray,
-    marginHorizontal: 6,
-  },
-  inlineRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: wp(4),
+  emoji: {
+    fontSize: 18,
   },
   linearview: {
     padding: wp(20),
@@ -601,26 +519,22 @@ const styles = StyleSheet.create({
     padding: wp(18),
     paddingBottom: hp(4),
   },
-  down: {
-    width: wp(24),
-    height: wp(24),
-    resizeMode: 'contain',
-  },
-  day: {
-    ...commonFontStyle(600, 18, colors.black),
-  },
-  Open: {
-    ...commonFontStyle(600, 18, '#26C243'),
-  },
   dateContainor: {
     justifyContent: 'space-between',
     paddingHorizontal: wp(20),
     paddingBottom: hp(10),
     alignItems: 'flex-start',
   },
-  content: {
-    gap: hp(18),
-    marginBottom: hp(20),
+  day: {
+    ...commonFontStyle(600, 18, colors._BD2332),
+  },
+  addlabel: {
+    ...commonFontStyle(600, 18, colors.black),
+  },
+  down: {
+    width: wp(24),
+    height: wp(24),
+    resizeMode: 'contain',
   },
   infoContainor: {
     paddingHorizontal: wp(20),
@@ -722,31 +636,12 @@ const styles = StyleSheet.create({
   post: {
     ...commonFontStyle(500, 10, colors.white),
   },
-  sheet: {
-    gap: hp(16),
-    paddingVertical: hp(16),
+  slider: {
+    flex: 1,
+    width: SCREEN_WIDTH,
   },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: wp(12),
-    paddingHorizontal: wp(24),
-    paddingVertical: hp(10),
-    borderWidth: 1,
-    borderColor: colors.black,
-    borderRadius: 12,
-  },
-  link: {
-    width: wp(16),
-    height: wp(16),
-  },
-  linkInput: {
-    ...commonFontStyle(400, 16, colors._787878),
-  },
-  uploadBtn: {
-    borderColor: colors._1B1515,
-  },
-  uploadTitle: {
-    ...commonFontStyle(700, 15, colors.black),
+  container: {
+    marginVertical: hp(8),
+    gap: hp(8),
   },
 });

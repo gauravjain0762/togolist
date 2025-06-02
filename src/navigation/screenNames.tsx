@@ -30,6 +30,7 @@ export const SCREENS = {
   SubscriptionScreenSetting: 'SubscriptionScreenSetting',
   SharedListDetails: 'SharedListDetails',
   FoodPlace: 'FoodPlace',
+  EventDetails: 'EventDetails',
 };
 
 export interface ScreenNames {
@@ -63,6 +64,7 @@ export interface ScreenNames {
   SubscriptionScreenSetting: string;
   SharedListDetails: string;
   FoodPlace: string;
+  EventDetails: string;
 }
 
 export const SCREEN_NAMES: ScreenNames = {

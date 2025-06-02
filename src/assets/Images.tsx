@@ -127,15 +127,17 @@ export const IMAGES = {
   top: require('./icon/profile/top.png'),
   distance: require('./icon/profile/distance.png'),
   star: require('./icon/profile/star.png'),
-  
-  
+
   //Explore
   user1: require('./icon/explore/user1.png'),
   Subtract: require('./icon/explore/Subtract.png'),
   solar: require('./icon/explore/solar.png'),
   calendar_star: require('./icon/explore/calendar_star.png'),
-    user1_on: require('./icon/explore/user1_on.png'),
+  user1_on: require('./icon/explore/user1_on.png'),
   Subtract_on: require('./icon/explore/Subtract_on.png'),
   solar_off: require('./icon/explore/solar_off.png'),
   calendar_star_on: require('./icon/explore/calendar_star_on.png'),
+  comment: require('./icon/profile/comment.png'),
+  link: require('./icon/profile/link.png'),
+  upload: require('./icon/profile/upload.png'),
 };
