@@ -31,6 +31,7 @@ export const SCREENS = {
   SharedListDetails: 'SharedListDetails',
   FoodPlace: 'FoodPlace',
   EventDetails: 'EventDetails',
+  ExperienceScreen: 'ExperienceScreen',
 };
 
 export interface ScreenNames {
@@ -65,6 +66,7 @@ export interface ScreenNames {
   SharedListDetails: string;
   FoodPlace: string;
   EventDetails: string;
+  ExperienceScreen: string;
 }
 
 export const SCREEN_NAMES: ScreenNames = {

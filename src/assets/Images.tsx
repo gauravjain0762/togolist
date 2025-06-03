@@ -145,4 +145,5 @@ export const IMAGES = {
   container: require('./icon/profile/container.png'),
   book: require('./icon/profile/book.png'),
   clock: require('./icon/explore/clock.png'),
+  profile_badge: require('./icon/explore/profile_badge.png'),
 };

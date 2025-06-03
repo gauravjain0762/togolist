@@ -8,7 +8,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, {FC} from 'react';
+import React, {FC, memo} from 'react';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 
@@ -39,7 +39,7 @@ const SocialBtn: FC<Props> = ({
   );
 };
 
-export default SocialBtn;
+export default memo(SocialBtn);
 
 const styles = StyleSheet.create({
   img: {

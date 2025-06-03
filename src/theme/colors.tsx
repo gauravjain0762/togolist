@@ -15,6 +15,7 @@ export const colors = {
   _AE1927: '#AE1927',
   _E4E4E4: '#E4E4E4',
   _999999: '#999999',
+  _D9D9D9: '#D9D9D9',
 
   _25201a: '#25201a',
   containerBGColor: 'rgba(51, 50, 50, 0.4)',

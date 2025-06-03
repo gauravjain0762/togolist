@@ -1,5 +1,5 @@
 import {Image, StyleSheet, Text, View, ViewStyle} from 'react-native';
-import React, {FC} from 'react';
+import React, {FC, memo} from 'react';
 import {colors} from '../../theme/colors';
 import {IMAGES} from '../../assets/Images';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
@@ -32,7 +32,7 @@ const OptionBar: FC<bar> = ({container}) => {
   );
 };
 
-export default OptionBar;
+export default memo(OptionBar);
 
 const styles = StyleSheet.create({
   container: {

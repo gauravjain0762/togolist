@@ -7,7 +7,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import React, {FC, ReactNode, Ref} from 'react';
+import React, {FC, ReactNode, Ref, memo} from 'react';
 import {
   BottomSheetModal,
   BottomSheetModalProvider,
@@ -65,7 +65,7 @@ const CommonSheet: FC<sheet> = ({
   );
 };
 
-export default CommonSheet;
+export default memo(CommonSheet);
 
 const styles = StyleSheet.create({
   contentContainer: {

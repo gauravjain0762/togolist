@@ -23,7 +23,7 @@ const CardImageText: FC<button> = ({
   return (
     <ImageBackground
       source={IMAGES.collocation_bg}
-      resizeMode="contain"
+      resizeMode="cover"
       imageStyle={{borderRadius: 20}}
       style={styles.collocation_bg}>
       <Text style={styles.chipText1}>{title}</Text>
@@ -36,11 +36,10 @@ export default memo(CardImageText);
 
 const styles = StyleSheet.create({
   collocation_bg: {
-    width: wp(370),
     height: wp(370),
-    marginTop: 18,
     justifyContent: 'center',
     alignItems: 'center',
+    flex: 1,
   },
 
   chipText1: {

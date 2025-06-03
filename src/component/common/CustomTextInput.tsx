@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {memo, useState} from 'react';
 import {
   View,
   Text,
@@ -60,10 +60,7 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
         />
         {keyValue == 'username' && value?.length !== 0 && (
           <View>
-            <Image
-              source={IMAGES.right}
-              style={{width: 22, height: 22,}}
-            />
+            <Image source={IMAGES.right} style={{width: 22, height: 22}} />
           </View>
         )}
         {showToggle && (
@@ -109,4 +106,4 @@ const getGlobalStyles = (props: any) => {
   });
 };
 
-export default CustomTextInput;
+export default memo(CustomTextInput);

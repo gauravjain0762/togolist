@@ -32,6 +32,7 @@ import SecurityScreen from '../screens/profile/profileSetting/SecurityScreen';
 import SharedListDetails from '../screens/profile/SharedListDetails';
 import FoodPlace from '../screens/profile/FoodPlace';
 import EventDetails from '../screens/profile/EventDetails';
+import ExperienceScreen from '../screens/search/ExperienceScreen';
 
 export type RootStackParamList = {
   HomeScreen: undefined;
@@ -295,6 +296,11 @@ const StackNavigator: FC = () => {
         options={({navigation}) => ({headerShown: false})}
         name={SCREENS.EventDetails}
         component={EventDetails}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.ExperienceScreen}
+        component={ExperienceScreen}
       />
     </Stack.Navigator>
   );

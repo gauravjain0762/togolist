@@ -20,7 +20,13 @@ import {IMAGES} from '../../assets/Images';
 import {navigationRef} from '../../navigation/RootContainer';
 import {SCREENS} from '../../navigation/screenNames';
 import CustomHeader from '../../component/common/CustomHeader';
-import {Button, CommonSheet, LinearView, Loader} from '../../component';
+import {
+  Button,
+  CommonSheet,
+  LinearView,
+  Loader,
+  ProfileCard,
+} from '../../component';
 import {useGetDashboardQuery} from '../../api/dashboardApi';
 import {navigateTo} from '../../utils/commonFunction';
 import ExploreCard from '../../component/explore/ExploreCard';
@@ -202,9 +208,6 @@ const SearchScreen = (props: Props) => {
                 justifyContent: 'space-between',
               }}
               renderItem={({item}) => <ExploreCard {...item} />}
-              ListFooterComponent={() => {
-                return <View style={{height: 300}} />;
-              }}
             />
           )}
           {activeTab == 'location' && (
@@ -274,7 +277,7 @@ const SearchScreen = (props: Props) => {
                 resizeMode="cover"
                 style={styles.imageContainer}>
                 <>
-                  <Text style={styles.title}>Event Name</Text>
+                  <Text style={styles.title}>Find a Host</Text>
                   <TouchableOpacity style={[styles.inputBox]}>
                     <Image source={IMAGES.location} style={styles.icon} />
                     <Text style={styles.placeholder}>Location</Text>
@@ -293,9 +296,39 @@ const SearchScreen = (props: Props) => {
                 </>
               </ImageBackground>
               <View style={styles.guiderow}>
-                <Text>{'Local Guides'}</Text>
-                <Text>{'Your Location | 10m Radius'}</Text>
+                <Text style={styles.guideTitle}>{'Local Guides'}</Text>
+                <Text style={styles.headerlabel}>
+                  {'Your Location | 10m Radius'}
+                </Text>
               </View>
+              <View style={styles.list}>
+                <FlatList
+                  data={[1, 2, 3, 4]}
+                  numColumns={2}
+                  columnWrapperStyle={{
+                    justifyContent: 'space-between',
+                    gap: wp(8),
+                  }}
+                  contentContainerStyle={{gap: wp(16)}}
+                  renderItem={({item, index}) => <ProfileCard />}
+                />
+              </View>
+              <ImageBackground
+                imageStyle={styles.earnImg}
+                source={IMAGES.intro3}
+                style={styles.earnBg}>
+                <Text style={styles.earntitle}>{'Earn with Togolist'}</Text>
+                <Text style={styles.discription}>
+                  {
+                    'Share your world. Meet great people. Get paid to host local experiences.'
+                  }
+                </Text>
+                <TouchableOpacity
+                  onPress={() => navigateTo(SCREENS.ExperienceScreen)}
+                  style={styles.hostbtn}>
+                  <Text style={styles.hosttitle}>{'Become a Host'}</Text>
+                </TouchableOpacity>
+              </ImageBackground>
             </View>
           )}
         </ScrollView>
@@ -631,5 +664,41 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingVertical: hp(24),
+  },
+  guideTitle: {
+    ...commonFontStyle(600, 18, colors.black),
+  },
+  headerlabel: {
+    ...commonFontStyle(400, 14, colors._787878),
+  },
+  list: {
+    flex: 1,
+  },
+  earnBg: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: wp(16),
+    marginTop: hp(16),
+    height: hp(280),
+    gap: hp(8),
+  },
+  earntitle: {
+    ...commonFontStyle(700, 24, colors.white),
+  },
+  earnImg: {
+    borderRadius: 20,
+  },
+  discription: {
+    ...commonFontStyle(700, 16, colors.white),
+    textAlign: 'center',
+  },
+  hostbtn: {
+    backgroundColor: colors.white,
+    borderRadius: 8,
+  },
+  hosttitle: {
+    ...commonFontStyle(600, 12, colors._444444),
+    paddingVertical: hp(8),
+    paddingHorizontal: wp(12),
   },
 });
