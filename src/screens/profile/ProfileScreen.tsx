@@ -244,7 +244,7 @@ const ProfileScreen = (props: Props) => {
           setSearchShow(!searchShow);
         }}
         onMorePress={() => {
-          navigateTo(SCREENS.ProfileSettingScreen)
+          navigateTo(SCREENS.ProfileSettingScreen);
         }}
       />
       <Loader visible={false} />
@@ -297,7 +297,9 @@ const ProfileScreen = (props: Props) => {
           onPress={() => {}}
           title={'Follow'}
         />
-        <LinearView linearViewStyle={{marginTop: 18, paddingVertical: 20}}>
+        <LinearView
+          linearViewStyle={{marginTop: hp(18)}}
+          containerStyle={{paddingVertical: 20}}>
           <View style={styles.tabContainer}>
             {tabs.map(tab => (
               <TouchableOpacity

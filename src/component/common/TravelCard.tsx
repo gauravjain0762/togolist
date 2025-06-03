@@ -7,7 +7,7 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
-import {commonFontStyle} from '../../theme/fonts';
+import {commonFontStyle, hp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {IMAGES} from '../../assets/Images';
 import LinearGradient from 'react-native-linear-gradient';
@@ -32,31 +32,33 @@ const TravelCard = ({
       <LinearGradient
         colors={['transparent', 'rgba(0,0,0,0.6)']}
         style={styles.overlay}>
-        {/* <View style={styles.overlay}> */}
-        <Text style={styles.title}>{title}</Text>
-        <View style={styles.footer}>
-          <View style={styles.locationRow}>
-            {location && (
-              <Image
-                source={IMAGES.locationWhite}
-                style={{width: 16, height: 16}}
-              />
-            )}
-            <Text style={styles.location}>{location}</Text>
-          </View>
-          <View style={styles.avatarStack}>
-            {visibleUsers.map((user, index) => (
-              <Image
-                key={index}
-                source={{uri: user.avatar}}
-                style={[styles.avatar, {marginLeft: index === 0 ? -10 : -10}]}
-              />
-            ))}
-            {extraUserCount > 0 && (
-              <View style={[styles.avatar1, styles.extraAvatar]}>
-                <Text style={styles.extraText}>+{extraUserCount}</Text>
-              </View>
-            )}
+        <View style={styles.containor}>
+          {/* <View style={styles.overlay}> */}
+          <Text style={styles.title}>{title}</Text>
+          <View style={styles.footer}>
+            <View style={styles.locationRow}>
+              {location && (
+                <Image
+                  source={IMAGES.locationWhite}
+                  style={{width: 16, height: 16}}
+                />
+              )}
+              <Text style={styles.location}>{location}</Text>
+            </View>
+            <View style={styles.avatarStack}>
+              {visibleUsers.map((user, index) => (
+                <Image
+                  key={index}
+                  source={{uri: user.avatar}}
+                  style={[styles.avatar, {marginLeft: index === 0 ? -10 : -10}]}
+                />
+              ))}
+              {extraUserCount > 0 && (
+                <View style={[styles.avatar1, styles.extraAvatar]}>
+                  <Text style={styles.extraText}>+{extraUserCount}</Text>
+                </View>
+              )}
+            </View>
           </View>
         </View>
         {/* </View> */}
@@ -68,7 +70,7 @@ const TravelCard = ({
 const styles = StyleSheet.create({
   card: {
     width: CARD_WIDTH,
-    height: 180,
+    height: hp(180),
     borderRadius: 20,
     overflow: 'hidden',
   },
@@ -82,6 +84,9 @@ const styles = StyleSheet.create({
   //   backgroundColor: 'rgba(0,0,0,0.3)',
   // },
   overlay: {
+    flex: 1,
+  },
+  containor: {
     flex: 1,
     justifyContent: 'flex-end',
     padding: 12,

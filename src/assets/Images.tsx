@@ -140,4 +140,9 @@ export const IMAGES = {
   comment: require('./icon/profile/comment.png'),
   link: require('./icon/profile/link.png'),
   upload: require('./icon/profile/upload.png'),
+  addpin: require('./icon/profile/addpin.png'),
+  plain: require('./icon/profile/plain.png'),
+  container: require('./icon/profile/container.png'),
+  book: require('./icon/profile/book.png'),
+  clock: require('./icon/explore/clock.png'),
 };

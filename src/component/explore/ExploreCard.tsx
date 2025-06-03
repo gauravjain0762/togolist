@@ -24,7 +24,9 @@ const ExploreCard = ({title, location, image, avatar, users}) => {
       <LinearGradient
         colors={['transparent', 'rgba(0,0,0,0.6)']}
         style={styles.overlay}>
-        <Text style={styles.title}>{title}</Text>
+        <View style={styles.container}>
+          <Text style={styles.title}>{title}</Text>
+        </View>
       </LinearGradient>
     </ImageBackground>
   );
@@ -42,14 +44,17 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
-    justifyContent: 'flex-end',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 20,
   },
   title: {
     ...commonFontStyle(600, 12, colors.white),
     marginBottom: 8,
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 20,
   },
 });
 

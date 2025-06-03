@@ -1,6 +1,7 @@
 import {
   FlatList,
   Image,
+  ImageBackground,
   RefreshControl,
   ScrollView,
   Share,
@@ -10,20 +11,22 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
-import {commonFontStyle, Fs, hp, wp} from '../../theme/fonts';
+import {commonFontStyle, Fs, hp, SCREEN_HEIGHT, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {IMAGES} from '../../assets/Images';
 import {navigationRef} from '../../navigation/RootContainer';
 import {SCREENS} from '../../navigation/screenNames';
 import CustomHeader from '../../component/common/CustomHeader';
-import {Loader} from '../../component';
+import {Button, CommonSheet, LinearView, Loader} from '../../component';
 import {useGetDashboardQuery} from '../../api/dashboardApi';
 import {navigateTo} from '../../utils/commonFunction';
 import ExploreCard from '../../component/explore/ExploreCard';
 import DiscoverNewSpotsCard from '../../component/explore/DiscoverNewSpotsCard';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import HeaderTextIcon from '../../component/common/HeaderTextIcon';
 
 type Props = {};
 
@@ -74,6 +77,15 @@ const SearchScreen = (props: Props) => {
   const [activeTab, setActiveTab] = useState('hot');
   const [select, setSelect] = useState('List View');
 
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const bottomSheetAddListRef = useRef<BottomSheetModal>(null);
+
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+  const handlePresentAddlistPress = useCallback(() => {
+    bottomSheetAddListRef.current?.present();
+  }, []);
   function NavItem({icon, library, active, onPress, keyValue}) {
     return (
       <TouchableOpacity onPress={onPress} style={styles.navItem}>
@@ -85,6 +97,21 @@ const SearchScreen = (props: Props) => {
       </TouchableOpacity>
     );
   }
+
+  const AddListCard = useCallback(item => {
+    return (
+      <TouchableOpacity style={styles.card}>
+        <ImageBackground
+          source={IMAGES.bg1}
+          imageStyle={styles.imgStyle}
+          resizeMode="cover"
+          style={styles.bg}>
+          <Text style={styles.cardTitle}>{'Tourist Attractions'}</Text>
+          <Image source={IMAGES.add_icon} style={styles.addicon} />
+        </ImageBackground>
+      </TouchableOpacity>
+    );
+  }, []);
 
   return (
     <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
@@ -98,6 +125,7 @@ const SearchScreen = (props: Props) => {
       <View
         style={{
           marginHorizontal: wp(16),
+          flex: 1,
         }}>
         <View style={styles.searchBox}>
           {/* <Ionicons name="search" size={20} color="#999" /> */}
@@ -160,7 +188,8 @@ const SearchScreen = (props: Props) => {
         </View>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          style={{marginTop: 20}}>
+          style={{marginTop: 20, flex: 1}}
+          contentContainerStyle={{flexGrow: 1}}>
           {activeTab == 'hot' && (
             <FlatList
               data={CARD_DATA}
@@ -231,13 +260,127 @@ const SearchScreen = (props: Props) => {
               )}
               {select == 'Map View' && (
                 <>
-                  <Text>Map View</Text>
+                  <TouchableOpacity onPress={() => handlePresentModalPress()}>
+                    <Text>Map View</Text>
+                  </TouchableOpacity>
                 </>
               )}
             </>
           )}
+          {activeTab == 'profile' && (
+            <View>
+              <ImageBackground
+                source={IMAGES.requestHost_bg}
+                resizeMode="cover"
+                style={styles.imageContainer}>
+                <>
+                  <Text style={styles.title}>Event Name</Text>
+                  <TouchableOpacity style={[styles.inputBox]}>
+                    <Image source={IMAGES.location} style={styles.icon} />
+                    <Text style={styles.placeholder}>Location</Text>
+                  </TouchableOpacity>
+                  <View style={styles.Eventrow}>
+                    <TouchableOpacity style={styles.card1}>
+                      <Image source={IMAGES.canlder} style={styles.icon1} />
+                      <Text style={styles.cardText}>Event Dates</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.BGcard}>
+                      <Image source={IMAGES.clock} style={styles.icon} />
+                      <Text style={styles.cardText}>Length</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <Button title="Find Local Guides" />
+                </>
+              </ImageBackground>
+              <View style={styles.guiderow}>
+                <Text>{'Local Guides'}</Text>
+                <Text>{'Your Location | 10m Radius'}</Text>
+              </View>
+            </View>
+          )}
         </ScrollView>
       </View>
+      <CommonSheet
+        title="Details"
+        bottomSheetModalRef={bottomSheetModalRef}
+        children={
+          <DiscoverNewSpotsCard
+            onPressAdd={() => handlePresentAddlistPress()}
+          />
+        }
+      />
+      <CommonSheet
+        title="Add To List"
+        bottomSheetModalRef={bottomSheetAddListRef}
+        maxDynamicContentSize={SCREEN_HEIGHT - hp(150)}
+        children={
+          <View>
+            <DiscoverNewSpotsCard
+              showInfo={false}
+              showRating={false}
+              isShowOptions={false}
+            />
+            <View style={styles.optionContainer}>
+              <View style={styles.row}>
+                <TouchableOpacity>
+                  <Image style={styles.icons} source={IMAGES.addpin} />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Image style={styles.icons} source={IMAGES.plain} />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Image style={styles.icons} source={IMAGES.container} />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Image style={styles.icons} source={IMAGES.book} />
+                </TouchableOpacity>
+              </View>
+              <LinearView
+                containerStyle={styles.containerStyle}
+                linearViewStyle={styles.listContainer}>
+                <View>
+                  <HeaderTextIcon
+                    titleStyle={styles.titleStyle}
+                    title={'Personal Lists'}
+                    headerStyle={styles.headerstyle}
+                  />
+                  <FlatList
+                    data={[1, 2, 3, 4]}
+                    ItemSeparatorComponent={() => (
+                      <View style={{height: hp(4)}} />
+                    )}
+                    renderItem={({item, index}) => <AddListCard />}
+                  />
+                  <HeaderTextIcon
+                    titleStyle={styles.titleStyle}
+                    title={'Guide to LA'}
+                    headerStyle={styles.headerstyle}
+                  />
+                  <FlatList
+                    data={[1, 2, 3, 4]}
+                    ItemSeparatorComponent={() => (
+                      <View style={{height: hp(4)}} />
+                    )}
+                    renderItem={({item, index}) => <AddListCard />}
+                  />
+                  <HeaderTextIcon
+                    titleStyle={styles.titleStyle}
+                    title={'Golf Courses'}
+                    headerStyle={styles.headerstyle}
+                  />
+                  <HeaderTextIcon
+                    titleStyle={styles.titleStyle}
+                    title={'Cool Architecture'}
+                    headerStyle={styles.headerstyle}
+                  />
+                </View>
+              </LinearView>
+            </View>
+            <Button type="outline" BtnStyle={styles.btn} title="Create New" />
+            <Button type="outline" BtnStyle={styles.btn} title="Done" />
+          </View>
+        }
+      />
     </SafeAreaView>
   );
 };
@@ -271,7 +414,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 12,
     paddingHorizontal: 9,
-    paddingVertical: 3,
+    paddingVertical: hp(10),
     marginBottom: 15,
     marginTop: 14,
   },
@@ -350,5 +493,143 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: wp(8),
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: wp(48),
+    paddingVertical: hp(21),
+  },
+  icons: {
+    width: wp(26),
+    height: wp(26),
+    resizeMode: 'contain',
+  },
+  optionContainer: {
+    backgroundColor: '#4444441A',
+    borderRadius: 16,
+    marginTop: hp(16),
+    overflow: 'hidden',
+    marginBottom: hp(8),
+  },
+  listContainer: {
+    borderRadius: 0,
+  },
+  titleStyle: {
+    ...commonFontStyle(600, 14, colors.black),
+  },
+  containerStyle: {
+    padding: wp(16),
+  },
+  bg: {
+    flex: 1,
+    paddingVertical: hp(11),
+    paddingHorizontal: wp(8),
+  },
+  card: {
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  imgStyle: {
+    flex: 1,
+  },
+  cardTitle: {
+    ...commonFontStyle(700, 24, colors.white),
+  },
+  addicon: {
+    width: wp(18),
+    height: wp(18),
+    alignSelf: 'flex-end',
+    tintColor: colors.white,
+  },
+  headerstyle: {
+    paddingBottom: hp(9),
+  },
+  btn: {
+    marginTop: hp(8),
+  },
+  imageContainer: {
+    justifyContent: 'center',
+    borderRadius: 20,
+    overflow: 'hidden',
+    padding: wp(24),
+  },
+  title: {
+    ...commonFontStyle(700, 24, colors.white),
+    marginBottom: 10,
+  },
+  placeholder: {
+    ...commonFontStyle(500, 16, '#3C3C4399'),
+  },
+  inputBox: {
+    backgroundColor: colors.white,
+    borderRadius: 16,
+    paddingHorizontal: 7,
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+    paddingVertical: hp(16),
+  },
+  icon: {
+    height: 24,
+    width: 24,
+    resizeMode: 'contain',
+    marginRight: 5,
+  },
+  icon1: {
+    height: 22,
+    width: 22,
+    resizeMode: 'contain',
+    marginRight: 5,
+    tintColor: '#3C3C4399',
+  },
+  cardText: {
+    ...commonFontStyle(500, 16, '#3C3C4399'),
+  },
+  card1: {
+    backgroundColor: colors.white,
+    borderRadius: 16,
+    // paddingVertical: 16,
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    // width: '62%',
+    height: 56,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+    flex: 0.7,
+    marginRight: 10,
+  },
+  BGcard: {
+    backgroundColor: colors.white,
+    borderRadius: 16,
+    // paddingVertical: 16,
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    // width: '32%',
+    height: 56,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+    flex: 0.3,
+  },
+  Eventrow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: hp(8),
+  },
+  guiderow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: hp(24),
   },
 });

@@ -22,7 +22,10 @@ const OptionBar: FC<bar> = ({container}) => {
         <Text style={styles.label}>{'Been there'}</Text>
       </View>
       <View style={styles.row}>
-        <Image source={IMAGES.close} style={[styles.icon]} />
+        <Image
+          source={IMAGES.remove}
+          style={[styles.icon, {width: wp(26), height: wp(26)}]}
+        />
         <Text style={styles.label}>{'Remove'}</Text>
       </View>
     </View>

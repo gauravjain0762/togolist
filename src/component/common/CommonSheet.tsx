@@ -27,6 +27,7 @@ type sheet = {
   headerStyle?: ViewStyle;
   title?: string;
   titleStyle?: TextStyle;
+  maxDynamicContentSize?: number | undefined;
 };
 
 const CommonSheet: FC<sheet> = ({
@@ -38,15 +39,17 @@ const CommonSheet: FC<sheet> = ({
   headerStyle,
   title = 'Hi',
   titleStyle,
+  maxDynamicContentSize = 450,
 }) => {
   return (
     <BottomSheetModalProvider>
       <BottomSheetModal
         ref={bottomSheetModalRef}
-        maxDynamicContentSize={450}
+        maxDynamicContentSize={maxDynamicContentSize}
         onChange={e => handleSheetChanges(e)}>
         <BottomSheetScrollView
           style={scrollviewStyle}
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={[styles.contentContainer, contentContainer]}>
           <View style={[styles.header, headerStyle]}>
             <Text style={[styles.title, titleStyle]}>{title}</Text>

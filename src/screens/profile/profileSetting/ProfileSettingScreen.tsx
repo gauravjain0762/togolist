@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../../theme/appStyles';
 import {CustomHeader, LinearView} from '../../../component';
@@ -45,7 +45,7 @@ const ProfileSettingScreen = (props: Props) => {
     location: 'Toronto, Canada',
   });
 
-  const handlePress = (id: string) => {
+  const handlePress = useCallback((id: string) => {
     if (id == 'subscription') {
       navigateTo(SCREENS.SubscriptionScreen);
     } else if (id == 'personal_info') {
@@ -65,7 +65,7 @@ const ProfileSettingScreen = (props: Props) => {
     }
     console.log(`Pressed: ${id}`);
     // Navigate or trigger logic based on `id`
-  };
+  }, []);
 
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
@@ -180,9 +180,9 @@ const ProfileSettingScreen = (props: Props) => {
         </LinearView>
 
         <View>
-          {options.map(option => {
+          {options?.map((option, index) => {
             return (
-              <LinearView linearViewStyle={{marginTop: 8}}>
+              <LinearView key={index} linearViewStyle={{marginTop: 8}}>
                 <TouchableOpacity
                   key={option.id}
                   style={styles.item}
@@ -225,10 +225,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.lightGray,
     borderRadius: 14,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingHorizontal: wp(12),
+    paddingVertical: hp(12),
     marginBottom: 16,
-    marginHorizontal: 16,
+    marginHorizontal: wp(16),
     marginTop: 10,
   },
   searchInput: {
