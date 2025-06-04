@@ -32,6 +32,8 @@ export const SCREENS = {
   FoodPlace: 'FoodPlace',
   EventDetails: 'EventDetails',
   ExperienceScreen: 'ExperienceScreen',
+  RequestHost: 'RequestHost',
+  PostRequest: 'PostRequest',
 };
 
 export interface ScreenNames {
@@ -67,6 +69,8 @@ export interface ScreenNames {
   FoodPlace: string;
   EventDetails: string;
   ExperienceScreen: string;
+  RequestHost: string;
+  PostRequest: string;
 }
 
 export const SCREEN_NAMES: ScreenNames = {

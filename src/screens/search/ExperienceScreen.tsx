@@ -14,6 +14,8 @@ import {CustomHeader} from '../../component';
 import {IMAGES} from '../../assets/Images';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
+import {navigateTo} from '../../utils/commonFunction';
+import {SCREEN_NAMES} from '../../navigation/screenNames';
 
 let data = ['View All', 'Hosts', 'Half Day', 'Full Day', '< 4 hours'];
 
@@ -65,6 +67,7 @@ const ExperienceScreen = () => {
             )}
           />
         </View>
+        <Text style={styles.localTitle}>{'Local Hosts'}</Text>
         <ImageBackground
           imageStyle={styles.earnImg}
           source={IMAGES.requestHost_bg}
@@ -75,7 +78,9 @@ const ExperienceScreen = () => {
               'Submit a request for Togolist to connect with local hosts from your destination.'
             }
           </Text>
-          <TouchableOpacity style={styles.hostbtn}>
+          <TouchableOpacity
+            onPress={() => navigateTo(SCREEN_NAMES.RequestHost)}
+            style={styles.hostbtn}>
             <Text style={styles.hosttitle}>{'Request a Host'}</Text>
           </TouchableOpacity>
         </ImageBackground>
@@ -161,5 +166,9 @@ const styles = StyleSheet.create({
     ...commonFontStyle(600, 12, colors._444444),
     paddingVertical: hp(8),
     paddingHorizontal: wp(12),
+  },
+  localTitle: {
+    ...commonFontStyle(600, 18, colors.black),
+    paddingHorizontal: wp(22),
   },
 });

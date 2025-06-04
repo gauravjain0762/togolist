@@ -10,7 +10,7 @@ import {
 import React, {FC, memo} from 'react';
 import {colors} from '../../theme/colors';
 import {commonFontStyle, hp} from '../../theme/fonts';
-import { IMAGES } from '../../assets/Images';
+import {IMAGES} from '../../assets/Images';
 
 type button = {
   title: string;
@@ -47,13 +47,14 @@ const TogolistPro: FC<button> = ({
 export default memo(TogolistPro);
 
 const styles = StyleSheet.create({
- card: {
+  card: {
     borderRadius: 24,
     padding: 20,
     alignSelf: 'center',
     position: 'relative',
     overflow: 'hidden',
     marginTop: 20,
+    marginBottom: hp(20),
   },
   closeIcon: {
     position: 'absolute',

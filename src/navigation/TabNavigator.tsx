@@ -13,6 +13,7 @@ import SearchScreen from '../screens/search/SearchScreen';
 import CreateListScreen from '../screens/newList/CreateListScreen';
 import ShapeScreen from '../screens/shape/ShapeScreen';
 import ProfileScreen from '../screens/profile/ProfileScreen';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const Tab = createBottomTabNavigator();
 
@@ -132,6 +133,6 @@ const styles = StyleSheet.create({
   carImage: {
     width: hp(26),
     height: hp(37),
-    resizeMode:'contain'
+    resizeMode: 'contain',
   },
 });

@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import {IMAGES} from '../../assets/Images';
 import {colors} from '../../theme/colors';
-import {commonFontStyle} from '../../theme/fonts';
+import {commonFontStyle, wp} from '../../theme/fonts';
 import {navigationRef} from '../../navigation/RootContainer';
 
 type header = {
@@ -98,7 +98,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    marginLeft: 8,
     ...commonFontStyle(600, 17, colors._787878),
   },
   row: {

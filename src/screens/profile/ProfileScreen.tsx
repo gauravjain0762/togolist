@@ -328,7 +328,10 @@ const ProfileScreen = (props: Props) => {
         {selectedTab == 'Lists' && (
           <>
             <HeaderTextIcon title={'Personal Lists'} />
-            <View style={styles.categoryRow}>
+            <ScrollView
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              contentContainerStyle={styles.categoryRow}>
               {categories.map(category => {
                 return (
                   <LinearView>
@@ -354,7 +357,7 @@ const ProfileScreen = (props: Props) => {
                   </LinearView>
                 );
               })}
-            </View>
+            </ScrollView>
             <CardImage
               onCardPress={() => {
                 navigateTo(SCREENS.CreatedForYou);

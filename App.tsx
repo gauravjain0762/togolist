@@ -5,8 +5,9 @@ import {
   SafeAreaView,
   Animated,
   Easing,
+  LogBox,
 } from 'react-native';
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Provider} from 'react-redux';
 // import store from './src/redux';
 import Toast from 'react-native-toast-message';
@@ -23,6 +24,10 @@ type Props = {};
 
 const App = (props: Props) => {
   const lineAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    // LogBox.ignoreAllLogs();
+  }, []);
 
   const startLineAnimation = () => {
     // Reset the animation value to 1 before starting it

@@ -32,31 +32,33 @@ const TravelCardLock = ({
       <LinearGradient
         colors={['transparent', 'rgba(0,0,0,0.6)']}
         style={styles.overlay}>
-        {/* <View style={styles.overlay}> */}
-        {/* Top row */}
-        <View style={styles.topRow}>
-          <Text style={styles.date}>{date}</Text>
-          {isPrivate && (
-            <Image source={IMAGES.loca_icon} style={{width: 16, height: 16}} />
-          )}
-        </View>
-        <View>
-          <Text style={styles.title}>{title}</Text>
-          <View style={styles.footer}>
-            <View style={styles.locationRow}>
+        <View style={styles.container}>
+          <View style={styles.topRow}>
+            <Text style={styles.date}>{date}</Text>
+            {isPrivate && (
               <Image
-                source={IMAGES.locationWhite}
+                source={IMAGES.loca_icon}
                 style={{width: 16, height: 16}}
               />
-              <Text style={styles.location}>{location}</Text>
-            </View>
-            <View style={styles.avatarStack}>
-              <Image source={IMAGES.user_icon} style={[styles.avatar]} />
-              <Text style={styles.metaText}>{attendees}</Text>
+            )}
+          </View>
+          <View>
+            <Text style={styles.title}>{title}</Text>
+            <View style={styles.footer}>
+              <View style={styles.locationRow}>
+                <Image
+                  source={IMAGES.locationWhite}
+                  style={{width: 16, height: 16}}
+                />
+                <Text style={styles.location}>{location}</Text>
+              </View>
+              <View style={styles.avatarStack}>
+                <Image source={IMAGES.user_icon} style={[styles.avatar]} />
+                <Text style={styles.metaText}>{attendees}</Text>
+              </View>
             </View>
           </View>
         </View>
-        {/* </View> */}
       </LinearGradient>
     </ImageBackground>
   );
@@ -80,9 +82,6 @@ const styles = StyleSheet.create({
   // },
   overlay: {
     flex: 1,
-    justifyContent: 'space-between',
-    padding: 12,
-    borderRadius: 20,
   },
   title: {
     ...commonFontStyle(600, 16, colors.white),
@@ -133,14 +132,20 @@ const styles = StyleSheet.create({
     ...commonFontStyle(600, 11, 'white'),
     marginLeft: 4,
   },
-   date: {
+  date: {
     ...commonFontStyle(600, 11, 'white'),
-    flex:1
+    flex: 1,
   },
-  topRow:{
-    flexDirection:'row',
-    alignItems:'center'
-  }
+  topRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  container: {
+    justifyContent: 'space-between',
+    padding: 12,
+    borderRadius: 20,
+    flex: 1,
+  },
 });
 
 export default memo(TravelCardLock);

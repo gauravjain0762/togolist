@@ -120,7 +120,7 @@ const SearchScreen = (props: Props) => {
   }, []);
 
   return (
-    <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
+    <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
       {/* <Loader visible={dashboardLoading} /> */}
       <View style={styles.headerView}>
         <Text style={styles.heading}>{'Explore'}</Text>
@@ -206,6 +206,7 @@ const SearchScreen = (props: Props) => {
               columnWrapperStyle={{
                 paddingTop: hp(10),
                 justifyContent: 'space-between',
+                paddingBottom: hp(16),
               }}
               renderItem={({item}) => <ExploreCard {...item} />}
             />
@@ -255,9 +256,7 @@ const SearchScreen = (props: Props) => {
                     nestedScrollEnabled
                     keyExtractor={(_, index) => index.toString()}
                     renderItem={({item}) => <DiscoverNewSpotsCard {...item} />}
-                    ListFooterComponent={() => {
-                      return <View style={{height: 300}} />;
-                    }}
+                    contentContainerStyle={{paddingBottom: hp(16), gap: hp(8)}}
                   />
                 </>
               )}
@@ -271,7 +270,7 @@ const SearchScreen = (props: Props) => {
             </>
           )}
           {activeTab == 'profile' && (
-            <View>
+            <View style={{paddingBottom: hp(16)}}>
               <ImageBackground
                 source={IMAGES.requestHost_bg}
                 resizeMode="cover"

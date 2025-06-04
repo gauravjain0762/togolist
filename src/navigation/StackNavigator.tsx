@@ -33,6 +33,8 @@ import SharedListDetails from '../screens/profile/SharedListDetails';
 import FoodPlace from '../screens/profile/FoodPlace';
 import EventDetails from '../screens/profile/EventDetails';
 import ExperienceScreen from '../screens/search/ExperienceScreen';
+import RequestHost from '../screens/search/RequestHost';
+import PostRequest from '../screens/search/PostRequest';
 
 export type RootStackParamList = {
   HomeScreen: undefined;
@@ -301,6 +303,16 @@ const StackNavigator: FC = () => {
         options={({navigation}) => ({headerShown: false})}
         name={SCREENS.ExperienceScreen}
         component={ExperienceScreen}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.RequestHost}
+        component={RequestHost}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.PostRequest}
+        component={PostRequest}
       />
     </Stack.Navigator>
   );
