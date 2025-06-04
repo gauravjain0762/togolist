@@ -4,6 +4,7 @@ import {
   ImageProps,
   ImageStyle,
   ImageURISource,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -33,7 +34,7 @@ const SearchBar: FC<search> = ({
   onChangeText = () => {},
   placeholder,
   container,
-  value = '',
+  value = undefined,
   searchImg,
   IconStyle,
   inputStyle,
@@ -92,8 +93,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lightGray,
     borderRadius: 14,
     paddingHorizontal: 12,
-    paddingVertical: hp(12),
     marginVertical: 15,
+    paddingVertical: Platform.OS == 'ios' ? hp(12) : 0,
   },
   searchInput: {
     flex: 1,
@@ -118,7 +119,8 @@ const styles = StyleSheet.create({
   listcontainer: {
     paddingTop: hp(10),
     borderTopWidth: 1,
-    marginTop: hp(10),
+    marginTop: Platform.OS == 'ios' ? hp(10) : 0,
     borderColor: colors._959595,
+    paddingVertical: Platform.OS == 'ios' ? 0 : hp(10),
   },
 });

@@ -232,17 +232,19 @@ const SearchScreen = (props: Props) => {
           marginHorizontal: wp(16),
           flex: 1,
         }}>
-        <SearchBar
-          container={styles.searchBox}
-          placeholder="Search"
-          handleSelect={handleSelect}
-          Filterdata={filtered}
-          onChangeText={handleSearch}
-          value={query}
-          data={SUGGESTIONS}
-          inputStyle={styles.searchInput}
-          IconStyle={{width: 17, height: 15, tintColor: '#A4A4A4'}}
-        />
+        <View>
+          <SearchBar
+            container={styles.searchBox}
+            placeholder="Search"
+            handleSelect={handleSelect}
+            Filterdata={filtered}
+            onChangeText={handleSearch}
+            value={query}
+            data={SUGGESTIONS}
+            inputStyle={styles.searchInput}
+            IconStyle={{width: 17, height: 15, tintColor: '#A4A4A4'}}
+          />
+        </View>
 
         {/* Category Chips */}
         <View style={styles.tagsContainer}>
