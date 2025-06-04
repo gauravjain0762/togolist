@@ -35,6 +35,7 @@ import EventDetails from '../screens/profile/EventDetails';
 import ExperienceScreen from '../screens/search/ExperienceScreen';
 import RequestHost from '../screens/search/RequestHost';
 import PostRequest from '../screens/search/PostRequest';
+import ExploreSearch from '../screens/search/ExploreSearch';
 
 export type RootStackParamList = {
   HomeScreen: undefined;
@@ -313,6 +314,11 @@ const StackNavigator: FC = () => {
         options={({navigation}) => ({headerShown: false})}
         name={SCREENS.PostRequest}
         component={PostRequest}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.ExploreSearch}
+        component={ExploreSearch}
       />
     </Stack.Navigator>
   );

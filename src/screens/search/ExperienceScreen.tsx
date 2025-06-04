@@ -10,17 +10,19 @@ import {
 import React, {useState} from 'react';
 import {AppStyles} from '../../theme/appStyles';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {CustomHeader} from '../../component';
+import {CustomHeader, ExperienceCard, ProfileCard} from '../../component';
 import {IMAGES} from '../../assets/Images';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREEN_NAMES} from '../../navigation/screenNames';
+import {useRoute} from '@react-navigation/native';
 
 let data = ['View All', 'Hosts', 'Half Day', 'Full Day', '< 4 hours'];
 
 const ExperienceScreen = () => {
   const [select, setSelect] = useState('View All');
+  const {params} = useRoute();
   return (
     <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader
@@ -68,22 +70,61 @@ const ExperienceScreen = () => {
           />
         </View>
         <Text style={styles.localTitle}>{'Local Hosts'}</Text>
-        <ImageBackground
-          imageStyle={styles.earnImg}
-          source={IMAGES.requestHost_bg}
-          style={styles.earnBg}>
-          <Text style={styles.earntitle}>{'Hosts Pending'}</Text>
-          <Text style={styles.discription}>
-            {
-              'Submit a request for Togolist to connect with local hosts from your destination.'
-            }
-          </Text>
-          <TouchableOpacity
-            onPress={() => navigateTo(SCREEN_NAMES.RequestHost)}
-            style={styles.hostbtn}>
-            <Text style={styles.hosttitle}>{'Request a Host'}</Text>
-          </TouchableOpacity>
-        </ImageBackground>
+        {params?.submit ? (
+          <View style={styles.container}>
+            <View style={styles.list}>
+              <FlatList
+                data={[1, 2, 3, 4]}
+                numColumns={2}
+                columnWrapperStyle={{
+                  justifyContent: 'space-between',
+                  gap: wp(8),
+                }}
+                contentContainerStyle={{gap: wp(16)}}
+                renderItem={({item, index}) => (
+                  <ProfileCard followButton={false} ishire={false} />
+                )}
+              />
+              <Text style={styles.localTitle}>{'Experiences'}</Text>
+              <FlatList
+                data={[1, 2]}
+                contentContainerStyle={{gap: wp(8)}}
+                renderItem={({item, index}) => <ExperienceCard />}
+              />
+            </View>
+            <ImageBackground
+              imageStyle={styles.moreImge}
+              source={IMAGES.bg}
+              style={styles.moreBg}>
+              <Text style={styles.lookingTitle}>{'Looking for More?'}</Text>
+              <Text style={styles.discription}>
+                {
+                  'Submit a request for TogoList to connect with local hosts from your destination.'
+                }
+              </Text>
+              <TouchableOpacity style={styles.hostbtn}>
+                <Text style={styles.hosttitle}>{'Become a Host'}</Text>
+              </TouchableOpacity>
+            </ImageBackground>
+          </View>
+        ) : (
+          <ImageBackground
+            imageStyle={styles.earnImg}
+            source={IMAGES.requestHost_bg}
+            style={styles.earnBg}>
+            <Text style={styles.earntitle}>{'Earn with Togolist'}</Text>
+            <Text style={styles.discription}>
+              {
+                'Submit a request for Togolist to connect with local hosts from your destination.'
+              }
+            </Text>
+            <TouchableOpacity
+              onPress={() => navigateTo(SCREEN_NAMES.RequestHost)}
+              style={styles.hostbtn}>
+              <Text style={styles.hosttitle}>{'Request a Host'}</Text>
+            </TouchableOpacity>
+          </ImageBackground>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -142,7 +183,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: wp(16),
-    marginTop: hp(16),
     gap: hp(8),
     marginHorizontal: hp(16),
     flex: 1,
@@ -170,5 +210,29 @@ const styles = StyleSheet.create({
   localTitle: {
     ...commonFontStyle(600, 18, colors.black),
     paddingHorizontal: wp(22),
+    paddingVertical: hp(16),
+  },
+  list: {
+    flex: 1,
+  },
+  container: {
+    paddingHorizontal: wp(16),
+    flexGrow: 1,
+  },
+  moreImge: {
+    borderRadius: 20,
+    flex: 1,
+  },
+  moreBg: {
+    // flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: hp(600),
+    marginTop: hp(16),
+    paddingHorizontal: wp(16),
+    gap: hp(8),
+  },
+  lookingTitle: {
+    ...commonFontStyle(700, 24, colors.white),
   },
 });

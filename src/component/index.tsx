@@ -16,6 +16,7 @@ import ShareBottomSheet from './profile/ShareBottomSheet';
 import OptionBar from './profile/OptionBar';
 import CommonSheet from './common/CommonSheet';
 import ProfileCard from './explore/ProfileCard';
+import ExperienceCard from './explore/ExperienceCard';
 
 export {
   Loader,
@@ -36,4 +37,5 @@ export {
   OptionBar,
   CommonSheet,
   ProfileCard,
+  ExperienceCard,
 };

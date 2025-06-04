@@ -26,6 +26,7 @@ import {
   LinearView,
   Loader,
   ProfileCard,
+  SearchBar,
 } from '../../component';
 import {useGetDashboardQuery} from '../../api/dashboardApi';
 import {navigateTo} from '../../utils/commonFunction';
@@ -33,8 +34,76 @@ import ExploreCard from '../../component/explore/ExploreCard';
 import DiscoverNewSpotsCard from '../../component/explore/DiscoverNewSpotsCard';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import HeaderTextIcon from '../../component/common/HeaderTextIcon';
+import TravelCardLock from '../../component/common/TravelCardLock';
 
 type Props = {};
+
+const events = [
+  {
+    date: 'April 23',
+    title: 'BBQ Festival',
+    location: 'San Diego',
+    attendees: '428',
+    image: 'https://your-cdn.com/bbq.jpg',
+    isPrivate: false,
+  },
+  {
+    date: 'May 2',
+    title: 'Jazz Night',
+    location: 'San Diego',
+    attendees: '752',
+    image: 'https://your-cdn.com/jazz.jpg',
+    isPrivate: true,
+  },
+  {
+    date: 'May 10',
+    title: 'Lafayette',
+    location: 'San Diego',
+    attendees: '103',
+    image: 'https://your-cdn.com/lafayette.jpg',
+    isPrivate: false,
+  },
+  {
+    date: 'May 26',
+    title: 'CRSSD',
+    location: 'San Diego',
+    attendees: '1.2K',
+    image: 'https://your-cdn.com/crssd.jpg',
+    isPrivate: true,
+  },
+  {
+    date: 'April 23',
+    title: 'BBQ Festival',
+    location: 'San Diego',
+    attendees: '428',
+    image: 'https://your-cdn.com/bbq.jpg',
+    isPrivate: false,
+  },
+  {
+    date: 'May 2',
+    title: 'Jazz Night',
+    location: 'San Diego',
+    attendees: '752',
+    image: 'https://your-cdn.com/jazz.jpg',
+    isPrivate: true,
+  },
+  {
+    date: 'May 10',
+    title: 'Lafayette',
+    location: 'San Diego',
+    attendees: '103',
+    image: 'https://your-cdn.com/lafayette.jpg',
+    isPrivate: false,
+  },
+  {
+    date: 'May 26',
+    title: 'CRSSD',
+    location: 'San Diego',
+    attendees: '1.2K',
+    image: 'https://your-cdn.com/crssd.jpg',
+    isPrivate: true,
+  },
+];
 
 const categories = [
   {label: 'Top Rated Nearby 🏆'},
@@ -44,6 +113,15 @@ const categories = [
   {label: 'Shopping 🎪'},
   {label: 'Fun 🎳'},
   {label: 'More'},
+];
+
+const SUGGESTIONS = [
+  'Mexico must see',
+  'Mexico must see attractions',
+  'Mexico must see cities',
+  'Mexico must see places',
+  'Mexico must see monuments',
+  'Mexico must see natural wonders',
 ];
 
 const CARD_DATA = [
@@ -82,6 +160,8 @@ const CARD_DATA = [
 const SearchScreen = (props: Props) => {
   const [activeTab, setActiveTab] = useState('hot');
   const [select, setSelect] = useState('List View');
+  const [query, setQuery] = useState('');
+  const [filtered, setFiltered] = useState<string[]>([]);
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const bottomSheetAddListRef = useRef<BottomSheetModal>(null);
@@ -103,6 +183,25 @@ const SearchScreen = (props: Props) => {
       </TouchableOpacity>
     );
   }
+
+  const handleSearch = (text: string) => {
+    setQuery(text);
+    if (text.length > 2) {
+      const lowerText = text.toLowerCase();
+      const matched = SUGGESTIONS.filter(item =>
+        item.toLowerCase().startsWith(lowerText),
+      );
+      setFiltered(matched);
+    } else {
+      setFiltered([]);
+    }
+  };
+
+  const handleSelect = (text: string) => {
+    setQuery(text);
+    setFiltered([]);
+    navigateTo(SCREENS.ExploreSearch, {search: text});
+  };
 
   const AddListCard = useCallback(item => {
     return (
@@ -133,18 +232,17 @@ const SearchScreen = (props: Props) => {
           marginHorizontal: wp(16),
           flex: 1,
         }}>
-        <View style={styles.searchBox}>
-          {/* <Ionicons name="search" size={20} color="#999" /> */}
-          <Image
-            source={IMAGES.search}
-            style={{width: 17, height: 15, tintColor: '#A4A4A4'}}
-          />
-          <TextInput
-            placeholder="Search"
-            placeholderTextColor="#A4A4A4"
-            style={styles.searchInput}
-          />
-        </View>
+        <SearchBar
+          container={styles.searchBox}
+          placeholder="Search"
+          handleSelect={handleSelect}
+          Filterdata={filtered}
+          onChangeText={handleSearch}
+          value={query}
+          data={SUGGESTIONS}
+          inputStyle={styles.searchInput}
+          IconStyle={{width: 17, height: 15, tintColor: '#A4A4A4'}}
+        />
 
         {/* Category Chips */}
         <View style={styles.tagsContainer}>
@@ -330,6 +428,40 @@ const SearchScreen = (props: Props) => {
               </ImageBackground>
             </View>
           )}
+          {activeTab == 'events' && (
+            <>
+              <View style={styles.headerrow}>
+                <Text style={styles.eventTitle}>{'Events Near You'}</Text>
+                <Text style={styles.location}>{'50miles Radius'}</Text>
+              </View>
+
+              <FlatList
+                data={events}
+                numColumns={2}
+                keyExtractor={(_, index) => index.toString()}
+                columnWrapperStyle={{
+                  justifyContent: 'space-between',
+                  marginBottom: 16,
+                }}
+                style={{marginTop: 10}}
+                renderItem={({item}) => <TravelCardLock {...item} />}
+              />
+
+              <View style={styles.headerrow}>
+                <Text style={styles.eventTitle}>{'Experiences  Near You'}</Text>
+                <Text style={styles.location}>{'50miles Radius'}</Text>
+              </View>
+
+              <FlatList
+                data={[1, 2]}
+                showsVerticalScrollIndicator={false}
+                nestedScrollEnabled
+                keyExtractor={(_, index) => index.toString()}
+                renderItem={({item}) => <DiscoverNewSpotsCard {...item} />}
+                contentContainerStyle={{paddingBottom: hp(16), gap: hp(8)}}
+              />
+            </>
+          )}
         </ScrollView>
       </View>
       <CommonSheet
@@ -427,7 +559,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     marginVertical: 10,
-    ...commonFontStyle(600, 34, colors.black),
+    ...commonFontStyle(700, 34, colors.black),
     flex: 1,
   },
   moreIcon: {
@@ -440,15 +572,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   searchBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
     borderColor: '#959595',
     borderWidth: 1,
     borderRadius: 12,
     paddingHorizontal: 9,
-    paddingVertical: hp(10),
-    marginBottom: 15,
-    marginTop: 14,
+    backgroundColor: colors.white,
   },
   searchInput: {
     flex: 1,
@@ -699,5 +827,17 @@ const styles = StyleSheet.create({
     ...commonFontStyle(600, 12, colors._444444),
     paddingVertical: hp(8),
     paddingHorizontal: wp(12),
+  },
+  location: {
+    ...commonFontStyle(400, 14, colors._787878),
+  },
+  headerrow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: hp(16),
+  },
+  eventTitle: {
+    ...commonFontStyle(600, 18, colors.black),
   },
 });

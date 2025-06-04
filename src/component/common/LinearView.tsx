@@ -27,7 +27,7 @@ const LinearView: FC<Props> = ({
   );
 };
 
-export default memo(LinearView);
+export default LinearView;
 
 const styles = StyleSheet.create({
   linearView: {

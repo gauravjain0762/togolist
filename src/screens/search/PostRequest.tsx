@@ -4,15 +4,19 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
-import {CustomHeader, LinearView} from '../../component';
+import {Button, CustomHeader, LinearView} from '../../component';
 import {IMAGES} from '../../assets/Images';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
+import {navigateTo} from '../../utils/commonFunction';
+import {SCREEN_NAMES} from '../../navigation/screenNames';
 
 const PostRequest = () => {
   return (
@@ -25,7 +29,10 @@ const PostRequest = () => {
         moreIconStyle={styles.more}
         headerStyle={styles.header}
       />
-      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={styles.Scrollcontainer}
+        style={styles.scroll}
+        showsVerticalScrollIndicator={false}>
         <ImageBackground
           source={IMAGES.bbq}
           imageStyle={styles.placeimges}
@@ -37,9 +44,59 @@ const PostRequest = () => {
           </View>
           <Text style={styles.rate}>{'Hourly $20 USD'}</Text>
         </ImageBackground>
-        <LinearView>
-          <Text style={styles.headerTitle}>{'Details'}</Text>
+        <LinearView containerStyle={styles.valueContainer}>
+          <Text style={styles.headerTitle}>{'About'}</Text>
+          <TextInput
+            style={styles.valueinput}
+            placeholder="Add a short description..."
+          />
         </LinearView>
+        <LinearView containerStyle={styles.valueContainer}>
+          <Text style={styles.headerTitle}>{'Details'}</Text>
+          {/* WHEN */}
+          <Text style={styles.label}>When</Text>
+          <View style={[styles.row, {justifyContent: 'space-between'}]}>
+            <Text style={styles.dateText}>April 3–5, 2025</Text>
+            <View style={[styles.row, {gap: wp(4)}]}>
+              <TouchableOpacity style={styles.tag}>
+                <Text style={styles.tagText}>Fixed</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.tag, styles.redBorder]}>
+                <Text style={styles.tagTextRed}>Dates Flexible</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={styles.divider} />
+
+          {/* LENGTH OPTIONS */}
+          <Text style={styles.label}>Select Length Options</Text>
+          <View style={styles.rowWrap}>
+            {['Multiday', 'Full Day', 'Half Day', 'Half Day'].map(
+              (item, index) => (
+                <TouchableOpacity key={index} style={styles.disabledTag}>
+                  <Text style={styles.disabledText}>{item}</Text>
+                </TouchableOpacity>
+              ),
+            )}
+          </View>
+
+          {/* GROUP SIZE */}
+          <Text style={styles.label}>Group Size</Text>
+          <Text style={styles.actionText}>4-6 Guests</Text>
+
+          <View style={styles.divider} />
+
+          {/* INTERESTS */}
+          <Text style={styles.label}>Interests (Max 3)</Text>
+          <Text style={styles.actionText}>Set Interests</Text>
+        </LinearView>
+        <Button
+          onPress={() =>
+            navigateTo(SCREEN_NAMES.ExperienceScreen, {submit: true})
+          }
+          title="Submit Request"
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -76,7 +133,6 @@ const styles = StyleSheet.create({
     width: 'auto',
     resizeMode: 'contain',
     height: hp(555),
-    marginBottom: wp(18),
     marginTop: hp(21),
     justifyContent: 'flex-end',
     alignItems: 'center',
@@ -103,7 +159,70 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     ...commonFontStyle(700, 24, colors.black),
-    padding: wp(18),
-    paddingBottom: hp(4),
+  },
+  valueinput: {
+    ...commonFontStyle(400, 14, colors._5A5757),
+  },
+  valueContainer: {
+    padding: wp(16),
+    gap: hp(10),
+  },
+  title: {
+    ...commonFontStyle(700, 20, colors.black),
+    marginBottom: hp(12),
+  },
+  label: {
+    ...commonFontStyle(600, 16, colors._444444),
+  },
+  dateText: {
+    ...commonFontStyle(600, 18, colors._BD2332),
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+  },
+  tag: {
+    borderRadius: wp(10),
+    borderColor: colors._D9D9D9,
+    borderWidth: 1,
+    padding: wp(6),
+  },
+  redBorder: {
+    borderWidth: 1,
+    borderColor: colors._BD2332,
+    backgroundColor: 'transparent',
+  },
+  tagText: {
+    ...commonFontStyle(600, 14, colors._99999),
+  },
+  tagTextRed: {
+    ...commonFontStyle(500, 13, colors._BD2332),
+  },
+  rowWrap: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: wp(6),
+  },
+  disabledTag: {
+    paddingVertical: hp(5),
+    paddingHorizontal: wp(12),
+    borderRadius: wp(18),
+    borderWidth: 1,
+    borderColor: colors._D9D9D9,
+  },
+  disabledText: {
+    ...commonFontStyle(600, 14, colors._99999),
+  },
+  actionText: {
+    ...commonFontStyle(600, 18, colors._BD2332),
+  },
+  divider: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#1B151533',
+    marginVertical: hp(8),
+  },
+  Scrollcontainer: {
+    gap: hp(8),
   },
 });

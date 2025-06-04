@@ -1,0 +1,324 @@
+import {
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useState} from 'react';
+import {CustomHeader, ProfileCard, SearchBar} from '../../component';
+import {IMAGES} from '../../assets/Images';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {AppStyles} from '../../theme/appStyles';
+import {Fs, commonFontStyle, hp, wp} from '../../theme/fonts';
+import {colors} from '../../theme/colors';
+import DiscoverNewSpotsCard from '../../component/explore/DiscoverNewSpotsCard';
+import TravelCardLock from '../../component/common/TravelCardLock';
+
+let data = ['Lists', 'Places', 'Events', 'Itineraries', 'Profiles'];
+
+const events = [
+  {
+    date: 'April 23',
+    title: 'BBQ Festival',
+    location: 'San Diego',
+    attendees: '428',
+    image: 'https://your-cdn.com/bbq.jpg',
+    isPrivate: false,
+  },
+  {
+    date: 'May 2',
+    title: 'Jazz Night',
+    location: 'San Diego',
+    attendees: '752',
+    image: 'https://your-cdn.com/jazz.jpg',
+    isPrivate: true,
+  },
+  {
+    date: 'May 10',
+    title: 'Lafayette',
+    location: 'San Diego',
+    attendees: '103',
+    image: 'https://your-cdn.com/lafayette.jpg',
+    isPrivate: false,
+  },
+  {
+    date: 'May 26',
+    title: 'CRSSD',
+    location: 'San Diego',
+    attendees: '1.2K',
+    image: 'https://your-cdn.com/crssd.jpg',
+    isPrivate: true,
+  },
+  {
+    date: 'April 23',
+    title: 'BBQ Festival',
+    location: 'San Diego',
+    attendees: '428',
+    image: 'https://your-cdn.com/bbq.jpg',
+    isPrivate: false,
+  },
+  {
+    date: 'May 2',
+    title: 'Jazz Night',
+    location: 'San Diego',
+    attendees: '752',
+    image: 'https://your-cdn.com/jazz.jpg',
+    isPrivate: true,
+  },
+  {
+    date: 'May 10',
+    title: 'Lafayette',
+    location: 'San Diego',
+    attendees: '103',
+    image: 'https://your-cdn.com/lafayette.jpg',
+    isPrivate: false,
+  },
+  {
+    date: 'May 26',
+    title: 'CRSSD',
+    location: 'San Diego',
+    attendees: '1.2K',
+    image: 'https://your-cdn.com/crssd.jpg',
+    isPrivate: true,
+  },
+];
+
+const ExploreSearch = () => {
+  const [select, setSelect] = useState('Lists');
+  const [select1, setSelect1] = useState('List View');
+  return (
+    <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
+      <CustomHeader
+        backImg={IMAGES.back1}
+        backIconStyle={styles.back}
+        showSearch={false}
+        moreImg={IMAGES.more_icon}
+        moreIconStyle={styles.more}
+        headerStyle={styles.header}
+        title="Explore"
+      />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scroll}>
+        <SearchBar
+          container={styles.searchBox}
+          placeholder="Search"
+          inputStyle={styles.searchInput}
+          IconStyle={{width: 17, height: 15, tintColor: '#A4A4A4'}}
+        />
+        <View>
+          <FlatList
+            data={data}
+            horizontal
+            contentContainerStyle={styles.listContainer}
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
+            renderItem={({item, index}) => (
+              <TouchableOpacity
+                onPress={() => setSelect(item)}
+                style={[
+                  styles.btn,
+                  {
+                    borderColor:
+                      select == item ? colors._BD2332 : colors._D9D9D9,
+                  },
+                ]}>
+                <Text
+                  style={[
+                    styles.btnText,
+                    {color: select == item ? colors._BD2332 : colors._99999},
+                  ]}>
+                  {item}
+                </Text>
+              </TouchableOpacity>
+            )}
+          />
+          {select == 'Lists' && (
+            <>
+              <View style={styles.headerrow}>
+                <View style={styles.select}>
+                  <TouchableOpacity onPress={() => setSelect1('List View')}>
+                    <Text
+                      style={[
+                        styles.subtext,
+                        {
+                          fontSize: Fs(18),
+                          color:
+                            select1 == 'List View'
+                              ? colors._BD2332
+                              : colors._99999,
+                        },
+                      ]}>
+                      List View
+                    </Text>
+                  </TouchableOpacity>
+                  <Text style={[styles.subtext, {fontSize: Fs(18)}]}>
+                    {'|'}
+                  </Text>
+                  <TouchableOpacity onPress={() => setSelect1('Map View')}>
+                    <Text
+                      style={[
+                        styles.subtext,
+                        {
+                          fontSize: Fs(18),
+                          color:
+                            select1 == 'Map View'
+                              ? colors._BD2332
+                              : colors._99999,
+                        },
+                      ]}>
+                      Map View
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <Text style={styles.location}>{'Mexico'}</Text>
+              </View>
+              <>
+                <FlatList
+                  data={[1, 2]}
+                  showsVerticalScrollIndicator={false}
+                  nestedScrollEnabled
+                  keyExtractor={(_, index) => index.toString()}
+                  renderItem={({item}) => <DiscoverNewSpotsCard {...item} />}
+                  contentContainerStyle={{paddingBottom: hp(16), gap: hp(8)}}
+                />
+              </>
+            </>
+          )}
+          {select == 'Events' && (
+            <>
+              <View style={styles.headerrow}>
+                <Text style={styles.eventTitle}>{'Events in Mexico'}</Text>
+                <Text style={styles.location}>{'50miles Radius'}</Text>
+              </View>
+              <FlatList
+                data={events}
+                numColumns={2}
+                keyExtractor={(_, index) => index.toString()}
+                columnWrapperStyle={{
+                  justifyContent: 'space-between',
+                  marginBottom: 16,
+                }}
+                style={{marginTop: 10}}
+                renderItem={({item}) => <TravelCardLock {...item} />}
+              />
+            </>
+          )}
+          {select == 'Itineraries' && (
+            <>
+              <View style={styles.headerrow}>
+                <Text style={styles.eventTitle}>{'Mexico Itineraries'}</Text>
+              </View>
+              <FlatList
+                data={events}
+                numColumns={2}
+                keyExtractor={(_, index) => index.toString()}
+                columnWrapperStyle={{
+                  justifyContent: 'space-between',
+                  marginBottom: 16,
+                }}
+                style={{marginTop: 10}}
+                renderItem={({item}) => <TravelCardLock {...item} />}
+              />
+            </>
+          )}
+          {select == 'Profiles' && (
+            <View style={styles.list}>
+              <FlatList
+                data={[1, 2, 3, 4, 5, 6]}
+                numColumns={2}
+                columnWrapperStyle={{
+                  justifyContent: 'space-between',
+                  gap: wp(8),
+                }}
+                contentContainerStyle={{gap: wp(16)}}
+                renderItem={({item, index}) => (
+                  <ProfileCard
+                    followStyle={{backgroundColor: colors.white}}
+                    followText={{...commonFontStyle(500, 12, colors._BD2332)}}
+                    ishire={false}
+                  />
+                )}
+              />
+            </View>
+          )}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+export default ExploreSearch;
+
+const styles = StyleSheet.create({
+  back: {
+    resizeMode: 'contain',
+    width: wp(24),
+    height: wp(24),
+    tintColor: undefined,
+  },
+  more: {
+    tintColor: undefined,
+    resizeMode: 'contain',
+    width: wp(24),
+    height: wp(24),
+  },
+  header: {
+    paddingHorizontal: wp(16),
+  },
+  searchBox: {
+    borderColor: '#959595',
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingHorizontal: 9,
+    backgroundColor: colors.white,
+  },
+  searchInput: {
+    flex: 1,
+    marginLeft: 5,
+    ...commonFontStyle(400, 14, '#000'), // You can change 16 to any default search input size
+  },
+  scroll: {
+    paddingHorizontal: wp(16),
+  },
+  listContainer: {
+    marginBottom: hp(16),
+  },
+  btn: {
+    borderWidth: 1,
+    borderColor: colors._D9D9D9,
+    borderRadius: 10,
+    paddingHorizontal: wp(6),
+    paddingVertical: hp(6),
+  },
+  btnText: {
+    ...commonFontStyle(600, 14, colors._99999),
+  },
+  separator: {
+    width: wp(8),
+  },
+  select: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: wp(8),
+  },
+  subtext: {
+    marginVertical: 12,
+    ...commonFontStyle(600, 15, '#999999'),
+  },
+  location: {
+    ...commonFontStyle(400, 14, colors._787878),
+  },
+  headerrow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  eventTitle: {
+    ...commonFontStyle(600, 18, colors.black),
+  },
+  list: {
+    flex: 1,
+  },
+});

@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Platform} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {IMAGES} from '../assets/Images';
 import FastImage from 'react-native-fast-image';
@@ -20,62 +20,64 @@ const Tab = createBottomTabNavigator();
 // Custom Tab Bar Component
 const CustomTabBar = ({state, navigation}: any) => {
   return (
-    <View style={[styles.tabBarContainer]}>
-      {state.routes.map((route: any, index: any) => {
-        const isFocused = state.index === index;
+    <SafeAreaView edges={['bottom']}>
+      <View style={[styles.tabBarContainer]}>
+        {state.routes.map((route: any, index: any) => {
+          const isFocused = state.index === index;
 
-        let iconName;
-        switch (route.name) {
-          case SCREENS.HomeScreen:
-            iconName = isFocused ? IMAGES.trips : IMAGES.trips;
-            break;
-          case SCREENS.SearchScreen:
-            iconName = IMAGES.search;
-            break;
-          case SCREENS.CreateListScreen:
-            iconName = IMAGES.newList;
-            break;
-          case SCREENS.ShapeScreen:
-            iconName = IMAGES.shape;
-            break;
-          case SCREENS.ProfileScreen:
-            iconName = IMAGES.user;
-            break;
-          default:
-            iconName = IMAGES.user;
-        }
+          let iconName;
+          switch (route.name) {
+            case SCREENS.HomeScreen:
+              iconName = isFocused ? IMAGES.trips : IMAGES.trips;
+              break;
+            case SCREENS.SearchScreen:
+              iconName = IMAGES.search;
+              break;
+            case SCREENS.CreateListScreen:
+              iconName = IMAGES.newList;
+              break;
+            case SCREENS.ShapeScreen:
+              iconName = IMAGES.shape;
+              break;
+            case SCREENS.ProfileScreen:
+              iconName = IMAGES.user;
+              break;
+            default:
+              iconName = IMAGES.user;
+          }
 
-        return (
-          <TouchableOpacity
-            key={route.name}
-            onPress={() => navigation.navigate(route.name)}
-            style={[
-              styles.tabButton,
-              {
-                // backgroundColor: isFocused ? colors.white : colors._181818,
-              },
-            ]}>
-            {route.name == SCREENS.CreateListScreen ? (
-              <FastImage
-                source={iconName}
-                defaultSource={iconName}
-                style={styles.carImage}
-                resizeMode="contain"
-                tintColor={isFocused ? '#BD2332' : colors.black}
-              />
-            ) : (
-              <FastImage
-                source={iconName}
-                defaultSource={iconName}
-                style={styles.image}
-                resizeMode="contain"
-                tintColor={isFocused ? '#BD2332' : colors.black}
-              />
-            )}
-          </TouchableOpacity>
-        );
-      })}
-    </View>
+          return (
+            <TouchableOpacity
+              key={route.name}
+              onPress={() => navigation.navigate(route.name)}
+              style={[
+                styles.tabButton,
+                {
+                  // backgroundColor: isFocused ? colors.white : colors._181818,
+                },
+              ]}>
+              {route.name == SCREENS.CreateListScreen ? (
+                <FastImage
+                  source={iconName}
+                  defaultSource={iconName}
+                  style={styles.carImage}
+                  resizeMode="contain"
+                  tintColor={isFocused ? '#BD2332' : colors.black}
+                />
+              ) : (
+                <FastImage
+                  source={iconName}
+                  defaultSource={iconName}
+                  style={styles.image}
+                  resizeMode="contain"
+                  tintColor={isFocused ? '#BD2332' : colors.black}
+                />
+              )}
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -115,7 +117,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderColor: '#E3E3E3',
     backgroundColor: colors.white,
-    paddingVertical: hp(6),
+    paddingVertical: Platform.OS == 'ios' ? 0 : hp(6),
   },
   tabButton: {
     width: wp(65),

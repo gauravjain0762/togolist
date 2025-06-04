@@ -1,15 +1,35 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import React, {FC, memo} from 'react';
 import {SCREEN_WIDTH, commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {LinearView} from '..';
 import {IMAGES} from '../../assets/Images';
 
-type card = {};
+type card = {
+  followButton?: boolean;
+  cardStyle?: ViewStyle;
+  ishire?: boolean;
+  followStyle?: ViewStyle;
+  followText?: TextStyle;
+};
 
-const ProfileCard: FC<card> = () => {
+const ProfileCard: FC<card> = ({
+  followButton = true,
+  cardStyle,
+  ishire = true,
+  followStyle,
+  followText,
+}) => {
   return (
-    <LinearView containerStyle={styles.card}>
+    <LinearView containerStyle={[styles.card, cardStyle]}>
       <Image source={IMAGES.profile} style={styles.avatar} />
       <View style={styles.row}>
         <Text style={styles.username}>@Emily </Text>
@@ -22,14 +42,16 @@ const ProfileCard: FC<card> = () => {
         <Text style={styles.statsText}>58 Lists</Text>
       </View>
 
-      <Text style={styles.hireText}>Available For Hire</Text>
+      {ishire && <Text style={styles.hireText}>Available For Hire</Text>}
       <Text style={styles.bio}>
         Avid traveler, sharing hidden gems all across the globe.
       </Text>
 
-      <TouchableOpacity style={styles.followBtn}>
-        <Text style={styles.followText}>Follow</Text>
-      </TouchableOpacity>
+      {followButton && (
+        <TouchableOpacity style={[styles.followBtn, followStyle]}>
+          <Text style={[styles.followText, followText]}>Follow</Text>
+        </TouchableOpacity>
+      )}
     </LinearView>
   );
 };
@@ -43,7 +65,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(10),
     gap: hp(8),
     flex: 1,
-    maxWidth: SCREEN_WIDTH / 2 - wp(20),
+    maxWidth: (SCREEN_WIDTH / 2) * 0.9,
   },
   avatar: {
     width: wp(58),
@@ -59,7 +81,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     ...commonFontStyle(400, 14, '#ccc'),
-    marginHorizontal: wp(4),
+    marginHorizontal: wp(2),
   },
   hireText: {
     ...commonFontStyle(400, 12, colors._BD2332),
