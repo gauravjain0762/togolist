@@ -1,5 +1,6 @@
 import {
   Image,
+  ImageBackground,
   RefreshControl,
   ScrollView,
   Share,
@@ -11,7 +12,7 @@ import {
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
-import {commonFontStyle, hp, wp} from '../../theme/fonts';
+import {SCREEN_WIDTH, commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {IMAGES} from '../../assets/Images';
 import {navigationRef} from '../../navigation/RootContainer';
@@ -33,14 +34,15 @@ import CalendarCard from '../../component/trip/CalendarCard';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import StatusCard from '../../component/trip/StatusCard';
 import CardImageText from '../../component/common/CardImageText';
+import {SwipeListView} from 'react-native-swipe-list-view';
 
 type Props = {};
 
 const TripHome = (props: Props) => {
   const [activeTab, setActiveTab] = useState('tab1');
-  const [short, setshort] = useState(false);
   const [short1, setshort1] = useState(false);
   const [short2, setshort2] = useState(false);
+  const [options, setOptions] = useState(false);
 
   const tabs = [
     {
@@ -98,7 +100,11 @@ const TripHome = (props: Props) => {
       {/* <Loader visible={dashboardLoading} /> */}
       <View style={styles.headerView}>
         <Text style={styles.heading}>
-          {activeTab === 'tab1' ? 'Trips' : 'Bucket List'}
+          {activeTab === 'tab1'
+            ? options
+              ? 'Archived'
+              : 'Trips'
+            : 'Bucket List'}
         </Text>
         <TouchableOpacity onPress={() => handlePresentModalPress()}>
           <Image source={IMAGES.more_icon} style={[styles.moreIcon]} />
@@ -139,7 +145,7 @@ const TripHome = (props: Props) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={AppStyles.flexGrow}
         style={{marginHorizontal: wp(16), flex: 1}}>
-        {activeTab == 'tab1' && (
+        {activeTab == 'tab1' && !options && (
           <Button
             type="outline"
             BtnStyle={styles.btn}
@@ -160,12 +166,15 @@ const TripHome = (props: Props) => {
           />
         )}
 
-        <StatusCard
-          showBucket={activeTab == 'tab2' ? true : false}
-          title={'Travel Stats'}
-        />
+        {!options && (
+          <StatusCard
+            showBucket={activeTab == 'tab2' ? true : false}
+            title={'Travel Stats'}
+            key={activeTab}
+          />
+        )}
 
-        {activeTab == 'tab1' && (
+        {activeTab == 'tab1' && !options && (
           <View style={{marginTop: 8}}>
             <TripCardBottomText
               title={'Start Planning...'}
@@ -176,6 +185,41 @@ const TripHome = (props: Props) => {
             <TogolistPro cardStyle={{marginTop: 8, marginBottom: 9}} />
             <CalendarCard />
           </View>
+        )}
+        {options && (
+          <SwipeListView
+            data={[1, 1]}
+            ItemSeparatorComponent={() => <View style={{height: hp(12)}} />}
+            renderItem={(data, rowMap) => (
+              <View style={styles.rowFront}>
+                <TripCardBottomText
+                  title={'Toronto, Canada'}
+                  location={'New Destination'}
+                  showDay={true}
+                  dayValue={45}
+                  BGImg={{borderRadius: 0}}
+                  containerStyle={{borderRadius: 0}}
+                />
+              </View>
+            )}
+            disableRightSwipe
+            swipeToOpenPercent={30}
+            rightOpenValue={SCREEN_WIDTH}
+            renderHiddenItem={(data, rowMap) => (
+              <View style={styles.rowBack}>
+                <TouchableOpacity style={styles.backButton}>
+                  {/* <Icon name="restore" size={24} color="#fff" /> */}
+                  <Text style={styles.backText}>Restore</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.backButton}>
+                  {/* <Icon name="close" size={24} color="#fff" /> */}
+                  <Text style={styles.backText}>Delete</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            leftOpenValue={75}
+            rightOpenValue={-75}
+          />
         )}
         {activeTab == 'tab2' && (
           <>
@@ -217,10 +261,12 @@ const TripHome = (props: Props) => {
               </View>
               <View style={styles.divider1} />
               {/* <View style={styles.divider1} /> */}
-              <View style={styles.row}>
+              <TouchableOpacity
+                onPress={() => navigateTo(SCREENS.TripsDetails)}
+                style={styles.row}>
                 <Text style={styles.sheetlabel}>{'Edit Trips'}</Text>
                 <Image source={IMAGES.edit_icon} style={styles.icon} />
-              </View>
+              </TouchableOpacity>
             </View>
             <View style={styles.row}>
               <Text style={styles.sheetlabel}>{'Sort by Date'}</Text>
@@ -231,29 +277,28 @@ const TripHome = (props: Props) => {
             </View>
             <View style={styles.divider1} />
 
-            <View
-              style={[
-                styles.row,
-                {borderBottomWidth: 8, borderColor: '#8080802E'},
-              ]}>
+            <View style={[styles.row]}>
               <Text style={styles.sheetlabel}>{'Sort by Destination'}</Text>
               <GetCheckboxImage
                 onPress={() => setshort2(!short2)}
                 value={short2}
               />
             </View>
-            <View
-              style={[
-                styles.row,
-                {borderBottomWidth: 8, borderColor: '#8080802E'},
-              ]}>
+            <View style={styles.devider} />
+
+            <TouchableOpacity
+              onPress={() => (
+                setOptions(!options), bottomSheetModalRef.current?.dismiss()
+              )}
+              style={styles.row}>
               <Text style={styles.sheetlabel}>{'Archived'}</Text>
               <Image
                 source={IMAGES.archived}
                 resizeMode="contain"
                 style={styles.icon}
               />
-            </View>
+            </TouchableOpacity>
+            <View style={styles.devider} />
             <View style={styles.row}>
               <Text style={styles.sheetlabel}>{'Report an Issue'}</Text>
               <Image
@@ -371,5 +416,42 @@ const styles = StyleSheet.create({
     width: wp(20),
     height: wp(20),
     resizeMode: 'contain',
+  },
+  devider: {
+    borderColor: '#8080802E',
+    borderBottomWidth: hp(8),
+  },
+  contentContainerStyle: {
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
+  rowFront: {
+    overflow: 'hidden',
+    borderRadius: 20,
+  },
+  imageBackground: {
+    flex: 1,
+    borderRadius: 12,
+  },
+  rowBack: {
+    alignItems: 'center',
+    backgroundColor: '#C62828',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    overflow: 'hidden',
+  },
+  backButton: {
+    width: 70,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 10,
+  },
+  backText: {
+    color: '#fff',
+    fontSize: 12,
+    marginTop: 4,
   },
 });

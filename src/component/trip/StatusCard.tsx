@@ -51,10 +51,10 @@ const StatusCard = ({title, showBucket}: any) => {
         {data?.map((tab, index) => {
           return (
             <View style={styles.tabItem}>
-              <Text style={[commonFontStyle(600, 20, colors.primary1)]}>
+              <Text style={{...commonFontStyle(600, 20, colors.primary1)}}>
                 {tab?.value}
               </Text>
-              <Text style={[commonFontStyle(500, 10, '#444444')]}>
+              <Text style={{...commonFontStyle(500, 10, '#444444')}}>
                 {tab?.key}
               </Text>
             </View>

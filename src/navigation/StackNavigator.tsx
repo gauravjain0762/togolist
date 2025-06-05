@@ -36,6 +36,7 @@ import ExperienceScreen from '../screens/search/ExperienceScreen';
 import RequestHost from '../screens/search/RequestHost';
 import PostRequest from '../screens/search/PostRequest';
 import ExploreSearch from '../screens/search/ExploreSearch';
+import TripsDetails from '../screens/tripHome/TripsDetails';
 
 export type RootStackParamList = {
   TripHome: undefined;
@@ -319,6 +320,11 @@ const StackNavigator: FC = () => {
         options={({navigation}) => ({headerShown: false})}
         name={SCREENS.ExploreSearch}
         component={ExploreSearch}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.TripsDetails}
+        component={TripsDetails}
       />
     </Stack.Navigator>
   );

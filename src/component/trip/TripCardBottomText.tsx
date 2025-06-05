@@ -18,12 +18,14 @@ const TripCardBottomText: FC<button> = ({
   location,
   showDay,
   dayValue,
+  BGImg,
+  containerStyle,
 }: any) => {
   return (
     <ImageBackground
       source={IMAGES.bg1} // Replace with actual pyramid image URL
-      style={styles.container}
-      imageStyle={styles.image}>
+      style={[styles.container, containerStyle]}
+      imageStyle={[styles.image, BGImg]}>
       {location && (
         <View style={styles.row}>
           <Image source={IMAGES.locationWhite} style={styles.iconStyle} />

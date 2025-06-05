@@ -160,4 +160,6 @@ export const IMAGES = {
   tab1: require('./icon/tripHome/tab1.png'),
   tab_off: require('./icon/tripHome/tab_off.png'),
   archived: require('./icon/tripHome/archived.png'),
+  rightArrow: require('./icon/tripHome/right.png'),
+  world_map: require('./icon/tripHome/map.png'),
 };
