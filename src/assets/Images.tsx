@@ -146,4 +146,17 @@ export const IMAGES = {
   book: require('./icon/profile/book.png'),
   clock: require('./icon/explore/clock.png'),
   profile_badge: require('./icon/explore/profile_badge.png'),
+
+  //tripHome
+  tab4_on: require('./icon/tripHome/tab4_on.png'),
+  tab4_off: require('./icon/tripHome/tab4_off.png'),
+  tab3_on: require('./icon/tripHome/tab3_on.png'),
+  tab3_off: require('./icon/tripHome/tab3_off.png'),
+  tab2_on: require('./icon/tripHome/tab2_on.png'),
+  tab2_off: require('./icon/tripHome/tab2_off.png'),
+  plane_on: require('./icon/tripHome/plane_on.png'),
+  plane_off: require('./icon/tripHome/plane_off.png'),
+  add_location: require('./icon/tripHome/add_location.png'),
+  tab1: require('./icon/tripHome/tab1.png'),
+  tab_off: require('./icon/tripHome/tab_off.png'),
 };

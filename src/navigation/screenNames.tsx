@@ -1,5 +1,5 @@
 export const SCREENS = {
-  HomeScreen: 'HomeScreen',
+  TripHome: 'TripHome',
   LoginScreen: 'LoginScreen',
   TabNavigator: 'TabNavigator',
   SplashScreen: 'SplashScreen',
@@ -39,7 +39,7 @@ export const SCREENS = {
 
 export interface ScreenNames {
   [key: string]: string;
-  HomeScreen: string;
+  TripHome: string;
   LoginScreen: string;
   SplashScreen: string;
   PanditProfileScreen: string;

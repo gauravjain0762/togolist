@@ -166,7 +166,7 @@ const LoginScreen = (props: Props) => {
         console.log('Login Response11', response1);
         if (response1) {
           successToast('Created Successfully');
-          navigationRef.navigate(SCREENS.HomeScreen);
+          navigationRef.navigate(SCREENS.TripHome);
         } else {
           errorToast(response1?.message);
         }
@@ -219,7 +219,7 @@ const LoginScreen = (props: Props) => {
       //       onSuccess: res => {
       //         setIsLoading(false);
       //         successToast("Created Successfully")
-      //         navigationRef.navigate(SCREENS.HomeScreen);
+      //         navigationRef.navigate(SCREENS.TripHome);
       //       },
       //       onFailure: () => {
       //         setIsLoading(false);

@@ -16,6 +16,7 @@ type button = {
   title: string;
   onPress?: () => void;
   BtnStyle?: ViewStyle;
+  cardStyle?: ViewStyle;
   titleStyle?: TextStyle;
 };
 
@@ -24,9 +25,10 @@ const TogolistPro: FC<button> = ({
   BtnStyle,
   onPress = () => {},
   titleStyle,
+  cardStyle
 }) => {
   return (
-    <ImageBackground source={IMAGES.bg2} style={styles.card}>
+    <ImageBackground source={IMAGES.bg2} style={[styles.card,cardStyle]}>
       <TouchableOpacity style={styles.closeIcon}>
         <Text style={{fontSize: 16, color: '#f9a8b7'}}>✕</Text>
       </TouchableOpacity>

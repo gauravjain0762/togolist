@@ -3,7 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {useAppDispatch} from '../redux/hooks';
 import {colors} from '../theme/colors';
 import {Text} from 'react-native';
-import HomeScreen from '../screens/home/HomeScreen';
+import TripHome from '../screens/tripHome/TripHome';
 import {ScreenNames, SCREENS} from './screenNames';
 import LoginScreen from '../screens/auth/LoginScreen';
 import {SET_FCM_TOKEN} from '../redux/actionTypes';
@@ -38,7 +38,7 @@ import PostRequest from '../screens/search/PostRequest';
 import ExploreSearch from '../screens/search/ExploreSearch';
 
 export type RootStackParamList = {
-  HomeScreen: undefined;
+  TripHome: undefined;
 };
 const headerStyleTransparent = {
   headerStyle: {

@@ -6,7 +6,7 @@ import {IMAGES} from '../assets/Images';
 import FastImage from 'react-native-fast-image';
 import {colors} from '../theme/colors';
 import {hp, wp} from '../theme/fonts';
-import HomeScreen from '../screens/home/HomeScreen';
+import TripHome from '../screens/tripHome/TripHome';
 import {SCREENS} from './screenNames';
 import {useAppSelector} from '../redux/hooks';
 import SearchScreen from '../screens/search/SearchScreen';
@@ -27,7 +27,7 @@ const CustomTabBar = ({state, navigation}: any) => {
 
           let iconName;
           switch (route.name) {
-            case SCREENS.HomeScreen:
+            case SCREENS.TripHome:
               iconName = isFocused ? IMAGES.trips : IMAGES.trips;
               break;
             case SCREENS.SearchScreen:
@@ -88,13 +88,13 @@ export default function TabNavigator() {
       screenOptions={{headerShown: false}}
       initialRouteName={SCREENS.ProfileScreen}
       tabBar={(props: any) => <CustomTabBar {...props} />}>
-      <Tab.Screen name={SCREENS.SearchScreen} component={SearchScreen} />
-      <Tab.Screen name={SCREENS.HomeScreen} component={HomeScreen} />
+      <Tab.Screen name={SCREENS.SearchScreen} component={ShapeScreen} />
+      <Tab.Screen name={SCREENS.TripHome} component={TripHome} />
       <Tab.Screen
         name={SCREENS.CreateListScreen}
         component={CreateListScreen}
       />
-      <Tab.Screen name={SCREENS.ShapeScreen} component={ShapeScreen} />
+      <Tab.Screen name={SCREENS.ShapeScreen} component={SearchScreen} />
       <Tab.Screen name={SCREENS.ProfileScreen} component={ProfileScreen} />
     </Tab.Navigator>
   );
