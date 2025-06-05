@@ -70,11 +70,10 @@ export default memo(CommonSheet);
 const styles = StyleSheet.create({
   contentContainer: {
     justifyContent: 'center',
-    paddingHorizontal: wp(21),
     backgroundColor: colors.white,
+    paddingHorizontal: wp(16),
   },
   header: {
-    paddingHorizontal: wp(16),
     paddingBottom: hp(16),
     flexDirection: 'row',
     alignItems: 'center',

@@ -159,4 +159,5 @@ export const IMAGES = {
   add_location: require('./icon/tripHome/add_location.png'),
   tab1: require('./icon/tripHome/tab1.png'),
   tab_off: require('./icon/tripHome/tab_off.png'),
+  archived: require('./icon/tripHome/archived.png'),
 };

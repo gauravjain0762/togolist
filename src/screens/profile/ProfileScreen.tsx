@@ -246,6 +246,7 @@ const ProfileScreen = (props: Props) => {
         onMorePress={() => {
           navigateTo(SCREENS.ProfileSettingScreen);
         }}
+        backIconStyle={{marginRight: wp(6)}}
       />
       <Loader visible={false} />
       <ScrollView

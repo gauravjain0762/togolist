@@ -17,7 +17,13 @@ import {IMAGES} from '../../assets/Images';
 import {navigationRef} from '../../navigation/RootContainer';
 import {SCREENS} from '../../navigation/screenNames';
 import CustomHeader from '../../component/common/CustomHeader';
-import {Button, CommonSheet, LinearView, Loader} from '../../component';
+import {
+  Button,
+  CommonSheet,
+  GetCheckboxImage,
+  LinearView,
+  Loader,
+} from '../../component';
 import {useGetDashboardQuery} from '../../api/dashboardApi';
 import {navigateTo} from '../../utils/commonFunction';
 import TogolistPro from '../../component/common/TogolistPro';
@@ -32,6 +38,28 @@ type Props = {};
 
 const TripHome = (props: Props) => {
   const [activeTab, setActiveTab] = useState('tab1');
+  const [short, setshort] = useState(false);
+  const [short1, setshort1] = useState(false);
+  const [short2, setshort2] = useState(false);
+
+  const tabs = [
+    {
+      key: 'Trips',
+      value: 0,
+    },
+    {
+      key: 'Countries',
+      value: 0,
+    },
+    {
+      key: 'Cities',
+      value: 0,
+    },
+    {
+      key: 'Days',
+      value: 0,
+    },
+  ];
 
   const {
     data: dashBoardData,
@@ -138,14 +166,14 @@ const TripHome = (props: Props) => {
         />
 
         {activeTab == 'tab1' && (
-          <View style={{marginTop:8}}>
+          <View style={{marginTop: 8}}>
             <TripCardBottomText
               title={'Start Planning...'}
               location={'New Destination'}
               showDay={false}
               dayValue={0}
             />
-            <TogolistPro cardStyle={{marginTop: 8,marginBottom:9}} />
+            <TogolistPro cardStyle={{marginTop: 8, marginBottom: 9}} />
             <CalendarCard />
           </View>
         )}
@@ -169,7 +197,74 @@ const TripHome = (props: Props) => {
           </>
         )}
       </ScrollView>
-      <CommonSheet bottomSheetModalRef={bottomSheetModalRef} title="Settings" />
+      <CommonSheet
+        bottomSheetModalRef={bottomSheetModalRef}
+        children={
+          <>
+            <View style={styles.toplist}>
+              <View style={styles.row}>
+                <Text style={styles.sheetlabel}>{'Share'}</Text>
+                <Image source={IMAGES.send} style={styles.icon} />
+              </View>
+              <View style={styles.divider1} />
+              <View style={styles.row}>
+                <Text style={styles.sheetlabel}>{'Create a Trip'}</Text>
+                <Image
+                  source={IMAGES.tab1}
+                  resizeMode="contain"
+                  style={styles.icon}
+                />
+              </View>
+              <View style={styles.divider1} />
+              {/* <View style={styles.divider1} /> */}
+              <View style={styles.row}>
+                <Text style={styles.sheetlabel}>{'Edit Trips'}</Text>
+                <Image source={IMAGES.edit_icon} style={styles.icon} />
+              </View>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.sheetlabel}>{'Sort by Date'}</Text>
+              <GetCheckboxImage
+                onPress={() => setshort1(!short1)}
+                value={short1}
+              />
+            </View>
+            <View style={styles.divider1} />
+
+            <View
+              style={[
+                styles.row,
+                {borderBottomWidth: 8, borderColor: '#8080802E'},
+              ]}>
+              <Text style={styles.sheetlabel}>{'Sort by Destination'}</Text>
+              <GetCheckboxImage
+                onPress={() => setshort2(!short2)}
+                value={short2}
+              />
+            </View>
+            <View
+              style={[
+                styles.row,
+                {borderBottomWidth: 8, borderColor: '#8080802E'},
+              ]}>
+              <Text style={styles.sheetlabel}>{'Archived'}</Text>
+              <Image
+                source={IMAGES.archived}
+                resizeMode="contain"
+                style={styles.icon}
+              />
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.sheetlabel}>{'Report an Issue'}</Text>
+              <Image
+                source={IMAGES.report}
+                style={[styles.icon, {width: wp(24), height: hp(24)}]}
+              />
+            </View>
+          </>
+        }
+        title="Settings"
+      />
     </SafeAreaView>
   );
 };
@@ -235,5 +330,46 @@ const styles = StyleSheet.create({
   },
   titleStyle: {
     ...commonFontStyle(700, 13, colors._BD2332),
+  },
+
+  tabContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    // backgroundColor: '#7878800D',
+    borderRadius: 12,
+    // paddingVertical: 20,
+  },
+  tabContainer1: {
+    backgroundColor: '#7878800D',
+    borderRadius: 20,
+    marginTop: 18,
+    overflow: 'hidden',
+  },
+  tabItem: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  toplist: {
+    borderBottomWidth: 8,
+    borderColor: '#8080802E',
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: hp(17),
+    paddingHorizontal: wp(16),
+  },
+  sheetlabel: {
+    ...commonFontStyle(500, 18, colors.black),
+  },
+  divider1: {
+    height: 0.5,
+    backgroundColor: '#8080808C',
+  },
+  icon: {
+    width: wp(20),
+    height: wp(20),
+    resizeMode: 'contain',
   },
 });
