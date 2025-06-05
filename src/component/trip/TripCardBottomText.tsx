@@ -24,10 +24,12 @@ const TripCardBottomText: FC<button> = ({
       source={IMAGES.bg1} // Replace with actual pyramid image URL
       style={styles.container}
       imageStyle={styles.image}>
-      <View style={styles.row}>
-        <Image source={IMAGES.locationWhite} style={styles.iconStyle} />
-        <Text style={styles.headerText}>{location}</Text>
-      </View>
+      {location && (
+        <View style={styles.row}>
+          <Image source={IMAGES.locationWhite} style={styles.iconStyle} />
+          <Text style={styles.headerText}>{location}</Text>
+        </View>
+      )}
       <View style={styles.row}>
         <Text style={styles.title}>{title}</Text>
         {showDay && (
@@ -48,7 +50,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     overflow: 'hidden',
     // justifyContent: 'space-between',
-    marginTop: 12,
+    // marginTop: 12,
     justifyContent: 'flex-end',
     paddingHorizontal: 16,
     paddingBottom: 12,

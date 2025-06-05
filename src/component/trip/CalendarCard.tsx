@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderColor: '#C5C5C5',
     borderWidth: 1,
-    padding: 12,
+    padding: 14,
     alignItems: 'center',
     backgroundColor: 'white',
     shadowColor: '#000',
@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
   title: {
     ...commonFontStyle(700, 13, "#1B1515"), // You specified this
     marginBottom: 4,
+    marginTop:2
   },
   subtitle: {
     ...commonFontStyle(400, 12, "#A6A6A6"), // example for subtitle
@@ -58,7 +59,8 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 10,
     borderWidth: 1.5,
-    borderColor: '#000',
+    borderColor: '#1B1515',
+    alignSelf:"flex-start"
   },
 });
 

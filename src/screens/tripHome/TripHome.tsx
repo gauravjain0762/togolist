@@ -25,30 +25,13 @@ import CardBottomText from '../../component/common/CardBottomText';
 import TripCardBottomText from '../../component/trip/TripCardBottomText';
 import CalendarCard from '../../component/trip/CalendarCard';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import StatusCard from '../../component/trip/StatusCard';
+import CardImageText from '../../component/common/CardImageText';
 
 type Props = {};
 
 const TripHome = (props: Props) => {
-  const [activeTab, setActiveTab] = useState('hot');
-
-  const tabs = [
-    {
-      key: 'Trips',
-      value: 0,
-    },
-    {
-      key: 'Countries',
-      value: 0,
-    },
-    {
-      key: 'Cities',
-      value: 0,
-    },
-    {
-      key: 'Days',
-      value: 0,
-    },
-  ];
+  const [activeTab, setActiveTab] = useState('tab1');
 
   const {
     data: dashBoardData,
@@ -86,39 +69,41 @@ const TripHome = (props: Props) => {
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
       {/* <Loader visible={dashboardLoading} /> */}
       <View style={styles.headerView}>
-        <Text style={styles.heading}>{'Trips'}</Text>
+        <Text style={styles.heading}>
+          {activeTab === 'tab1' ? 'Trips' : 'Bucket List'}
+        </Text>
         <TouchableOpacity onPress={() => handlePresentModalPress()}>
           <Image source={IMAGES.more_icon} style={[styles.moreIcon]} />
         </TouchableOpacity>
       </View>
       <View style={styles.tabView}>
         <NavItem
-          icon={activeTab === 'hot' ? IMAGES.tab1 : IMAGES.tab_off}
-          active={activeTab === 'hot'}
+          icon={activeTab === 'tab1' ? IMAGES.tab1 : IMAGES.tab_off}
+          active={activeTab === 'tab1'}
           onPress={() => {
-            setActiveTab('hot');
+            setActiveTab('tab1');
           }}
           keyValue={true}
         />
         <NavItem
-          icon={activeTab === 'location' ? IMAGES.tab2_on : IMAGES.tab2_off}
-          active={activeTab === 'location'}
+          icon={activeTab === 'tab2' ? IMAGES.tab2_on : IMAGES.tab2_off}
+          active={activeTab === 'tab2'}
           onPress={() => {
-            setActiveTab('location');
+            setActiveTab('tab2');
           }}
         />
         <NavItem
-          icon={activeTab === 'profile' ? IMAGES.tab3_on : IMAGES.tab3_off}
-          active={activeTab === 'profile'}
+          icon={activeTab === 'tab3' ? IMAGES.tab3_on : IMAGES.tab3_off}
+          active={activeTab === 'tab3'}
           onPress={() => {
-            setActiveTab('profile');
+            setActiveTab('tab3');
           }}
         />
         <NavItem
-          icon={activeTab === 'events' ? IMAGES.tab4_on : IMAGES.tab4_off}
-          active={activeTab === 'events'}
+          icon={activeTab === 'tab4' ? IMAGES.tab4_on : IMAGES.tab4_off}
+          active={activeTab === 'tab4'}
           onPress={() => {
-            setActiveTab('events');
+            setActiveTab('tab4');
           }}
         />
       </View>
@@ -126,50 +111,63 @@ const TripHome = (props: Props) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={AppStyles.flexGrow}
         style={{marginHorizontal: wp(16), flex: 1}}>
-        <Button
-          type="outline"
-          BtnStyle={styles.btn}
-          leftImgStyle={styles.leftImgStyle}
-          titleStyle={styles.titleStyle}
-          leftImg={IMAGES.add_location}
-          title="New Trip"
+        {activeTab == 'tab1' && (
+          <Button
+            type="outline"
+            BtnStyle={styles.btn}
+            leftImgStyle={styles.leftImgStyle}
+            titleStyle={styles.titleStyle}
+            leftImg={IMAGES.add_location}
+            title="New Trip"
+          />
+        )}
+        {activeTab == 'tab2' && (
+          <Button
+            type="outline"
+            BtnStyle={styles.btn}
+            leftImgStyle={styles.leftImgStyle}
+            titleStyle={styles.titleStyle}
+            leftImg={IMAGES.add_location}
+            title="New Bucket List Trip"
+          />
+        )}
+
+        <StatusCard
+          showBucket={activeTab == 'tab2' ? true : false}
+          title={'Travel Stats'}
         />
 
-        <LinearView
-          linearViewStyle={{marginTop: hp(20)}}
-          containerStyle={{paddingVertical: 20}}>
-          <Text
-            style={[
-              commonFontStyle(700, 24, colors.black),
-              {marginBottom: 16, textAlign: 'center'},
-            ]}>
-            {'Travel Stats'}
-          </Text>
-          <View style={[styles.tabContainer]}>
-            {tabs.map(tab => (
-              <TouchableOpacity
-                key={tab.key}
-                onPress={() => setSelectedTab(tab.key)}
-                style={styles.tabItem}>
-                <Text style={[commonFontStyle(600, 20, colors.primary1)]}>
-                  {tab.value}
-                </Text>
-                <Text style={[commonFontStyle(500, 10, '#444444')]}>
-                  {tab.key}{' '}
-                </Text>
-              </TouchableOpacity>
-            ))}
+        {activeTab == 'tab1' && (
+          <View style={{marginTop:8}}>
+            <TripCardBottomText
+              title={'Start Planning...'}
+              location={'New Destination'}
+              showDay={false}
+              dayValue={0}
+            />
+            <TogolistPro cardStyle={{marginTop: 8,marginBottom:9}} />
+            <CalendarCard />
           </View>
-        </LinearView>
-
-        <TripCardBottomText
-          title={'Start Planning...'}
-          location={'New Destination'}
-          showDay={false}
-          dayValue={0}
-        />
-        <TogolistPro cardStyle={{marginTop: 10}} />
-        <CalendarCard />
+        )}
+        {activeTab == 'tab2' && (
+          <>
+            <View style={{marginVertical: 8}}>
+              <CardImageText
+                // title={'No collections yet!'}
+                subText={
+                  'Start building Bucket List Trips to save places you’d like to go!'
+                }
+              />
+            </View>
+            <TripCardBottomText
+              title={'Explore Destinations'}
+              // location={'New Destination'}
+              showDay={false}
+              dayValue={0}
+            />
+            <TogolistPro cardStyle={{marginTop: 10}} />
+          </>
+        )}
       </ScrollView>
       <CommonSheet bottomSheetModalRef={bottomSheetModalRef} title="Settings" />
     </SafeAreaView>
@@ -237,23 +235,5 @@ const styles = StyleSheet.create({
   },
   titleStyle: {
     ...commonFontStyle(700, 13, colors._BD2332),
-  },
-
-  tabContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    // backgroundColor: '#7878800D',
-    borderRadius: 12,
-    // paddingVertical: 20,
-  },
-  tabContainer1: {
-    backgroundColor: '#7878800D',
-    borderRadius: 20,
-    marginTop: 18,
-    overflow: 'hidden',
-  },
-  tabItem: {
-    alignItems: 'center',
-    flex: 1,
   },
 });
