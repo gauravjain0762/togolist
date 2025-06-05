@@ -1,5 +1,6 @@
 export const API = {
   BASE_URL: 'https://mangalbhav.com/',
+  MAP_KEY: 'AIzaSyBmE9L3sw2X3M70AG4_w3wSJy8M_hU3VZY',
 
   UserInfoInsert: 'UserInfoInsert',
   EntityProfileInsert: 'EntityProfileInsert',

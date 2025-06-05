@@ -8,6 +8,7 @@ import {
   Dimensions,
   TouchableOpacity,
   ImageProps,
+  ViewStyle,
 } from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
@@ -27,6 +28,7 @@ const DiscoverNewSpotsCard: FC<{
   isShowOptions?: boolean;
   showInfo?: boolean;
   showRating?: boolean;
+  containerStyle?: ViewStyle;
 }> = ({
   title,
   location,
@@ -37,10 +39,11 @@ const DiscoverNewSpotsCard: FC<{
   isShowOptions = true,
   showInfo = true,
   showRating = true,
+  containerStyle,
 }) => {
   return (
     <LinearView>
-      <View style={{padding: wp(20)}}>
+      <View style={[{paddingVertical: wp(20)}, containerStyle]}>
         <Image
           source={{
             uri: 'https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U',
@@ -49,7 +52,12 @@ const DiscoverNewSpotsCard: FC<{
         />
         <Text style={styles.title}>Communal Coffee</Text>
 
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingHorizontal: wp(20),
+          }}>
           <Image source={IMAGES.locationWhite} style={styles.locationIcon} />
           <Text style={styles.userName2}>Toronto, Canada</Text>
         </View>
@@ -132,7 +140,8 @@ const styles = StyleSheet.create({
   title: {
     ...commonFontStyle(700, 24, colors.black),
     marginBottom: 8,
-    marginTop: 18,
+    paddingHorizontal: wp(20),
+    marginTop: hp(18),
   },
 
   imageStyle: {
@@ -140,6 +149,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     flex: 1,
     borderRadius: 10,
+    paddingHorizontal: wp(20),
   },
   locationIcon: {
     width: wp(14),
@@ -153,12 +163,14 @@ const styles = StyleSheet.create({
   decText: {
     ...commonFontStyle(400, 14, '#5A5757'),
     marginVertical: 6,
+    paddingHorizontal: wp(20),
   },
   features: {
     gap: wp(4),
     flex: 1,
-    // flexWrap: 'wrap',
+    flexWrap: 'wrap',
     marginVertical: hp(10),
+    paddingLeft: wp(20),
   },
   add: {
     width: wp(15),
@@ -166,8 +178,8 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   check: {
-    width: wp(22),
-    height: wp(22),
+    width: wp(20),
+    height: wp(20),
     resizeMode: 'contain',
   },
   fav: {
@@ -195,6 +207,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: wp(4),
     marginTop: hp(10),
+    paddingHorizontal: wp(20),
   },
   googlereview: {
     ...commonFontStyle(500, 14, colors._787878),

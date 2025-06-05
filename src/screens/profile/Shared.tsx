@@ -23,6 +23,8 @@ import {Fs, commonFontStyle, hp, wp} from '../../theme/fonts';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import {API} from '../../utils/apiConstant';
 
 const cards = [
   {
@@ -73,7 +75,10 @@ const Shared = () => {
         moreIconStyle={styles.more}
         headerStyle={styles.header}
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={AppStyles.flexGrow}
+        style={AppStyles.flex1}
+        showsVerticalScrollIndicator={false}>
         <View style={styles.containter}>
           <View style={styles.info}>
             <Text style={styles.title}>{'North America'}</Text>
@@ -100,10 +105,7 @@ const Shared = () => {
             </View>
             <Text style={styles.travel}>{'Travel around North America.'}</Text>
           </View>
-          <SearchBar
-            container={{marginHorizontal: 0}}
-            searchImg={IMAGES.search1}
-          />
+          <SearchBar container={AppStyles.M16} searchImg={IMAGES.search1} />
           <View style={styles.select}>
             <TouchableOpacity onPress={() => setSelect('List View')}>
               <Text
@@ -133,36 +135,53 @@ const Shared = () => {
               </Text>
             </TouchableOpacity>
           </View>
-          <FlatList
-            data={cards}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.Listcontainer}
-            ItemSeparatorComponent={() => (
-              <View style={styles.liastseparator} />
-            )}
-            renderItem={({item}) => {
-              return (
-                <SharedCard
-                  onCardPress={() => {
-                    item?.onPress && item?.onPress();
-                  }}
-                  title={item?.title}
-                  likeCount={item.lists}
-                  account
-                  address
-                  place
-                  listCount={item?.lists}
-                />
-              );
-            }}
-          />
-          <Button
-            leftImg={IMAGES.addlist}
-            type="outline"
-            title="Add a new list"
-            BtnStyle={styles.btn}
-            onPress={() => handlePresentModalPress()}
-          />
+          {select == 'List View' && (
+            <>
+              <FlatList
+                data={cards}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.Listcontainer}
+                ItemSeparatorComponent={() => (
+                  <View style={styles.liastseparator} />
+                )}
+                renderItem={({item}) => {
+                  return (
+                    <SharedCard
+                      onCardPress={() => {
+                        item?.onPress && item?.onPress();
+                      }}
+                      title={item?.title}
+                      likeCount={item.lists}
+                      account
+                      address
+                      place
+                      listCount={item?.lists}
+                    />
+                  );
+                }}
+              />
+              <Button
+                leftImg={IMAGES.addlist}
+                type="outline"
+                title="Add a new list"
+                BtnStyle={styles.btn}
+                onPress={() => handlePresentModalPress()}
+              />
+            </>
+          )}
+          {select == 'Map View' && (
+            <MapView
+              style={AppStyles.flex1}
+              provider={PROVIDER_GOOGLE}
+              key={API.MAP_KEY}
+              region={{
+                latitude: 51.5065313072,
+                longitude: -0.1888825778,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+              }}
+            />
+          )}
         </View>
       </ScrollView>
       <ShareBottomSheet
@@ -198,7 +217,7 @@ const styles = StyleSheet.create({
     ...commonFontStyle(700, 32, colors.black),
   },
   containter: {
-    paddingHorizontal: wp(16),
+    flex: 1,
   },
   info: {
     paddingHorizontal: wp(24),
@@ -260,6 +279,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: wp(8),
+    paddingHorizontal: wp(16),
   },
   subtext: {
     marginVertical: 12,

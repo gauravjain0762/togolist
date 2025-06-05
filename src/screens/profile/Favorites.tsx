@@ -17,6 +17,8 @@ import {Fs, commonFontStyle, hp, wp} from '../../theme/fonts';
 import HeaderTextIcon from '../../component/common/HeaderTextIcon';
 import TravelCard from '../../component/common/TravelCard';
 import CardImage from '../../component/common/CardImage';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import {API} from '../../utils/apiConstant';
 
 const mockData = [
   {
@@ -102,7 +104,10 @@ const Favorites = () => {
         moreIconStyle={styles.more}
         headerStyle={styles.header}
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={AppStyles.flex1}
+        contentContainerStyle={AppStyles.flexGrow}
+        showsVerticalScrollIndicator={false}>
         <View style={styles.intro}>
           <Text style={styles.daily}>{'Ray Daily’s'}</Text>
           <Text style={styles.title}>{'Favorites'}</Text>
@@ -218,6 +223,19 @@ const Favorites = () => {
               renderItem={({item}) => <TravelCard {...item} />}
             />
           </View>
+        )}
+        {select == 'Map View' && (
+          <MapView
+            style={AppStyles.flex1}
+            provider={PROVIDER_GOOGLE}
+            key={API.MAP_KEY}
+            region={{
+              latitude: 51.5065313072,
+              longitude: -0.1888825778,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01,
+            }}
+          />
         )}
       </ScrollView>
     </SafeAreaView>

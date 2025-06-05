@@ -17,6 +17,8 @@ import {colors} from '../../theme/colors';
 import HeaderTextIcon from '../../component/common/HeaderTextIcon';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import {API} from '../../utils/apiConstant';
 
 const cards = [
   {
@@ -59,7 +61,10 @@ const BeenThere = () => {
         moreIconStyle={styles.more}
         headerStyle={styles.header}
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={AppStyles.flex1}
+        contentContainerStyle={AppStyles.flexGrow}
+        showsVerticalScrollIndicator={false}>
         <View style={styles.intro}>
           <Text style={styles.daily}>{'Ray Daily’s'}</Text>
           <Text style={styles.title}>{'Been There'}</Text>
@@ -138,6 +143,19 @@ const BeenThere = () => {
               </View>
             </View>
           </View>
+        )}
+        {select == 'Map View' && (
+          <MapView
+            style={AppStyles.flex1}
+            provider={PROVIDER_GOOGLE}
+            key={API.MAP_KEY}
+            region={{
+              latitude: 51.5065313072,
+              longitude: -0.1888825778,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01,
+            }}
+          />
         )}
       </ScrollView>
     </SafeAreaView>

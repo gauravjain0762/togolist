@@ -1,4 +1,5 @@
 import {
+  Alert,
   FlatList,
   Image,
   ImageBackground,
@@ -35,6 +36,8 @@ import DiscoverNewSpotsCard from '../../component/explore/DiscoverNewSpotsCard';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import HeaderTextIcon from '../../component/common/HeaderTextIcon';
 import TravelCardLock from '../../component/common/TravelCardLock';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import {API} from '../../utils/apiConstant';
 
 type Props = {};
 
@@ -227,12 +230,8 @@ const SearchScreen = (props: Props) => {
           <Image source={IMAGES.more_icon} style={[styles.moreIcon]} />
         </TouchableOpacity>
       </View>
-      <View
-        style={{
-          marginHorizontal: wp(16),
-          flex: 1,
-        }}>
-        <View>
+      <View style={AppStyles.flex1}>
+        <View style={AppStyles.P16}>
           <SearchBar
             container={styles.searchBox}
             placeholder="Search"
@@ -295,7 +294,7 @@ const SearchScreen = (props: Props) => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={{marginTop: 20, flex: 1}}
-          contentContainerStyle={{flexGrow: 1}}>
+          contentContainerStyle={AppStyles.flexGrow}>
           {activeTab == 'hot' && (
             <FlatList
               data={CARD_DATA}
@@ -303,6 +302,7 @@ const SearchScreen = (props: Props) => {
               showsVerticalScrollIndicator={false}
               nestedScrollEnabled
               keyExtractor={(_, index) => index.toString()}
+              contentContainerStyle={AppStyles.P16}
               columnWrapperStyle={{
                 paddingTop: hp(10),
                 justifyContent: 'space-between',
@@ -312,7 +312,7 @@ const SearchScreen = (props: Props) => {
             />
           )}
           {activeTab == 'location' && (
-            <>
+            <View style={AppStyles.flex1}>
               <View style={styles.headerRow}>
                 <Text style={styles.headerText}>Discover New Spots</Text>
                 <Text style={styles.headerText1}>15miles Radius</Text>
@@ -361,16 +361,23 @@ const SearchScreen = (props: Props) => {
                 </>
               )}
               {select == 'Map View' && (
-                <>
-                  <TouchableOpacity onPress={() => handlePresentModalPress()}>
-                    <Text>Map View</Text>
-                  </TouchableOpacity>
-                </>
+                <MapView
+                  style={AppStyles.flex1}
+                  provider={PROVIDER_GOOGLE}
+                  key={API.MAP_KEY}
+                  region={{
+                    latitude: 51.5065313073,
+                    longitude: -0.1888825778,
+                    latitudeDelta: 0.02,
+                    longitudeDelta: 0.02,
+                  }}
+                  onPoiClick={e => handlePresentModalPress()}
+                />
               )}
-            </>
+            </View>
           )}
           {activeTab == 'profile' && (
-            <View style={{paddingBottom: hp(16)}}>
+            <View style={[AppStyles.P16, {paddingBottom: hp(16)}]}>
               <ImageBackground
                 source={IMAGES.requestHost_bg}
                 resizeMode="cover"
@@ -431,7 +438,7 @@ const SearchScreen = (props: Props) => {
             </View>
           )}
           {activeTab == 'events' && (
-            <>
+            <View style={AppStyles.P16}>
               <View style={styles.headerrow}>
                 <Text style={styles.eventTitle}>{'Events Near You'}</Text>
                 <Text style={styles.location}>{'50miles Radius'}</Text>
@@ -462,7 +469,7 @@ const SearchScreen = (props: Props) => {
                 renderItem={({item}) => <DiscoverNewSpotsCard {...item} />}
                 contentContainerStyle={{paddingBottom: hp(16), gap: hp(8)}}
               />
-            </>
+            </View>
           )}
         </ScrollView>
       </View>
@@ -470,9 +477,11 @@ const SearchScreen = (props: Props) => {
         title="Details"
         bottomSheetModalRef={bottomSheetModalRef}
         children={
-          <DiscoverNewSpotsCard
-            onPressAdd={() => handlePresentAddlistPress()}
-          />
+          <View style={{paddingVertical: hp(28)}}>
+            <DiscoverNewSpotsCard
+              onPressAdd={() => handlePresentAddlistPress()}
+            />
+          </View>
         }
       />
       <CommonSheet
@@ -588,14 +597,16 @@ const styles = StyleSheet.create({
   tagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 5,
+    gap: 2,
+    paddingHorizontal: wp(16),
   },
   tag: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingHorizontal: wp(12),
+    paddingVertical: hp(5),
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#D9D9D9',
+    marginTop: hp(4),
   },
   tagText: {
     ...commonFontStyle(600, 12, '#000'),
@@ -606,6 +617,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
     marginBottom: 6,
+    paddingHorizontal: wp(16),
   },
 
   headerText: {
@@ -619,9 +631,10 @@ const styles = StyleSheet.create({
   tabView: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: 29,
-    marginHorizontal: 20,
+    justifyContent: 'center',
+    marginTop: hp(29),
+    marginHorizontal: wp(16),
+    gap: wp(60),
   },
   activeBar: {
     marginTop: 4,
@@ -655,6 +668,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: wp(8),
+    paddingHorizontal: wp(16),
   },
   row: {
     flexDirection: 'row',

@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
@@ -17,13 +17,14 @@ import {IMAGES} from '../../assets/Images';
 import {navigationRef} from '../../navigation/RootContainer';
 import {SCREENS} from '../../navigation/screenNames';
 import CustomHeader from '../../component/common/CustomHeader';
-import {Button, LinearView, Loader} from '../../component';
+import {Button, CommonSheet, LinearView, Loader} from '../../component';
 import {useGetDashboardQuery} from '../../api/dashboardApi';
 import {navigateTo} from '../../utils/commonFunction';
 import TogolistPro from '../../component/common/TogolistPro';
 import CardBottomText from '../../component/common/CardBottomText';
 import TripCardBottomText from '../../component/trip/TripCardBottomText';
 import CalendarCard from '../../component/trip/CalendarCard';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 type Props = {};
 
@@ -65,22 +66,28 @@ const TripHome = (props: Props) => {
   function NavItem({icon, library, active, onPress, keyValue}) {
     return (
       <TouchableOpacity onPress={onPress} style={styles.navItem}>
-        <Image
-          source={icon}
-          resizeMode="contain"
-          style={keyValue ? styles.tabIcon1 : styles.tabIcon}
+        <Image source={icon} resizeMode="contain" style={styles.tabIcon} />
+        <View
+          style={[
+            styles.activeBar,
+            {backgroundColor: active ? colors.black : colors.white},
+          ]}
         />
-        {active && <View style={styles.activeBar} />}
       </TouchableOpacity>
     );
   }
 
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
   return (
-    <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
+    <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
       {/* <Loader visible={dashboardLoading} /> */}
       <View style={styles.headerView}>
         <Text style={styles.heading}>{'Trips'}</Text>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={() => handlePresentModalPress()}>
           <Image source={IMAGES.more_icon} style={[styles.moreIcon]} />
         </TouchableOpacity>
       </View>
@@ -91,11 +98,11 @@ const TripHome = (props: Props) => {
           onPress={() => {
             setActiveTab('hot');
           }}
+          keyValue={true}
         />
         <NavItem
           icon={activeTab === 'location' ? IMAGES.tab2_on : IMAGES.tab2_off}
           active={activeTab === 'location'}
-          keyValue={true}
           onPress={() => {
             setActiveTab('location');
           }}
@@ -115,7 +122,10 @@ const TripHome = (props: Props) => {
           }}
         />
       </View>
-      <ScrollView style={{marginHorizontal: wp(16)}}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={AppStyles.flexGrow}
+        style={{marginHorizontal: wp(16), flex: 1}}>
         <Button
           type="outline"
           BtnStyle={styles.btn}
@@ -161,6 +171,7 @@ const TripHome = (props: Props) => {
         <TogolistPro cardStyle={{marginTop: 10}} />
         <CalendarCard />
       </ScrollView>
+      <CommonSheet bottomSheetModalRef={bottomSheetModalRef} title="Settings" />
     </SafeAreaView>
   );
 };
@@ -190,32 +201,31 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: hp(16),
     marginHorizontal: wp(48),
+    backgroundColor: colors.white,
+    paddingBottom: hp(20),
   },
   activeBar: {
-    // marginTop: 1,
-    width: wp(36),
-    height: 2,
+    height: 3,
     borderRadius: 100,
     backgroundColor: '#000',
-    position: 'absolute',
-    bottom: -8,
+    width: '100%',
   },
   tabIcon: {
     width: wp(25),
-    height: wp(23),
+    height: wp(25),
     resizeMode: 'contain',
   },
   tabIcon1: {
-    width: wp(20),
+    width: wp(25),
     height: wp(25),
     resizeMode: 'contain',
   },
   navItem: {
     alignItems: 'center',
+    gap: hp(10),
   },
 
   btn: {
-    marginTop: hp(30),
     paddingVertical: hp(12),
     borderRadius: 8,
     borderWidth: 2,

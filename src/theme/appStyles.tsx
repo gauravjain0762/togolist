@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {colors} from './colors';
+import {wp} from './fonts';
 
 export const AppStyles = StyleSheet.create({
   flex: {
@@ -13,10 +14,16 @@ export const AppStyles = StyleSheet.create({
     flexGrow: 1,
   },
   side: {
-    paddingHorizontal: 10,
+    paddingHorizontal: wp(10),
   },
   mainSide: {
-    marginHorizontal: 20,
+    marginHorizontal: wp(20),
+  },
+  P16: {
+    paddingHorizontal: wp(16),
+  },
+  M16: {
+    marginHorizontal: wp(16),
   },
   mainWhiteContainer: {
     flex: 1,

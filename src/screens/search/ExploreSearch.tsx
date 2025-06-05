@@ -15,6 +15,8 @@ import {Fs, commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import DiscoverNewSpotsCard from '../../component/explore/DiscoverNewSpotsCard';
 import TravelCardLock from '../../component/common/TravelCardLock';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import {API} from '../../utils/apiConstant';
 
 let data = ['Lists', 'Places', 'Events', 'Itineraries', 'Profiles'];
 
@@ -108,34 +110,36 @@ const ExploreSearch = () => {
           inputStyle={styles.searchInput}
           IconStyle={{width: 17, height: 15, tintColor: '#A4A4A4'}}
         />
-        <View>
-          <FlatList
-            data={data}
-            horizontal
-            contentContainerStyle={styles.listContainer}
-            ItemSeparatorComponent={() => <View style={styles.separator} />}
-            renderItem={({item, index}) => (
-              <TouchableOpacity
-                onPress={() => setSelect(item)}
-                style={[
-                  styles.btn,
-                  {
-                    borderColor:
-                      select == item ? colors._BD2332 : colors._D9D9D9,
-                  },
-                ]}>
-                <Text
+        <View style={AppStyles.flex1}>
+          <View>
+            <FlatList
+              data={data}
+              horizontal
+              contentContainerStyle={styles.listContainer}
+              ItemSeparatorComponent={() => <View style={styles.separator} />}
+              renderItem={({item, index}) => (
+                <TouchableOpacity
+                  onPress={() => setSelect(item)}
                   style={[
-                    styles.btnText,
-                    {color: select == item ? colors._BD2332 : colors._99999},
+                    styles.btn,
+                    {
+                      borderColor:
+                        select == item ? colors._BD2332 : colors._D9D9D9,
+                    },
                   ]}>
-                  {item}
-                </Text>
-              </TouchableOpacity>
-            )}
-          />
+                  <Text
+                    style={[
+                      styles.btnText,
+                      {color: select == item ? colors._BD2332 : colors._99999},
+                    ]}>
+                    {item}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            />
+          </View>
           {select == 'Lists' && (
-            <>
+            <View style={[AppStyles.flex1]}>
               <View style={styles.headerrow}>
                 <View style={styles.select}>
                   <TouchableOpacity onPress={() => setSelect1('List View')}>
@@ -174,20 +178,35 @@ const ExploreSearch = () => {
                 </View>
                 <Text style={styles.location}>{'Mexico'}</Text>
               </View>
-              <>
-                <FlatList
-                  data={[1, 2]}
-                  showsVerticalScrollIndicator={false}
-                  nestedScrollEnabled
-                  keyExtractor={(_, index) => index.toString()}
-                  renderItem={({item}) => <DiscoverNewSpotsCard {...item} />}
-                  contentContainerStyle={{paddingBottom: hp(16), gap: hp(8)}}
-                />
-              </>
-            </>
+              <View style={[AppStyles.flex1]}>
+                {select1 == 'List View' && (
+                  <FlatList
+                    data={[1, 2]}
+                    showsVerticalScrollIndicator={false}
+                    nestedScrollEnabled
+                    keyExtractor={(_, index) => index.toString()}
+                    renderItem={({item}) => <DiscoverNewSpotsCard {...item} />}
+                    contentContainerStyle={{paddingBottom: hp(16), gap: hp(8)}}
+                  />
+                )}
+                {select1 == 'Map View' && (
+                  <MapView
+                    style={AppStyles.flex1}
+                    provider={PROVIDER_GOOGLE}
+                    key={API.MAP_KEY}
+                    region={{
+                      latitude: 51.5065313073,
+                      longitude: -0.1888825778,
+                      latitudeDelta: 0.02,
+                      longitudeDelta: 0.02,
+                    }}
+                  />
+                )}
+              </View>
+            </View>
           )}
           {select == 'Events' && (
-            <>
+            <View>
               <View style={styles.headerrow}>
                 <Text style={styles.eventTitle}>{'Events in Mexico'}</Text>
                 <Text style={styles.location}>{'50miles Radius'}</Text>
@@ -200,10 +219,11 @@ const ExploreSearch = () => {
                   justifyContent: 'space-between',
                   marginBottom: 16,
                 }}
+                contentContainerStyle={AppStyles.P16}
                 style={{marginTop: 10}}
                 renderItem={({item}) => <TravelCardLock {...item} />}
               />
-            </>
+            </View>
           )}
           {select == 'Itineraries' && (
             <>
@@ -213,6 +233,7 @@ const ExploreSearch = () => {
               <FlatList
                 data={events}
                 numColumns={2}
+                contentContainerStyle={AppStyles.P16}
                 keyExtractor={(_, index) => index.toString()}
                 columnWrapperStyle={{
                   justifyContent: 'space-between',
@@ -232,7 +253,7 @@ const ExploreSearch = () => {
                   justifyContent: 'space-between',
                   gap: wp(8),
                 }}
-                contentContainerStyle={{gap: wp(16)}}
+                contentContainerStyle={{gap: wp(16), paddingHorizontal: wp(16)}}
                 renderItem={({item, index}) => (
                   <ProfileCard
                     followStyle={{backgroundColor: colors.white}}
@@ -273,6 +294,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 9,
     backgroundColor: colors.white,
+    marginHorizontal: wp(16),
   },
   searchInput: {
     flex: 1,
@@ -280,10 +302,11 @@ const styles = StyleSheet.create({
     ...commonFontStyle(400, 14, '#000'), // You can change 16 to any default search input size
   },
   scroll: {
-    paddingHorizontal: wp(16),
+    flexGrow: 1,
   },
   listContainer: {
     marginBottom: hp(16),
+    paddingHorizontal: wp(16),
   },
   btn: {
     borderWidth: 1,
@@ -314,6 +337,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingHorizontal: wp(16),
   },
   eventTitle: {
     ...commonFontStyle(600, 18, colors.black),
