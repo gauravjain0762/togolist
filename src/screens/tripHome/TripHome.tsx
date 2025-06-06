@@ -160,6 +160,7 @@ const TripHome = (props: Props) => {
             titleStyle={styles.titleStyle}
             leftImg={IMAGES.add_location}
             title="New Trip"
+            onPress={() => navigateTo(SCREENS.NewTrip)}
           />
         )}
         {activeTab == 'tab2' && (

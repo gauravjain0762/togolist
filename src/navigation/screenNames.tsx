@@ -36,13 +36,17 @@ export const SCREENS = {
   PostRequest: 'PostRequest',
   ExploreSearch: 'ExploreSearch',
   TripsDetails: 'TripsDetails',
-  BucketListScreen:"BucketListScreen",
-  BucketListDetails:"BucketListDetails",
-  CollaboratorsScreen:"CollaboratorsScreen",
-  TripTogolistsScreen:"TripTogolistsScreen",
-  AddTripTogolistsScreen:"AddTripTogolistsScreen",
-  ThingsTogolistsScreen:"ThingsTogolistsScreen",
-  SearchViewScreen:"SearchViewScreen",
+  BucketListScreen: 'BucketListScreen',
+  BucketListDetails: 'BucketListDetails',
+  CollaboratorsScreen: 'CollaboratorsScreen',
+  TripTogolistsScreen: 'TripTogolistsScreen',
+  AddTripTogolistsScreen: 'AddTripTogolistsScreen',
+  ThingsTogolistsScreen: 'ThingsTogolistsScreen',
+  SearchViewScreen: 'SearchViewScreen',
+  BucketListScreen: 'BucketListScreen',
+  BucketListDetails: 'BucketListDetails',
+  CollaboratorsScreen: 'CollaboratorsScreen',
+  NewTrip: 'NewTrip',
 };
 
 export interface ScreenNames {
@@ -89,6 +93,7 @@ export interface ScreenNames {
   AddTripTogolistsScreen: string;
   ThingsTogolistsScreen: string;
   SearchViewScreen: string;
+  NewTrip: string;
 }
 
 export const SCREEN_NAMES: ScreenNames = {

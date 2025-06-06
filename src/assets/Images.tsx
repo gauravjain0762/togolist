@@ -175,4 +175,5 @@ export const IMAGES = {
   addIcon1: require('./icon/tripHome/addIcon1.png'),
   logo_white: require('./icon/tripHome/logo_white.png'),
   addLocation: require('./icon/tripHome/addLocation.png'),
+  file: require('./icon/tripHome/file.png'),
 };

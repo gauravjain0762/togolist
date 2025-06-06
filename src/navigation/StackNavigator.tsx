@@ -44,6 +44,7 @@ import TripTogolistsScreen from '../screens/tripHome/TripTogolistsScreen';
 import AddTripTogolistsScreen from '../screens/tripHome/AddTripTogolistsScreen';
 import ThingsTogolistsScreen from '../screens/tripHome/ThingsTogolistsScreen';
 import SearchViewScreen from '../screens/shape/SearchViewScreen';
+import NewTrip from '../screens/tripHome/NewTrip';
 
 export type RootStackParamList = {
   TripHome: undefined;
@@ -333,12 +334,6 @@ const StackNavigator: FC = () => {
         name={SCREENS.TripsDetails}
         component={TripsDetails}
       />
-
-
-
-
-
-
       {/* NEW  */}
       <Stack.Screen
         options={({navigation}) => ({headerShown: false})}
@@ -350,7 +345,7 @@ const StackNavigator: FC = () => {
         name={SCREENS.BucketListDetails}
         component={BucketListDetails}
       />
-      
+
       <Stack.Screen
         options={({navigation}) => ({headerShown: false})}
         name={SCREENS.CollaboratorsScreen}
@@ -376,7 +371,11 @@ const StackNavigator: FC = () => {
         name={SCREENS.SearchViewScreen}
         component={SearchViewScreen}
       />
-      
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.NewTrip}
+        component={NewTrip}
+      />
     </Stack.Navigator>
   );
 };

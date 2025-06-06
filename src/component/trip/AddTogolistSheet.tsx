@@ -52,7 +52,7 @@ const AddTogolistSheet: FC<sheet> = ({
               <Image source={IMAGES.close} style={styles.close} />
             </TouchableOpacity>
           </View>
-          <View>
+          <View style={styles.btnContainer}>
             <Button
               title="Create trip manually"
               leftImg={IMAGES.upload}
@@ -103,5 +103,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     paddingVertical: hp(16),
   },
-  social: {},
+  social: {
+    borderWidth: 1,
+  },
+  btnContainer: {
+    gap: hp(16),
+    marginVertical: hp(16),
+  },
 });

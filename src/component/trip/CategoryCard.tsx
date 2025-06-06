@@ -25,6 +25,7 @@ type card = {
   listCount?: number;
   BgImgStyle?: ImageStyle;
   BGStyle?: ImageStyle;
+  showAddList?: boolean;
 };
 
 const CategoryCard: FC<card> = ({
@@ -37,7 +38,7 @@ const CategoryCard: FC<card> = ({
   BgImgStyle,
   BGStyle,
   viewValue,
-  showAddList
+  showAddList,
 }: any) => {
   return (
     <TouchableOpacity onPress={onCardPress}>

@@ -17,6 +17,7 @@ import {
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {IMAGES} from '../../assets/Images';
 import {colors} from '../../theme/colors';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 type sheet = {
   bottomSheetModalRef?: Ref<BottomSheetModal>;
@@ -51,14 +52,16 @@ const CommonSheet: FC<sheet> = ({
           style={scrollviewStyle}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={[styles.contentContainer, contentContainer]}>
-          <View style={[styles.header, headerStyle]}>
-            <Text style={[styles.title, titleStyle]}>{title}</Text>
-            <TouchableOpacity
-              onPress={() => bottomSheetModalRef.current?.dismiss()}>
-              <Image source={IMAGES.close} style={styles.close} />
-            </TouchableOpacity>
-          </View>
-          {children}
+          <SafeAreaView edges={['bottom']}>
+            <View style={[styles.header, headerStyle]}>
+              <Text style={[styles.title, titleStyle]}>{title}</Text>
+              <TouchableOpacity
+                onPress={() => bottomSheetModalRef.current?.dismiss()}>
+                <Image source={IMAGES.close} style={styles.close} />
+              </TouchableOpacity>
+            </View>
+            {children}
+          </SafeAreaView>
         </BottomSheetScrollView>
       </BottomSheetModal>
     </BottomSheetModalProvider>
