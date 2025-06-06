@@ -19,6 +19,7 @@ type Props = {
   btnStyle?: ViewStyle;
   textStyle?: TextStyle;
   img: ImageProps;
+  imgStyle?: ImageProps;
 };
 
 const SocialBtn: FC<Props> = ({
@@ -28,13 +29,14 @@ const SocialBtn: FC<Props> = ({
   isFilled,
   onPress = () => {},
   textStyle,
+  imgStyle,
 }) => {
   return (
     <TouchableOpacity
       onPress={() => onPress()}
       style={[styles.container, btnStyle]}>
-      <Image source={img} style={styles.img} />
-      <Text style={styles.title}>{title}</Text>
+      <Image source={img} style={[styles.img, imgStyle]} />
+      <Text style={[styles.title, textStyle]}>{title}</Text>
     </TouchableOpacity>
   );
 };

@@ -162,4 +162,7 @@ export const IMAGES = {
   archived: require('./icon/tripHome/archived.png'),
   rightArrow: require('./icon/tripHome/right.png'),
   world_map: require('./icon/tripHome/map.png'),
+  restore: require('./icon/tripHome/restore.png'),
+  Itinerary: require('./icon/tripHome/Itinerary.png'),
+  googleOutline: require('./icon/tripHome/googleOutline.png'),
 };

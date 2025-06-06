@@ -19,11 +19,13 @@ import {navigationRef} from '../../navigation/RootContainer';
 import {SCREENS} from '../../navigation/screenNames';
 import CustomHeader from '../../component/common/CustomHeader';
 import {
+  AddTogolistSheet,
   Button,
   CommonSheet,
   GetCheckboxImage,
   LinearView,
   Loader,
+  SwipeList,
 } from '../../component';
 import {useGetDashboardQuery} from '../../api/dashboardApi';
 import {navigateTo} from '../../utils/commonFunction';
@@ -93,6 +95,11 @@ const TripHome = (props: Props) => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
+  }, []);
+
+  const bottomSheetAddTogolist = useRef<BottomSheetModal>(null);
+  const handlePresentAddTogoModalPress = useCallback(() => {
+    bottomSheetAddTogolist.current?.present();
   }, []);
 
   return (
@@ -175,51 +182,79 @@ const TripHome = (props: Props) => {
         )}
 
         {activeTab == 'tab1' && !options && (
-          <View style={{marginTop: 8}}>
-            <TripCardBottomText
-              title={'Start Planning...'}
-              location={'New Destination'}
-              showDay={false}
-              dayValue={0}
-            />
+          <View style={{marginTop: 8, paddingBottom: hp(16)}}>
+            <TouchableOpacity
+              onPress={() => handlePresentAddTogoModalPress()}
+              style={{borderRadius: 20}}>
+              <TripCardBottomText
+                title={'Start Planning...'}
+                location={'New Destination'}
+                showDay={false}
+                dayValue={0}
+              />
+            </TouchableOpacity>
+            <View style={styles.optioncontainer}>
+              <View style={styles.row1}>
+                <Image source={IMAGES.send} style={styles.Shareicon} />
+                <Text style={styles.label}>{'Share'}</Text>
+              </View>
+              <View style={styles.row1}>
+                <Image source={IMAGES.container} style={styles.Addicon} />
+                <Text style={styles.label}>{'Bucket List'}</Text>
+              </View>
+              <View style={styles.row1}>
+                <Image source={IMAGES.Itinerary} style={styles.Buildicon} />
+                <Text style={styles.label}>{'Build Itinerary'}</Text>
+              </View>
+              <View style={styles.row1}>
+                <Image
+                  source={IMAGES.archived}
+                  style={[styles.Archiveicon, {width: wp(26), height: wp(26)}]}
+                />
+                <Text style={styles.label}>{'Archive'}</Text>
+              </View>
+            </View>
             <TogolistPro cardStyle={{marginTop: 8, marginBottom: 9}} />
             <CalendarCard />
           </View>
         )}
-        {options && (
-          <SwipeListView
-            data={[1, 1]}
-            ItemSeparatorComponent={() => <View style={{height: hp(12)}} />}
-            renderItem={(data, rowMap) => (
-              <View style={styles.rowFront}>
-                <TripCardBottomText
-                  title={'Toronto, Canada'}
-                  location={'New Destination'}
-                  showDay={true}
-                  dayValue={45}
-                  BGImg={{borderRadius: 0}}
-                  containerStyle={{borderRadius: 0}}
-                />
-              </View>
-            )}
-            disableRightSwipe
-            swipeToOpenPercent={30}
-            rightOpenValue={SCREEN_WIDTH}
-            renderHiddenItem={(data, rowMap) => (
-              <View style={styles.rowBack}>
-                <TouchableOpacity style={styles.backButton}>
-                  {/* <Icon name="restore" size={24} color="#fff" /> */}
-                  <Text style={styles.backText}>Restore</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.backButton}>
-                  {/* <Icon name="close" size={24} color="#fff" /> */}
-                  <Text style={styles.backText}>Delete</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-            leftOpenValue={75}
-            rightOpenValue={-75}
-          />
+        {options && activeTab == 'tab1' && (
+          <>
+            {/* <SwipeList title={'HEllo'} /> */}
+            <SwipeListView
+              data={[1, 1]}
+              ItemSeparatorComponent={() => <View style={{height: hp(12)}} />}
+              renderItem={(data, rowMap) => (
+                <View style={styles.rowFront}>
+                  <TripCardBottomText
+                    title={'Toronto, Canada'}
+                    location={'New Destination'}
+                    showDay={true}
+                    dayValue={45}
+                    BGImg={{borderRadius: 0}}
+                    containerStyle={{borderRadius: 0}}
+                  />
+                </View>
+              )}
+              disableRightSwipe
+              swipeToOpenPercent={30}
+              rightOpenValue={-150}
+              renderHiddenItem={(data, rowMap) => (
+                <View style={styles.rowBack}>
+                  <TouchableOpacity style={styles.backButton}>
+                    <Image source={IMAGES.restore} style={styles.restore} />
+                    <Text style={styles.backText}>Restore</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.backButton, {marginTop: hp(4)}]}>
+                    <Image source={IMAGES.remove} style={styles.remove} />
+                    <Text style={styles.backText}>Delete</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+              leftOpenValue={75}
+            />
+          </>
         )}
         {activeTab == 'tab2' && (
           <>
@@ -310,6 +345,7 @@ const TripHome = (props: Props) => {
         }
         title="Settings"
       />
+      <AddTogolistSheet bottomSheetModalRef={bottomSheetAddTogolist} />
     </SafeAreaView>
   );
 };
@@ -435,23 +471,73 @@ const styles = StyleSheet.create({
   },
   rowBack: {
     alignItems: 'center',
-    backgroundColor: '#C62828',
+    backgroundColor: colors._BD2332,
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
     borderRadius: 20,
-    paddingHorizontal: 10,
+    paddingHorizontal: hp(28),
+    gap: wp(30),
     overflow: 'hidden',
   },
   backButton: {
-    width: 70,
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 10,
+    gap: hp(6),
   },
   backText: {
-    color: '#fff',
-    fontSize: 12,
-    marginTop: 4,
+    ...commonFontStyle(500, 10, colors.white),
+  },
+  restore: {
+    width: wp(23),
+    height: wp(23),
+    resizeMode: 'contain',
+  },
+  remove: {
+    width: wp(18),
+    height: wp(18),
+    resizeMode: 'contain',
+  },
+  optioncontainer: {
+    backgroundColor: colors._BD2332,
+    borderRadius: 18,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: hp(36),
+    paddingBottom: hp(22),
+    paddingHorizontal: wp(33),
+    marginTop: hp(12),
+  },
+  label: {
+    ...commonFontStyle(500, 10, colors.white),
+    lineHeight: hp(24),
+  },
+  row1: {
+    alignItems: 'center',
+  },
+  Shareicon: {
+    width: wp(28),
+    height: wp(28),
+    resizeMode: 'contain',
+    tintColor: colors.white,
+  },
+  Addicon: {
+    width: wp(25),
+    height: wp(26),
+    resizeMode: 'contain',
+    tintColor: colors.white,
+  },
+  Buildicon: {
+    width: wp(25),
+    height: wp(26),
+    resizeMode: 'contain',
+    tintColor: colors.white,
+  },
+  Archiveicon: {
+    width: wp(30),
+    height: wp(24),
+    resizeMode: 'contain',
+    tintColor: colors.white,
   },
 });

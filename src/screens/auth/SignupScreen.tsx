@@ -157,7 +157,7 @@ const SignupScreen = ({navigation}: any) => {
   };
 
   return (
-    <SafeAreaView edges={['top']} style={AppStyles.flex}>
+    <SafeAreaView style={AppStyles.flex}>
       {/* Header with back icon and progress bar */}
       <StatusBar
         barStyle={'dark-content'}
@@ -182,58 +182,57 @@ const SignupScreen = ({navigation}: any) => {
         <View />
       </View>
 
-        {currentStep.key == 'Enable permissions' ? (
-          <View style={{marginHorizontal: 20, flex: 1}}>
-            {/* Title */}
-            <Text style={styles.title1}>
-              Enable permissions and boost Togolist’s functionality
-            </Text>
-            <Text style={styles.subtitle}>
-              Togolist works best with access to the following permissions
-            </Text>
+      {currentStep.key == 'Enable permissions' ? (
+        <View style={{marginHorizontal: 20, flex: 1}}>
+          {/* Title */}
+          <Text style={styles.title1}>
+            Enable permissions and boost Togolist’s functionality
+          </Text>
+          <Text style={styles.subtitle}>
+            Togolist works best with access to the following permissions
+          </Text>
 
-            {/* Permission Cards */}
-            <FlatList
-              data={permissions}
-              keyExtractor={item => item.id}
-              renderItem={({item}) => {
-                const isSelected = selected1.includes(item.id);
-                return (
-                  <TouchableOpacity
-                    onPress={() => toggleSelect(item.id)}
-                    style={styles.card}>
-                    <Image source={item.icon} style={styles.icon1} />
-                    <View style={styles.cardText}>
-                      <Text style={styles.cardTitle}>{item.title}</Text>
-                      <Text style={styles.cardDesc}>{item.description}</Text>
-                    </View>
-                    <View
-                      style={[
-                        styles.radio,
-                        isSelected && styles.radioSelected,
-                      ]}>
-                      {isSelected && (
-                        <Image
-                          source={IMAGES.check1}
-                          style={{width: 11, height: 9, resizeMode: 'contain'}}
-                        />
-                      )}
-                    </View>
-                  </TouchableOpacity>
-                );
-              }}
-            />
-            <CustomBtn
-              style={styles.button2}
-              onPress={() => {
-                navigateTo(SCREENS.VerifyAccountScreen);
-              }}
-              title={selected1?.length !== 3 ? 'Next' : 'Finish sign up'}
-            />
-          </View>
-        ) : (
-                <KeyboardAwareScrollView keyboardShouldPersistTaps='handled' showsVerticalScrollIndicator={false}>
-
+          {/* Permission Cards */}
+          <FlatList
+            data={permissions}
+            keyExtractor={item => item.id}
+            renderItem={({item}) => {
+              const isSelected = selected1.includes(item.id);
+              return (
+                <TouchableOpacity
+                  onPress={() => toggleSelect(item.id)}
+                  style={styles.card}>
+                  <Image source={item.icon} style={styles.icon1} />
+                  <View style={styles.cardText}>
+                    <Text style={styles.cardTitle}>{item.title}</Text>
+                    <Text style={styles.cardDesc}>{item.description}</Text>
+                  </View>
+                  <View
+                    style={[styles.radio, isSelected && styles.radioSelected]}>
+                    {isSelected && (
+                      <Image
+                        source={IMAGES.check1}
+                        style={{width: 11, height: 9, resizeMode: 'contain'}}
+                      />
+                    )}
+                  </View>
+                </TouchableOpacity>
+              );
+            }}
+          />
+          <CustomBtn
+            style={styles.button2}
+            onPress={() => {
+              navigateTo(SCREENS.VerifyAccountScreen);
+            }}
+            title={selected1?.length !== 3 ? 'Next' : 'Finish sign up'}
+          />
+        </View>
+      ) : (
+        <KeyboardAwareScrollView
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={AppStyles.flexGrow}
+          showsVerticalScrollIndicator={false}>
           <ImageBackground
             source={IMAGES.bg} // replace with your actual image path
             style={styles.container}>
@@ -321,8 +320,8 @@ const SignupScreen = ({navigation}: any) => {
               title={'Next'}
             />
           </ImageBackground>
-      </KeyboardAwareScrollView>
-        )}
+        </KeyboardAwareScrollView>
+      )}
     </SafeAreaView>
   );
 };
@@ -330,11 +329,12 @@ const SignupScreen = ({navigation}: any) => {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    height: SCREEN_HEIGHT * 0.84,
     marginHorizontal: 20,
     borderRadius: 20,
     overflow: 'hidden',
     paddingVertical: 20,
+    marginBottom: hp(14),
+    flex: 1,
   },
   header: {
     flexDirection: 'row',

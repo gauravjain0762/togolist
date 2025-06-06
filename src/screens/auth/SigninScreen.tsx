@@ -121,7 +121,7 @@ const SigninScreen = ({navigation}: any) => {
   };
 
   return (
-    <SafeAreaView edges={['top']} style={AppStyles.flex}>
+    <SafeAreaView style={AppStyles.flex}>
       {/* Header with back icon and progress bar */}
       <StatusBar
         barStyle={'dark-content'}
@@ -206,14 +206,12 @@ const SigninScreen = ({navigation}: any) => {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 1,
     justifyContent: 'center',
-    height: SCREEN_HEIGHT * 0.84,
     marginHorizontal: 20,
     borderRadius: 20,
     overflow: 'hidden',
-    // padding:hp(24)
-    paddingVertical: 20,
+    marginBottom: hp(14),
   },
   header: {
     flexDirection: 'row',

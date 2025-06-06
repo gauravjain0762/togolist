@@ -17,6 +17,8 @@ import OptionBar from './profile/OptionBar';
 import CommonSheet from './common/CommonSheet';
 import ProfileCard from './explore/ProfileCard';
 import ExperienceCard from './explore/ExperienceCard';
+import SwipeList from './trip/SwipeList';
+import AddTogolistSheet from './trip/AddTogolistSheet';
 
 export {
   Loader,
@@ -38,4 +40,6 @@ export {
   CommonSheet,
   ProfileCard,
   ExperienceCard,
+  SwipeList,
+  AddTogolistSheet,
 };
