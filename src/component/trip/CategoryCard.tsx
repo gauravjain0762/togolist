@@ -13,12 +13,13 @@ import React, {FC, memo} from 'react';
 import {colors} from '../../theme/colors';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {IMAGES} from '../../assets/Images';
-import { AppStyles } from '../../theme/appStyles';
+import {AppStyles} from '../../theme/appStyles';
 
 type card = {
-  Togolist?: boolean;
+  Togolist?: string;
   title: string;
-  Worldwide?: boolean;
+  viewValue: string;
+  Worldwide?: string;
   Lists?: boolean;
   onCardPress: () => void;
   listCount?: number;
@@ -26,7 +27,7 @@ type card = {
   BGStyle?: ImageStyle;
 };
 
-const CardImage: FC<card> = ({
+const CategoryCard: FC<card> = ({
   Togolist,
   title,
   Worldwide,
@@ -35,6 +36,7 @@ const CardImage: FC<card> = ({
   listCount,
   BgImgStyle,
   BGStyle,
+  viewValue,
 }: any) => {
   return (
     <TouchableOpacity onPress={onCardPress}>
@@ -45,49 +47,44 @@ const CardImage: FC<card> = ({
         <Text style={styles.title}>{title}</Text>
 
         <View style={styles.bottomRow}>
-          {Togolist && (
-            <ImageBackground
-              source={IMAGES.bg5}
-              resizeMode="cover"
-              imageStyle={styles.image1}
-              style={styles.chip}>
-              <Image source={IMAGES.ToglistCircleIcon} style={styles.forIcon} />
-              <Text style={styles.chipText}>Togolist</Text>
-            </ImageBackground>
-          )}
+          <View style={[styles.bottomRow, {flex: 1}]}>
+            {Togolist && (
+              <ImageBackground
+                source={IMAGES.bg5}
+                resizeMode="cover"
+                imageStyle={styles.image1}
+                style={styles.chip}>
+                <Image
+                  source={IMAGES.ToglistCircleIcon}
+                  style={styles.forIcon}
+                />
+                <Text style={styles.chipText}>{Togolist}</Text>
+              </ImageBackground>
+            )}
 
-          {Worldwide && (
-            <ImageBackground
-              source={IMAGES.bg5}
-              resizeMode="cover"
-              imageStyle={styles.image1}
-              style={styles.chip}>
-              <Image source={IMAGES.wordWide} style={styles.forIcon1} />
-              <Text style={styles.chipText}>Worldwide</Text>
-            </ImageBackground>
+            {Lists && (
+              <ImageBackground
+                source={IMAGES.bg5}
+                resizeMode="cover"
+                imageStyle={styles.image1}
+                style={styles.chip}>
+                <Text style={styles.chipText}>{listCount} Places</Text>
+              </ImageBackground>
+            )}
+          </View>
+
+          {true && (
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>Add to List</Text>
+            </TouchableOpacity>
           )}
-          {Lists && (
-            <ImageBackground
-              source={IMAGES.bg5}
-              resizeMode="cover"
-              imageStyle={styles.image1}
-              style={styles.chip}>
-              <Text style={styles.chipText}>{listCount} Lists</Text>
-            </ImageBackground>
-          )}
-          {/* {Lists && (
-            <View style={[AppStyles.row,{flex:1,justifyContent:'flex-end'}]} >
-              <Image source={IMAGES.heart} style={styles.heartIcon} />
-              <Text style={styles.viewText}>18.1K</Text>
-            </View>
-          )} */}
         </View>
       </ImageBackground>
     </TouchableOpacity>
   );
 };
 
-export default memo(CardImage);
+export default memo(CategoryCard);
 
 const styles = StyleSheet.create({
   container: {
@@ -99,7 +96,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   image: {
-    borderRadius: 25,
+    borderRadius: 18,
   },
   image1: {
     borderRadius: 8,
@@ -142,5 +139,18 @@ const styles = StyleSheet.create({
     width: 18,
     height: 18,
     resizeMode: 'contain',
+  },
+
+  button: {
+    alignSelf: 'flex-start',
+    borderColor: '#fff',
+    borderWidth: 1,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.45)',
+  },
+  buttonText: {
+    ...commonFontStyle(500, 12, colors.white),
   },
 });

@@ -170,6 +170,9 @@ const TripHome = (props: Props) => {
             titleStyle={styles.titleStyle}
             leftImg={IMAGES.add_location}
             title="New Bucket List Trip"
+            onPress={()=>{
+              navigateTo(SCREENS.CreateListScreen,{bucketScreen:true})
+            }}
           />
         )}
 
@@ -271,8 +274,21 @@ const TripHome = (props: Props) => {
               // location={'New Destination'}
               showDay={false}
               dayValue={0}
+              onPress={() => {
+                navigateTo(SCREENS.BucketListScreen);
+              }}
             />
-            <TogolistPro cardStyle={{marginTop: 10}} />
+            <TripCardBottomText
+              title={'Peru Explorations'}
+              location={'Peru, South Ameria'}
+              showDay={false}
+              dayValue={0}
+              containerStyle={{marginTop: 8}}
+              onPress={() => {
+                navigateTo(SCREENS.BucketListScreen);
+              }}
+            />
+            <TogolistPro cardStyle={{marginTop: 8}} />
           </>
         )}
       </ScrollView>

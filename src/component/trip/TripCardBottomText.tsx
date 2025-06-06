@@ -13,15 +13,18 @@ import {colors} from '../../theme/colors';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {IMAGES} from '../../assets/Images';
 
-const TripCardBottomText: FC<button> = ({
+const TripCardBottomText: FC<any> = ({
   title,
   location,
   showDay,
   dayValue,
   BGImg,
   containerStyle,
+  onPress
 }: any) => {
   return (
+    <TouchableOpacity onPress={onPress}>
+
     <ImageBackground
       source={IMAGES.bg1} // Replace with actual pyramid image URL
       style={[styles.container, containerStyle]}
@@ -41,6 +44,7 @@ const TripCardBottomText: FC<button> = ({
         )}
       </View>
     </ImageBackground>
+    </TouchableOpacity>
   );
 };
 

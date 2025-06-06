@@ -19,6 +19,7 @@ import CustomBtn from '../../component/common/CustomBtn';
 import RenderPrivacyOption from '../../component/createNew/RenderPrivacyOption';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
+import {useRoute} from '@react-navigation/native';
 
 const options = [
   'List',
@@ -31,7 +32,10 @@ const options = [
 ];
 
 const CreateListScreen = () => {
-  const [activeOption, setActiveOption] = useState('List');
+  const {params} = useRoute();
+  const [activeOption, setActiveOption] = useState(
+    params?.bucketScreen ? 'Bucket List' : 'List',
+  );
   const [privacy, setPrivacy] = useState<'public' | 'private'>('public');
 
   const {data: dashBoardData, isLoading: dashboardLoading} =
@@ -68,38 +72,52 @@ const CreateListScreen = () => {
   return (
     <SafeAreaView style={[AppStyles.mainWhiteContainer, styles.containor]}>
       {/* <Loader visible={dashboardLoading} /> */}
-
-      <View style={styles.header}>
-        <Text style={styles.heading}>{'Create New'}</Text>
-
-        <View style={styles.optionsWrapper}>
-          {options.map(option => (
-            <TouchableOpacity
-              key={option}
-              onPress={() => setActiveOption(option)}
-              style={[
-                styles.optionItem,
-                activeOption === option && styles.activeOption,
-              ]}>
-              <Text
-                style={[
-                  styles.optionText,
-                  activeOption === option && styles.activeOptionText,
-                ]}>
-                {option}
-              </Text>
-            </TouchableOpacity>
-          ))}
+      {params?.bucketScreen ? (
+        <View style={styles.headerView}>
+          <Text style={styles.heading1}>{'Bucket List'}</Text>
+          <TouchableOpacity onPress={() => {}}>
+            <Image source={IMAGES.more_icon} style={[styles.moreIcon]} />
+          </TouchableOpacity>
         </View>
-      </View>
+      ) : (
+        <View style={styles.header}>
+          <Text style={styles.heading}>{'Create New'}</Text>
+
+          <View style={styles.optionsWrapper}>
+            {options.map(option => (
+              <TouchableOpacity
+                key={option}
+                onPress={() => setActiveOption(option)}
+                style={[
+                  styles.optionItem,
+                  activeOption === option && styles.activeOption,
+                ]}>
+                <Text
+                  style={[
+                    styles.optionText,
+                    activeOption === option && styles.activeOptionText,
+                  ]}>
+                  {option}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+      )}
 
       <ImageBackground
         source={renderBg(activeOption)}
         style={styles.imageContainer}>
         {(activeOption == 'List' || activeOption == 'Bucket List') && (
           <>
-            <Text style={styles.title}>List Name</Text>
-            <TouchableOpacity style={styles.inputBox}>
+            <Text style={styles.title}>
+              {params?.bucketScreen ? 'Trip Name' : 'List Name'}
+            </Text>
+            <TouchableOpacity
+              style={[
+                styles.inputBox,
+                {width: params?.bucketScreen ? '24%' : '90%'},
+              ]}>
               <Image source={IMAGES.camera} style={styles.icon} />
               <Text style={styles.placeholder}>Image</Text>
             </TouchableOpacity>
@@ -188,7 +206,9 @@ const CreateListScreen = () => {
           <CustomBtn
             style={styles.button}
             onPress={() => {
-              navigateTo(SCREENS.PlaceDetails);
+              activeOption == 'Bucket List'
+                ? navigateTo(SCREENS.BucketListDetails)
+                : navigateTo(SCREENS.PlaceDetails);
             }}
             buttonText={styles.buttonText}
             title={'Next'}
@@ -202,6 +222,22 @@ const CreateListScreen = () => {
 export default CreateListScreen;
 
 const styles = StyleSheet.create({
+  headerView: {
+    // marginHorizontal: wp(16),
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  heading1: {
+    marginVertical: 10,
+    ...commonFontStyle(700, 34, colors.black),
+    flex: 1,
+  },
+  moreIcon: {
+    width: 22,
+    height: 22,
+    tintColor: colors.black,
+  },
+
   containor: {
     paddingHorizontal: wp(16),
   },

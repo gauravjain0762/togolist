@@ -36,6 +36,9 @@ export const SCREENS = {
   PostRequest: 'PostRequest',
   ExploreSearch: 'ExploreSearch',
   TripsDetails: 'TripsDetails',
+  BucketListScreen:"BucketListScreen",
+  BucketListDetails:"BucketListDetails",
+  CollaboratorsScreen:"CollaboratorsScreen",
 };
 
 export interface ScreenNames {
@@ -75,6 +78,9 @@ export interface ScreenNames {
   PostRequest: string;
   ExploreSearch: string;
   TripsDetails: string;
+  BucketListScreen: string;
+  BucketListDetails: string;
+  CollaboratorsScreen: string;
 }
 
 export const SCREEN_NAMES: ScreenNames = {

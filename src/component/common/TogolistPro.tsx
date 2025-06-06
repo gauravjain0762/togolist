@@ -13,22 +13,12 @@ import {commonFontStyle, hp} from '../../theme/fonts';
 import {IMAGES} from '../../assets/Images';
 
 type button = {
-  title: string;
-  onPress?: () => void;
-  BtnStyle?: ViewStyle;
   cardStyle?: ViewStyle;
-  titleStyle?: TextStyle;
 };
 
-const TogolistPro: FC<button> = ({
-  title,
-  BtnStyle,
-  onPress = () => {},
-  titleStyle,
-  cardStyle
-}) => {
+const TogolistPro: FC<button> = ({cardStyle}) => {
   return (
-    <ImageBackground source={IMAGES.bg2} style={[styles.card,cardStyle]}>
+    <ImageBackground source={IMAGES.bg2} style={[styles.card, cardStyle]}>
       <TouchableOpacity style={styles.closeIcon}>
         <Text style={{fontSize: 16, color: '#f9a8b7'}}>✕</Text>
       </TouchableOpacity>

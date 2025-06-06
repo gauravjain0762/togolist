@@ -16,9 +16,10 @@ import {IMAGES} from '../../assets/Images';
 import { AppStyles } from '../../theme/appStyles';
 
 type card = {
-  Togolist?: boolean;
+  Togolist?: string;
   title: string;
-  Worldwide?: boolean;
+  viewValue: string;
+  Worldwide?: string;
   Lists?: boolean;
   onCardPress: () => void;
   listCount?: number;
@@ -26,7 +27,7 @@ type card = {
   BGStyle?: ImageStyle;
 };
 
-const CardImage: FC<card> = ({
+const CardImageView: FC<card> = ({
   Togolist,
   title,
   Worldwide,
@@ -35,6 +36,7 @@ const CardImage: FC<card> = ({
   listCount,
   BgImgStyle,
   BGStyle,
+  viewValue
 }: any) => {
   return (
     <TouchableOpacity onPress={onCardPress}>
@@ -52,7 +54,7 @@ const CardImage: FC<card> = ({
               imageStyle={styles.image1}
               style={styles.chip}>
               <Image source={IMAGES.ToglistCircleIcon} style={styles.forIcon} />
-              <Text style={styles.chipText}>Togolist</Text>
+              <Text style={styles.chipText}>{Togolist}</Text>
             </ImageBackground>
           )}
 
@@ -63,7 +65,7 @@ const CardImage: FC<card> = ({
               imageStyle={styles.image1}
               style={styles.chip}>
               <Image source={IMAGES.wordWide} style={styles.forIcon1} />
-              <Text style={styles.chipText}>Worldwide</Text>
+              <Text style={styles.chipText}>{Worldwide}</Text>
             </ImageBackground>
           )}
           {Lists && (
@@ -75,19 +77,19 @@ const CardImage: FC<card> = ({
               <Text style={styles.chipText}>{listCount} Lists</Text>
             </ImageBackground>
           )}
-          {/* {Lists && (
+          {viewValue && (
             <View style={[AppStyles.row,{flex:1,justifyContent:'flex-end'}]} >
               <Image source={IMAGES.heart} style={styles.heartIcon} />
-              <Text style={styles.viewText}>18.1K</Text>
+              <Text style={styles.viewText}>{viewValue}</Text>
             </View>
-          )} */}
+          )}
         </View>
       </ImageBackground>
     </TouchableOpacity>
   );
 };
 
-export default memo(CardImage);
+export default memo(CardImageView);
 
 const styles = StyleSheet.create({
   container: {

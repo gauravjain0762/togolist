@@ -37,6 +37,9 @@ import RequestHost from '../screens/search/RequestHost';
 import PostRequest from '../screens/search/PostRequest';
 import ExploreSearch from '../screens/search/ExploreSearch';
 import TripsDetails from '../screens/tripHome/TripsDetails';
+import BucketListScreen from '../screens/tripHome/BucketListScreen';
+import BucketListDetails from '../screens/tripHome/BucketListDetails';
+import CollaboratorsScreen from '../screens/tripHome/CollaboratorsScreen';
 
 export type RootStackParamList = {
   TripHome: undefined;
@@ -326,6 +329,30 @@ const StackNavigator: FC = () => {
         name={SCREENS.TripsDetails}
         component={TripsDetails}
       />
+
+
+
+
+
+
+      {/* NEW  */}
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.BucketListScreen}
+        component={BucketListScreen}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.BucketListDetails}
+        component={BucketListDetails}
+      />
+      
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.CollaboratorsScreen}
+        component={CollaboratorsScreen}
+      />
+      
     </Stack.Navigator>
   );
 };

@@ -165,4 +165,11 @@ export const IMAGES = {
   restore: require('./icon/tripHome/restore.png'),
   Itinerary: require('./icon/tripHome/Itinerary.png'),
   googleOutline: require('./icon/tripHome/googleOutline.png'),
+  heart: require('./icon/tripHome/heart.png'),
+  addIcon: require('./icon/tripHome/addIcon.png'),
+  message_icon: require('./icon/tripHome/message_icon.png'),
+  Checkbox: require('./icon/tripHome/Checkbox.png'),
+  info: require('./icon/tripHome/info.png'),
+  bell: require('./icon/tripHome/bell.png'),
+  pin1: require('./icon/tripHome/pin1.png'),
 };
