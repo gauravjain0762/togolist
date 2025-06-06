@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
     borderColor: '#E3E3E3',
     backgroundColor: colors.white,
     paddingVertical: Platform.OS == 'ios' ? 0 : hp(6),
+    width:"100%"
   },
   tabButton: {
     width: wp(65),

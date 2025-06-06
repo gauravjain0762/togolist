@@ -96,8 +96,18 @@ const events = [
   },
 ];
 
+const categories = [
+  {label: 'Top Rated Nearby 🏆'},
+  {label: 'Entertainment 🎭'},
+  {label: 'Outdoors 🌲'},
+  {label: 'Wellness 🧘'},
+  {label: 'Shopping 🎪'},
+  {label: 'Fun 🎳'},
+  {label: 'More'},
+];
+
 const SearchViewScreen = () => {
-  const [select, setSelect] = useState('Lists');
+  const [select, setSelect] = useState(false);
   const [select1, setSelect1] = useState('List View');
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -111,20 +121,20 @@ const SearchViewScreen = () => {
     bottomSheetAddListRef.current?.present();
   }, []);
 
-   const AddListCard = useCallback(item => {
-      return (
-        <TouchableOpacity style={styles.card}>
-          <ImageBackground
-            source={IMAGES.bg1}
-            imageStyle={styles.imgStyle}
-            resizeMode="cover"
-            style={styles.bg}>
-            <Text style={styles.cardTitle}>{'Tourist Attractions'}</Text>
-            <Image source={IMAGES.add_icon} style={styles.addicon} />
-          </ImageBackground>
-        </TouchableOpacity>
-      );
-    }, []);
+  const AddListCard = useCallback(item => {
+    return (
+      <TouchableOpacity style={styles.card}>
+        <ImageBackground
+          source={IMAGES.bg1}
+          imageStyle={styles.imgStyle}
+          resizeMode="cover"
+          style={styles.bg}>
+          <Text style={styles.cardTitle}>{'Tourist Attractions'}</Text>
+          <Image source={IMAGES.add_icon} style={styles.addicon} />
+        </ImageBackground>
+      </TouchableOpacity>
+    );
+  }, []);
 
   return (
     <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
@@ -142,10 +152,22 @@ const SearchViewScreen = () => {
         contentContainerStyle={styles.scroll}>
         <SearchBar
           container={styles.searchBox}
-          placeholder="Search"
+          placeholder="Toronto Dinner Spots"
           inputStyle={styles.searchInput}
           IconStyle={{width: 17, height: 15, tintColor: '#A4A4A4'}}
         />
+        {/* Category Chips */}
+        <View style={styles.tagsContainer}>
+          {categories.map((cat, index) => (
+            <TouchableOpacity key={index} style={styles.tag}>
+              <Text style={styles.tagText}>{cat.label}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+        <View style={styles.headerRow}>
+          <Text style={styles.headerText}>Toronto Cafes</Text>
+          <Text style={styles.headerText1}>Toronto, Canada</Text>
+        </View>
         <View style={AppStyles.flex1}>
           <View></View>
 
@@ -197,6 +219,10 @@ const SearchViewScreen = () => {
                     <DiscoverNewSpotsCard
                       {...item}
                       imageStyle={{marginHorizontal: 16}}
+                      onPressAdd={() => {
+                        setSelect(true);
+                        handlePresentAddlistPress();
+                      }}
                     />
                   )}
                   contentContainerStyle={{
@@ -229,89 +255,94 @@ const SearchViewScreen = () => {
             children={
               <View style={{paddingVertical: hp(8)}}>
                 <DiscoverNewSpotsCard
-                  onPressAdd={() => handlePresentAddlistPress()}
+                  onPressAdd={() => {
+                    setSelect(false);
+                    handlePresentAddlistPress();
+                  }}
                 />
-              </View>
-            }
-          />
-          <CommonSheet
-            title="Add To List"
-            bottomSheetModalRef={bottomSheetAddListRef}
-            maxDynamicContentSize={SCREEN_HEIGHT - hp(150)}
-            children={
-              <View>
-                <DiscoverNewSpotsCard
-                  showInfo={false}
-                  showRating={false}
-                  isShowOptions={false}
-                />
-                <View style={styles.optionContainer}>
-                  <View style={styles.row}>
-                    <TouchableOpacity>
-                      <Image style={styles.icons} source={IMAGES.addpin} />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                      <Image style={styles.icons} source={IMAGES.plain} />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                      <Image style={styles.icons} source={IMAGES.container} />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                      <Image style={styles.icons} source={IMAGES.book} />
-                    </TouchableOpacity>
-                  </View>
-                  <LinearView
-                    containerStyle={styles.containerStyle}
-                    linearViewStyle={styles.listContainer1}>
-                    <View>
-                      <HeaderTextIcon
-                        titleStyle={styles.titleStyle}
-                        title={'Personal Lists'}
-                        headerStyle={styles.headerstyle}
-                      />
-                      <FlatList
-                        data={[1, 2, 3, 4]}
-                        ItemSeparatorComponent={() => (
-                          <View style={{height: hp(4)}} />
-                        )}
-                        renderItem={({item, index}) => <AddListCard />}
-                      />
-                      <HeaderTextIcon
-                        titleStyle={styles.titleStyle}
-                        title={'Guide to LA'}
-                        headerStyle={styles.headerstyle}
-                      />
-                      <FlatList
-                        data={[1, 2, 3, 4]}
-                        ItemSeparatorComponent={() => (
-                          <View style={{height: hp(4)}} />
-                        )}
-                        renderItem={({item, index}) => <AddListCard />}
-                      />
-                      <HeaderTextIcon
-                        titleStyle={styles.titleStyle}
-                        title={'Golf Courses'}
-                        headerStyle={styles.headerstyle}
-                      />
-                      <HeaderTextIcon
-                        titleStyle={styles.titleStyle}
-                        title={'Cool Architecture'}
-                        headerStyle={styles.headerstyle}
-                      />
-                    </View>
-                  </LinearView>
-                </View>
-                <Button
-                  type="outline"
-                  BtnStyle={styles.btn1}
-                  title="Create New"
-                />
-                <Button type="outline" BtnStyle={styles.btn1} title="Done" />
               </View>
             }
           />
         </View>
       </ScrollView>
+      <CommonSheet
+        title="Add To List"
+        bottomSheetModalRef={bottomSheetAddListRef}
+        maxDynamicContentSize={
+          select ? SCREEN_HEIGHT - hp(190) : SCREEN_HEIGHT - hp(190)
+        }
+        children={
+          <View style={{}}>
+            <DiscoverNewSpotsCard
+              showInfo={false}
+              showRating={false}
+              isShowOptions={false}
+            />
+            <View style={styles.optionContainer}>
+              <View style={styles.row}>
+                <TouchableOpacity>
+                  <Image style={styles.icons} source={IMAGES.addpin} />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Image style={styles.icons} source={IMAGES.plain} />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Image style={styles.icons} source={IMAGES.container} />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Image style={styles.icons} source={IMAGES.book} />
+                </TouchableOpacity>
+              </View>
+              <LinearView
+                containerStyle={styles.containerStyle}
+                linearViewStyle={styles.listContainer1}>
+                <View>
+                  <HeaderTextIcon
+                    titleStyle={styles.titleStyle}
+                    title={'Personal Lists'}
+                    headerStyle={styles.headerstyle}
+                  />
+                  <FlatList
+                    data={[1, 2, 3, 4]}
+                    ItemSeparatorComponent={() => (
+                      <View style={{height: hp(4)}} />
+                    )}
+                    renderItem={({item, index}) => <AddListCard />}
+                  />
+                  <HeaderTextIcon
+                    titleStyle={styles.titleStyle}
+                    title={'Guide to LA'}
+                    headerStyle={styles.headerstyle}
+                  />
+                  <FlatList
+                    data={[1, 2, 3, 4]}
+                    ItemSeparatorComponent={() => (
+                      <View style={{height: hp(4)}} />
+                    )}
+                    renderItem={({item, index}) => <AddListCard />}
+                  />
+                  <HeaderTextIcon
+                    titleStyle={styles.titleStyle}
+                    title={'Golf Courses'}
+                    headerStyle={styles.headerstyle}
+                  />
+                  <HeaderTextIcon
+                    titleStyle={styles.titleStyle}
+                    title={'Cool Architecture'}
+                    headerStyle={styles.headerstyle}
+                  />
+                </View>
+              </LinearView>
+            </View>
+            <Button type="outline" BtnStyle={styles.btn1} title="Create New" />
+            <Button
+              type="outline"
+              BtnStyle={[styles.btn1, {marginBottom: 20}]}
+              title="Done"
+            />
+          </View>
+        }
+      />
     </SafeAreaView>
   );
 };
@@ -319,6 +350,40 @@ const SearchViewScreen = () => {
 export default SearchViewScreen;
 
 const styles = StyleSheet.create({
+  tagsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 2,
+    paddingHorizontal: wp(16),
+  },
+  tag: {
+    paddingHorizontal: wp(12),
+    paddingVertical: hp(5),
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#D9D9D9',
+    marginTop: hp(4),
+  },
+  tagText: {
+    ...commonFontStyle(600, 12, '#000'),
+  },
+
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 27,
+    marginBottom: 11,
+    paddingHorizontal: wp(16),
+  },
+
+  headerText: {
+    ...commonFontStyle(600, 18, '#000'),
+    flex: 1,
+  },
+  headerText1: {
+    ...commonFontStyle(400, 14, '#787878'),
+  },
+
   back: {
     resizeMode: 'contain',
     width: wp(24),
@@ -389,8 +454,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-
-  select: {
+  select1: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: wp(8),
@@ -570,5 +634,4 @@ const styles = StyleSheet.create({
     paddingVertical: hp(8),
     paddingHorizontal: wp(12),
   },
- 
 });

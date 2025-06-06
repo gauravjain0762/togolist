@@ -177,7 +177,7 @@ const StackNavigator: FC = () => {
   // }
 
   return (
-    <Stack.Navigator initialRouteName={SCREENS.TabNavigator}>
+    <Stack.Navigator initialRouteName={SCREENS.SplashScreen}>
       <Stack.Screen
         options={({navigation}) => ({headerShown: false})}
         name={SCREENS.SplashScreen}
