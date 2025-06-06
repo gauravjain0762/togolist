@@ -129,7 +129,7 @@ const CollaboratorsScreen = () => {
         <LinearView containerStyle={styles.notOnTogolistBox}>
           <Text style={styles.notOnTogolistText}>Not on Togolist?</Text>
           <Button
-            leftImg={IMAGES.pin}
+            leftImg={IMAGES.pin1}
             leftImgStyle={styles.leftImgStyle}
             title="Copy invite link"
             BtnStyle={{marginVertical: 10, paddingVertical: hp(12)}}
