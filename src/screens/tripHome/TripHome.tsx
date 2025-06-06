@@ -170,8 +170,8 @@ const TripHome = (props: Props) => {
             titleStyle={styles.titleStyle}
             leftImg={IMAGES.add_location}
             title="New Bucket List Trip"
-            onPress={()=>{
-              navigateTo(SCREENS.CreateListScreen,{bucketScreen:true})
+            onPress={() => {
+              navigateTo(SCREENS.CreateListScreen, {bucketScreen: true});
             }}
           />
         )}
@@ -288,6 +288,29 @@ const TripHome = (props: Props) => {
                 navigateTo(SCREENS.BucketListScreen);
               }}
             />
+
+            <View style={styles.optioncontainer}>
+              <View style={styles.row1}>
+                <Image source={IMAGES.send} style={styles.Shareicon} />
+                <Text style={styles.label}>{'Share'}</Text>
+              </View>
+              <View style={styles.row1}>
+                <Image source={IMAGES.container} style={styles.Addicon} />
+                <Text style={styles.label}>{'Bucket List'}</Text>
+              </View>
+              <View style={styles.row1}>
+                <Image source={IMAGES.Itinerary} style={styles.Buildicon} />
+                <Text style={styles.label}>{'Build Itinerary'}</Text>
+              </View>
+              <View style={styles.row1}>
+                <Image
+                  source={IMAGES.archived}
+                  style={[styles.Archiveicon, {width: wp(26), height: wp(26)}]}
+                />
+                <Text style={styles.label}>{'Archive'}</Text>
+              </View>
+            </View>
+
             <TogolistPro cardStyle={{marginTop: 8}} />
           </>
         )}

@@ -37,6 +37,7 @@ const CategoryCard: FC<card> = ({
   BgImgStyle,
   BGStyle,
   viewValue,
+  showAddList
 }: any) => {
   return (
     <TouchableOpacity onPress={onCardPress}>
@@ -73,8 +74,8 @@ const CategoryCard: FC<card> = ({
             )}
           </View>
 
-          {true && (
-            <TouchableOpacity style={styles.button}>
+          {showAddList && (
+            <TouchableOpacity onPress={onCardPress} style={styles.button}>
               <Text style={styles.buttonText}>Add to List</Text>
             </TouchableOpacity>
           )}

@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
     height: 24,
     tintColor: colors._787878,
     resizeMode: 'contain',
+    marginRight:6
   },
 });
 

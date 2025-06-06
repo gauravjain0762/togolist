@@ -15,12 +15,13 @@ import {AppStyles} from '../../theme/appStyles';
 import {colors} from '../../theme/colors';
 import {
   Button,
+  CommonSheet,
   CustomHeader,
   EventBottomSheet,
   LinearView,
 } from '../../component';
 import {IMAGES} from '../../assets/Images';
-import {commonFontStyle, hp, wp} from '../../theme/fonts';
+import {commonFontStyle, hp, SCREEN_HEIGHT, wp} from '../../theme/fonts';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import TogolistPro from '../../component/common/TogolistPro';
 import CardImageView from '../../component/trip/CardImageView';
@@ -70,6 +71,9 @@ const BucketListDetails = () => {
         showSearch={false}
         // moreImg={IMAGES.more}
         // moreIconStyle={styles.more}
+        onMorePress={() => {
+          handlePresentModalPress();
+        }}
       />
       <ScrollView
         contentContainerStyle={AppStyles.flexGrow}
@@ -141,12 +145,13 @@ const BucketListDetails = () => {
             return (
               <CategoryCard
                 onCardPress={() => {
-                  navigateTo(SCREENS.BucketListDetails);
+                  navigateTo(SCREENS.TripTogolistsScreen);
                 }}
                 title={item?.title}
                 Togolist={item?.category}
                 Lists
                 listCount={item?.places}
+                showAddList={true}
               />
             );
           }}
@@ -283,9 +288,43 @@ const BucketListDetails = () => {
           </LinearView>
         </View>
       </ScrollView>
-      <EventBottomSheet
+      <CommonSheet
         bottomSheetModalRef={bottomSheetModalRef}
-        handleSheetChanges={e => handleSheetChanges(e)}
+        maxDynamicContentSize={SCREEN_HEIGHT*0.75}
+        children={
+          <>
+            <TouchableOpacity style={styles.modalBtn}>
+              <Image source={IMAGES.addIcon1} style={styles.iconStyle1} />
+              <Text style={styles.modalText}>Add friends</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[styles.modalBtn, {marginTop: 15}]}>
+              <Image source={IMAGES.pin1} style={styles.iconStyle} />
+              <Text style={styles.modalText}>Copy invite link</Text>
+            </TouchableOpacity>
+
+            <View style={[AppStyles.row, {marginTop: 20, gap: 8}]}>
+              <Image source={IMAGES.share1} style={styles.shareIcon} />
+              <Text style={styles.shareText}>Share on social media</Text>
+            </View>
+
+            <ImageBackground
+              source={IMAGES.bg1} // Replace with actual pyramid image URL
+              style={[styles.containerBg]}
+              imageStyle={[styles.image]}>
+              <View style={[AppStyles.row]}>
+                <Text style={styles.text1}>Share on social media</Text>
+                <Image source={IMAGES.logo_white} style={styles.logo_white} />
+              </View>
+              <View>
+                <Text style={styles.text2}>{'Peru Explorations'}</Text>
+                <Text style={styles.text3}>{'@ray Top 10'}</Text>
+              </View>
+            </ImageBackground>
+            <View style={{height: 30}} />
+          </>
+        }
+        title="Share Trip"
       />
     </SafeAreaView>
   );
@@ -597,5 +636,71 @@ const styles = StyleSheet.create({
   },
   viewAll: {
     ...commonFontStyle(500, 16, '#444444'),
+  },
+
+  modalBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: colors.black,
+    paddingVertical: 17,
+    paddingHorizontal: 24,
+    gap: 8,
+    borderRadius: 12,
+  },
+  modalText: {
+    ...commonFontStyle(700, 18, colors.black),
+  },
+  iconStyle: {
+    width: 16,
+    height: 15,
+    resizeMode: 'contain',
+    tintColor: colors.black,
+  },
+  iconStyle1: {
+    width: 24,
+    height: 24,
+    resizeMode: 'contain',
+    tintColor: colors.black,
+  },
+  shareIcon: {
+    width: 16,
+    height: 16,
+    resizeMode: 'contain',
+    tintColor: colors.black,
+  },
+  logo_white: {
+    width: 16,
+    height: 22,
+    resizeMode: 'contain',
+  },
+  shareText: {
+    ...commonFontStyle(700, 18, colors.primary1),
+  },
+
+  containerBg: {
+    height: 370,
+    borderRadius: 18,
+    overflow: 'hidden',
+    justifyContent: 'space-between',
+    paddingHorizontal: 17,
+    paddingVertical: 28,
+    marginTop: 12,
+  },
+  image: {
+    borderRadius: 18,
+  },
+  image1: {
+    borderRadius: 8,
+  },
+  text1: {
+    ...commonFontStyle(600, 14, colors.white),
+    flex:1
+  },
+  text2: {
+    ...commonFontStyle(700, 24, colors.white),
+  },
+  text3: {
+    ...commonFontStyle(600, 14, colors.white),
   },
 });

@@ -40,6 +40,7 @@ const DiscoverNewSpotsCard: FC<{
   showInfo = true,
   showRating = true,
   containerStyle,
+  imageStyle
 }) => {
   return (
     <LinearView>
@@ -48,7 +49,7 @@ const DiscoverNewSpotsCard: FC<{
           source={{
             uri: 'https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U',
           }}
-          style={styles.imageStyle}
+          style={[styles.imageStyle,imageStyle]}
         />
         <Text style={styles.title}>Communal Coffee</Text>
 
