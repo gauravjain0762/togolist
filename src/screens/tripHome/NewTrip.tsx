@@ -21,8 +21,10 @@ import {
   Checklist,
   CommonSheet,
   CustomHeader,
+  InviteFriendsSheet,
   LinearView,
   SearchBar,
+  ShareTripSheet,
 } from '../../component';
 import RenderPrivacyOption from '../../component/createNew/RenderPrivacyOption';
 import CustomBtn from '../../component/common/CustomBtn';
@@ -31,6 +33,9 @@ import TogolistPro from '../../component/common/TogolistPro';
 import CategoryCard from '../../component/trip/CategoryCard';
 import {useRoute} from '@react-navigation/native';
 import HeaderTextIcon from '../../component/common/HeaderTextIcon';
+import ReactNativeModal from 'react-native-modal';
+import {navigateTo} from '../../utils/commonFunction';
+import {SCREENS} from '../../navigation/screenNames';
 
 const categories = [
   {
@@ -76,9 +81,30 @@ const NewTrip = () => {
     bottomSheetModalRef.current?.present();
   }, []);
 
+  const bottomSheetInviteModalRef = useRef<BottomSheetModal>(null);
+  const handlePresentInviteModalPress = useCallback(() => {
+    bottomSheetInviteModalRef.current?.present();
+  }, []);
+
+  const bottomSheetUploadModalRef = useRef<BottomSheetModal>(null);
+  const handlePresentUploadModalPress = useCallback(() => {
+    bottomSheetUploadModalRef.current?.present();
+  }, []);
+
+  const bottomSheetUrlModalRef = useRef<BottomSheetModal>(null);
+  const handlePresentUrlModalPress = useCallback(() => {
+    bottomSheetUrlModalRef.current?.present();
+  }, []);
+
+  const bottomSheetShareModalRef = useRef<BottomSheetModal>(null);
+  const handlePresentShareModalPress = useCallback(() => {
+    bottomSheetShareModalRef.current?.present();
+  }, []);
+
   const [step, setStep] = useState(1);
   const [upload, setUpload] = useState(false);
   const [references, setReferences] = useState(false);
+  const [uploadModel, setUploadModel] = useState(false);
 
   const SocialCard = useCallback(
     item => {
@@ -168,7 +194,17 @@ const NewTrip = () => {
               <Text style={styles.time}>{'May 11'}</Text>
             </View>
           </ImageBackground>
-          <TogolistPro />
+          <TogolistPro cardStyle={{marginBottom: hp(18)}} />
+          <TouchableOpacity onPress={() => handlePresentShareModalPress()}>
+            <LinearView
+              linearViewStyle={{borderRadius: 10}}
+              containerStyle={styles.shareRow}>
+              <Text style={styles.notificationtitle}>{'Share trip'}</Text>
+              <TouchableOpacity>
+                <Image source={IMAGES.send} style={styles.notification} />
+              </TouchableOpacity>
+            </LinearView>
+          </TouchableOpacity>
           <View style={AppStyles.row}>
             <Text style={[styles.Tripphoto, {flex: 1}]}>
               {'Trip Togolists'}
@@ -212,7 +248,7 @@ const NewTrip = () => {
               ))}
               <TouchableOpacity
                 onPress={() => {
-                  // navigateTo(SCREENS.CollaboratorsScreen);
+                  handlePresentInviteModalPress();
                 }}>
                 <Image source={IMAGES.addIcon} style={[styles.avatar1]} />
               </TouchableOpacity>
@@ -256,6 +292,30 @@ const NewTrip = () => {
               BtnStyle={styles.addButton}
               leftImgStyle={styles.addImg}
               type="outline"
+            />
+          </LinearView>
+          <LinearView containerStyle={styles.rainRow}>
+            <Text>{'Travel Easy'}</Text>
+            <Button
+              title="Find Itineraries"
+              BtnStyle={styles.bucketBtn}
+              titleStyle={{...commonFontStyle(600, 12, colors.white)}}
+            />
+          </LinearView>
+          <LinearView containerStyle={styles.ExperiencesContainer}>
+            <View style={styles.experienceinfo}>
+              <Text style={styles.experience}>{'Experiences'}</Text>
+              <Text style={styles.local}>{'Explore Like a Local'}</Text>
+              <Text style={styles.info}>
+                {
+                  'Make the most of your trip with premade itineraries and guided tours.'
+                }
+              </Text>
+            </View>
+            <Button
+              onPress={() => navigateTo(SCREENS.TripPlanner)}
+              title="Find Locals"
+              BtnStyle={styles.btn}
             />
           </LinearView>
           <LinearView>
@@ -328,7 +388,7 @@ const NewTrip = () => {
                 <Text style={styles.uploadTitle}>{'Uploads'}</Text>
                 <Image source={IMAGES.info} style={styles.infoIcon} />
               </View>
-              <TouchableOpacity onPress={() => setUpload(!upload)}>
+              <TouchableOpacity onPress={() => setUploadModel(!uploadModel)}>
                 <Image source={IMAGES.add_icon} style={styles.addicon} />
               </TouchableOpacity>
             </View>
@@ -396,7 +456,7 @@ const NewTrip = () => {
               showAddIcon={true}
               showDown={false}
               titleStyle={commonFontStyle(700, 24, colors._1B1515)}
-              onAddPress={() => setReferences(!references)}
+              onAddPress={() => handlePresentUrlModalPress()}
             />
             {references ? (
               <FlatList
@@ -471,6 +531,94 @@ const NewTrip = () => {
           </View>
         }
       />
+      <CommonSheet
+        bottomSheetModalRef={bottomSheetUploadModalRef}
+        title="Add Upload"
+        children={
+          <View style={styles.sheet}>
+            <Button
+              title="From Photo Library"
+              onPress={() => (
+                setUpload(!upload), bottomSheetUploadModalRef.current?.dismiss()
+              )}
+              leftImg={IMAGES.upload}
+              leftImgStyle={{
+                width: wp(24),
+                height: wp(24),
+                resizeMode: 'contain',
+              }}
+              BtnStyle={{backgroundColor: colors.primary}}
+            />
+            <Button
+              title="Take Photo"
+              type="outline"
+              leftImg={IMAGES.camera}
+              leftImgStyle={{
+                width: wp(24),
+                height: wp(24),
+                resizeMode: 'contain',
+                tintColor: colors.black,
+              }}
+              BtnStyle={styles.uploadBtn}
+              titleStyle={styles.BtnTitle}
+              onPress={() => bottomSheetUploadModalRef.current?.dismiss()}
+            />
+            <Button
+              title="From Files"
+              type="outline"
+              leftImg={IMAGES.file}
+              leftImgStyle={{
+                width: wp(24),
+                height: wp(24),
+                resizeMode: 'contain',
+                tintColor: colors.black,
+              }}
+              BtnStyle={styles.uploadBtn}
+              titleStyle={styles.BtnTitle}
+              onPress={() => bottomSheetUploadModalRef.current?.dismiss()}
+            />
+          </View>
+        }
+      />
+      <CommonSheet
+        bottomSheetModalRef={bottomSheetUrlModalRef}
+        title="Add Social Link"
+        children={
+          <View style={styles.sheet}>
+            <View style={styles.inputContainer}>
+              <Image source={IMAGES.link} style={styles.link} />
+              <TextInput placeholder="Paste link..." style={styles.linkInput} />
+            </View>
+            <Button
+              title="Done"
+              onPress={() => (
+                bottomSheetUrlModalRef.current?.dismiss(),
+                setReferences(!references)
+              )}
+            />
+          </View>
+        }
+      />
+      <InviteFriendsSheet bottomSheetModalRef={bottomSheetInviteModalRef} />
+      <ReactNativeModal style={styles.uploadModel} isVisible={uploadModel}>
+        <View style={styles.modelContainer}>
+          <Image source={IMAGES.doc} style={styles.doc} />
+          <Text style={styles.uploadinfo}>
+            {
+              'Add trip photos and documents such as tickets, flight & hotel details to stay organized in one place.'
+            }
+          </Text>
+          <Button
+            title="Done"
+            onPress={() => (
+              setUploadModel(!uploadModel), handlePresentUploadModalPress()
+            )}
+            type="outline"
+            BtnStyle={styles.DoneBtn}
+          />
+        </View>
+      </ReactNativeModal>
+      <ShareTripSheet bottomSheetModalRef={bottomSheetShareModalRef} />
     </SafeAreaView>
   );
 };
@@ -903,6 +1051,87 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: wp(18),
+    paddingVertical: hp(16),
+  },
+  ExperiencesContainer: {
+    padding: 10,
+  },
+  experience: {
+    ...commonFontStyle(700, 24, colors.black),
+  },
+  local: {
+    ...commonFontStyle(700, 18, colors._444444),
+    marginTop: hp(10),
+  },
+  info: {
+    ...commonFontStyle(400, 16, colors._444444),
+  },
+  btn: {
+    marginTop: hp(10),
+  },
+  experienceinfo: {
+    padding: wp(8),
+  },
+  sheet: {
+    gap: hp(16),
+    paddingVertical: hp(16),
+  },
+  uploadBtn: {
+    borderColor: colors._1B1515,
+    paddingVertical: hp(16),
+  },
+  BtnTitle: {
+    ...commonFontStyle(700, 15, colors._1B1515),
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: wp(12),
+    paddingHorizontal: wp(24),
     paddingVertical: hp(10),
+    borderWidth: 1,
+    borderColor: colors.black,
+    borderRadius: 12,
+  },
+  link: {
+    width: wp(16),
+    height: wp(16),
+  },
+  linkInput: {
+    ...commonFontStyle(400, 16, colors._787878),
+  },
+  uploadModel: {},
+  doc: {
+    width: wp(32),
+    height: wp(32),
+    resizeMode: 'contain',
+    alignSelf: 'center',
+  },
+  uploadinfo: {
+    ...commonFontStyle(400, 16, colors._444444),
+    textAlign: 'center',
+  },
+  DoneBtn: {
+    alignSelf: 'center',
+    paddingHorizontal: wp(16),
+    paddingVertical: hp(8),
+  },
+  modelContainer: {
+    justifyContent: 'flex-end',
+    backgroundColor: colors.white,
+    borderRadius: 20,
+    flex: 0,
+    marginHorizontal: wp(34),
+    paddingHorizontal: wp(34),
+    paddingVertical: hp(40),
+    gap: hp(16),
+    alignItems: 'center',
+  },
+  shareRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: hp(14),
+    paddingHorizontal: wp(18),
   },
 });

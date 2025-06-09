@@ -20,6 +20,8 @@ import ExperienceCard from './explore/ExperienceCard';
 import SwipeList from './trip/SwipeList';
 import AddTogolistSheet from './trip/AddTogolistSheet';
 import Checklist from './trip/Checklist';
+import InviteFriendsSheet from './trip/InviteFriendsSheet';
+import ShareTripSheet from './trip/ShareTripSheet';
 
 export {
   Loader,
@@ -44,4 +46,6 @@ export {
   SwipeList,
   AddTogolistSheet,
   Checklist,
+  InviteFriendsSheet,
+  ShareTripSheet,
 };

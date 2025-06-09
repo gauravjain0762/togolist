@@ -48,6 +48,7 @@ import NewTrip from '../screens/tripHome/NewTrip';
 import NotificationScreen from '../screens/notification/NotificationScreen';
 import PastTripDetails from '../screens/tripHome/PastTripDetails';
 import NotificationDetails from '../screens/notification/NotificationDetails';
+import TripPlanner from '../component/trip/TripPlanner';
 
 export type RootStackParamList = {
   TripHome: undefined;
@@ -379,9 +380,13 @@ const StackNavigator: FC = () => {
         name={SCREENS.NewTrip}
         component={NewTrip}
       />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.TripPlanner}
+        component={TripPlanner}
+      />
 
-
-    {/* notification */}
+      {/* notification */}
       <Stack.Screen
         options={({navigation}) => ({headerShown: false})}
         name={SCREENS.PastTripDetails}
@@ -392,7 +397,6 @@ const StackNavigator: FC = () => {
         name={SCREENS.NotificationDetails}
         component={NotificationDetails}
       />
-
     </Stack.Navigator>
   );
 };
