@@ -19,6 +19,7 @@ import ProfileCard from './explore/ProfileCard';
 import ExperienceCard from './explore/ExperienceCard';
 import SwipeList from './trip/SwipeList';
 import AddTogolistSheet from './trip/AddTogolistSheet';
+import Checklist from './trip/Checklist';
 
 export {
   Loader,
@@ -42,4 +43,5 @@ export {
   ExperienceCard,
   SwipeList,
   AddTogolistSheet,
+  Checklist,
 };

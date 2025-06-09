@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {FC, useState} from 'react';
 import {
   View,
   Text,
@@ -17,13 +17,17 @@ interface ChecklistItem {
   checked: boolean;
 }
 
+type List = {
+  data?: ChecklistItem[];
+};
+
 const initialItems: ChecklistItem[] = [
   {id: '1', label: 'Three Day Mountain Trek', checked: false},
   {id: '2', label: 'Pet a Lama', checked: false},
 ];
 
-const Checklist = () => {
-  const [items, setItems] = useState<ChecklistItem[]>(initialItems);
+const Checklist: FC<List> = ({data}) => {
+  const [items, setItems] = useState<ChecklistItem[]>(data || initialItems);
 
   const toggleCheck = (id: string) => {
     const updatedItems = items.map(item =>
@@ -39,7 +43,10 @@ const Checklist = () => {
         size={22}
         color={item.checked ? colors._BD2332 : '#8A8A8A'}
       /> */}
-      <Image source={IMAGES.Checkbox} style={{width: wp(20), height: wp(20)}} />
+      <Image
+        source={item.checked ? IMAGES.Checkboxfill : IMAGES.Checkbox}
+        style={{width: wp(20), height: wp(20)}}
+      />
       <Text style={[styles.label, item.checked && styles.checkedLabel]}>
         {item.label}
       </Text>
