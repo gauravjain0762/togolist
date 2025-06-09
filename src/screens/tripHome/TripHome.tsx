@@ -1,4 +1,5 @@
 import {
+  FlatList,
   Image,
   ImageBackground,
   RefreshControl,
@@ -6,6 +7,7 @@ import {
   Share,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -37,6 +39,7 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import StatusCard from '../../component/trip/StatusCard';
 import CardImageText from '../../component/common/CardImageText';
 import {SwipeListView} from 'react-native-swipe-list-view';
+import CardImageBtn from '../../component/common/CardImageBtn';
 
 type Props = {};
 
@@ -176,8 +179,19 @@ const TripHome = (props: Props) => {
             }}
           />
         )}
+        {activeTab == 'tab4' && (
+          <Button
+            type="outline"
+            BtnStyle={styles.btn}
+            leftImgStyle={styles.leftImgStyle}
+            titleStyle={styles.titleStyle}
+            leftImg={IMAGES.add_location}
+            title="Add Past Trip"
+            onPress={() => navigateTo(SCREENS.NewTrip, {pastTrips: true})}
+          />
+        )}
 
-        {!options && (
+        {activeTab !== 'tab3' && !options && (
           <StatusCard
             showBucket={activeTab == 'tab2' ? true : false}
             title={'Travel Stats'}
@@ -313,6 +327,63 @@ const TripHome = (props: Props) => {
             </View>
 
             <TogolistPro cardStyle={{marginTop: 8}} />
+          </>
+        )}
+
+        {activeTab == 'tab3' && (
+          <>
+            <CardImageBtn
+              text1={'Coming Soon...'}
+              text2={'Monetize Your Account'}
+              text3={
+                'Create experiences & trip itineraries for account monetization opportunities'
+              }
+              btnText={''}
+              onBtnPress={() => {}}
+            />
+          </>
+        )}
+        {activeTab == 'tab4' && (
+          <>
+            <TogolistPro cardStyle={{marginTop: 8, marginBottom: 9}} />
+            <View style={styles.searchContainer}>
+              <Image source={IMAGES.search} style={styles.searchIcon} />
+              <TextInput
+                placeholder="Search Past Trips"
+                placeholderTextColor={"#A4A4A4"}
+                style={styles.searchInput}
+              />
+            </View>
+            <FlatList
+              data={[1, 2, 3]}
+              contentContainerStyle={{marginBottom: hp(8)}}
+              renderItem={() => {
+                return (
+                  <TripCardBottomText
+                    title={'Canada Experience'}
+                    location={'Toronto, Canada'}
+                    showDay={false}
+                    dayValue={0}
+                    showDayTime={'Sept 2024'}
+                    containerStyle={{marginTop: 8}}
+                    onPress={() => {
+                      navigateTo(SCREENS.BucketListScreen);
+                    }}
+                  />
+                );
+              }}
+              ListFooterComponent={() => {
+                return (
+                  <View style={{marginTop: hp(8)}}>
+                    <CardImageText
+                      subText={
+                        'No past trips yet. Time to start making memories!'
+                      }
+                    />
+                  </View>
+                );
+              }}
+            />
           </>
         )}
       </ScrollView>
@@ -579,5 +650,26 @@ const styles = StyleSheet.create({
     height: wp(24),
     resizeMode: 'contain',
     tintColor: colors.white,
+  },
+
+  searchIcon: {
+    width: 18,
+    height: 18,
+    tintColor: "#A4A4A4",
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 14,
+    paddingHorizontal: 12,
+    marginVertical: 14,
+    borderWidth: 1,
+    borderColor: '#959595',
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: colors.black,
+    marginLeft: 8,
   },
 });

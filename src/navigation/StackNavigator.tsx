@@ -45,6 +45,7 @@ import AddTripTogolistsScreen from '../screens/tripHome/AddTripTogolistsScreen';
 import ThingsTogolistsScreen from '../screens/tripHome/ThingsTogolistsScreen';
 import SearchViewScreen from '../screens/shape/SearchViewScreen';
 import NewTrip from '../screens/tripHome/NewTrip';
+import NotificationScreen from '../screens/notification/NotificationScreen';
 
 export type RootStackParamList = {
   TripHome: undefined;
@@ -177,7 +178,7 @@ const StackNavigator: FC = () => {
   // }
 
   return (
-    <Stack.Navigator initialRouteName={SCREENS.SplashScreen}>
+    <Stack.Navigator initialRouteName={SCREENS.TabNavigator}>
       <Stack.Screen
         options={({navigation}) => ({headerShown: false})}
         name={SCREENS.SplashScreen}
@@ -376,6 +377,15 @@ const StackNavigator: FC = () => {
         name={SCREENS.NewTrip}
         component={NewTrip}
       />
+
+
+    {/* notification */}
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.NotificationScreen}
+        component={NotificationScreen}
+      />
+
     </Stack.Navigator>
   );
 };

@@ -20,7 +20,8 @@ const TripCardBottomText: FC<any> = ({
   dayValue,
   BGImg,
   containerStyle,
-  onPress
+  onPress,
+  showDayTime
 }: any) => {
   return (
     <TouchableOpacity onPress={onPress}>
@@ -40,6 +41,11 @@ const TripCardBottomText: FC<any> = ({
         {showDay && (
           <Text style={styles.valueText}>
             {dayValue} <Text style={styles.dayText}>Days</Text>
+          </Text>
+        )}
+        {showDayTime && (
+          <Text style={styles.valueText1}>
+            {showDayTime}
           </Text>
         )}
       </View>
@@ -73,6 +79,10 @@ const styles = StyleSheet.create({
   },
   valueText: {
     ...commonFontStyle(700, 24, colors.white),
+    marginRight: 2,
+  },
+  valueText1: {
+    ...commonFontStyle(500, 13, "#CFCFCF"),
     marginRight: 2,
   },
   dayText: {

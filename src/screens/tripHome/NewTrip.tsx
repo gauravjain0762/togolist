@@ -20,6 +20,7 @@ import CustomBtn from '../../component/common/CustomBtn';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import TogolistPro from '../../component/common/TogolistPro';
 import CategoryCard from '../../component/trip/CategoryCard';
+import {useRoute} from '@react-navigation/native';
 
 const categories = [
   {
@@ -47,6 +48,7 @@ const categories = [
 
 const NewTrip = () => {
   const [privacy, setPrivacy] = useState<'public' | 'private'>('public');
+  const {params} = useRoute();
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const handlePresentModalPress = useCallback(() => {
@@ -64,7 +66,7 @@ const NewTrip = () => {
         moreImg={IMAGES.more_icon}
         moreIconStyle={styles.more}
         headerStyle={styles.header}
-        title="Trips"
+        title={params?.pastTrips ? 'Past Trips' : 'Trips'}
       />
       {step == 1 && (
         <ImageBackground source={IMAGES.trip_bg} style={styles.imageContainer}>

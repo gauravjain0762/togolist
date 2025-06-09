@@ -43,10 +43,8 @@ export const SCREENS = {
   AddTripTogolistsScreen: 'AddTripTogolistsScreen',
   ThingsTogolistsScreen: 'ThingsTogolistsScreen',
   SearchViewScreen: 'SearchViewScreen',
-  BucketListScreen: 'BucketListScreen',
-  BucketListDetails: 'BucketListDetails',
-  CollaboratorsScreen: 'CollaboratorsScreen',
   NewTrip: 'NewTrip',
+  NotificationScreen:"NotificationScreen",
 };
 
 export interface ScreenNames {
@@ -94,6 +92,8 @@ export interface ScreenNames {
   ThingsTogolistsScreen: string;
   SearchViewScreen: string;
   NewTrip: string;
+  NotificationScreen: string;
+  
 }
 
 export const SCREEN_NAMES: ScreenNames = {

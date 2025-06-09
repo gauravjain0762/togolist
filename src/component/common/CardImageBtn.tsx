@@ -18,25 +18,26 @@ const CardImageBtn: FC<button> = ({
   text2,
   text3,
   btnText,
+  collocation_bg
 }: any) => {
   return (
     <ImageBackground
       source={IMAGES.collocation_bg}
       resizeMode="cover"
       imageStyle={{borderRadius: 20, flex: 1}}
-      style={styles.collocation_bg}>
+      style={[styles.collocation_bg,collocation_bg]}>
       <View style={styles.content}>
         <Text style={styles.comingSoon}>{text1}</Text>
         <Text style={styles.title1}>{text2}</Text>
         <Text style={styles.subtitle}>{text3}</Text>
 
-        <TouchableOpacity
+        {btnText && <TouchableOpacity
           onPress={() => {
             onBtnPress;
           }}
           style={styles.button1}>
           <Text style={styles.buttonText1}>{btnText}</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>}
       </View>
     </ImageBackground>
   );
@@ -61,6 +62,7 @@ const styles = StyleSheet.create({
   comingSoon: {
     ...commonFontStyle(700, 36, colors.white),
     marginBottom: 10,
+    textAlign:"center"
   },
   title1: {
     ...commonFontStyle(700, 24, colors.white),

@@ -19,13 +19,14 @@ const CardImageText: FC<button> = ({
   Worldwide,
   Lists,
   subText,
+  collocation_bg
 }: any) => {
   return (
     <ImageBackground
       source={IMAGES.collocation_bg}
       resizeMode="cover"
       imageStyle={{borderRadius: 20}}
-      style={styles.collocation_bg}>
+      style={[styles.collocation_bg,collocation_bg]}>
       <Text style={styles.chipText1}>{title}</Text>
       <Text style={styles.chipText2}>{subText}</Text>
     </ImageBackground>
