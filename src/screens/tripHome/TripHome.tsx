@@ -84,7 +84,14 @@ const TripHome = (props: Props) => {
   function NavItem({icon, library, active, onPress, keyValue}) {
     return (
       <TouchableOpacity onPress={onPress} style={styles.navItem}>
-        <Image source={icon} resizeMode="contain" style={styles.tabIcon} />
+        <Image
+          source={icon}
+          resizeMode="contain"
+          style={[
+            styles.tabIcon,
+            {tintColor: active ? colors.black : '#999999'},
+          ]}
+        />
         <View
           style={[
             styles.activeBar,
@@ -127,7 +134,6 @@ const TripHome = (props: Props) => {
           onPress={() => {
             setActiveTab('tab1');
           }}
-          keyValue={true}
         />
         <NavItem
           icon={activeTab === 'tab2' ? IMAGES.tab2_on : IMAGES.tab2_off}
@@ -144,8 +150,9 @@ const TripHome = (props: Props) => {
           }}
         />
         <NavItem
-          icon={activeTab === 'tab4' ? IMAGES.tab4_on : IMAGES.tab4_off}
+          icon={activeTab === 'tab4' ? IMAGES.tab4_on : IMAGES.tab4_on}
           active={activeTab === 'tab4'}
+          keyValue={true}
           onPress={() => {
             setActiveTab('tab4');
           }}
@@ -350,7 +357,7 @@ const TripHome = (props: Props) => {
               <Image source={IMAGES.search} style={styles.searchIcon} />
               <TextInput
                 placeholder="Search Past Trips"
-                placeholderTextColor={"#A4A4A4"}
+                placeholderTextColor={'#A4A4A4'}
                 style={styles.searchInput}
               />
             </View>
@@ -367,7 +374,7 @@ const TripHome = (props: Props) => {
                     showDayTime={'Sept 2024'}
                     containerStyle={{marginTop: 8}}
                     onPress={() => {
-                      navigateTo(SCREENS.BucketListScreen);
+                      navigateTo(SCREENS.PastTripDetails);
                     }}
                   />
                 );
@@ -493,7 +500,7 @@ const styles = StyleSheet.create({
     height: 3,
     borderRadius: 100,
     backgroundColor: '#000',
-    width: '100%',
+    width: 36,
   },
   tabIcon: {
     width: wp(25),
@@ -501,8 +508,8 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   tabIcon1: {
-    width: wp(25),
-    height: wp(25),
+    width: wp(24),
+    height: wp(26),
     resizeMode: 'contain',
   },
   navItem: {
@@ -655,21 +662,21 @@ const styles = StyleSheet.create({
   searchIcon: {
     width: 18,
     height: 18,
-    tintColor: "#A4A4A4",
+    tintColor: '#A4A4A4',
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 14,
-    paddingHorizontal: 12,
+    paddingHorizontal: 11,
+    paddingVertical:10.2,
     marginVertical: 14,
     borderWidth: 1,
     borderColor: '#959595',
   },
   searchInput: {
     flex: 1,
-    fontSize: 16,
-    color: colors.black,
+    ...commonFontStyle(600, 12, colors.black),
     marginLeft: 8,
   },
 });

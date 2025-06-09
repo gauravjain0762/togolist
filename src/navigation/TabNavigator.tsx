@@ -14,13 +14,14 @@ import CreateListScreen from '../screens/newList/CreateListScreen';
 import ShapeScreen from '../screens/shape/ShapeScreen';
 import ProfileScreen from '../screens/profile/ProfileScreen';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import NotificationScreen from '../screens/notification/NotificationScreen';
 
 const Tab = createBottomTabNavigator();
 
 // Custom Tab Bar Component
 const CustomTabBar = ({state, navigation}: any) => {
   return (
-    <SafeAreaView edges={['bottom']}>
+    <View>
       <View style={[styles.tabBarContainer]}>
         {state.routes.map((route: any, index: any) => {
           const isFocused = state.index === index;
@@ -77,7 +78,7 @@ const CustomTabBar = ({state, navigation}: any) => {
           );
         })}
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -88,13 +89,13 @@ export default function TabNavigator() {
       screenOptions={{headerShown: false}}
       initialRouteName={SCREENS.ProfileScreen}
       tabBar={(props: any) => <CustomTabBar {...props} />}>
-      <Tab.Screen name={SCREENS.SearchScreen} component={ShapeScreen} />
+      <Tab.Screen name={SCREENS.SearchScreen} component={SearchScreen} />
       <Tab.Screen name={SCREENS.TripHome} component={TripHome} />
       <Tab.Screen
         name={SCREENS.CreateListScreen}
         component={CreateListScreen}
       />
-      <Tab.Screen name={SCREENS.ShapeScreen} component={SearchScreen} />
+      <Tab.Screen name={SCREENS.ShapeScreen} component={NotificationScreen} />
       <Tab.Screen name={SCREENS.ProfileScreen} component={ProfileScreen} />
     </Tab.Navigator>
   );
@@ -117,8 +118,9 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderColor: '#E3E3E3',
     backgroundColor: colors.white,
-    paddingVertical: Platform.OS == 'ios' ? 0 : hp(6),
-    width:"100%"
+    // paddingVertical: Platform.OS == 'ios' ? 0 : hp(0),
+    width:"100%",
+    paddingBottom:12
   },
   tabButton: {
     width: wp(65),

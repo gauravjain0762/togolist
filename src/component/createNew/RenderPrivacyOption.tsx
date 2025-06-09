@@ -36,12 +36,12 @@ const RenderPrivacyOption: FC<RenderPrivacyOptionProps> = ({
       <View
         style={[
           styles.radioOuter,
-          {borderColor: isSelected ? colors.white : '#D1D1D1'},
+          {borderColor: isSelected ? colors.primary1 : '#D1D1D1'},
         ]}>
         <View
           style={[
             styles.radioInner,
-            {backgroundColor: isSelected ? colors.white : '#D1D1D1'},
+            {backgroundColor: isSelected ? colors.primary1 : '#D1D1D1'},
           ]}
         />
       </View>

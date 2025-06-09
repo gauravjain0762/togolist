@@ -2,7 +2,6 @@ import {
   FlatList,
   Image,
   ImageBackground,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,7 +13,7 @@ import React, {useCallback, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
 import {IMAGES} from '../../assets/Images';
-import {commonFontStyle, hp, wp} from '../../theme/fonts';
+import {commonFontStyle, hp, SCREEN_HEIGHT, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {
   Button,
@@ -67,7 +66,7 @@ const reference = [
   },
 ];
 
-const NewTrip = () => {
+const PastTripDetails = () => {
   const [privacy, setPrivacy] = useState<'public' | 'private'>('public');
   const {params} = useRoute();
 
@@ -76,7 +75,12 @@ const NewTrip = () => {
     bottomSheetModalRef.current?.present();
   }, []);
 
-  const [step, setStep] = useState(1);
+  const bottomSheetModalRefShare = useRef<BottomSheetModal>(null);
+  const handlePresentModalSharePress = useCallback(() => {
+    bottomSheetModalRefShare.current?.present();
+  }, []);
+
+  const [step, setStep] = useState(2);
   const [upload, setUpload] = useState(false);
   const [references, setReferences] = useState(false);
 
@@ -107,49 +111,6 @@ const NewTrip = () => {
         headerStyle={styles.header}
         title={params?.pastTrips ? 'Past Trips' : 'Trips'}
       />
-      {step == 1 && (
-        <ImageBackground source={IMAGES.trip_bg} style={styles.imageContainer}>
-          {/* <Text style={styles.title}>Destination</Text> */}
-          <TextInput
-            placeholder="Destination"
-            placeholderTextColor={'#FFFFFF99'}
-            style={styles.title}
-          />
-          <View style={styles.row}>
-            <TouchableOpacity style={styles.card1}>
-              <Image source={IMAGES.canlder} style={styles.icon1} />
-              <Text style={styles.cardText}>Trip Dates</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => handlePresentModalPress()}
-              style={styles.card}>
-              <Image source={IMAGES.camera} style={styles.icon} />
-              <Text style={styles.cardText}>Image</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.privacyContainer}>
-            <RenderPrivacyOption
-              type="public"
-              selected={privacy}
-              setSelected={setPrivacy}
-            />
-
-            <View style={{height: 16}} />
-            <RenderPrivacyOption
-              type="private"
-              selected={privacy}
-              setSelected={setPrivacy}
-            />
-          </View>
-          <CustomBtn
-            style={styles.button}
-            onPress={() => setStep(step + 1)}
-            buttonText={styles.buttonText}
-            title={'Next'}
-          />
-        </ImageBackground>
-      )}
       {step == 2 && (
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -168,8 +129,17 @@ const NewTrip = () => {
               <Text style={styles.time}>{'May 11'}</Text>
             </View>
           </ImageBackground>
-          <TogolistPro />
-          <View style={AppStyles.row}>
+          <TogolistPro cardStyle={{marginBottom: 18}} />
+          <LinearView containerStyle={styles.notificationRow}>
+            <Text style={styles.notificationtitle}>{'Share trip '}</Text>
+            <TouchableOpacity
+              onPress={() => {
+                handlePresentModalSharePress();
+              }}>
+              <Image source={IMAGES.share1} style={styles.notification} />
+            </TouchableOpacity>
+          </LinearView>
+          <View style={[AppStyles.row, {marginTop: 8}]}>
             <Text style={[styles.Tripphoto, {flex: 1}]}>
               {'Trip Togolists'}
             </Text>
@@ -218,46 +188,7 @@ const NewTrip = () => {
               </TouchableOpacity>
             </View>
           </LinearView>
-          <LinearView containerStyle={styles.ItineraryCard}>
-            <View style={styles.Itineraryheader}>
-              <Text style={styles.Itinerarytitle}>Itinerary</Text>
-              <Image source={IMAGES.edit_icon} style={styles.edit} />
-            </View>
 
-            {/* Day List */}
-            {['Day 01', 'Day 02', 'Day 03'].map((day, index) => (
-              <View key={index}>
-                <TouchableOpacity style={styles.dayRow}>
-                  <View style={styles.daterow}>
-                    <Text style={styles.dayText}>{day}</Text>
-                    <Image
-                      source={IMAGES.rightArrow}
-                      style={{
-                        width: wp(24),
-                        height: wp(24),
-                        tintColor: colors.black,
-                      }}
-                      resizeMode="contain"
-                    />
-                  </View>
-                  <Text style={styles.addText}>Add</Text>
-                </TouchableOpacity>
-                <View style={styles.separator} />
-              </View>
-            ))}
-
-            {/* Add Day Button */}
-            {/* <TouchableOpacity style={styles.addButton}>
-              <Text style={styles.addButtonText}>＋ Add Day</Text>
-            </TouchableOpacity> */}
-            <Button
-              title="Add Day"
-              leftImg={IMAGES.add_location}
-              BtnStyle={styles.addButton}
-              leftImgStyle={styles.addImg}
-              type="outline"
-            />
-          </LinearView>
           <LinearView>
             <Text style={styles.headerTitle}>{'Notes'}</Text>
             <View style={[styles.infoContainor]}>
@@ -354,7 +285,7 @@ const NewTrip = () => {
           <LinearView containerStyle={[styles.Budgatecard]}>
             <View style={[styles.budgaterow, {marginBottom: hp(18)}]}>
               <View style={styles.uploadRow}>
-                <Text style={styles.Budgettitle}>Budget</Text>
+                <Text style={styles.Budgettitle}>Spending</Text>
                 <Image source={IMAGES.info} style={styles.infoIcon} />
               </View>
               <Image source={IMAGES.edit_icon} style={styles.edit} />
@@ -364,24 +295,27 @@ const NewTrip = () => {
               ['Hotel', '$0'],
               ['Food', '$0'],
               ['Tickets', '$0'],
+              ['New item', '$0'],
               ['Total', '$0'],
             ].map(([label, value], i) => (
               <>
-                {i === 4 && (
+                {i === 5 && (
                   <View style={[styles.devider, {marginVertical: hp(4)}]} />
                 )}
                 <View style={styles.achievementRow} key={i}>
                   <Text
                     style={[
                       styles.achievementLabel,
-                      i === 4 && styles.totalLabel,
+                      i === 4 && styles.totalLabel1,
+                      i === 5 && styles.totalLabel,
                     ]}>
                     {label}
                   </Text>
                   <Text
                     style={[
                       styles.achievementValue,
-                      i === 4 && styles.totalValue,
+                      i === 4 && styles.totalValue1,
+                      i === 5 && styles.totalValue,
                     ]}>
                     {value}
                   </Text>
@@ -419,22 +353,14 @@ const NewTrip = () => {
               </Text>
             )}
           </LinearView>
-          <LinearView containerStyle={styles.rainRow}>
+          {/* <LinearView containerStyle={styles.rainRow}>
             <Text>{'Need a rain check?'}</Text>
             <Button
               title="Convert to Bucket List"
               BtnStyle={styles.bucketBtn}
               titleStyle={{...commonFontStyle(600, 12, colors.white)}}
             />
-          </LinearView>
-          <LinearView containerStyle={styles.notificationRow}>
-            <Text style={styles.notificationtitle}>
-              {'Turn on trip notifications '}
-            </Text>
-            <TouchableOpacity>
-              <Image source={IMAGES.bell} style={styles.notification} />
-            </TouchableOpacity>
-          </LinearView>
+          </LinearView> */}
         </ScrollView>
       )}
       <CommonSheet
@@ -471,11 +397,50 @@ const NewTrip = () => {
           </View>
         }
       />
+
+      <CommonSheet
+        bottomSheetModalRef={bottomSheetModalRefShare}
+        maxDynamicContentSize={SCREEN_HEIGHT * 0.75}
+        children={
+          <>
+            <TouchableOpacity style={styles.modalBtn}>
+              <Image source={IMAGES.addIcon1} style={styles.iconStyle1} />
+              <Text style={styles.modalText}>Add friends</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[styles.modalBtn, {marginTop: 15}]}>
+              <Image source={IMAGES.pin1} style={styles.iconStyle} />
+              <Text style={styles.modalText}>Copy invite link</Text>
+            </TouchableOpacity>
+
+            <View style={[AppStyles.row, {marginTop: 20, gap: 8}]}>
+              <Image source={IMAGES.share1} style={styles.shareIcon} />
+              <Text style={styles.shareText}>Share on social media</Text>
+            </View>
+
+            <ImageBackground
+              source={IMAGES.bg1} // Replace with actual pyramid image URL
+              style={[styles.containerBg]}
+              imageStyle={[styles.image]}>
+              <View style={[AppStyles.row]}>
+                <Text style={styles.text1}>Share on social media</Text>
+                <Image source={IMAGES.logo_white} style={styles.logo_white} />
+              </View>
+              <View>
+                <Text style={styles.text2}>{'Peru Explorations'}</Text>
+                <Text style={styles.text3}>{'@ray Top 10'}</Text>
+              </View>
+            </ImageBackground>
+            <View style={{height: 30}} />
+          </>
+        }
+        title="Share Trip"
+      />
     </SafeAreaView>
   );
 };
 
-export default NewTrip;
+export default PastTripDetails;
 
 const styles = StyleSheet.create({
   imageContainer: {
@@ -489,8 +454,7 @@ const styles = StyleSheet.create({
   },
   title: {
     ...commonFontStyle(700, 32, '#FFFFFF99'),
-    marginBottom: Platform.OS == 'ios' ? 15 : 4,
-
+    marginBottom: hp(15),
     textAlign: 'center',
   },
   row: {
@@ -833,7 +797,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#3C3C4399',
     flex: 1,
   },
-  achievementLabel: {...commonFontStyle(500, 16, colors._444444)},
+  achievementLabel: {...commonFontStyle(400, 16, colors._444444)},
   achievementValue: {...commonFontStyle(400, 16, colors._444444)},
   achievementRow: {
     flexDirection: 'row',
@@ -842,7 +806,9 @@ const styles = StyleSheet.create({
     // marginTop: hp(12),
   },
   totalLabel: {...commonFontStyle(600, 13, colors.primary)},
-  totalValue: {...commonFontStyle(400, 16, colors._444444)},
+  totalLabel1: {...commonFontStyle(500, 16, '#3C3C4399')},
+  totalValue: {...commonFontStyle(600, 16, colors._444444)},
+  totalValue1: {...commonFontStyle(400, 16, colors._444444)},
   Budgatecard: {
     marginHorizontal: wp(16),
     borderRadius: wp(12),
@@ -894,9 +860,10 @@ const styles = StyleSheet.create({
     width: wp(18),
     height: wp(18),
     resizeMode: 'contain',
+    tintColor: colors.black,
   },
   notificationtitle: {
-    ...commonFontStyle(400, 16, colors._444444),
+    ...commonFontStyle(600, 16, colors.black),
   },
   notificationRow: {
     flexDirection: 'row',
@@ -904,5 +871,71 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: wp(18),
     paddingVertical: hp(10),
+  },
+
+  modalBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: colors.black,
+    paddingVertical: 17,
+    paddingHorizontal: 24,
+    gap: 8,
+    borderRadius: 12,
+  },
+  modalText: {
+    ...commonFontStyle(700, 18, colors.black),
+  },
+  iconStyle: {
+    width: 16,
+    height: 15,
+    resizeMode: 'contain',
+    tintColor: colors.black,
+  },
+  iconStyle1: {
+    width: 24,
+    height: 24,
+    resizeMode: 'contain',
+    tintColor: colors.black,
+  },
+  shareIcon: {
+    width: 16,
+    height: 16,
+    resizeMode: 'contain',
+    tintColor: colors.black,
+  },
+  logo_white: {
+    width: 16,
+    height: 22,
+    resizeMode: 'contain',
+  },
+  shareText: {
+    ...commonFontStyle(700, 18, colors.primary1),
+  },
+
+  containerBg: {
+    height: 370,
+    borderRadius: 18,
+    overflow: 'hidden',
+    justifyContent: 'space-between',
+    paddingHorizontal: 17,
+    paddingVertical: 28,
+    marginTop: 12,
+  },
+  image: {
+    borderRadius: 18,
+  },
+  image1: {
+    borderRadius: 8,
+  },
+  text1: {
+    ...commonFontStyle(600, 14, colors.white),
+    flex: 1,
+  },
+  text2: {
+    ...commonFontStyle(700, 24, colors.white),
+  },
+  text3: {
+    ...commonFontStyle(600, 14, colors.white),
   },
 });

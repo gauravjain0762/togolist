@@ -1,6 +1,7 @@
 import {
   FlatList,
   Image,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -14,6 +15,9 @@ import {IMAGES} from '../../assets/Images';
 import NotificationCard from '../../component/notification/NotificationCard';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import CardImageBtn from '../../component/common/CardImageBtn';
+import {navigateTo} from '../../utils/commonFunction';
+import {SCREENS} from '../../navigation/screenNames';
+import ActivityFeedCard from '../../component/notification/ActivityFeedCard';
 
 const tabs = ['All', 'Updates', 'Activity Feed', 'Guide Board'];
 
@@ -170,6 +174,7 @@ const NotificationScreen = () => {
 
   return (
     <SafeAreaView
+      edges={['top']}
       style={[AppStyles.mainWhiteContainer, {paddingHorizontal: 20}]}>
       <View style={styles.header}>
         <Text style={styles.greeting}>Notifications</Text>
@@ -217,11 +222,32 @@ const NotificationScreen = () => {
 
       {selectedTab == 'Activity Feed' && (
         <FlatList
-          data={notificationDataUpdate}
-          renderItem={renderItem}
+          data={[1, 2]}
+          renderItem={() => {
+            return <ActivityFeedCard imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0 : 20 }} />;
+          }}
           keyExtractor={item => item.id}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 20, gap: 8}}
+          ListFooterComponent={() => {
+            return (
+              <CardImageBtn
+                text2={'Earn Cash with Togolist'}
+                text1={''}
+                text3={
+                  'Register with Togolist to become a verified local guide and share your expertise with others while earning an income!'
+                }
+                btnText={'Become a Guide'}
+                onBtnPress={() => {
+                  navigateTo(SCREENS.NotificationDetails);
+                }}
+                collocation_bg={{height: hp(368), marginTop: 0}}
+                btnStyle={{
+                  width: 116,
+                }}
+              />
+            );
+          }}
         />
       )}
 
@@ -232,9 +258,14 @@ const NotificationScreen = () => {
           text3={
             'Register with Togolist to become a verified local guide and share your expertise with others while earning an income!'
           }
-          btnText={'Learn More'}
-          onBtnPress={() => {}}
-          collocation_bg={{height: SCREEN_HEIGHT * 0.77, marginTop: 0}}
+          btnText={'Become a Guide'}
+          onBtnPress={() => {
+            navigateTo(SCREENS.NotificationDetails);
+          }}
+          collocation_bg={{height: SCREEN_HEIGHT * 0.69, marginTop: 0}}
+          btnStyle={{
+            width: 116,
+          }}
         />
       )}
     </SafeAreaView>

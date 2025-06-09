@@ -45,6 +45,8 @@ export const SCREENS = {
   SearchViewScreen: 'SearchViewScreen',
   NewTrip: 'NewTrip',
   NotificationScreen:"NotificationScreen",
+  PastTripDetails:"PastTripDetails",
+  NotificationDetails:"NotificationDetails",
 };
 
 export interface ScreenNames {
@@ -93,6 +95,8 @@ export interface ScreenNames {
   SearchViewScreen: string;
   NewTrip: string;
   NotificationScreen: string;
+  PastTripDetails: string;
+  NotificationDetails: string;
   
 }
 

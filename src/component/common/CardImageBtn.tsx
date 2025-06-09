@@ -18,7 +18,9 @@ const CardImageBtn: FC<button> = ({
   text2,
   text3,
   btnText,
-  collocation_bg
+  collocation_bg,
+  btnStyle,
+  onBtnPress
 }: any) => {
   return (
     <ImageBackground
@@ -33,9 +35,9 @@ const CardImageBtn: FC<button> = ({
 
         {btnText && <TouchableOpacity
           onPress={() => {
-            onBtnPress;
+            onBtnPress()
           }}
-          style={styles.button1}>
+          style={[styles.button1,btnStyle]}>
           <Text style={styles.buttonText1}>{btnText}</Text>
         </TouchableOpacity>}
       </View>

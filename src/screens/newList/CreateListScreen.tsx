@@ -1,13 +1,15 @@
 import {
   Image,
   ImageBackground,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
 import {commonFontStyle, hp, SCREEN_HEIGHT, wp} from '../../theme/fonts';
@@ -20,6 +22,7 @@ import RenderPrivacyOption from '../../component/createNew/RenderPrivacyOption';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
 import {useRoute} from '@react-navigation/native';
+import Swiper from 'react-native-swiper';
 
 const options = [
   'List',
@@ -33,9 +36,15 @@ const options = [
 
 const CreateListScreen = () => {
   const {params} = useRoute();
+
+  const [activeIndex, setActiveIndex] = useState(
+    params?.bucketScreen ? options.indexOf('Bucket List') : 0,
+  );
   const [activeOption, setActiveOption] = useState(
     params?.bucketScreen ? 'Bucket List' : 'List',
   );
+
+  const swiperRef = useRef(null);
   const [privacy, setPrivacy] = useState<'public' | 'private'>('public');
 
   const {data: dashBoardData, isLoading: dashboardLoading} =
@@ -69,6 +78,172 @@ const CreateListScreen = () => {
     }
   };
 
+  const handleIndexChanged = useCallback(
+    i => {
+      setActiveIndex(i);
+      setActiveOption(options[i]);
+    },
+    [], // Removed activeIndex from dependency array as it's set here
+  );
+
+  const slides = useMemo(() => {
+    return options.map((option, index) => {
+      const isListType = ['List', 'Bucket List'].includes(option);
+      const isTrip = option === 'Trip';
+      const isEvent = option === 'Event';
+      const showNextButton = ![
+        'Itinerary',
+        'Experience',
+        'Request a Host',
+      ].includes(option);
+
+      return (
+        <ImageBackground
+          key={option}
+          source={renderBg(option)}
+          style={styles.imageContainer}>
+          {isListType && (
+            <>
+              {/* <Text style={styles.title}>
+                {''}
+              </Text> */}
+              <TextInput
+                placeholder="List Name"
+                placeholderTextColor={'#FFFFFF99'}
+                style={styles.title}
+              />
+              <TouchableOpacity
+                style={[
+                  styles.inputBox,
+                  {width: params?.bucketScreen ? '24%' : '90%'},
+                ]}>
+                <Image source={IMAGES.camera} style={styles.icon} />
+                <Text style={styles.placeholder}>Image</Text>
+              </TouchableOpacity>
+            </>
+          )}
+
+          {isTrip && (
+            <>
+              {/* <Text style={styles.title}>Destination</Text> */}
+              <TextInput
+                placeholder="Destination"
+                placeholderTextColor={'#FFFFFF99'}
+                style={styles.title}
+              />
+              <View style={styles.row}>
+                <TouchableOpacity style={styles.card1}>
+                  <Image source={IMAGES.canlder} style={styles.icon1} />
+                  <Text style={styles.cardText}>Trip Dates</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.card}>
+                  <Image source={IMAGES.camera} style={styles.icon} />
+                  <Text style={styles.cardText}>Image</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
+
+          {isEvent && (
+            <>
+              {/* <Text style={styles.title}>Event Name</Text> */}
+              <TextInput
+                placeholder="Event Name"
+                placeholderTextColor={'#FFFFFF99'}
+                style={styles.title}
+              />
+              <TouchableOpacity style={[styles.inputBox, {marginBottom: 10}]}>
+                <Image source={IMAGES.location} style={styles.icon} />
+                <Text style={styles.placeholder}>Location</Text>
+              </TouchableOpacity>
+              <View style={styles.row}>
+                <TouchableOpacity style={styles.card1}>
+                  <Image source={IMAGES.canlder} style={styles.icon1} />
+                  <Text style={styles.cardText}>Event Dates</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.card}>
+                  <Image source={IMAGES.camera} style={styles.icon} />
+                  <Text style={styles.cardText}>Image</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
+
+          {!isListType && !isTrip && !isEvent && (
+            <View style={styles.content}>
+              <Text style={styles.comingSoon}>Coming Soon...</Text>
+              <Text style={styles.title1}>Monetize Your Account</Text>
+              <Text style={styles.subtitle}>
+                Create experiences & trip itineraries for account monetization
+                opportunities
+              </Text>
+              <TouchableOpacity
+                onPress={() => navigateTo(SCREENS.Experience)}
+                style={styles.button1}>
+                <Text style={styles.buttonText1}>Learn More</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {showNextButton && (
+            <>
+              <View style={styles.privacyContainer}>
+                <RenderPrivacyOption
+                  type="public"
+                  selected={privacy}
+                  setSelected={setPrivacy}
+                />
+                <View style={{height: 16}} />
+                <RenderPrivacyOption
+                  type="private"
+                  selected={privacy}
+                  setSelected={setPrivacy}
+                />
+              </View>
+              <CustomBtn
+                style={styles.button}
+                onPress={() => {
+                  option === 'Bucket List'
+                    ? navigateTo(SCREENS.BucketListDetails)
+                    : navigateTo(SCREENS.PlaceDetails);
+                }}
+                buttonText={styles.buttonText}
+                title={'Next'}
+              />
+            </>
+          )}
+        </ImageBackground>
+      );
+    });
+  }, [privacy]); // Added privacy to dependency array
+
+  const slidesHeader = useCallback(() => {
+    return options.map((option, index) => (
+      <TouchableOpacity
+        key={option}
+        onPress={() => {
+          const diff = index - activeIndex;
+          if (diff !== 0) {
+            swiperRef?.current?.scrollBy(diff, true);
+          }
+          // Removed setActiveIndex and setActiveOption from here.
+          // These will be updated by handleIndexChanged once swiper scrolls.
+        }}
+        style={[
+          styles.optionItem,
+          activeIndex === index && styles.activeOption,
+        ]}>
+        <Text
+          style={[
+            styles.optionText,
+            activeIndex === index && styles.activeOptionText,
+          ]}>
+          {option}
+        </Text>
+      </TouchableOpacity>
+    ));
+  }, [activeIndex]); // Keep activeIndex in dependency array
+
   return (
     <SafeAreaView style={[AppStyles.mainWhiteContainer, styles.containor]}>
       {/* <Loader visible={dashboardLoading} /> */}
@@ -82,139 +257,89 @@ const CreateListScreen = () => {
       ) : (
         <View style={styles.header}>
           <Text style={styles.heading}>{'Create New'}</Text>
-
-          <View style={styles.optionsWrapper}>
-            {options.map(option => (
-              <TouchableOpacity
-                key={option}
-                onPress={() => setActiveOption(option)}
-                style={[
-                  styles.optionItem,
-                  activeOption === option && styles.activeOption,
-                ]}>
-                <Text
-                  style={[
-                    styles.optionText,
-                    activeOption === option && styles.activeOptionText,
-                  ]}>
-                  {option}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+          <View style={styles.optionsWrapper}>{slidesHeader()}</View>
         </View>
       )}
 
-      <ImageBackground
-        source={renderBg(activeOption)}
-        style={styles.imageContainer}>
-        {(activeOption == 'List' || activeOption == 'Bucket List') && (
-          <>
-            <Text style={styles.title}>
-              {params?.bucketScreen ? 'Trip Name' : 'List Name'}
-            </Text>
-            <TouchableOpacity
-              style={[
-                styles.inputBox,
-                {width: params?.bucketScreen ? '24%' : '90%'},
-              ]}>
-              <Image source={IMAGES.camera} style={styles.icon} />
-              <Text style={styles.placeholder}>Image</Text>
-            </TouchableOpacity>
-          </>
-        )}
-        {activeOption == 'Trip' && (
-          <>
-            <Text style={styles.title}>Destination</Text>
+      {params?.bucketScreen ? (
+        <>
+          {['Bucket List'].map((option, index) => {
+            const isListType = ['List', 'Bucket List'].includes(option);
+            const isTrip = option === 'Trip';
+            const isEvent = option === 'Event';
+            const showNextButton = ![
+              'Itinerary',
+              'Experience',
+              'Request a Host',
+            ].includes(option);
 
-            <View style={styles.row}>
-              <TouchableOpacity style={styles.card1}>
-                <Image source={IMAGES.canlder} style={styles.icon1} />
-                <Text style={styles.cardText}>Trip Dates</Text>
-              </TouchableOpacity>
+            return (
+              <ImageBackground
+                key={option}
+                source={renderBg(option)}
+                style={styles.imageContainer}>
+                {isListType && (
+                  <>
+                    {/* <Text style={styles.title}>
+                      {params?.bucketScreen ? 'Trip Name' : 'List Name'}
+                    </Text> */}
+                    <TextInput
+                      placeholder="Trip Name"
+                      placeholderTextColor={'#FFFFFF99'}
+                      style={styles.title}
+                    />
+                    <TouchableOpacity
+                      style={[
+                        styles.inputBox,
+                        {width: params?.bucketScreen ? '24%' : '90%'},
+                      ]}>
+                      <Image source={IMAGES.camera} style={styles.icon} />
+                      <Text style={styles.placeholder}>Image</Text>
+                    </TouchableOpacity>
+                  </>
+                )}
 
-              <TouchableOpacity style={styles.card}>
-                <Image source={IMAGES.camera} style={styles.icon} />
-                <Text style={styles.cardText}>Image</Text>
-              </TouchableOpacity>
-            </View>
-          </>
-        )}
-        {activeOption == 'Event' && (
-          <>
-            <Text style={styles.title}>Event Name</Text>
-            <TouchableOpacity style={[styles.inputBox, {marginBottom: 10}]}>
-              <Image source={IMAGES.location} style={styles.icon} />
-              <Text style={styles.placeholder}>Location</Text>
-            </TouchableOpacity>
-            <View style={styles.row}>
-              <TouchableOpacity style={styles.card1}>
-                <Image source={IMAGES.canlder} style={styles.icon1} />
-                <Text style={styles.cardText}>Event Dates</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.card}>
-                <Image source={IMAGES.camera} style={styles.icon} />
-                <Text style={styles.cardText}>Image</Text>
-              </TouchableOpacity>
-            </View>
-          </>
-        )}
-
-        {(activeOption == 'Itinerary' ||
-          activeOption == 'Experience' ||
-          activeOption == 'Request a Host') && (
-          <>
-            <View style={styles.content}>
-              <Text style={styles.comingSoon}>Coming Soon...</Text>
-              <Text style={styles.title1}>Monetize Your Account</Text>
-              <Text style={styles.subtitle}>
-                Create experiences & trip itineraries for account monetization
-                opportunities
-              </Text>
-
-              <TouchableOpacity
-                onPress={() => navigateTo(SCREENS.Experience)}
-                style={styles.button1}>
-                <Text style={styles.buttonText1}>Learn More</Text>
-              </TouchableOpacity>
-            </View>
-          </>
-        )}
-
-        {activeOption == 'Itinerary' ||
-        activeOption == 'Experience' ||
-        activeOption == 'Request a Host' ? null : (
-          <View style={styles.privacyContainer}>
-            <RenderPrivacyOption
-              type="public"
-              selected={privacy}
-              setSelected={setPrivacy}
-            />
-
-            <View style={{height: 16}} />
-            <RenderPrivacyOption
-              type="private"
-              selected={privacy}
-              setSelected={setPrivacy}
-            />
-          </View>
-        )}
-        {activeOption == 'Itinerary' ||
-        activeOption == 'Experience' ||
-        activeOption == 'Request a Host' ? null : (
-          <CustomBtn
-            style={styles.button}
-            onPress={() => {
-              activeOption == 'Bucket List'
-                ? navigateTo(SCREENS.BucketListDetails)
-                : navigateTo(SCREENS.PlaceDetails);
-            }}
-            buttonText={styles.buttonText}
-            title={'Next'}
-          />
-        )}
-      </ImageBackground>
+                {showNextButton && (
+                  <>
+                    <View style={styles.privacyContainer}>
+                      <RenderPrivacyOption
+                        type="public"
+                        selected={privacy}
+                        setSelected={setPrivacy}
+                      />
+                      <View style={{height: 16}} />
+                      <RenderPrivacyOption
+                        type="private"
+                        selected={privacy}
+                        setSelected={setPrivacy}
+                      />
+                    </View>
+                    <CustomBtn
+                      style={styles.button}
+                      onPress={() => {
+                        option === 'Bucket List'
+                          ? navigateTo(SCREENS.BucketListDetails)
+                          : navigateTo(SCREENS.PlaceDetails);
+                      }}
+                      buttonText={styles.buttonText}
+                      title={'Next'}
+                    />
+                  </>
+                )}
+              </ImageBackground>
+            );
+          })}
+        </>
+      ) : (
+        <Swiper
+          ref={swiperRef}
+          index={activeIndex} // Initialize Swiper with the correct index
+          onIndexChanged={handleIndexChanged}
+          loop={false}
+          showsPagination={false}>
+          {slides}
+        </Swiper>
+      )}
     </SafeAreaView>
   );
 };
@@ -277,6 +402,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     flex: 1,
     // marginBottom: hp(18),
+    // width:"100%"
   },
   button: {
     position: 'absolute',
@@ -330,7 +456,7 @@ const styles = StyleSheet.create({
 
   title: {
     ...commonFontStyle(700, 32, '#FFFFFF99'),
-    marginBottom: 10,
+    marginBottom: Platform.OS== 'ios' ?  10 : 0,
     textAlign: 'center',
   },
   placeholder: {

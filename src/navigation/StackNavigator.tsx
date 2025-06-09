@@ -46,6 +46,8 @@ import ThingsTogolistsScreen from '../screens/tripHome/ThingsTogolistsScreen';
 import SearchViewScreen from '../screens/shape/SearchViewScreen';
 import NewTrip from '../screens/tripHome/NewTrip';
 import NotificationScreen from '../screens/notification/NotificationScreen';
+import PastTripDetails from '../screens/tripHome/PastTripDetails';
+import NotificationDetails from '../screens/notification/NotificationDetails';
 
 export type RootStackParamList = {
   TripHome: undefined;
@@ -382,8 +384,13 @@ const StackNavigator: FC = () => {
     {/* notification */}
       <Stack.Screen
         options={({navigation}) => ({headerShown: false})}
-        name={SCREENS.NotificationScreen}
-        component={NotificationScreen}
+        name={SCREENS.PastTripDetails}
+        component={PastTripDetails}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.NotificationDetails}
+        component={NotificationDetails}
       />
 
     </Stack.Navigator>
