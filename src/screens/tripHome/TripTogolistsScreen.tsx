@@ -20,7 +20,7 @@ import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
 import CategoryCard from '../../component/trip/CategoryCard';
 import {useRoute} from '@react-navigation/native';
-import { navigationRef } from '../../navigation/RootContainer';
+import {navigationRef} from '../../navigation/RootContainer';
 
 const categories = [
   {
@@ -46,12 +46,16 @@ const categories = [
   },
 ];
 
-const TripTogolistsScreen = ({navigate}:any) => {
+const TripTogolistsScreen = ({navigate}: any) => {
   const {params} = useRoute();
 
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
-      <CustomHeader title={params?.showTitle ? " Peru Explorations" :"Trips"} showSearch={false} onMorePress={() => {}} />
+      <CustomHeader
+        title={params?.showTitle ? ' Peru Explorations' : 'Trips'}
+        showSearch={false}
+        onMorePress={() => {}}
+      />
       <View style={[{paddingHorizontal: 20}]}>
         {/* Title */}
         {params?.showTitle && (
@@ -86,7 +90,7 @@ const TripTogolistsScreen = ({navigate}:any) => {
           return (
             <CategoryCard
               onCardPress={() => {
-                navigateTo(SCREENS.ThingsTogolistsScreen, {showTitle: true});
+                // navigateTo(SCREENS.ThingsTogolistsScreen, {showTitle: true});
               }}
               title={item?.title}
               Togolist={item?.category}

@@ -22,6 +22,7 @@ import AddTogolistSheet from './trip/AddTogolistSheet';
 import Checklist from './trip/Checklist';
 import InviteFriendsSheet from './trip/InviteFriendsSheet';
 import ShareTripSheet from './trip/ShareTripSheet';
+import ProgressRingChart from './trip/ProgressRingChart';
 
 export {
   Loader,
@@ -48,4 +49,5 @@ export {
   Checklist,
   InviteFriendsSheet,
   ShareTripSheet,
+  ProgressRingChart,
 };

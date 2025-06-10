@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TextInputProps,
   TouchableOpacity,
   View,
   ViewStyle,
@@ -17,7 +18,7 @@ import {colors} from '../../theme/colors';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {IMAGES} from '../../assets/Images';
 
-type search = {
+interface search extends TextInputProps {
   onChangeText?: (e: any) => void;
   placeholder?: string;
   container?: ViewStyle;
@@ -28,7 +29,7 @@ type search = {
   Filterdata?: any[];
   handleSelect?: (e: any) => void;
   data?: any[];
-};
+}
 
 const SearchBar: FC<search> = ({
   onChangeText = () => {},
@@ -41,6 +42,7 @@ const SearchBar: FC<search> = ({
   Filterdata = [],
   handleSelect = () => {},
   data = [],
+  ...props
 }) => {
   return (
     <View style={[styles.searchContainer, container]}>
@@ -55,6 +57,7 @@ const SearchBar: FC<search> = ({
           placeholderTextColor={colors.gray}
           style={[styles.searchInput, inputStyle]}
           onChangeText={e => onChangeText(e)}
+          {...props}
         />
       </View>
       {Filterdata.length > 0 && (

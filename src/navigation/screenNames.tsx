@@ -48,6 +48,7 @@ export const SCREENS = {
   PastTripDetails: 'PastTripDetails',
   NotificationDetails: 'NotificationDetails',
   TripPlanner: 'TripPlanner',
+  TripExplore: 'TripExplore',
 };
 
 export interface ScreenNames {
@@ -99,6 +100,7 @@ export interface ScreenNames {
   PastTripDetails: string;
   NotificationDetails: string;
   TripPlanner: string;
+  TripExplore: string;
 }
 
 export const SCREEN_NAMES: ScreenNames = {

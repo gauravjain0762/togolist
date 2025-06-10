@@ -129,6 +129,7 @@ const NewTrip = () => {
         backIconStyle={styles.back}
         showSearch={false}
         moreImg={IMAGES.more_icon}
+        onMorePress={() => handlePresentInviteModalPress()}
         moreIconStyle={styles.more}
         headerStyle={styles.header}
         title={params?.pastTrips ? 'Past Trips' : 'Trips'}
@@ -220,9 +221,9 @@ const NewTrip = () => {
             renderItem={({item}) => {
               return (
                 <CategoryCard
-                  // onCardPress={() => {
-                  //   navigateTo(SCREENS.BucketListDetails);
-                  // }}
+                  onCardPress={() => {
+                    navigateTo(SCREENS.ThingsTogolistsScreen, {isBack: true});
+                  }}
                   title={item?.title}
                   Togolist={item?.category}
                   Lists
@@ -247,9 +248,9 @@ const NewTrip = () => {
                 />
               ))}
               <TouchableOpacity
-                onPress={() => {
-                  handlePresentInviteModalPress();
-                }}>
+                onPress={() =>
+                  navigateTo(SCREENS.CollaboratorsScreen, {FriendsGoing: true})
+                }>
                 <Image source={IMAGES.addIcon} style={[styles.avatar1]} />
               </TouchableOpacity>
             </View>

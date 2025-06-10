@@ -145,7 +145,7 @@ const BucketListDetails = () => {
             return (
               <CategoryCard
                 onCardPress={() => {
-                  navigateTo(SCREENS.TripTogolistsScreen);
+                  navigateTo(SCREENS.ThingsTogolistsScreen);
                 }}
                 title={item?.title}
                 Togolist={item?.category}
@@ -290,7 +290,7 @@ const BucketListDetails = () => {
       </ScrollView>
       <CommonSheet
         bottomSheetModalRef={bottomSheetModalRef}
-        maxDynamicContentSize={SCREEN_HEIGHT*0.75}
+        maxDynamicContentSize={SCREEN_HEIGHT * 0.75}
         children={
           <>
             <TouchableOpacity style={styles.modalBtn}>
@@ -695,7 +695,7 @@ const styles = StyleSheet.create({
   },
   text1: {
     ...commonFontStyle(600, 14, colors.white),
-    flex:1
+    flex: 1,
   },
   text2: {
     ...commonFontStyle(700, 24, colors.white),

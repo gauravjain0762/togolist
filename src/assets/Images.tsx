@@ -178,4 +178,5 @@ export const IMAGES = {
   file: require('./icon/tripHome/file.png'),
   Checkboxfill: require('./icon/tripHome/Checkboxfill.png'),
   doc: require('./icon/tripHome/doc.png'),
+  explorePin: require('./icon/tripHome/explore.png'),
 };

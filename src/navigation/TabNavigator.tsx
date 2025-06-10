@@ -95,7 +95,10 @@ export default function TabNavigator() {
         name={SCREENS.CreateListScreen}
         component={CreateListScreen}
       />
-      <Tab.Screen name={SCREENS.ShapeScreen} component={NotificationScreen} />
+      <Tab.Screen
+        name={SCREENS.NotificationScreen}
+        component={NotificationScreen}
+      />
       <Tab.Screen name={SCREENS.ProfileScreen} component={ProfileScreen} />
     </Tab.Navigator>
   );
@@ -119,8 +122,8 @@ const styles = StyleSheet.create({
     borderColor: '#E3E3E3',
     backgroundColor: colors.white,
     // paddingVertical: Platform.OS == 'ios' ? 0 : hp(0),
-    width:"100%",
-    paddingBottom:12
+    width: '100%',
+    paddingBottom: 12,
   },
   tabButton: {
     width: wp(65),

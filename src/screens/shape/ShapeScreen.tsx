@@ -44,7 +44,9 @@ const ShapeScreen = (props: Props) => {
       style={[AppStyles.mainWhiteContainer, {paddingHorizontal: 20}]}>
       <View style={styles.header}>
         <Text style={styles.greeting}>Hi, Ray!</Text>
-        <TouchableOpacity onPress={()=>{navigateTo(SCREENS.NotificationScreen)}} style={styles.profileIcon}>
+        <TouchableOpacity
+          onPress={() => navigateTo(SCREENS.NotificationScreen)}
+          style={styles.profileIcon}>
           <Image
             source={IMAGES.addLocation}
             style={{width: 24, height: 24, resizeMode: 'contain'}}

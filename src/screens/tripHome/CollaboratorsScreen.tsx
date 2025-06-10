@@ -14,6 +14,7 @@ import {AppStyles} from '../../theme/appStyles';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {IMAGES} from '../../assets/Images';
 import {colors} from '../../theme/colors';
+import {useRoute} from '@react-navigation/native';
 
 const users = [
   {
@@ -33,20 +34,30 @@ const users = [
   },
 ];
 
+const options = [
+  {label: 'Going', emoji: '👍', key: 'going'},
+  {label: 'Maybe', emoji: '🤔', key: 'maybe'},
+  {label: 'Can’t Go', emoji: '😔', key: 'cantGo'},
+];
+
 const CollaboratorsScreen = () => {
   const [searchText, setSearchText] = useState('');
+  const [selected, setSelected] = useState('going');
+  const {params} = useRoute();
 
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader
-        title="Trip Planner"
+        title={'Trip Planner'}
         showSearch={false}
         showMore={false}
         onMorePress={() => {}}
       />
       <View style={[styles.horizontal_divider]} />
       <ScrollView contentContainerStyle={{marginHorizontal: 20}}>
-        <Text style={styles.title}>Collaborators</Text>
+        <Text style={styles.title}>
+          {params?.FriendsGoing ? 'Friends Going' : 'Collaborators'}
+        </Text>
 
         <View
           style={[
@@ -96,35 +107,57 @@ const CollaboratorsScreen = () => {
           </View>
         )}
 
-        <Button title="Add Friend" BtnStyle={{marginVertical: 20}} />
+        {searchText?.length !== 0 && (
+          <Button
+            title="Add Friend"
+            BtnStyle={{marginTop: hp(20), marginBottom: hp(6)}}
+          />
+        )}
 
-        {users.map((user, index) => (
-          <View style={styles.userRow} key={index}>
-            <Image source={{uri: user.image}} style={styles.avatar} />
-            <View style={styles.userInfo}>
-              <Text style={styles.name}>{user.name}</Text>
-              {!!user.username && (
-                <Text style={styles.username}>
-                  <Text style={styles.username1}>{'@'}</Text>
-                  {user.username}
-                </Text>
+        <View style={styles.container}>
+          {options.map(({label, emoji, key}) => (
+            <TouchableOpacity
+              key={key}
+              onPress={() => setSelected(key)}
+              style={styles.tab}>
+              <Text style={styles.tabText}>
+                {emoji} {label} (0)
+              </Text>
+              {selected === key && <View style={styles.underline} />}
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {searchText?.length !== 0 &&
+          users.map((user, index) => (
+            <View style={styles.userRow} key={index}>
+              <Image source={{uri: user.image}} style={styles.avatar} />
+              <View style={styles.userInfo}>
+                <Text style={styles.name}>{user.name}</Text>
+                {!!user.username && (
+                  <Text style={styles.username}>
+                    <Text style={styles.username1}>{'@'}</Text>
+                    {user.username}
+                  </Text>
+                )}
+              </View>
+              {!user.username && (
+                <TouchableOpacity style={styles.inviteBtn}>
+                  <Text style={styles.inviteText}>Invite to Togolist</Text>
+                </TouchableOpacity>
               )}
             </View>
-            {!user.username && (
-              <TouchableOpacity style={styles.inviteBtn}>
-                <Text style={styles.inviteText}>Invite to Togolist</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        ))}
-
-        <View style={{height: 16}} />
-        <LinearView containerStyle={styles.notOnTogolistBox}>
-          <Text style={styles.notOnTogolistText1}>No friends added yet! </Text>
-          <Text style={styles.notOnTogolistText2}>
-            Search for friends on Togolist or invite friends to join the app!
-          </Text>
-        </LinearView>
+          ))}
+        {searchText?.length == 0 && (
+          <LinearView containerStyle={styles.notOnTogolistBox}>
+            <Text style={styles.notOnTogolistText1}>
+              No friends added yet!{' '}
+            </Text>
+            <Text style={styles.notOnTogolistText2}>
+              Search for friends on Togolist or invite friends to join the app!
+            </Text>
+          </LinearView>
+        )}
         <View style={{height: 16}} />
         <LinearView containerStyle={styles.notOnTogolistBox}>
           <Text style={styles.notOnTogolistText}>Not on Togolist?</Text>
@@ -248,9 +281,9 @@ const styles = StyleSheet.create({
     ...commonFontStyle(600, 16, colors.primary1),
   },
   notOnTogolistBox: {
-    paddingTop: 20,
+    marginTop: hp(16),
     paddingHorizontal: 20,
-    paddingBottom: 8,
+    paddingBottom: hp(8),
   },
   notOnTogolistText: {
     ...commonFontStyle(700, 16, '#444444'),
@@ -271,6 +304,23 @@ const styles = StyleSheet.create({
     width: wp(15),
     height: wp(16),
     resizeMode: 'contain',
+  },
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginVertical: hp(16),
+  },
+  tab: {
+    alignItems: 'center',
+  },
+  tabText: {
+    ...commonFontStyle(700, 14, colors._1B1515),
+  },
+  underline: {
+    height: 2,
+    backgroundColor: colors.black,
+    width: '100%',
+    marginTop: hp(6),
   },
 });
 

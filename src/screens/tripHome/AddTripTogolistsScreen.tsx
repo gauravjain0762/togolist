@@ -21,9 +21,10 @@ import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
 import CategoryCard from '../../component/trip/CategoryCard';
 import {navigationRef} from '../../navigation/RootContainer';
-
+import {useRoute} from '@react-navigation/native';
 
 const AddTripTogolistsScreen = () => {
+  const {params} = useRoute();
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
       <View style={styles.left}>
@@ -31,7 +32,9 @@ const AddTripTogolistsScreen = () => {
           <Image source={IMAGES.back} style={[styles.backIcon]} />
         </TouchableOpacity>
         <AuthHeader showBack={false} proggress={60} />
-        <TouchableOpacity onPress={() => navigationRef.goBack()} style={{right:20}}>
+        <TouchableOpacity
+          onPress={() => navigationRef.goBack()}
+          style={{right: 20}}>
           <Image source={IMAGES.close} style={[styles.closeIcon]} />
         </TouchableOpacity>
       </View>
@@ -50,6 +53,18 @@ const AddTripTogolistsScreen = () => {
             style={styles.searchInput}
           />
         </View>
+        {params?.sources && (
+          <View style={styles.sorceContainer}>
+            <Text style={styles.sorcelabel}>{'Sources (optional)'}</Text>
+            <View style={styles.searchContainer}>
+              <TextInput
+                placeholder="Add link"
+                placeholderTextColor={'#3C3C4399'}
+                style={styles.searchInput}
+              />
+            </View>
+          </View>
+        )}
       </View>
       {/* <FlatList
         data={categories}
@@ -83,7 +98,7 @@ const AddTripTogolistsScreen = () => {
       <Button
         title="Next"
         BtnStyle={styles.btn}
-        // onPress={() => handlePresentModalPress()}
+        onPress={() => navigateTo(SCREENS.TripExplore)}
       />
       <View style={{height: 20}} />
     </SafeAreaView>
@@ -96,9 +111,9 @@ const styles = StyleSheet.create({
   left: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal:20,
-    paddingVertical:10,
-    justifyContent:"space-between",
+    marginHorizontal: 20,
+    paddingVertical: 10,
+    justifyContent: 'space-between',
   },
   backIcon: {
     width: 11,
@@ -162,11 +177,19 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     ...commonFontStyle(500, 18, colors.black),
+    paddingVertical: hp(12),
   },
 
   btn: {
     marginVertical: hp(16),
     paddingVertical: hp(16),
     marginHorizontal: 20,
+  },
+  sorcelabel: {
+    ...commonFontStyle(600, 16, colors.black),
+  },
+  sorceContainer: {
+    marginTop: hp(16),
+    gap: hp(6),
   },
 });

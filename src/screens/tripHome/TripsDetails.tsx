@@ -4,17 +4,25 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
 import {SCREEN_WIDTH, commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
-import {CustomHeader, LinearView} from '../../component';
+import {
+  Button,
+  CustomHeader,
+  LinearView,
+  ProgressRingChart,
+} from '../../component';
 import {IMAGES} from '../../assets/Images';
+import ReactNativeModal from 'react-native-modal';
 
 const TripsDetails = () => {
+  const [proModel, setProModel] = useState(false);
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader
@@ -129,8 +137,12 @@ const TripsDetails = () => {
               styles.row,
               {justifyContent: 'flex-start', marginTop: hp(10)},
             ]}>
-            <Text style={styles.customize}>Customize goals</Text>
-            <Image source={IMAGES.rightArrow} style={styles.right} />
+            <TouchableOpacity
+              onPress={() => setProModel(!proModel)}
+              style={styles.row}>
+              <Text style={styles.customize}>Customize goals</Text>
+              <Image source={IMAGES.rightArrow} style={styles.right} />
+            </TouchableOpacity>
           </View>
         </LinearView>
 
@@ -144,8 +156,8 @@ const TripsDetails = () => {
         </LinearView>
 
         {/* Badges */}
-        <LinearView containerStyle={styles.card}>
-          <View style={styles.row}>
+        <LinearView containerStyle={[styles.card, {paddingHorizontal: 0}]}>
+          <View style={[styles.row, AppStyles.P16]}>
             <Text style={styles.title}>Badges</Text>
             <Image source={IMAGES.send} style={styles.send} />
           </View>
@@ -165,7 +177,7 @@ const TripsDetails = () => {
               numColumns={3}
               columnWrapperStyle={{
                 flexWrap: 'wrap',
-                gap: wp(8),
+                gap: wp(6),
                 justifyContent: 'space-between',
                 marginTop: hp(16),
               }}
@@ -230,6 +242,21 @@ const TripsDetails = () => {
           ))}
         </LinearView>
       </ScrollView>
+      <ReactNativeModal isVisible={proModel}>
+        <View style={styles.model}>
+          <Text style={styles.proheader}>{'Togolist Pro'}</Text>
+          <Text style={styles.info}>
+            {
+              'Upgrade to pro to access premium features, track your stats, get exclusive discounts on flights, get customized deals to your favorite places & more! '
+            }
+          </Text>
+          <Button
+            title="Try Pro"
+            onPress={() => setProModel(!proModel)}
+            BtnStyle={styles.btn}
+          />
+        </View>
+      </ReactNativeModal>
     </SafeAreaView>
   );
 };
@@ -282,6 +309,7 @@ const styles = StyleSheet.create({
   profileCircle: {
     alignItems: 'center',
     justifyContent: 'center',
+    flex: 1,
   },
   circleOuter: {
     width: wp(50),
@@ -322,7 +350,7 @@ const styles = StyleSheet.create({
   },
   badgeItem: {
     alignItems: 'center',
-    maxWidth: (SCREEN_WIDTH / 3) * 0.7,
+    maxWidth: (SCREEN_WIDTH / 3) * 0.8,
   },
   badgeLabel: {...commonFontStyle(400, 12, colors.black)},
   avatarRow: {
@@ -366,5 +394,24 @@ const styles = StyleSheet.create({
   badgeinfo: {
     ...commonFontStyle(500, 12, colors._444444),
     textAlign: 'center',
+  },
+  model: {
+    backgroundColor: colors.white,
+    borderRadius: 20,
+    padding: wp(16),
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: hp(10),
+  },
+  info: {
+    ...commonFontStyle(400, 16, colors._444444),
+    textAlign: 'center',
+  },
+  proheader: {
+    ...commonFontStyle(700, 24, colors._BD2332),
+  },
+  btn: {
+    paddingVertical: hp(8),
+    paddingHorizontal: wp(17),
   },
 });

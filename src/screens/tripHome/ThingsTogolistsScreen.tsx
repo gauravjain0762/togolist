@@ -20,11 +20,11 @@ import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
 import CategoryCard from '../../component/trip/CategoryCard';
 import {useRoute} from '@react-navigation/native';
-import { navigationRef } from '../../navigation/RootContainer';
+import {navigationRef} from '../../navigation/RootContainer';
 
 const categories = [
   {
-    title: 'Things to Do',
+    title: 'Tourist Attractions',
     category: 'Activities',
     places: 0,
     image: 'https://example.com/ferris.jpg',
@@ -46,18 +46,28 @@ const categories = [
   },
 ];
 
-const ThingsTogolistsScreen = ({navigate}:any) => {
+const ThingsTogolistsScreen = ({navigate}: any) => {
   const {params} = useRoute();
 
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
-      <CustomHeader title={params?.showTitle ? "Peru Explorations" :"Trips"} showSearch={false} onMorePress={() => {}} />
+      <CustomHeader
+        title={
+          params?.isBack
+            ? 'Back'
+            : params?.showTitle
+            ? 'Peru Explorations'
+            : 'Trips'
+        }
+        showSearch={false}
+        onMorePress={() => {}}
+      />
       <View style={[{paddingHorizontal: 20}]}>
         {/* Title */}
         {params?.showTitle && (
           <Text style={[styles.title, {color: '#999999'}]}>Things to Do</Text>
         )}
-        <Text style={styles.title}>Tourist Attractions</Text>
+        <Text style={styles.title}>Things to Do</Text>
 
         {/* Location + Collection count */}
         <Text style={styles.subtext}>Trip to Toronto, Canada | 0 Lists</Text>
@@ -86,7 +96,7 @@ const ThingsTogolistsScreen = ({navigate}:any) => {
           return (
             <CategoryCard
               onCardPress={() => {
-                // navigateTo(SCREENS.ThingsTogolistsScreen, {showTitle: true});
+                navigateTo(SCREENS.TripTogolistsScreen, {showTitle: true});
               }}
               title={item?.title}
               Togolist={item?.category}
@@ -102,7 +112,11 @@ const ThingsTogolistsScreen = ({navigate}:any) => {
               type="outline"
               title="Add a new place"
               BtnStyle={styles.btn}
-              onPress={() => navigateTo(SCREENS.AddTripTogolistsScreen)}
+              onPress={() =>
+                navigateTo(SCREENS.AddTripTogolistsScreen, {
+                  sources: params?.isBack ? true : false,
+                })
+              }
             />
           );
         }}
@@ -171,7 +185,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lightGray,
     borderRadius: 14,
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: 12,
     marginVertical: 15,
   },
   searchInput: {
