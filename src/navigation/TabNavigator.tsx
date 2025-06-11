@@ -37,7 +37,7 @@ const CustomTabBar = ({state, navigation}: any) => {
             case SCREENS.CreateListScreen:
               iconName = IMAGES.newList;
               break;
-            case SCREENS.ShapeScreen:
+            case SCREENS.NotificationScreen:
               iconName = IMAGES.shape;
               break;
             case SCREENS.ProfileScreen:

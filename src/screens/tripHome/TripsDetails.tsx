@@ -20,9 +20,116 @@ import {
 } from '../../component';
 import {IMAGES} from '../../assets/Images';
 import ReactNativeModal from 'react-native-modal';
+import {PieChart} from 'react-native-gifted-charts';
 
 const TripsDetails = () => {
   const [proModel, setProModel] = useState(false);
+  const pieData = [
+    {
+      label: 'Wilding',
+      pieData: [
+        {value: 20, color: '#D9D9D9'},
+        {value: 12, color: '#D9D9D9'},
+        {value: 58, color: '#BD2332'},
+      ],
+      image: IMAGES.profile1,
+      initialAngle: -0.7,
+    },
+    {
+      label: 'Paradise Seeker',
+      pieData: [
+        {value: 20, color: '#BD2332'},
+        {value: 12, color: '#D9D9D9'},
+        {value: 58, color: '#D9D9D9'},
+      ],
+      image: IMAGES.profile2,
+      initialAngle: -0.7,
+    },
+    {
+      label: 'Urban Explorer',
+      pieData: [
+        {value: 20, color: '#D9D9D9'},
+        {value: 12, color: '#BD2332'},
+        {value: 58, color: '#D9D9D9'},
+      ],
+      image: IMAGES.profile3,
+      initialAngle: -0.7,
+    },
+  ];
+
+  const pieData2 = [
+    {
+      label: 'Prospector',
+      pieData: [
+        {value: 10, color: '#BD2332'},
+        {value: 10, color: '#BD2332'},
+        {value: 10, color: '#BD2332'},
+        {value: 10, color: '#BD2332'},
+        {value: 10, color: '#BD2332'},
+        {value: 10, color: '#BD2332'},
+        {value: 10, color: '#BD2332'},
+        {value: 10, color: '#BD2332'},
+        {value: 10, color: '#D9D9D9'},
+        {value: 10, color: '#D9D9D9'},
+      ],
+      image: IMAGES.badges1,
+      initialAngle: 0,
+      info: 'You’ve been to 10+ hidden gems!',
+    },
+    {
+      label: 'Weekend Warrior',
+      pieData: [
+        {value: 60, color: '#BD2332'},
+        {value: 40, color: '#D9D9D9'},
+      ],
+      image: IMAGES.badges2,
+      initialAngle: 0,
+      info: 'Went on 50+ weekend trips!',
+    },
+    {
+      label: 'Grand Tour',
+      pieData: [
+        {value: 14.28, color: '#D9D9D9'},
+        {value: 14.28, color: '#BD2332'},
+        {value: 14.28, color: '#BD2332'},
+        {value: 14.28, color: '#BD2332'},
+        {value: 14.28, color: '#D9D9D9'},
+        {value: 14.28, color: '#D9D9D9'},
+        {value: 14.28, color: '#D9D9D9'},
+      ],
+      image: IMAGES.badges3,
+      initialAngle: 0,
+      info: 'Visited every continent.',
+    },
+    {
+      label: 'Social Nomad',
+      pieData: [
+        {value: 20, color: '#D9D9D9'},
+        {value: 20, color: '#BD2332'},
+        {value: 20, color: '#D9D9D9'},
+        {value: 20, color: '#D9D9D9'},
+        {value: 20, color: '#D9D9D9'},
+      ],
+      image: IMAGES.badges4,
+      initialAngle: 0,
+      info: 'Traveled with 5+ friends.',
+    },
+    {
+      label: 'Islander',
+      pieData: [{value: 100, color: '#D9D9D9'}],
+      image: IMAGES.profile2,
+      initialAngle: 0,
+      info: 'You’ve gone to 25+ islands!',
+    },
+    {
+      label: 'Polar Explorer',
+      pieData: [{value: 100, color: '#D9D9D9'}],
+      image: IMAGES.badges5,
+      initialAngle: 0,
+      info: 'Been to both ends of the earth!',
+    },
+  ];
+
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader
@@ -82,14 +189,22 @@ const TripsDetails = () => {
           </View>
 
           <View style={styles.profileRow}>
-            {['Wilding', 'Paradise Seeker', 'Urban Explorer'].map(
-              (label, i) => (
-                <View key={i} style={styles.profileCircle}>
-                  <View style={styles.circleOuter}></View>
-                  <Text style={styles.profileLabel}>{label}</Text>
-                </View>
-              ),
-            )}
+            {pieData.map((label, i) => (
+              <View key={i} style={styles.profileCircle}>
+                <ProgressRingChart
+                  initialAngle={label?.initialAngle}
+                  centerLabelComponent={
+                    <Image
+                      resizeMode="contain"
+                      style={styles.icons}
+                      source={label?.image}
+                    />
+                  }
+                  pieData={label?.pieData}
+                />
+                <Text style={styles.profileLabel}>{label?.label}</Text>
+              </View>
+            ))}
           </View>
           <Text style={styles.howTravel}>{'How You Travel'}</Text>
           <Text style={styles.howYouTravel}>
@@ -163,17 +278,7 @@ const TripsDetails = () => {
           </View>
           <View style={styles.badgeGrid}>
             <FlatList
-              data={[
-                {title: 'Prospector', info: 'You’ve been to 10+ hidden gems!'},
-                {title: 'Weekend Warrior', info: 'Went on 50+ weekend trips!'},
-                {title: 'Grand Tour', info: 'Visited every continent.'},
-                {title: 'Social Nomad', info: 'Traveled with 5+ friends.'},
-                {title: 'Islander', info: 'You’ve gone to 25+ islands!'},
-                {
-                  title: 'Polar Explorer',
-                  info: 'Been to both ends of the earth!',
-                },
-              ]}
+              data={pieData2}
               numColumns={3}
               columnWrapperStyle={{
                 flexWrap: 'wrap',
@@ -182,9 +287,19 @@ const TripsDetails = () => {
                 marginTop: hp(16),
               }}
               renderItem={({item, index}) => (
-                <View key={index} style={styles.badgeItem}>
-                  <View style={styles.circleOuter}></View>
-                  <Text style={styles.badgeLabel}>{item?.title}</Text>
+                <View key={index} style={styles.profileCircle}>
+                  <ProgressRingChart
+                    initialAngle={item?.initialAngle}
+                    centerLabelComponent={
+                      <Image
+                        resizeMode="contain"
+                        style={styles.icons}
+                        source={item?.image}
+                      />
+                    }
+                    pieData={item?.pieData}
+                  />
+                  <Text style={styles.profileLabel}>{item?.label}</Text>
                   <Text style={styles.badgeinfo}>{item?.info}</Text>
                 </View>
               )}
@@ -319,7 +434,7 @@ const styles = StyleSheet.create({
     borderColor: colors.red,
     marginBottom: hp(8),
   },
-  profileLabel: {...commonFontStyle(600, 12, colors._BD2332)},
+  profileLabel: {...commonFontStyle(600, 12, colors._BD2332), marginTop: hp(4)},
   howYouTravel: {
     ...commonFontStyle(400, 16, colors.black),
     textAlign: 'center',
@@ -413,5 +528,9 @@ const styles = StyleSheet.create({
   btn: {
     paddingVertical: hp(8),
     paddingHorizontal: wp(17),
+  },
+  icons: {
+    width: wp(20),
+    height: wp(20),
   },
 });

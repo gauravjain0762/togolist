@@ -10,8 +10,9 @@ import {
 } from 'react-native';
 import React, {FC, memo} from 'react';
 import {colors} from '../../theme/colors';
-import {commonFontStyle, hp, wp} from '../../theme/fonts';
+import {commonFontStyle, hp, sharedTransition, wp} from '../../theme/fonts';
 import {IMAGES} from '../../assets/Images';
+import Animated from 'react-native-reanimated';
 
 const TripCardBottomText: FC<any> = ({
   title,
@@ -21,35 +22,31 @@ const TripCardBottomText: FC<any> = ({
   BGImg,
   containerStyle,
   onPress,
-  showDayTime
+  showDayTime,
+  activeOpacity,
 }: any) => {
   return (
-    <TouchableOpacity onPress={onPress}>
-
-    <ImageBackground
-      source={IMAGES.bg1} // Replace with actual pyramid image URL
-      style={[styles.container, containerStyle]}
-      imageStyle={[styles.image, BGImg]}>
-      {location && (
+    <TouchableOpacity activeOpacity={activeOpacity} onPress={onPress}>
+      <ImageBackground
+        source={IMAGES.bg1}
+        style={[styles.container, containerStyle]}
+        imageStyle={[styles.image, BGImg]}>
+        {location && (
+          <View style={styles.row}>
+            <Image source={IMAGES.locationWhite} style={styles.iconStyle} />
+            <Text style={styles.headerText}>{location}</Text>
+          </View>
+        )}
         <View style={styles.row}>
-          <Image source={IMAGES.locationWhite} style={styles.iconStyle} />
-          <Text style={styles.headerText}>{location}</Text>
+          <Text style={styles.title}>{title}</Text>
+          {showDay && (
+            <Text style={styles.valueText}>
+              {dayValue} <Text style={styles.dayText}>Days</Text>
+            </Text>
+          )}
+          {showDayTime && <Text style={styles.valueText1}>{showDayTime}</Text>}
         </View>
-      )}
-      <View style={styles.row}>
-        <Text style={styles.title}>{title}</Text>
-        {showDay && (
-          <Text style={styles.valueText}>
-            {dayValue} <Text style={styles.dayText}>Days</Text>
-          </Text>
-        )}
-        {showDayTime && (
-          <Text style={styles.valueText1}>
-            {showDayTime}
-          </Text>
-        )}
-      </View>
-    </ImageBackground>
+      </ImageBackground>
     </TouchableOpacity>
   );
 };
@@ -82,7 +79,7 @@ const styles = StyleSheet.create({
     marginRight: 2,
   },
   valueText1: {
-    ...commonFontStyle(500, 13, "#CFCFCF"),
+    ...commonFontStyle(500, 13, '#CFCFCF'),
     marginRight: 2,
   },
   dayText: {

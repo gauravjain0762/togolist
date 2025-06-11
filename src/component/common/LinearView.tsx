@@ -1,8 +1,6 @@
 import {StyleSheet, Text, View, ViewStyle} from 'react-native';
 import React, {FC, memo} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {AppStyles} from '../../theme/appStyles';
 
 type Props = {
   children: any;

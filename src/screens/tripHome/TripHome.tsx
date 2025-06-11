@@ -40,6 +40,7 @@ import StatusCard from '../../component/trip/StatusCard';
 import CardImageText from '../../component/common/CardImageText';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import CardImageBtn from '../../component/common/CardImageBtn';
+import Animated from 'react-native-reanimated';
 
 type Props = {};
 
@@ -113,7 +114,7 @@ const TripHome = (props: Props) => {
   }, []);
 
   return (
-    <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
+    <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
       {/* <Loader visible={dashboardLoading} /> */}
       <View style={styles.headerView}>
         <Text style={styles.heading}>
@@ -121,6 +122,10 @@ const TripHome = (props: Props) => {
             ? options
               ? 'Archived'
               : 'Trips'
+            : activeTab == 'tab3'
+            ? 'Listings'
+            : activeTab == 'tab4'
+            ? 'Past Trips'
             : 'Bucket List'}
         </Text>
         <TouchableOpacity onPress={() => handlePresentModalPress()}>
@@ -170,7 +175,7 @@ const TripHome = (props: Props) => {
             titleStyle={styles.titleStyle}
             leftImg={IMAGES.add_location}
             title="New Trip"
-            onPress={() => navigateTo(SCREENS.NewTrip)}
+            onPress={() => handlePresentAddTogoModalPress()}
           />
         )}
         {activeTab == 'tab2' && (
@@ -187,15 +192,25 @@ const TripHome = (props: Props) => {
           />
         )}
         {activeTab == 'tab4' && (
-          <Button
-            type="outline"
-            BtnStyle={styles.btn}
-            leftImgStyle={styles.leftImgStyle}
-            titleStyle={styles.titleStyle}
-            leftImg={IMAGES.add_location}
-            title="Add Past Trip"
-            onPress={() => navigateTo(SCREENS.NewTrip, {pastTrips: true})}
-          />
+          <>
+            <View style={styles.searchContainer}>
+              <Image source={IMAGES.search} style={styles.searchIcon} />
+              <TextInput
+                placeholder="Search Past Trips"
+                placeholderTextColor={'#A4A4A4'}
+                style={styles.searchInput}
+              />
+            </View>
+            <Button
+              type="outline"
+              BtnStyle={styles.btn}
+              leftImgStyle={styles.leftImgStyle}
+              titleStyle={styles.titleStyle}
+              leftImg={IMAGES.add_location}
+              title="Add Past Trip"
+              onPress={() => navigateTo(SCREENS.NewTrip, {pastTrips: true})}
+            />
+          </>
         )}
 
         {activeTab !== 'tab3' && !options && (
@@ -208,7 +223,7 @@ const TripHome = (props: Props) => {
 
         {activeTab == 'tab1' && !options && (
           <View style={{marginTop: 8, paddingBottom: hp(16)}}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => handlePresentAddTogoModalPress()}
               style={{borderRadius: 20}}>
               <TripCardBottomText
@@ -217,7 +232,50 @@ const TripHome = (props: Props) => {
                 showDay={false}
                 dayValue={0}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+            <SwipeListView
+              ItemSeparatorComponent={() => <View style={{height: hp(12)}} />}
+              data={[
+                {title: 'Start Planning...', location: 'New Destination'},
+                {title: 'Canada Experience', location: 'Toronto, Canada'},
+              ]}
+              renderItem={({item, index}) => (
+                <View style={styles.rowFront}>
+                  <TripCardBottomText
+                    title={item?.title}
+                    sharedTransitionTag={`TripCard-${index?.toString()}`}
+                    location={item?.location}
+                    showDay={false}
+                    dayValue={0}
+                    BGImg={{borderRadius: 0}}
+                    activeOpacity={1}
+                    containerStyle={{borderRadius: 0}}
+                    onPress={() =>
+                      navigateTo(SCREENS.NewTrip, {
+                        tag: `TripCard-${index?.toString()}`,
+                      })
+                    }
+                  />
+                </View>
+              )}
+              disableRightSwipe
+              swipeToOpenPercent={30}
+              rightOpenValue={-150}
+              renderHiddenItem={(data, rowMap) => (
+                <View style={styles.rowBack}>
+                  <TouchableOpacity style={styles.backButton}>
+                    <Image source={IMAGES.restore} style={styles.restore} />
+                    <Text style={styles.backText}>Restore</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.backButton, {marginTop: hp(4)}]}>
+                    <Image source={IMAGES.remove} style={styles.remove} />
+                    <Text style={styles.backText}>Delete</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+              leftOpenValue={75}
+            />
             <View style={styles.optioncontainer}>
               <View style={styles.row1}>
                 <Image source={IMAGES.send} style={styles.Shareicon} />
@@ -257,6 +315,7 @@ const TripHome = (props: Props) => {
                     showDay={true}
                     dayValue={45}
                     BGImg={{borderRadius: 0}}
+                    activeOpacity={1}
                     containerStyle={{borderRadius: 0}}
                   />
                 </View>
@@ -353,14 +412,6 @@ const TripHome = (props: Props) => {
         {activeTab == 'tab4' && (
           <>
             <TogolistPro cardStyle={{marginTop: 8, marginBottom: 9}} />
-            <View style={styles.searchContainer}>
-              <Image source={IMAGES.search} style={styles.searchIcon} />
-              <TextInput
-                placeholder="Search Past Trips"
-                placeholderTextColor={'#A4A4A4'}
-                style={styles.searchInput}
-              />
-            </View>
             <FlatList
               data={[1, 2, 3]}
               contentContainerStyle={{marginBottom: hp(8)}}
@@ -404,14 +455,14 @@ const TripHome = (props: Props) => {
                 <Image source={IMAGES.send} style={styles.icon} />
               </View>
               <View style={styles.divider1} />
-              <View style={styles.row}>
+              <TouchableOpacity style={styles.row}>
                 <Text style={styles.sheetlabel}>{'Create a Trip'}</Text>
                 <Image
                   source={IMAGES.tab1}
                   resizeMode="contain"
                   style={styles.icon}
                 />
-              </View>
+              </TouchableOpacity>
               <View style={styles.divider1} />
               {/* <View style={styles.divider1} /> */}
               <TouchableOpacity
@@ -669,10 +720,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 14,
     paddingHorizontal: 11,
-    paddingVertical:10.2,
-    marginVertical: 14,
+    paddingVertical: 10.2,
     borderWidth: 1,
     borderColor: '#959595',
+    marginBottom: hp(16),
   },
   searchInput: {
     flex: 1,

@@ -14,7 +14,7 @@ import React, {useCallback, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
 import {IMAGES} from '../../assets/Images';
-import {commonFontStyle, hp, wp} from '../../theme/fonts';
+import {commonFontStyle, hp, sharedTransition, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {
   Button,
@@ -36,6 +36,7 @@ import HeaderTextIcon from '../../component/common/HeaderTextIcon';
 import ReactNativeModal from 'react-native-modal';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
+import Animated from 'react-native-reanimated';
 
 const categories = [
   {
@@ -121,7 +122,6 @@ const NewTrip = () => {
     },
     [reference],
   );
-
   return (
     <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader
@@ -632,9 +632,9 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     overflow: 'hidden',
     paddingVertical: 20,
-
     flex: 1,
     marginHorizontal: wp(16),
+    marginBottom: hp(20),
   },
   title: {
     ...commonFontStyle(700, 32, '#FFFFFF99'),

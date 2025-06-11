@@ -179,4 +179,12 @@ export const IMAGES = {
   Checkboxfill: require('./icon/tripHome/Checkboxfill.png'),
   doc: require('./icon/tripHome/doc.png'),
   explorePin: require('./icon/tripHome/explore.png'),
+  profile1: require('./icon/tripHome/profile1.png'),
+  profile2: require('./icon/tripHome/profile2.png'),
+  profile3: require('./icon/tripHome/profile3.png'),
+  badges1: require('./icon/tripHome/badges1.png'),
+  badges2: require('./icon/tripHome/badges2.png'),
+  badges3: require('./icon/tripHome/badges3.png'),
+  badges4: require('./icon/tripHome/badges4.png'),
+  badges5: require('./icon/tripHome/badges5.png'),
 };

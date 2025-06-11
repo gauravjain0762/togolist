@@ -230,71 +230,71 @@ const SearchScreen = (props: Props) => {
           <Image source={IMAGES.more_icon} style={[styles.moreIcon]} />
         </TouchableOpacity>
       </View>
-      <View style={AppStyles.flex1}>
-        <View style={AppStyles.P16}>
-          <SearchBar
-            container={styles.searchBox}
-            placeholder="Search"
-            handleSelect={handleSelect}
-            Filterdata={filtered}
-            onChangeText={handleSearch}
-            value={query}
-            data={SUGGESTIONS}
-            inputStyle={styles.searchInput}
-            IconStyle={{width: 17, height: 15, tintColor: '#A4A4A4'}}
-          />
-        </View>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={AppStyles.flex1}
+        contentContainerStyle={AppStyles.flexGrow}>
+        <View style={AppStyles.flex1}>
+          <View style={AppStyles.P16}>
+            <SearchBar
+              container={styles.searchBox}
+              placeholder="Search"
+              handleSelect={handleSelect}
+              Filterdata={filtered}
+              onChangeText={handleSearch}
+              value={query}
+              data={SUGGESTIONS}
+              inputStyle={styles.searchInput}
+              IconStyle={{width: 17, height: 15, tintColor: '#A4A4A4'}}
+            />
+          </View>
 
-        {/* Category Chips */}
-        <View style={styles.tagsContainer}>
-          {categories.map((cat, index) => (
-            <TouchableOpacity key={index} style={styles.tag}>
-              <Text style={styles.tagText}>{cat.label}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+          {/* Category Chips */}
+          <View style={styles.tagsContainer}>
+            {categories.map((cat, index) => (
+              <TouchableOpacity key={index} style={styles.tag}>
+                <Text style={styles.tagText}>{cat.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
 
-        <View style={styles.tabView}>
-          <NavItem
-            icon={activeTab === 'hot' ? IMAGES.solar : IMAGES.solar_off}
-            active={activeTab === 'hot'}
-            onPress={() => {
-              setActiveTab('hot');
-            }}
-          />
-          <NavItem
-            icon={
-              activeTab === 'location' ? IMAGES.Subtract_on : IMAGES.Subtract
-            }
-            active={activeTab === 'location'}
-            keyValue={true}
-            onPress={() => {
-              setActiveTab('location');
-            }}
-          />
-          <NavItem
-            icon={activeTab === 'profile' ? IMAGES.user1_on : IMAGES.user1}
-            active={activeTab === 'profile'}
-            onPress={() => {
-              setActiveTab('profile');
-            }}
-          />
-          <NavItem
-            icon={
-              activeTab === 'events'
-                ? IMAGES.calendar_star_on
-                : IMAGES.calendar_star
-            }
-            active={activeTab === 'events'}
-            onPress={() => {
-              setActiveTab('events');
-            }}
-          />
-        </View>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={{marginTop: 20, flex: 1}}
-          contentContainerStyle={AppStyles.flexGrow}>
+          <View style={styles.tabView}>
+            <NavItem
+              icon={activeTab === 'hot' ? IMAGES.solar : IMAGES.solar_off}
+              active={activeTab === 'hot'}
+              onPress={() => {
+                setActiveTab('hot');
+              }}
+            />
+            <NavItem
+              icon={
+                activeTab === 'location' ? IMAGES.Subtract_on : IMAGES.Subtract
+              }
+              active={activeTab === 'location'}
+              keyValue={true}
+              onPress={() => {
+                setActiveTab('location');
+              }}
+            />
+            <NavItem
+              icon={activeTab === 'profile' ? IMAGES.user1_on : IMAGES.user1}
+              active={activeTab === 'profile'}
+              onPress={() => {
+                setActiveTab('profile');
+              }}
+            />
+            <NavItem
+              icon={
+                activeTab === 'events'
+                  ? IMAGES.calendar_star_on
+                  : IMAGES.calendar_star
+              }
+              active={activeTab === 'events'}
+              onPress={() => {
+                setActiveTab('events');
+              }}
+            />
+          </View>
           {activeTab == 'hot' && (
             <FlatList
               data={CARD_DATA}
@@ -471,8 +471,8 @@ const SearchScreen = (props: Props) => {
               />
             </View>
           )}
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
       <CommonSheet
         title="Details"
         bottomSheetModalRef={bottomSheetModalRef}
@@ -635,6 +635,7 @@ const styles = StyleSheet.create({
     marginTop: hp(29),
     marginHorizontal: wp(16),
     gap: wp(60),
+    marginBottom: hp(28),
   },
   activeBar: {
     marginTop: 4,

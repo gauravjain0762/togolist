@@ -1,6 +1,7 @@
 import {
   FlatList,
   Image,
+  ImageBackground,
   ScrollView,
   StyleSheet,
   Text,
@@ -98,7 +99,7 @@ const CreatedForYou = () => {
       <FlatList
         data={cards}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingHorizontal:20}}
+        contentContainerStyle={{paddingHorizontal: 20}}
         renderItem={({item}) => {
           return (
             <CardImage
