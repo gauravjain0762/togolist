@@ -1,94 +1,67 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  Animated,
-  Easing,
-  LogBox,
-} from 'react-native';
-import React, {useEffect, useRef} from 'react';
-import {Provider} from 'react-redux';
-// import store from './src/redux';
-import Toast from 'react-native-toast-message';
-import {colors} from './src/theme/colors';
-import {hp, commonFontStyle, SCREEN_WIDTH} from './src/theme/fonts';
-import StackNavigator from './src/navigation/StackNavigator';
-import RootContainer from './src/navigation/RootContainer';
-import ToastComponent from './src/component/common/ToastComponent';
-import {PersistGate} from 'redux-persist/integration/react';
-import {persistor, store} from './src/store';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+// App.tsx
+import 'react-native-gesture-handler';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
+import WeatherListScreen from './WeatherListScreen';
+import WeatherDetailScreen from './WeatherDetailScreen';
 
-type Props = {};
+const Stack = createSharedElementStackNavigator();
 
-const App = (props: Props) => {
-  const lineAnim = useRef(new Animated.Value(1)).current;
-
-  useEffect(() => {
-    // LogBox.ignoreAllLogs();
-  }, []);
-
-  const startLineAnimation = () => {
-    // Reset the animation value to 1 before starting it
-    lineAnim.setValue(1);
-
-    Animated.timing(lineAnim, {
-      toValue: 0,
-      duration: 3000,
-      easing: Easing.linear,
-      useNativeDriver: false, // width anim can't use native driver
-    }).start();
-  };
-
-  const toastConfig = {
-    success: ({text1, ...rest}: any) => (
-      <ToastComponent type="success" text1={text1} lineAnim={lineAnim} />
-    ),
-    error: ({text1, ...rest}: any) => (
-      <ToastComponent type="error" text1={text1} lineAnim={lineAnim} />
-    ),
-  };
-
+const App = () => {
   return (
-    <GestureHandlerRootView>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <View style={{flex: 1}}>
-            <RootContainer />
-            <Toast
-              config={toastConfig}
-              position="bottom"
-              topOffset={0}
-              visibilityTime={3000}
-              onShow={() => {
-                startLineAnimation(); // Reset and trigger the animation
-              }}
-            />
-          </View>
-        </PersistGate>
-      </Provider>
-    </GestureHandlerRootView>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="WeatherList" headerMode="none">
+        <Stack.Screen name="WeatherList" component={WeatherListScreen} />
+        <Stack.Screen
+          name="WeatherDetail"
+          component={WeatherDetailScreen}
+          options={() => ({
+            gestureEnabled: false, // Disables swipe back gesture for now, adjust as needed
+            transitionSpec: {
+              // Customize timing for open and close animations
+              open: { animation: 'timing', config: { duration: 700 } }, // Open animation duration
+              close: { animation: 'timing', config: { duration: 400 } }, // Close animation duration
+            },
+            cardStyleInterpolator: ({ current: { progress } }) => ({
+              cardStyle: {
+                // This makes the new screen fade in/out during the transition
+                opacity: progress,
+              },
+            }),
+          })}
+          // **CRITICAL: Enable the sharedElements function here**
+          sharedElements={(route, otherRoute, showing) => {
+            const { item } = route.params; // Get the item data passed from the list screen
+            return [
+              {
+                id: `item.${item.id}.temperature`, // Unique ID for the temperature text
+                animation: 'fade', // Optional: how the shared element itself animates (e.g., 'fade', 'move')
+                resize: 'clip', // Optional: how the element resizes ('clip', 'stretch', 'none')
+              },
+              {
+                id: `item.${item.id}.city`, // Unique ID for the city name text
+                animation: 'fade',
+                resize: 'clip',
+              },
+              // You can add more shared elements here if you want to animate other parts,
+              // for example, the entire card background or an icon.
+              // To aanimate the entire card background, you would:
+              // 1. Add a SharedElement wrapping the main card content in WeatherListScreen.
+              // 2. Add a SharedElement wrapping the main content area in WeatherDetailScreen.
+              // 3. Give them a unique ID like `item.${item.id}.cardBackground`.
+              // Example (uncomment if you add the SharedElement wrappers in other files):
+              // {
+              //   id: `item.${item.id}.cardBackground`,
+              //   animation: 'fade',
+              //   resize: 'clip',
+              // },
+            ];
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
 export default App;
-
-const styles = StyleSheet.create({
-  toastStyle: {
-    backgroundColor: 'red',
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-    width: SCREEN_WIDTH,
-  },
-  textStyleToastSuccess: {
-    backgroundColor: 'green',
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-    width: SCREEN_WIDTH,
-  },
-  textStyleToast: {
-    ...commonFontStyle(500, 14, colors.white),
-    textAlign: 'center',
-  },
-});
