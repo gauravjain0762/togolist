@@ -29,7 +29,7 @@ const CustomTabBar = ({state, navigation}: any) => {
           let iconName;
           switch (route.name) {
             case SCREENS.TripHome:
-              iconName =  IMAGES.trips;
+              iconName =  IMAGES.tab1;
               break;
             case SCREENS.SearchScreen:
               iconName = IMAGES.search;

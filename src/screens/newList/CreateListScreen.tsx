@@ -2,27 +2,40 @@ import {
   Image,
   ImageBackground,
   Platform,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
-import {commonFontStyle, hp, SCREEN_HEIGHT, wp} from '../../theme/fonts';
+import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {IMAGES} from '../../assets/Images';
-import {Loader} from '../../component';
+// import {Loader} from '../../component'; // Still imported but commented out in usage
 import {useGetDashboardQuery} from '../../api/dashboardApi';
 import CustomBtn from '../../component/common/CustomBtn';
 import RenderPrivacyOption from '../../component/createNew/RenderPrivacyOption';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
 import {useRoute} from '@react-navigation/native';
-import Swiper from 'react-native-swiper';
+
+// Import for gestures and reanimated
+import {Gesture, GestureDetector} from 'react-native-gesture-handler';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  runOnJS,
+  withTiming,
+} from 'react-native-reanimated';
+import {SCREEN_WIDTH} from '../../theme/fonts'; // Assuming SCREEN_WIDTH is defined in your fonts.js or similar
+
+// Define SCREEN_WIDTH if not already in fonts.js
+// const SCREEN_WIDTH = Dimensions.get('window').width;
+
 
 const options = [
   'List',
@@ -44,8 +57,11 @@ const CreateListScreen = () => {
     params?.bucketScreen ? 'Bucket List' : 'List',
   );
 
-  const swiperRef = useRef(null);
   const [privacy, setPrivacy] = useState<'public' | 'private'>('public');
+
+  // Reanimated shared values for translation
+  const translateX = useSharedValue(0);
+  const startTranslateX = useSharedValue(0); // To store translation at the start of a gesture
 
   const {data: dashBoardData, isLoading: dashboardLoading} =
     useGetDashboardQuery(
@@ -57,7 +73,7 @@ const CreateListScreen = () => {
       },
     );
 
-  const renderBg = (key: string) => {
+  const renderBg = useCallback((key: string) => {
     switch (key) {
       case 'List':
         return IMAGES.list_bg;
@@ -76,159 +92,165 @@ const CreateListScreen = () => {
       default:
         return IMAGES.list_bg;
     }
-  };
+  }, []); // useCallback to memoize the function itself
 
-  const handleIndexChanged = useCallback(
-    i => {
-      setActiveIndex(i);
-      setActiveOption(options[i]);
-    },
-    [], // Removed activeIndex from dependency array as it's set here
-  );
+  const goToNextSlide = useCallback(() => {
+    setActiveIndex(prev => {
+      const nextIndex = Math.min(options.length - 1, prev + 1);
+      return nextIndex;
+    });
+  }, []);
+
+  const goToPrevSlide = useCallback(() => {
+    setActiveIndex(prev => {
+      const prevIndex = Math.max(0, prev - 1);
+      return prevIndex;
+    });
+  }, []);
+
+  // Use useEffect to reset translateX when activeIndex changes
+  // This will slide the new content into view
+  React.useEffect(() => {
+    // When activeIndex changes, reset translateX to 0 with animation
+    translateX.value = withTiming(0, { duration: 300 });
+    // Also update activeOption based on activeIndex
+    setActiveOption(options[activeIndex]);
+  }, [activeIndex]);
+
 
   const slides = useMemo(() => {
-    return options.map((option, index) => {
-      const isListType = ['List', 'Bucket List'].includes(option);
-      const isTrip = option === 'Trip';
-      const isEvent = option === 'Event';
-      const showNextButton = ![
-        'Itinerary',
-        'Experience',
-        'Request a Host',
-      ].includes(option);
+    // We only need to render the current and potentially adjacent slides for smooth transition
+    // For simplicity, we'll render only the active slide here,
+    // and rely on translateX for the "swipe" effect
+    const option = options[activeIndex];
+    const isListType = ['List', 'Bucket List'].includes(option);
+    const isTrip = option === 'Trip';
+    const isEvent = option === 'Event';
+    const showNextButton = ![
+      'Itinerary',
+      'Experience',
+      'Request a Host',
+    ].includes(option);
 
-      return (
-        <ImageBackground
-          key={option}
-          source={renderBg(option)}
-          style={styles.imageContainer}>
-          {isListType && (
-            <>
-              {/* <Text style={styles.title}>
-                {''}
-              </Text> */}
-              <TextInput
-                placeholder="List Name"
-                placeholderTextColor={'#FFFFFF99'}
-                style={styles.title}
-              />
-              <TouchableOpacity
-                style={[
-                  styles.inputBox,
-                  {width: params?.bucketScreen ? '24%' : '90%'},
-                ]}>
+    return (
+      <ImageBackground
+        key={option} // Key important for React's reconciliation
+        source={renderBg(option)}
+        style={styles.imageContainer}>
+        {isListType && (
+          <>
+            <TextInput
+              placeholder={option === 'Bucket List' ? 'Trip Name' : 'List Name'}
+              placeholderTextColor={'#FFFFFF99'}
+              style={styles.title}
+            />
+            <TouchableOpacity
+              style={[
+                styles.inputBox,
+                {width: '90%'},
+              ]}>
+              <Image source={IMAGES.camera} style={styles.icon} />
+              <Text style={styles.placeholder}>Image</Text>
+            </TouchableOpacity>
+          </>
+        )}
+
+        {isTrip && (
+          <>
+            <TextInput
+              placeholder="Destination"
+              placeholderTextColor={'#FFFFFF99'}
+              style={styles.title}
+            />
+            <View style={styles.row}>
+              <TouchableOpacity style={styles.card1}>
+                <Image source={IMAGES.canlder} style={styles.icon1} />
+                <Text style={styles.cardText}>Trip Dates</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.card}>
                 <Image source={IMAGES.camera} style={styles.icon} />
-                <Text style={styles.placeholder}>Image</Text>
-              </TouchableOpacity>
-            </>
-          )}
-
-          {isTrip && (
-            <>
-              {/* <Text style={styles.title}>Destination</Text> */}
-              <TextInput
-                placeholder="Destination"
-                placeholderTextColor={'#FFFFFF99'}
-                style={styles.title}
-              />
-              <View style={styles.row}>
-                <TouchableOpacity style={styles.card1}>
-                  <Image source={IMAGES.canlder} style={styles.icon1} />
-                  <Text style={styles.cardText}>Trip Dates</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.card}>
-                  <Image source={IMAGES.camera} style={styles.icon} />
-                  <Text style={styles.cardText}>Image</Text>
-                </TouchableOpacity>
-              </View>
-            </>
-          )}
-
-          {isEvent && (
-            <>
-              {/* <Text style={styles.title}>Event Name</Text> */}
-              <TextInput
-                placeholder="Event Name"
-                placeholderTextColor={'#FFFFFF99'}
-                style={styles.title}
-              />
-              <TouchableOpacity style={[styles.inputBox, {marginBottom: 10}]}>
-                <Image source={IMAGES.location} style={styles.icon} />
-                <Text style={styles.placeholder}>Location</Text>
-              </TouchableOpacity>
-              <View style={styles.row}>
-                <TouchableOpacity style={styles.card1}>
-                  <Image source={IMAGES.canlder} style={styles.icon1} />
-                  <Text style={styles.cardText}>Event Dates</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.card}>
-                  <Image source={IMAGES.camera} style={styles.icon} />
-                  <Text style={styles.cardText}>Image</Text>
-                </TouchableOpacity>
-              </View>
-            </>
-          )}
-
-          {!isListType && !isTrip && !isEvent && (
-            <View style={styles.content}>
-              <Text style={styles.comingSoon}>Coming Soon...</Text>
-              <Text style={styles.title1}>Monetize Your Account</Text>
-              <Text style={styles.subtitle}>
-                Create experiences & trip itineraries for account monetization
-                opportunities
-              </Text>
-              <TouchableOpacity
-                onPress={() => navigateTo(SCREENS.Experience)}
-                style={styles.button1}>
-                <Text style={styles.buttonText1}>Learn More</Text>
+                <Text style={styles.cardText}>Image</Text>
               </TouchableOpacity>
             </View>
-          )}
+          </>
+        )}
 
-          {showNextButton && (
-            <>
-              <View style={styles.privacyContainer}>
-                <RenderPrivacyOption
-                  type="public"
-                  selected={privacy}
-                  setSelected={setPrivacy}
-                />
-                <View style={{height: 16}} />
-                <RenderPrivacyOption
-                  type="private"
-                  selected={privacy}
-                  setSelected={setPrivacy}
-                />
-              </View>
-              <CustomBtn
-                style={styles.button}
-                onPress={() => {
-                  option === 'Bucket List'
-                    ? navigateTo(SCREENS.BucketListDetails)
-                    : navigateTo(SCREENS.PlaceDetails);
-                }}
-                buttonText={styles.buttonText}
-                title={'Next'}
+        {isEvent && (
+          <>
+            <TextInput
+              placeholder="Event Name"
+              placeholderTextColor={'#FFFFFF99'}
+              style={styles.title}
+            />
+            <TouchableOpacity style={[styles.inputBox, {marginBottom: 10}]}>
+              <Image source={IMAGES.location} style={styles.icon} />
+              <Text style={styles.placeholder}>Location</Text>
+            </TouchableOpacity>
+            <View style={styles.row}>
+              <TouchableOpacity style={styles.card1}>
+                <Image source={IMAGES.canlder} style={styles.icon1} />
+                <Text style={styles.cardText}>Event Dates</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.card}>
+                <Image source={IMAGES.camera} style={styles.icon} />
+                <Text style={styles.cardText}>Image</Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
+
+        {!isListType && !isTrip && !isEvent && (
+          <View style={styles.content}>
+            <Text style={styles.comingSoon}>Coming Soon...</Text>
+            <Text style={styles.title1}>Monetize Your Account</Text>
+            <Text style={styles.subtitle}>
+              Create experiences & trip itineraries for account monetization
+              opportunities
+            </Text>
+            <TouchableOpacity
+              onPress={() => navigateTo(SCREENS.Experience)}
+              style={styles.button1}>
+              <Text style={styles.buttonText1}>Learn More</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {showNextButton && (
+          <>
+            <View style={styles.privacyContainer}>
+              <RenderPrivacyOption
+                type="public"
+                selected={privacy}
+                setSelected={setPrivacy}
               />
-            </>
-          )}
-        </ImageBackground>
-      );
-    });
-  }, [privacy]); // Added privacy to dependency array
+              <View style={{height: 16}} />
+              <RenderPrivacyOption
+                type="private"
+                selected={privacy}
+                setSelected={setPrivacy}
+              />
+            </View>
+            <CustomBtn
+              style={styles.button}
+              onPress={() => {
+                option === 'Bucket List'
+                  ? navigateTo(SCREENS.BucketListDetails)
+                  : navigateTo(SCREENS.PlaceDetails);
+              }}
+              buttonText={styles.buttonText}
+              title={'Next'}
+            />
+          </>
+        )}
+      </ImageBackground>
+    );
+  }, [activeIndex, privacy, params?.bucketScreen, renderBg]); // Added renderBg to dependencies
 
   const slidesHeader = useCallback(() => {
     return options.map((option, index) => (
       <TouchableOpacity
         key={option}
-        onPress={() => {
-          const diff = index - activeIndex;
-          if (diff !== 0) {
-            swiperRef?.current?.scrollBy(diff, true);
-          }
-          // Removed setActiveIndex and setActiveOption from here.
-          // These will be updated by handleIndexChanged once swiper scrolls.
-        }}
+        onPress={() => setActiveIndex(index)} // Directly set activeIndex
         style={[
           styles.optionItem,
           activeIndex === index && styles.activeOption,
@@ -242,11 +264,47 @@ const CreateListScreen = () => {
         </Text>
       </TouchableOpacity>
     ));
-  }, [activeIndex]); // Keep activeIndex in dependency array
+  }, [activeIndex]);
+
+  // Gesture handler for swiping
+  const panGesture = Gesture.Pan()
+    .onStart(() => {
+      startTranslateX.value = translateX.value; // Store current position
+    })
+    .onUpdate((event) => {
+      // Calculate new position based on drag
+      translateX.value = startTranslateX.value + event.translationX;
+    })
+    .onEnd((event) => {
+      const THRESHOLD = SCREEN_WIDTH * 0.25; // Swipe threshold (25% of screen width)
+
+      if (event.translationX < -THRESHOLD && activeIndex < options.length - 1) {
+        // Swiped left (to go to next slide)
+        translateX.value = withTiming(-SCREEN_WIDTH, { duration: 200 }, () => {
+          runOnJS(goToNextSlide)(); // Update activeIndex on JS thread
+          // translateX will be reset by useEffect
+        });
+      } else if (event.translationX > THRESHOLD && activeIndex > 0) {
+        // Swiped right (to go to previous slide)
+        translateX.value = withTiming(SCREEN_WIDTH, { duration: 200 }, () => {
+          runOnJS(goToPrevSlide)(); // Update activeIndex on JS thread
+          // translateX will be reset by useEffect
+        });
+      } else {
+        // Not enough swipe, snap back to original position
+        translateX.value = withSpring(0);
+      }
+    });
+
+  // Animated style for the content container
+  const animatedStyles = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: translateX.value }],
+    };
+  });
 
   return (
     <SafeAreaView style={[AppStyles.mainWhiteContainer, styles.containor]}>
-      {/* <Loader visible={dashboardLoading} /> */}
       {params?.bucketScreen ? (
         <View style={styles.headerView}>
           <Text style={styles.heading1}>{'Bucket List'}</Text>
@@ -261,84 +319,17 @@ const CreateListScreen = () => {
         </View>
       )}
 
+      {/* Implement GestureDetector around the content that you want to swipe */}
+      {/* Make sure this GestureDetector wraps the Animated.View that will move */}
       {params?.bucketScreen ? (
-        <>
-          {['Bucket List'].map((option, index) => {
-            const isListType = ['List', 'Bucket List'].includes(option);
-            const isTrip = option === 'Trip';
-            const isEvent = option === 'Event';
-            const showNextButton = ![
-              'Itinerary',
-              'Experience',
-              'Request a Host',
-            ].includes(option);
-
-            return (
-              <ImageBackground
-                key={option}
-                source={renderBg(option)}
-                style={styles.imageContainer}>
-                {isListType && (
-                  <>
-                    {/* <Text style={styles.title}>
-                      {params?.bucketScreen ? 'Trip Name' : 'List Name'}
-                    </Text> */}
-                    <TextInput
-                      placeholder="Trip Name"
-                      placeholderTextColor={'#FFFFFF99'}
-                      style={styles.title}
-                    />
-                    <TouchableOpacity
-                      style={[
-                        styles.inputBox,
-                        {width: params?.bucketScreen ? '24%' : '90%'},
-                      ]}>
-                      <Image source={IMAGES.camera} style={styles.icon} />
-                      <Text style={styles.placeholder}>Image</Text>
-                    </TouchableOpacity>
-                  </>
-                )}
-
-                {showNextButton && (
-                  <>
-                    <View style={styles.privacyContainer}>
-                      <RenderPrivacyOption
-                        type="public"
-                        selected={privacy}
-                        setSelected={setPrivacy}
-                      />
-                      <View style={{height: 16}} />
-                      <RenderPrivacyOption
-                        type="private"
-                        selected={privacy}
-                        setSelected={setPrivacy}
-                      />
-                    </View>
-                    <CustomBtn
-                      style={styles.button}
-                      onPress={() => {
-                        option === 'Bucket List'
-                          ? navigateTo(SCREENS.BucketListDetails)
-                          : navigateTo(SCREENS.PlaceDetails);
-                      }}
-                      buttonText={styles.buttonText}
-                      title={'Next'}
-                    />
-                  </>
-                )}
-              </ImageBackground>
-            );
-          })}
-        </>
+        // For bucketScreen, still render the "Bucket List" slide directly without swipe
+        slides[options.indexOf('Bucket List')]
       ) : (
-        <Swiper
-          ref={swiperRef}
-          index={activeIndex} // Initialize Swiper with the correct index
-          onIndexChanged={handleIndexChanged}
-          loop={false}
-          showsPagination={false}>
-          {slides}
-        </Swiper>
+        <GestureDetector gesture={panGesture}>
+          <Animated.View style={[styles.animatedContentWrapper, animatedStyles]}>
+            {slides[activeIndex]}
+          </Animated.View>
+        </GestureDetector>
       )}
     </SafeAreaView>
   );
@@ -348,7 +339,6 @@ export default CreateListScreen;
 
 const styles = StyleSheet.create({
   headerView: {
-    // marginHorizontal: wp(16),
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -365,6 +355,10 @@ const styles = StyleSheet.create({
 
   containor: {
     paddingHorizontal: wp(16),
+    flex: 1, // Ensure container takes full height to allow flexible content
+  },
+  header: {
+    paddingHorizontal: wp(8),
   },
   heading: {
     marginVertical: 10,
@@ -394,6 +388,10 @@ const styles = StyleSheet.create({
   activeOptionText: {
     color: colors.white,
   },
+  // New style for the wrapper around the swiped content
+  animatedContentWrapper: {
+    flex: 1, // This is crucial so the Animated.View takes the full space for the slide
+  },
   imageContainer: {
     justifyContent: 'center',
     borderRadius: 20,
@@ -401,8 +399,6 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     marginTop: 20,
     flex: 1,
-    // marginBottom: hp(18),
-    // width:"100%"
   },
   button: {
     position: 'absolute',
@@ -417,8 +413,6 @@ const styles = StyleSheet.create({
   },
 
   privacyContainer: {
-    // flexDirection: 'row',
-    // justifyContent: 'space-between',
     position: 'absolute',
     paddingHorizontal: 24,
     bottom: 100,
@@ -472,11 +466,9 @@ const styles = StyleSheet.create({
   card1: {
     backgroundColor: colors.white,
     borderRadius: 16,
-    // paddingVertical: 16,
     paddingHorizontal: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    // width: '62%',
     height: 56,
     shadowColor: '#000',
     shadowOpacity: 0.1,
@@ -488,11 +480,9 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.white,
     borderRadius: 16,
-    // paddingVertical: 16,
     paddingHorizontal: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    // width: '32%',
     height: 56,
     shadowColor: '#000',
     shadowOpacity: 0.1,
@@ -534,8 +524,5 @@ const styles = StyleSheet.create({
   },
   buttonText1: {
     ...commonFontStyle(600, 12, colors.black),
-  },
-  header: {
-    paddingHorizontal: wp(8),
   },
 });
