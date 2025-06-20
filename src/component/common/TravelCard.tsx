@@ -6,11 +6,14 @@ import {
   StyleSheet,
   Image,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 import {commonFontStyle, hp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {IMAGES} from '../../assets/Images';
 import LinearGradient from 'react-native-linear-gradient';
+import { navigateTo } from '../../utils/commonFunction';
+import { SCREENS } from '../../navigation/screenNames';
 
 const {width} = Dimensions.get('window');
 const CARD_WIDTH = (width - 48) / 2; // 16 padding + 16 gap
@@ -21,10 +24,14 @@ const TravelCard = ({
   avatar = '',
   users = [],
   BGStyle,
-}) => {
+  onPress
+}:any) => {
   const visibleUsers = users?.slice(0, 2);
   const extraUserCount = users.length - visibleUsers.length;
   return (
+    <TouchableOpacity onPress={()=>{
+     onPress && onPress()
+    }}>
     <ImageBackground
       source={IMAGES.bg}
       style={[styles.card, BGStyle]}
@@ -64,6 +71,7 @@ const TravelCard = ({
         {/* </View> */}
       </LinearGradient>
     </ImageBackground>
+    </TouchableOpacity>
   );
 };
 
@@ -73,6 +81,7 @@ const styles = StyleSheet.create({
     height: hp(180),
     borderRadius: 20,
     overflow: 'hidden',
+      justifyContent: 'space-between',
   },
   image: {
     resizeMode: 'cover',

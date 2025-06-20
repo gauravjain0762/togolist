@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 import {commonFontStyle} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
@@ -23,8 +24,13 @@ const TravelCardLock = ({
   isPrivate,
   date,
   attendees,
-}) => {
+  onPress
+}:any) => {
   return (
+    <TouchableOpacity onPress={()=>{
+      onPress && onPress()
+    }}>
+
     <ImageBackground
       source={IMAGES.bg}
       style={styles.card}
@@ -61,6 +67,7 @@ const TravelCardLock = ({
         </View>
       </LinearGradient>
     </ImageBackground>
+    </TouchableOpacity>
   );
 };
 

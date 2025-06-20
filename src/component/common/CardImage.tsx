@@ -91,7 +91,7 @@ export default memo(CardImage);
 
 const styles = StyleSheet.create({
   container: {
-    height: 116,
+   height: 116,
     borderRadius: 18,
     overflow: 'hidden',
     justifyContent: 'space-between',

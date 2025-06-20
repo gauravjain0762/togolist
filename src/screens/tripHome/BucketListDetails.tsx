@@ -29,6 +29,7 @@ import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
 import CategoryCard from '../../component/trip/CategoryCard';
 import Checklist from '../../component/trip/Checklist';
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 const categories = [
   {
@@ -56,6 +57,8 @@ const categories = [
 
 const BucketListDetails = () => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const [showTogolistPro, setShowTogolistPro] = useState(true);
+
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
   }, []);
@@ -130,7 +133,14 @@ const BucketListDetails = () => {
             <Text style={[styles.optionText1]}>{'Been There'}</Text>
           </TouchableOpacity>
         </View> */}
-        <TogolistPro cardStyle={{marginTop: 8}} />
+        {showTogolistPro && (
+          <TogolistPro
+            cardStyle={{marginTop: 8}}
+            onClosePress={() => {
+              setShowTogolistPro(false);
+            }}
+          />
+        )}
         <View style={[AppStyles.row]}>
           <Text style={[styles.photo, {flex: 1}]}>{'Trip Togolists'}</Text>
           <TouchableOpacity>
@@ -138,7 +148,46 @@ const BucketListDetails = () => {
           </TouchableOpacity>
         </View>
 
-        <FlatList
+          <SwipeListView
+                data={categories}
+                // contentContainerStyle={{paddingHorizontal: 20}}
+                showsVerticalScrollIndicator={false}
+                renderItem={(data, rowMap) => {
+                  return (
+                    <View style={styles.rowFront}>
+                      <CategoryCard
+                onCardPress={() => {
+                  navigateTo(SCREENS.ThingsTogolistsScreen);
+                }}
+                title={data?.item?.title}
+                Togolist={data?.item?.category}
+                Lists
+                listCount={data?.item?.places}
+                showAddList={true}
+              />
+                    </View>
+                  );
+                }}
+                disableRightSwipe
+                swipeToOpenPercent={30}
+                rightOpenValue={-150}
+                renderHiddenItem
+                renderHiddenItem={(data, rowMap) => (
+                  <View style={styles.rowBack}>
+                    <TouchableOpacity style={styles.backButton}>
+                      <Image source={IMAGES.restore} style={styles.restore} />
+                      <Text style={styles.backText}>Restore</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.backButton, {marginTop: hp(4)}]}>
+                      <Image source={IMAGES.remove} style={styles.remove} />
+                      <Text style={styles.backText}>Delete</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+                leftOpenValue={75}
+              />
+
+        {/* <FlatList
           data={categories}
           showsVerticalScrollIndicator={false}
           renderItem={({item}) => {
@@ -155,7 +204,7 @@ const BucketListDetails = () => {
               />
             );
           }}
-        />
+        /> */}
 
         <View style={styles.content}>
           <LinearView>
@@ -702,5 +751,44 @@ const styles = StyleSheet.create({
   },
   text3: {
     ...commonFontStyle(600, 14, colors.white),
+  },
+
+
+   rowFront: {
+    overflow: 'hidden',
+    borderRadius: 10,
+    // marginHorizontal: 20,
+  },
+
+  rowBack: {
+    alignItems: 'center',
+    backgroundColor: colors._BD2332,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    borderRadius: 30,
+    paddingHorizontal: hp(28),
+    gap: wp(30),
+    overflow: 'hidden',
+    marginTop: 12,
+    // marginHorizontal: 20,
+  },
+  backButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: hp(6),
+  },
+  backText: {
+    ...commonFontStyle(500, 10, colors.white),
+  },
+  restore: {
+    width: wp(23),
+    height: wp(23),
+    resizeMode: 'contain',
+  },
+  remove: {
+    width: wp(18),
+    height: wp(18),
+    resizeMode: 'contain',
   },
 });

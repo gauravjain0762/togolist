@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React from 'react';
@@ -13,9 +14,10 @@ import {AppStyles} from '../../theme/appStyles';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {CustomHeader} from '../../component';
 import {IMAGES} from '../../assets/Images';
-import {commonFontStyle, wp} from '../../theme/fonts';
+import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import CardImage from '../../component/common/CardImage';
+import {SwipeListView} from 'react-native-swipe-list-view';
 
 const cards = [
   {
@@ -96,7 +98,43 @@ const CreatedForYou = () => {
           <Text style={styles.azText}>A-Z</Text>
         </Text>
       </View>
-      <FlatList
+      <SwipeListView
+        data={cards}
+        renderItem={(data, rowMap) => {
+          return (
+            <View style={styles.rowFront}>
+              <CardImage
+                onCardPress={() => {
+                  // navigateTo(SCREENS.CreatedForYou);
+                }}
+                title={data?.item?.title}
+                Togolist
+                Worldwide
+                Lists
+                listCount={data?.item?.lists}
+              />
+            </View>
+          );
+        }}
+        disableRightSwipe
+        swipeToOpenPercent={30}
+        rightOpenValue={-150}
+        renderHiddenItem
+        renderHiddenItem={(data, rowMap) => (
+          <View style={styles.rowBack}>
+            <TouchableOpacity style={styles.backButton}>
+              <Image source={IMAGES.restore} style={styles.restore} />
+              <Text style={styles.backText}>Restore</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.backButton, {marginTop: hp(4)}]}>
+              <Image source={IMAGES.remove} style={styles.remove} />
+              <Text style={styles.backText}>Delete</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        leftOpenValue={75}
+      />
+      {/* <FlatList
         data={cards}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingHorizontal: 20}}
@@ -114,7 +152,7 @@ const CreatedForYou = () => {
             />
           );
         }}
-      />
+      /> */}
       <View style={{height: 20}} />
     </SafeAreaView>
   );
@@ -182,5 +220,43 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.black,
     marginLeft: 8,
+  },
+
+  rowFront: {
+    overflow: 'hidden',
+    borderRadius: 10,
+    marginHorizontal: 20,
+  },
+
+  rowBack: {
+    alignItems: 'center',
+    backgroundColor: colors._BD2332,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    borderRadius: 30,
+    paddingHorizontal: hp(28),
+    gap: wp(30),
+    overflow: 'hidden',
+    marginTop: 12,
+    marginHorizontal: 20,
+  },
+  backButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: hp(6),
+  },
+  backText: {
+    ...commonFontStyle(500, 10, colors.white),
+  },
+  restore: {
+    width: wp(23),
+    height: wp(23),
+    resizeMode: 'contain',
+  },
+  remove: {
+    width: wp(18),
+    height: wp(18),
+    resizeMode: 'contain',
   },
 });

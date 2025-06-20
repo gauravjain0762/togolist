@@ -2,6 +2,7 @@ import {
   FlatList,
   Image,
   ImageBackground,
+  Platform,
   RefreshControl,
   ScrollView,
   Share,
@@ -49,6 +50,9 @@ const TripHome = (props: Props) => {
   const [short1, setshort1] = useState(false);
   const [short2, setshort2] = useState(false);
   const [options, setOptions] = useState(false);
+  const [showTogolistPro, setShowTogolistPro] = useState(true);
+  const [showTogolistPro1, setShowTogolistPro1] = useState(true);
+  const [showTogolistPro2, setShowTogolistPro2] = useState(true);
 
   const tabs = [
     {
@@ -234,7 +238,7 @@ const TripHome = (props: Props) => {
               />
             </TouchableOpacity> */}
             <SwipeListView
-              ItemSeparatorComponent={() => <View style={{height: hp(12)}} />}
+              ItemSeparatorComponent={() => <View style={{height: Platform.OS == 'ios' ?hp(12): 0}} />}
               data={[
                 {title: 'Start Planning...', location: 'New Destination'},
                 {title: 'Canada Experience', location: 'Toronto, Canada'},
@@ -297,7 +301,18 @@ const TripHome = (props: Props) => {
                 <Text style={styles.label}>{'Archive'}</Text>
               </View>
             </View>
-            <TogolistPro cardStyle={{marginTop: 8, marginBottom: 9}} />
+            {/* <TogolistPro cardStyle={{marginTop: 8, marginBottom: 9}} /> */}
+
+            {showTogolistPro ? (
+              <TogolistPro
+                cardStyle={{marginTop: 8, marginBottom: 9}}
+                onClosePress={() => {
+                  setShowTogolistPro(false);
+                }}
+              />
+            ) : (
+              <View style={{marginBottom: 9}} />
+            )}
             <CalendarCard />
           </View>
         )}
@@ -359,15 +374,43 @@ const TripHome = (props: Props) => {
                 navigateTo(SCREENS.BucketListScreen);
               }}
             />
-            <TripCardBottomText
-              title={'Peru Explorations'}
-              location={'Peru, South Ameria'}
-              showDay={false}
-              dayValue={0}
-              containerStyle={{marginTop: 8}}
-              onPress={() => {
-                navigateTo(SCREENS.BucketListScreen);
-              }}
+
+            <SwipeListView
+              // ItemSeparatorComponent={() => <View style={{height: hp(12)}} />}
+              data={[
+                {title: 'Start Planning...', location: 'New Destination'},
+              ]}
+              renderItem={({item, index}) => (
+                <View style={styles.rowFront}>
+                  <TripCardBottomText
+                    title={'Peru Explorations'}
+                    location={'Peru, South Ameria'}
+                    showDay={false}
+                    dayValue={0}
+                    containerStyle={{marginTop: 8}}
+                    onPress={() => {
+                      navigateTo(SCREENS.BucketListScreen);
+                    }}
+                  />
+                </View>
+              )}
+              disableRightSwipe
+              swipeToOpenPercent={30}
+              rightOpenValue={-150}
+              renderHiddenItem={(data, rowMap) => (
+                <View style={[styles.rowBack,{marginTop: 8}]}>
+                  <TouchableOpacity style={styles.backButton}>
+                    <Image source={IMAGES.restore} style={styles.restore} />
+                    <Text style={styles.backText}>Restore</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.backButton, {marginTop: hp(4)}]}>
+                    <Image source={IMAGES.remove} style={styles.remove} />
+                    <Text style={styles.backText}>Delete</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+              leftOpenValue={75}
             />
 
             <View style={styles.optioncontainer}>
@@ -392,7 +435,16 @@ const TripHome = (props: Props) => {
               </View>
             </View>
 
-            <TogolistPro cardStyle={{marginTop: 8}} />
+            {showTogolistPro1 ? (
+              <TogolistPro
+                cardStyle={{marginTop: 8}}
+                onClosePress={() => {
+                  setShowTogolistPro1(false);
+                }}
+              />
+            ) : (
+              <View style={{marginBottom: 9}} />
+            )}
           </>
         )}
 
@@ -411,8 +463,63 @@ const TripHome = (props: Props) => {
         )}
         {activeTab == 'tab4' && (
           <>
-            <TogolistPro cardStyle={{marginTop: 8, marginBottom: 9}} />
-            <FlatList
+            {showTogolistPro2 ? (
+              <TogolistPro
+                cardStyle={{marginTop: 8, marginBottom: 9}}
+                onClosePress={() => {
+                  setShowTogolistPro2(false);
+                }}
+              />
+            ) : (
+              <View style={{marginBottom: 9}} />
+            )}
+             <SwipeListView
+              data={[1, 2, 3]}
+              renderItem={({item, index}) => (
+                <View style={styles.rowFront}>
+                 <TripCardBottomText
+                    title={'Canada Experience'}
+                    location={'Toronto, Canada'}
+                    showDay={false}
+                    dayValue={0}
+                    showDayTime={'Sept 2024'}
+                    containerStyle={{marginTop: 8}}
+                    onPress={() => {
+                      navigateTo(SCREENS.PastTripDetails);
+                    }}
+                  />
+                </View>
+              )}
+              disableRightSwipe
+              swipeToOpenPercent={30}
+              rightOpenValue={-150}
+              renderHiddenItem={(data, rowMap) => (
+                <View style={[styles.rowBack,{marginTop: 8}]}>
+                  <TouchableOpacity style={styles.backButton}>
+                    <Image source={IMAGES.restore} style={styles.restore} />
+                    <Text style={styles.backText}>Restore</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.backButton, {marginTop: hp(4)}]}>
+                    <Image source={IMAGES.remove} style={styles.remove} />
+                    <Text style={styles.backText}>Delete</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+               ListFooterComponent={() => {
+                return (
+                  <View style={{marginTop: hp(8)}}>
+                    <CardImageText
+                      subText={
+                        'No past trips yet. Time to start making memories!'
+                      }
+                    />
+                  </View>
+                );
+              }}
+              leftOpenValue={75}
+            />
+            {/* <FlatList
               data={[1, 2, 3]}
               contentContainerStyle={{marginBottom: hp(8)}}
               renderItem={() => {
@@ -441,7 +548,7 @@ const TripHome = (props: Props) => {
                   </View>
                 );
               }}
-            />
+            /> */}
           </>
         )}
       </ScrollView>
@@ -644,7 +751,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    borderRadius: 20,
+    borderRadius: 30,
     paddingHorizontal: hp(28),
     gap: wp(30),
     overflow: 'hidden',

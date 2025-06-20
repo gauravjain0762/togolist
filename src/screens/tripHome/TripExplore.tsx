@@ -2,6 +2,7 @@ import {
   FlatList,
   Image,
   ImageBackground,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -206,6 +207,7 @@ const TripExplore = () => {
         children={
           <View style={{paddingVertical: hp(28)}}>
             <DiscoverNewSpotsCard
+             imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0: 16}}
               onPressAdd={() => handlePresentAddlistPress()}
             />
           </View>
@@ -219,6 +221,7 @@ const TripExplore = () => {
           <View>
             <DiscoverNewSpotsCard
               showInfo={false}
+               imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0: 16}}
               showRating={false}
               isShowOptions={false}
             />

@@ -25,6 +25,7 @@ import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {API} from '../../utils/apiConstant';
+import {SwipeListView} from 'react-native-swipe-list-view';
 
 const cards = [
   {
@@ -137,7 +138,48 @@ const Shared = () => {
           </View>
           {select == 'List View' && (
             <>
-              <FlatList
+              <SwipeListView
+                data={cards}
+                   ItemSeparatorComponent={() => (
+                  <View style={styles.liastseparator} />
+                )}
+                renderItem={(data, rowMap) => {
+                  return (
+                    <View style={styles.rowFront}>
+                      <SharedCard
+                        onCardPress={() => {
+                          data?.item?.onPress && data?.item?.onPress();
+                        }}
+                        title={data?.item?.title}
+                        likeCount={data?.item?.lists}
+                        account
+                        address
+                        place
+                        listCount={data?.item?.lists}
+                      />
+                    </View>
+                  );
+                }}
+                disableRightSwipe
+                swipeToOpenPercent={30}
+                rightOpenValue={-150}
+                renderHiddenItem
+                renderHiddenItem={(data, rowMap) => (
+                  <View style={styles.rowBack}>
+                    <TouchableOpacity style={styles.backButton}>
+                      <Image source={IMAGES.restore} style={styles.restore} />
+                      <Text style={styles.backText}>Restore</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.backButton, {marginTop: hp(4)}]}>
+                      <Image source={IMAGES.remove} style={styles.remove} />
+                      <Text style={styles.backText}>Delete</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+                leftOpenValue={75}
+              />
+              {/* <FlatList
                 data={cards}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.Listcontainer}
@@ -159,7 +201,7 @@ const Shared = () => {
                     />
                   );
                 }}
-              />
+              /> */}
               <Button
                 leftImg={IMAGES.addlist}
                 type="outline"
@@ -285,12 +327,54 @@ const styles = StyleSheet.create({
     marginVertical: 12,
     ...commonFontStyle(600, 15, '#999999'),
   },
-  Listcontainer: {},
+  Listcontainer: {
+    paddingHorizontal: 20,
+  },
   liastseparator: {
     height: hp(8),
   },
   btn: {
     marginVertical: hp(16),
     paddingVertical: hp(12),
+    marginHorizontal: 20,
+  },
+
+
+   rowFront: {
+    overflow: 'hidden',
+    borderRadius: 10,
+    marginHorizontal: 20,
+  },
+
+  rowBack: {
+    alignItems: 'center',
+    backgroundColor: colors._BD2332,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    borderRadius: 30,
+    paddingHorizontal: hp(28),
+    gap: wp(30),
+    overflow: 'hidden',
+    // marginTop: 12,
+    marginHorizontal: 20,
+  },
+  backButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: hp(6),
+  },
+  backText: {
+    ...commonFontStyle(500, 10, colors.white),
+  },
+  restore: {
+    width: wp(23),
+    height: wp(23),
+    resizeMode: 'contain',
+  },
+  remove: {
+    width: wp(18),
+    height: wp(18),
+    resizeMode: 'contain',
   },
 });

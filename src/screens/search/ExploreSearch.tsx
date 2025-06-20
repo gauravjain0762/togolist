@@ -1,5 +1,6 @@
 import {
   FlatList,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -185,7 +186,8 @@ const ExploreSearch = () => {
                     showsVerticalScrollIndicator={false}
                     nestedScrollEnabled
                     keyExtractor={(_, index) => index.toString()}
-                    renderItem={({item}) => <DiscoverNewSpotsCard {...item} />}
+                    
+                    renderItem={({item}) => <DiscoverNewSpotsCard {...item}  imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0: 16}} />}
                     contentContainerStyle={{paddingBottom: hp(16), gap: hp(8)}}
                   />
                 )}

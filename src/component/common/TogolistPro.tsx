@@ -16,10 +16,12 @@ type button = {
   cardStyle?: ViewStyle;
 };
 
-const TogolistPro: FC<button> = ({cardStyle}) => {
+const TogolistPro: FC<button> = ({cardStyle,onClosePress}:any) => {
   return (
     <ImageBackground source={IMAGES.bg2} style={[styles.card, cardStyle]}>
-      <TouchableOpacity style={styles.closeIcon}>
+      <TouchableOpacity onPress={()=>{
+        onClosePress && onClosePress()
+      }} style={styles.closeIcon}>
         <Text style={{fontSize: 16, color: '#f9a8b7'}}>✕</Text>
       </TouchableOpacity>
 

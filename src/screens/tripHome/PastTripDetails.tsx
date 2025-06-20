@@ -69,6 +69,7 @@ const reference = [
 const PastTripDetails = () => {
   const [privacy, setPrivacy] = useState<'public' | 'private'>('public');
   const {params} = useRoute();
+  const [showTogolistPro, setShowTogolistPro] = useState(true);
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const handlePresentModalPress = useCallback(() => {
@@ -129,7 +130,15 @@ const PastTripDetails = () => {
               <Text style={styles.time}>{'May 11'}</Text>
             </View>
           </ImageBackground>
-          <TogolistPro cardStyle={{marginBottom: 18}} />
+          {showTogolistPro ? (
+                      <TogolistPro
+                        cardStyle={{marginBottom: 18}}
+                        onClosePress={() => {
+                          setShowTogolistPro(false);
+                        }}
+                      />
+                    ):  <View style={{marginBottom: 18}} />}
+          
           <LinearView containerStyle={styles.notificationRow}>
             <Text style={styles.notificationtitle}>{'Share trip '}</Text>
             <TouchableOpacity

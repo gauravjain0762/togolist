@@ -24,6 +24,8 @@ const HeaderTextIcon: FC<button> = ({
   headerStyle,
   showDown = true,
   titleStyle,
+  onPress,
+  show,
 }: any) => {
   return (
     <View style={[styles.headerView, headerStyle]}>
@@ -37,7 +39,12 @@ const HeaderTextIcon: FC<button> = ({
         <Text style={[commonFontStyle(700, 20, colors.black), titleStyle]}>
           {title}
         </Text>
-        {showDown && <Image source={IMAGES.down} style={styles.downIcon} />}
+        {showDown && (
+          <Image
+            source={IMAGES.down}
+            style={[styles.downIcon, {transform: [{rotate: !show ? "0deg" : '180deg'}]}]}
+          />
+        )}
       </TouchableOpacity>
       {showAddIcon && (
         <TouchableOpacity onPress={onAddPress}>

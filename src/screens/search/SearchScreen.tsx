@@ -3,6 +3,7 @@ import {
   FlatList,
   Image,
   ImageBackground,
+  Platform,
   RefreshControl,
   ScrollView,
   Share,
@@ -308,7 +309,9 @@ const SearchScreen = (props: Props) => {
                 justifyContent: 'space-between',
                 paddingBottom: hp(16),
               }}
-              renderItem={({item}) => <ExploreCard {...item} />}
+              renderItem={({item}) => <ExploreCard {...item} onPress={()=>{
+                navigateTo(SCREENS.Shared)
+              }} />}
             />
           )}
           {activeTab == 'location' && (
@@ -351,12 +354,12 @@ const SearchScreen = (props: Props) => {
               {select == 'List View' && (
                 <>
                   <FlatList
-                    data={[1, 2]}
+                    data={[1,2]}
                     showsVerticalScrollIndicator={false}
                     nestedScrollEnabled
                     keyExtractor={(_, index) => index.toString()}
-                    renderItem={({item}) => <DiscoverNewSpotsCard {...item} />}
-                    contentContainerStyle={{paddingBottom: hp(16), gap: hp(8)}}
+                    renderItem={({item}) => <DiscoverNewSpotsCard {...item}  imageStyle={{marginHorizontal:  Platform.OS == 'ios' ? 0: 16}} />}
+                    contentContainerStyle={{paddingBottom: hp(16), gap: hp(8),paddingHorizontal:16}}
                   />
                 </>
               )}
@@ -391,10 +394,15 @@ const SearchScreen = (props: Props) => {
                   <View style={styles.Eventrow}>
                     <TouchableOpacity style={styles.card1}>
                       <Image source={IMAGES.canlder} style={styles.icon1} />
-                      <Text style={styles.cardText}>Event Dates</Text>
+                      <Text style={styles.cardText}>Start Date</Text>
                     </TouchableOpacity>
+                      <TouchableOpacity style={styles.card1}>
+                      <Image source={IMAGES.canlder} style={styles.icon1} />
+                      <Text style={styles.cardText}>End Date</Text>
+                    </TouchableOpacity>
+                    
                     <TouchableOpacity style={styles.BGcard}>
-                      <Image source={IMAGES.clock} style={styles.icon} />
+                      <Image source={IMAGES.clock} style={styles.icon1} />
                       <Text style={styles.cardText}>Length</Text>
                     </TouchableOpacity>
                   </View>
@@ -453,7 +461,9 @@ const SearchScreen = (props: Props) => {
                   marginBottom: 16,
                 }}
                 style={{marginTop: 10}}
-                renderItem={({item}) => <TravelCardLock {...item} />}
+                renderItem={({item}) => <TravelCardLock {...item}  onPress={()=>{
+                  navigateTo(SCREENS.Shared)
+                }}/>}
               />
 
               <View style={styles.headerrow}>
@@ -466,7 +476,7 @@ const SearchScreen = (props: Props) => {
                 showsVerticalScrollIndicator={false}
                 nestedScrollEnabled
                 keyExtractor={(_, index) => index.toString()}
-                renderItem={({item}) => <DiscoverNewSpotsCard {...item} />}
+                renderItem={({item}) => <DiscoverNewSpotsCard {...item}  imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0: 16}} />}
                 contentContainerStyle={{paddingBottom: hp(16), gap: hp(8)}}
               />
             </View>
@@ -480,6 +490,7 @@ const SearchScreen = (props: Props) => {
           <View style={{paddingVertical: hp(28)}}>
             <DiscoverNewSpotsCard
               onPressAdd={() => handlePresentAddlistPress()}
+               imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0: 16}}
             />
           </View>
         }
@@ -494,6 +505,7 @@ const SearchScreen = (props: Props) => {
               showInfo={false}
               showRating={false}
               isShowOptions={false}
+               imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0: 16}}
             />
             <View style={styles.optionContainer}>
               <View style={styles.row}>
@@ -758,14 +770,14 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   icon1: {
-    height: 22,
-    width: 22,
+    height: 16,
+    width: 16,
     resizeMode: 'contain',
     marginRight: 5,
     tintColor: '#3C3C4399',
   },
   cardText: {
-    ...commonFontStyle(500, 16, '#3C3C4399'),
+    ...commonFontStyle(500, 14, '#3C3C4399'),
   },
   card1: {
     backgroundColor: colors.white,
@@ -780,7 +792,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
-    flex: 0.7,
+    flex: 0.5,
     marginRight: 10,
   },
   BGcard: {
@@ -796,7 +808,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
-    flex: 0.3,
+    flex: 0.4,
   },
   Eventrow: {
     flexDirection: 'row',

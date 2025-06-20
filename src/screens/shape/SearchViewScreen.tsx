@@ -2,6 +2,7 @@ import {
   FlatList,
   Image,
   ImageBackground,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -218,7 +219,7 @@ const SearchViewScreen = () => {
                   renderItem={({item}) => (
                     <DiscoverNewSpotsCard
                       {...item}
-                      imageStyle={{marginHorizontal: 16}}
+                      imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0: 16}}
                       onPressAdd={() => {
                         setSelect(true);
                         handlePresentAddlistPress();
@@ -255,6 +256,7 @@ const SearchViewScreen = () => {
             children={
               <View style={{paddingVertical: hp(8)}}>
                 <DiscoverNewSpotsCard
+                 imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0: 16}}
                   onPressAdd={() => {
                     setSelect(false);
                     handlePresentAddlistPress();
@@ -277,6 +279,7 @@ const SearchViewScreen = () => {
               showInfo={false}
               showRating={false}
               isShowOptions={false}
+               imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0: 16}}
             />
             <View style={styles.optionContainer}>
               <View style={styles.row}>

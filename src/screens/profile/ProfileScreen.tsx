@@ -34,6 +34,7 @@ import CardImageBtn from '../../component/common/CardImageBtn';
 import Calendar from '../../component/common/Calendar';
 import TravelCard from '../../component/common/TravelCard';
 import TravelCardLock from '../../component/common/TravelCardLock';
+import { SwipeListView } from 'react-native-swipe-list-view';
 
 type Props = {};
 
@@ -121,6 +122,15 @@ const ProfileScreen = (props: Props) => {
   const [selectedTab, setSelectedTab] = useState('Lists');
   const [searchShow, setSearchShow] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('Favorites');
+  const [showTogolistPro, setShowTogolistPro] = useState(true);
+  const [showTogolistPro1, setShowTogolistPro1] = useState(true);
+
+  const [showPersonal, setShowPersonal] = useState(true);
+  const [showCollections, setShowCollections] = useState(true);
+  const [showCalendar, setShowCalendar] = useState(true);
+  const [showSavedCollections, setShowSavedCollections] = useState(true);
+  const [showUpcoming, setShowUpcoming] = useState(true);
+  const [showPast, setShowPast] = useState(true);
 
   const categories = [
     {
@@ -328,90 +338,181 @@ const ProfileScreen = (props: Props) => {
 
         {selectedTab == 'Lists' && (
           <>
-            <HeaderTextIcon title={'Personal Lists'} />
-            <ScrollView
-              showsHorizontalScrollIndicator={false}
-              horizontal
-              contentContainerStyle={styles.categoryRow}>
-              {categories.map(category => {
-                return (
-                  <LinearView>
-                    <TouchableOpacity
-                      key={category.key}
-                      onPress={() => (
-                        setSelectedCategory(category.key),
-                        category?.onPress && category?.onPress()
-                      )}
-                      style={[
-                        styles.categoryButton,
-                        styles.categoryButtonActive,
-                      ]}>
-                      {category.icon}
-                      <Text
-                        style={[
-                          commonFontStyle(500, 14, colors.black),
-                          {marginLeft: 6},
-                        ]}>
-                        {category.key}
-                      </Text>
-                    </TouchableOpacity>
-                  </LinearView>
-                );
-              })}
-            </ScrollView>
-            <CardImage
-              onCardPress={() => {
-                navigateTo(SCREENS.CreatedForYou);
+            <HeaderTextIcon
+              title={'Personal Lists'}
+              show={showPersonal}
+              onDownPress={() => {
+                setShowPersonal(!showPersonal);
               }}
-              title={'For You'}
-              Togolist
-              Worldwide
             />
-            <HeaderTextIcon title={'Collections'} showAddIcon={true} />
-
-            <FlatList
-              data={mockData}
-              numColumns={2}
-              keyExtractor={(_, index) => index.toString()}
-              columnWrapperStyle={{
-                justifyContent: 'space-between',
-                marginBottom: 16,
+            {showPersonal && (
+              <>
+                <ScrollView
+                  showsHorizontalScrollIndicator={false}
+                  horizontal
+                  contentContainerStyle={styles.categoryRow}>
+                  {categories.map(category => {
+                    return (
+                      <LinearView>
+                        <TouchableOpacity
+                          key={category.key}
+                          onPress={() => (
+                            setSelectedCategory(category.key),
+                            category?.onPress && category?.onPress()
+                          )}
+                          style={[
+                            styles.categoryButton,
+                            styles.categoryButtonActive,
+                          ]}>
+                          {category.icon}
+                          <Text
+                            style={[
+                              commonFontStyle(500, 14, colors.black),
+                              {marginLeft: 6},
+                            ]}>
+                            {category.key}
+                          </Text>
+                        </TouchableOpacity>
+                      </LinearView>
+                    );
+                  })}
+                </ScrollView>
+                <SwipeListView
+                  data={[1]}
+                  ItemSeparatorComponent={() => (
+                    <View style={{height: hp(12)}} />
+                  )}
+                  renderItem={(data, rowMap) => (
+                    <View style={styles.rowFront}>
+                      <CardImage
+                        onCardPress={() => {
+                          navigateTo(SCREENS.CreatedForYou);
+                        }}
+                        title={'For You'}
+                        Togolist
+                        Worldwide
+                      />
+                    </View>
+                  )}
+                  disableRightSwipe
+                  swipeToOpenPercent={30}
+                  rightOpenValue={-150}
+                  
+                  renderHiddenItem={(data, rowMap) => (
+                    <View style={styles.rowBack}>
+                      <TouchableOpacity style={styles.backButton}>
+                        <Image source={IMAGES.restore} style={styles.restore} />
+                        <Text style={styles.backText}>Restore</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={[styles.backButton, {marginTop: hp(4)}]}>
+                        <Image source={IMAGES.remove} style={styles.remove} />
+                        <Text style={styles.backText}>Delete</Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                  leftOpenValue={75}
+                />
+              </>
+            )}
+            <HeaderTextIcon
+              title={'Collections'}
+              showAddIcon={true}
+              show={showCollections}
+              onDownPress={() => {
+                setShowCollections(!showCollections);
               }}
-              style={{marginTop: 10}}
-              renderItem={({item}) => <TravelCard {...item} />}
             />
 
-            <CardImageText
-              title={'No collections yet!'}
-              subText={'Start saving places to create your \nfirst collection.'}
-            />
-            <TogolistPro />
+            {showCollections && (
+              <>
+                <FlatList
+                  data={mockData}
+                  numColumns={2}
+                  keyExtractor={(_, index) => index.toString()}
+                  columnWrapperStyle={{
+                    justifyContent: 'space-between',
+                    marginBottom: 16,
+                  }}
+                  style={{marginTop: 10}}
+                  renderItem={({item}) => (
+                    <TravelCard
+                      {...item}
+                      onPress={() => {
+                        navigateTo(SCREENS.Shared);
+                      }}
+                    />
+                  )}
+                />
+                <CardImageText
+                  title={'No collections yet!'}
+                  subText={
+                    'Start saving places to create your \nfirst collection.'
+                  }
+                />
+              </>
+            )}
+
+            {showTogolistPro && (
+              <TogolistPro
+                onClosePress={() => {
+                  setShowTogolistPro(false);
+                }}
+              />
+            )}
           </>
         )}
         {selectedTab == 'Saved' && (
           <>
-            <TogolistPro />
+            {showTogolistPro1 && (
+              <TogolistPro
+                onClosePress={() => {
+                  setShowTogolistPro1(false);
+                }}
+                cardStyle={{marginBottom: 0}}
+              />
+            )}
 
-            <View style={styles.headerView}>
+            {/* <View style={styles.headerView}>
               <Text style={[commonFontStyle(700, 20, colors.black)]}>
                 Saved Collections
               </Text>
               <Image source={IMAGES.down} style={styles.downIcon} />
-            </View>
+            </View> */}
 
-            <CardBottomText title={'Explore Collections'} />
-
-            <FlatList
-              data={mockData}
-              numColumns={2}
-              keyExtractor={(_, index) => index.toString()}
-              columnWrapperStyle={{
-                justifyContent: 'space-between',
-                marginBottom: 16,
+            <HeaderTextIcon
+              title={'Saved Collections'}
+              showAddIcon={false}
+              show={showSavedCollections}
+              onDownPress={() => {
+                setShowSavedCollections(!showSavedCollections);
               }}
-              style={{marginTop: 10}}
-              renderItem={({item}) => <TravelCard {...item} />}
             />
+
+            {showSavedCollections && (
+              <>
+                <CardBottomText title={'Explore Collections'} />
+
+                <FlatList
+                  data={mockData}
+                  numColumns={2}
+                  keyExtractor={(_, index) => index.toString()}
+                  columnWrapperStyle={{
+                    justifyContent: 'space-between',
+                    marginBottom: 16,
+                  }}
+                  style={{marginTop: 10}}
+                  renderItem={({item}) => (
+                    <TravelCard
+                      {...item}
+                      onPress={() => {
+                        navigateTo(SCREENS.Shared);
+                      }}
+                    />
+                  )}
+                />
+              </>
+            )}
           </>
         )}
         {selectedTab == 'Listings' && (
@@ -430,42 +531,83 @@ const ProfileScreen = (props: Props) => {
 
         {selectedTab == 'Going' && (
           <>
-            <HeaderTextIcon title={'Calendar View'} />
-            <View style={{flex: 1, justifyContent: 'center'}}>
-              <Calendar />
-            </View>
-            <HeaderTextIcon title={'Upcoming '} />
-            <CardBottomText title={'Start Planning...'} />
-            <FlatList
-              data={events}
-              numColumns={2}
-              keyExtractor={(_, index) => index.toString()}
-              columnWrapperStyle={{
-                justifyContent: 'space-between',
-                marginBottom: 16,
+            <HeaderTextIcon
+              title={'Calendar View'}
+              show={showCalendar}
+              onDownPress={() => {
+                setShowCalendar(!showCalendar);
               }}
-              style={{marginTop: 10}}
-              renderItem={({item}) => <TravelCardLock {...item} />}
             />
-            <HeaderTextIcon title={'Past '} />
-            <CardImageText
-              // title={'No collections yet!'}
-              subText={
-                'Nothing yet! Find activities or start planning trips to view your goings history!'
-              }
-            />
-
-            <FlatList
-              data={events}
-              numColumns={2}
-              keyExtractor={(_, index) => index.toString()}
-              columnWrapperStyle={{
-                justifyContent: 'space-between',
-                marginBottom: 16,
+            {showCalendar && (
+              <View style={{flex: 1, justifyContent: 'center'}}>
+                <Calendar />
+              </View>
+            )}
+            <HeaderTextIcon
+              title={'Upcoming '}
+              show={showUpcoming}
+              onDownPress={() => {
+                setShowUpcoming(!showUpcoming);
               }}
-              style={{marginTop: 10}}
-              renderItem={({item}) => <TravelCardLock {...item} />}
             />
+            {showUpcoming && (
+              <>
+                <CardBottomText title={'Start Planning...'} />
+                <FlatList
+                  data={events}
+                  numColumns={2}
+                  keyExtractor={(_, index) => index.toString()}
+                  columnWrapperStyle={{
+                    justifyContent: 'space-between',
+                    marginBottom: 16,
+                  }}
+                  style={{marginTop: 10}}
+                  renderItem={({item}) => (
+                    <TravelCardLock
+                      {...item}
+                      onPress={() => {
+                        navigateTo(SCREENS.Shared);
+                      }}
+                    />
+                  )}
+                />
+              </>
+            )}
+            <HeaderTextIcon
+              title={'Past '}
+              show={showPast}
+              onDownPress={() => {
+                setShowPast(!showPast);
+              }}
+            />
+            {showPast && (
+              <>
+                <CardImageText
+                  // title={'No collections yet!'}
+                  subText={
+                    'Nothing yet! Find activities or start planning trips to view your goings history!'
+                  }
+                />
+                <FlatList
+                  data={events}
+                  numColumns={2}
+                  keyExtractor={(_, index) => index.toString()}
+                  columnWrapperStyle={{
+                    justifyContent: 'space-between',
+                    marginBottom: 16,
+                  }}
+                  style={{marginTop: 10}}
+                  renderItem={({item}) => (
+                    <TravelCardLock
+                      {...item}
+                      onPress={() => {
+                        navigateTo(SCREENS.Shared);
+                      }}
+                    />
+                  )}
+                />
+              </>
+            )}
           </>
         )}
       </ScrollView>
@@ -673,5 +815,43 @@ const styles = StyleSheet.create({
   },
   tryProText: {
     ...commonFontStyle(600, 12, '#444444'),
+  },
+
+
+
+   rowFront: {
+    overflow: 'hidden',
+    borderRadius: 10,
+  },
+
+   rowBack: {
+    alignItems: 'center',
+    backgroundColor: colors._BD2332,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+      borderRadius: 30,
+    paddingHorizontal: hp(28),
+    gap: wp(30),
+    overflow: 'hidden',
+    marginTop: 12,
+  },
+  backButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: hp(6),
+  },
+  backText: {
+    ...commonFontStyle(500, 10, colors.white),
+  },
+  restore: {
+    width: wp(23),
+    height: wp(23),
+    resizeMode: 'contain',
+  },
+  remove: {
+    width: wp(18),
+    height: wp(18),
+    resizeMode: 'contain',
   },
 });
