@@ -34,6 +34,8 @@ export const IMAGES = {
   intro5: require('./image/info5.png'),
   back1: require('./icon/back1.png'),
   back2: require('./icon/back.png'),
+  menu1: require('./icon/menu1.png'),
+  map1: require('./icon/map1.png'),
 
   //create
   trip_bg: require('./icon/create/trip_bg.png'),

@@ -13,7 +13,8 @@ import React, {FC, memo} from 'react';
 import {colors} from '../../theme/colors';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {IMAGES} from '../../assets/Images';
-import { AppStyles } from '../../theme/appStyles';
+import {AppStyles} from '../../theme/appStyles';
+import { SharedElement } from 'react-navigation-shared-element';
 
 type card = {
   Togolist?: boolean;
@@ -42,7 +43,9 @@ const CardImage: FC<card> = ({
         source={IMAGES.bg1} // Replace with actual pyramid image URL
         style={[styles.container, BGStyle]}
         imageStyle={[styles.image, BgImgStyle]}>
-        <Text style={styles.title}>{title}</Text>
+        <SharedElement id={`item.${title}.city`}>
+          <Text style={styles.title}>{title}</Text>
+        </SharedElement>
 
         <View style={styles.bottomRow}>
           {Togolist && (
@@ -91,7 +94,7 @@ export default memo(CardImage);
 
 const styles = StyleSheet.create({
   container: {
-   height: 116,
+    height: 116,
     borderRadius: 18,
     overflow: 'hidden',
     justifyContent: 'space-between',

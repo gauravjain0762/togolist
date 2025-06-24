@@ -34,7 +34,7 @@ import CardImageBtn from '../../component/common/CardImageBtn';
 import Calendar from '../../component/common/Calendar';
 import TravelCard from '../../component/common/TravelCard';
 import TravelCardLock from '../../component/common/TravelCardLock';
-import { SwipeListView } from 'react-native-swipe-list-view';
+import {SwipeListView} from 'react-native-swipe-list-view';
 
 type Props = {};
 
@@ -377,7 +377,16 @@ const ProfileScreen = (props: Props) => {
                     );
                   })}
                 </ScrollView>
-                <SwipeListView
+                
+                <CardImage
+                  onCardPress={() => {
+                    navigateTo(SCREENS.CreatedForYou);
+                  }}
+                  title={'For You'}
+                  Togolist
+                  Worldwide
+                />
+                {/* <SwipeListView
                   data={[1]}
                   ItemSeparatorComponent={() => (
                     <View style={{height: hp(12)}} />
@@ -412,7 +421,7 @@ const ProfileScreen = (props: Props) => {
                     </View>
                   )}
                   leftOpenValue={75}
-                />
+                /> */}
               </>
             )}
             <HeaderTextIcon
@@ -817,20 +826,18 @@ const styles = StyleSheet.create({
     ...commonFontStyle(600, 12, '#444444'),
   },
 
-
-
-   rowFront: {
+  rowFront: {
     overflow: 'hidden',
     borderRadius: 10,
   },
 
-   rowBack: {
+  rowBack: {
     alignItems: 'center',
     backgroundColor: colors._BD2332,
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
-      borderRadius: 30,
+    borderRadius: 30,
     paddingHorizontal: hp(28),
     gap: wp(30),
     overflow: 'hidden',

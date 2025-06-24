@@ -705,7 +705,7 @@ const styles = StyleSheet.create({
     marginTop: 0,
   },
   bg: {
-    width: 'auto',
+     width: (SCREEN_WIDTH - 95) / 2,
     flex: 1,
   },
   socialImg: {

@@ -13,6 +13,7 @@ import {IMAGES} from '../../assets/Images';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {AppStyles} from '../../theme/appStyles';
+import {SharedElement} from 'react-native-shared-element';
 
 type card = {
   title: string;
@@ -23,6 +24,7 @@ type card = {
   location?: string;
   locationIcon?: boolean;
   locationStyle?: TextStyle;
+  id: any;
 };
 
 const PlacesCard: FC<card> = ({
@@ -34,20 +36,26 @@ const PlacesCard: FC<card> = ({
   location,
   locationIcon = false,
   locationStyle,
+  id,
 }) => {
   return (
     <TouchableOpacity onPress={onCardPress}>
+      <SharedElement id={`item.${id}.image`}>
       <ImageBackground
         source={IMAGES.bg1} // Replace with actual pyramid image URL
         style={[styles.container, BGStyle]}
         imageStyle={[styles.image, BgImgStyle]}>
         <View style={[{gap: wp(4)}]}>
-          <Text style={styles.title}>{title}</Text>
+          <SharedElement id={title}>
+            <Text style={styles.title}>{title}</Text>
+          </SharedElement>
           <View style={[AppStyles.row, {gap: wp(4)}]}>
             {locationIcon && (
               <Image source={IMAGES.wordWide} style={styles.pin} />
             )}
-            <Text style={[styles.location, locationStyle]}>{location}</Text>
+            <SharedElement id={location}>
+              <Text style={[styles.location, locationStyle]}>{location}</Text>
+            </SharedElement>
           </View>
         </View>
         <View style={[AppStyles.row, styles.footer]}>
@@ -58,6 +66,7 @@ const PlacesCard: FC<card> = ({
           </View>
         </View>
       </ImageBackground>
+      </SharedElement>
     </TouchableOpacity>
   );
 };

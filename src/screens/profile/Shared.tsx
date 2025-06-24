@@ -26,6 +26,7 @@ import {SCREENS} from '../../navigation/screenNames';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {API} from '../../utils/apiConstant';
 import {SwipeListView} from 'react-native-swipe-list-view';
+import {SharedElement} from 'react-native-shared-element';
 
 const cards = [
   {
@@ -82,7 +83,9 @@ const Shared = () => {
         showsVerticalScrollIndicator={false}>
         <View style={styles.containter}>
           <View style={styles.info}>
-            <Text style={styles.title}>{'North America'}</Text>
+            {/* <SharedElement id={`item.${title}.city`}> */}
+              <Text style={styles.title}>{'North America'}</Text>
+            {/* </SharedElement> */}
             <View style={styles.userinfo}>
               <Image source={IMAGES.avatar} style={styles.user} />
               <Text style={styles.username}>{'@ray'}</Text>
@@ -140,7 +143,7 @@ const Shared = () => {
             <>
               <SwipeListView
                 data={cards}
-                   ItemSeparatorComponent={() => (
+                ItemSeparatorComponent={() => (
                   <View style={styles.liastseparator} />
                 )}
                 renderItem={(data, rowMap) => {
@@ -339,8 +342,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
 
-
-   rowFront: {
+  rowFront: {
     overflow: 'hidden',
     borderRadius: 10,
     marginHorizontal: 20,

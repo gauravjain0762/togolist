@@ -98,7 +98,7 @@ const CreatedForYou = () => {
           <Text style={styles.azText}>A-Z</Text>
         </Text>
       </View>
-      <SwipeListView
+      {/* <SwipeListView
         data={cards}
         renderItem={(data, rowMap) => {
           return (
@@ -133,8 +133,8 @@ const CreatedForYou = () => {
           </View>
         )}
         leftOpenValue={75}
-      />
-      {/* <FlatList
+      /> */}
+      <FlatList
         data={cards}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingHorizontal: 20}}
@@ -152,7 +152,7 @@ const CreatedForYou = () => {
             />
           );
         }}
-      /> */}
+      />
       <View style={{height: 20}} />
     </SafeAreaView>
   );

@@ -28,6 +28,7 @@ import {
   GetCheckboxImage,
   LinearView,
   Loader,
+  OptionBar,
   SwipeList,
 } from '../../component';
 import {useGetDashboardQuery} from '../../api/dashboardApi';
@@ -53,6 +54,7 @@ const TripHome = (props: Props) => {
   const [showTogolistPro, setShowTogolistPro] = useState(true);
   const [showTogolistPro1, setShowTogolistPro1] = useState(true);
   const [showTogolistPro2, setShowTogolistPro2] = useState(true);
+  const [showCard, setShowCard] = useState(false);
 
   const tabs = [
     {
@@ -142,6 +144,7 @@ const TripHome = (props: Props) => {
           active={activeTab === 'tab1'}
           onPress={() => {
             setActiveTab('tab1');
+             setShowCard(false);
           }}
         />
         <NavItem
@@ -149,6 +152,7 @@ const TripHome = (props: Props) => {
           active={activeTab === 'tab2'}
           onPress={() => {
             setActiveTab('tab2');
+             setShowCard(false);
           }}
         />
         <NavItem
@@ -156,6 +160,7 @@ const TripHome = (props: Props) => {
           active={activeTab === 'tab3'}
           onPress={() => {
             setActiveTab('tab3');
+             setShowCard(false);
           }}
         />
         <NavItem
@@ -164,6 +169,7 @@ const TripHome = (props: Props) => {
           keyValue={true}
           onPress={() => {
             setActiveTab('tab4');
+             setShowCard(false);
           }}
         />
       </View>
@@ -237,8 +243,12 @@ const TripHome = (props: Props) => {
                 dayValue={0}
               />
             </TouchableOpacity> */}
+            {showCard && <OptionBar container={styles.optioncontainer} />}
+
             <SwipeListView
-              ItemSeparatorComponent={() => <View style={{height: Platform.OS == 'ios' ?hp(12): 0}} />}
+              ItemSeparatorComponent={() => (
+                <View style={{height: Platform.OS == 'ios' ? hp(12) : 8}} />
+              )}
               data={[
                 {title: 'Start Planning...', location: 'New Destination'},
                 {title: 'Canada Experience', location: 'Toronto, Canada'},
@@ -254,11 +264,11 @@ const TripHome = (props: Props) => {
                     BGImg={{borderRadius: 0}}
                     activeOpacity={1}
                     containerStyle={{borderRadius: 0}}
-                    onPress={() =>
+                    onPress={() => {
                       navigateTo(SCREENS.NewTrip, {
                         tag: `TripCard-${index?.toString()}`,
-                      })
-                    }
+                      });
+                    }}
                   />
                 </View>
               )}
@@ -278,30 +288,19 @@ const TripHome = (props: Props) => {
                   </TouchableOpacity>
                 </View>
               )}
+              onRowOpen={(rowKey, rowMap, toValue) => {
+                if (toValue < 0) {
+                  console.log('Swiped left');
+                  setShowCard(true);
+                } else {
+                  console.log('Swiped right');
+                }
+              }}
+              onRowClose={(rowKey, rowMap) => {
+                setShowCard(false);
+              }}
               leftOpenValue={75}
             />
-            <View style={styles.optioncontainer}>
-              <View style={styles.row1}>
-                <Image source={IMAGES.send} style={styles.Shareicon} />
-                <Text style={styles.label}>{'Share'}</Text>
-              </View>
-              <View style={styles.row1}>
-                <Image source={IMAGES.container} style={styles.Addicon} />
-                <Text style={styles.label}>{'Bucket List'}</Text>
-              </View>
-              <View style={styles.row1}>
-                <Image source={IMAGES.Itinerary} style={styles.Buildicon} />
-                <Text style={styles.label}>{'Build Itinerary'}</Text>
-              </View>
-              <View style={styles.row1}>
-                <Image
-                  source={IMAGES.archived}
-                  style={[styles.Archiveicon, {width: wp(26), height: wp(26)}]}
-                />
-                <Text style={styles.label}>{'Archive'}</Text>
-              </View>
-            </View>
-            {/* <TogolistPro cardStyle={{marginTop: 8, marginBottom: 9}} /> */}
 
             {showTogolistPro ? (
               <TogolistPro
@@ -375,11 +374,17 @@ const TripHome = (props: Props) => {
               }}
             />
 
+            {showCard && (
+              <OptionBar
+                container={[
+                  styles.optioncontainer,
+                  {marginTop: hp(8), marginBottom: 0},
+                ]}
+              />
+            )}
             <SwipeListView
               // ItemSeparatorComponent={() => <View style={{height: hp(12)}} />}
-              data={[
-                {title: 'Start Planning...', location: 'New Destination'},
-              ]}
+              data={[{title: 'Start Planning...', location: 'New Destination'}]}
               renderItem={({item, index}) => (
                 <View style={styles.rowFront}>
                   <TripCardBottomText
@@ -398,7 +403,7 @@ const TripHome = (props: Props) => {
               swipeToOpenPercent={30}
               rightOpenValue={-150}
               renderHiddenItem={(data, rowMap) => (
-                <View style={[styles.rowBack,{marginTop: 8}]}>
+                <View style={[styles.rowBack, {marginTop: 8}]}>
                   <TouchableOpacity style={styles.backButton}>
                     <Image source={IMAGES.restore} style={styles.restore} />
                     <Text style={styles.backText}>Restore</Text>
@@ -411,29 +416,18 @@ const TripHome = (props: Props) => {
                 </View>
               )}
               leftOpenValue={75}
+              onRowOpen={(rowKey, rowMap, toValue) => {
+                if (toValue < 0) {
+                  console.log('Swiped left');
+                  setShowCard(true);
+                } else {
+                  console.log('Swiped right');
+                }
+              }}
+              onRowClose={(rowKey, rowMap) => {
+                setShowCard(false);
+              }}
             />
-
-            <View style={styles.optioncontainer}>
-              <View style={styles.row1}>
-                <Image source={IMAGES.send} style={styles.Shareicon} />
-                <Text style={styles.label}>{'Share'}</Text>
-              </View>
-              <View style={styles.row1}>
-                <Image source={IMAGES.container} style={styles.Addicon} />
-                <Text style={styles.label}>{'Bucket List'}</Text>
-              </View>
-              <View style={styles.row1}>
-                <Image source={IMAGES.Itinerary} style={styles.Buildicon} />
-                <Text style={styles.label}>{'Build Itinerary'}</Text>
-              </View>
-              <View style={styles.row1}>
-                <Image
-                  source={IMAGES.archived}
-                  style={[styles.Archiveicon, {width: wp(26), height: wp(26)}]}
-                />
-                <Text style={styles.label}>{'Archive'}</Text>
-              </View>
-            </View>
 
             {showTogolistPro1 ? (
               <TogolistPro
@@ -473,11 +467,20 @@ const TripHome = (props: Props) => {
             ) : (
               <View style={{marginBottom: 9}} />
             )}
-             <SwipeListView
+            {showCard && (
+              <OptionBar
+                container={[
+                  styles.optioncontainer,
+                  {marginTop: hp(8), marginBottom: 0},
+                ]}
+              />
+            )}
+
+            <SwipeListView
               data={[1, 2, 3]}
               renderItem={({item, index}) => (
                 <View style={styles.rowFront}>
-                 <TripCardBottomText
+                  <TripCardBottomText
                     title={'Canada Experience'}
                     location={'Toronto, Canada'}
                     showDay={false}
@@ -494,7 +497,7 @@ const TripHome = (props: Props) => {
               swipeToOpenPercent={30}
               rightOpenValue={-150}
               renderHiddenItem={(data, rowMap) => (
-                <View style={[styles.rowBack,{marginTop: 8}]}>
+                <View style={[styles.rowBack, {marginTop: 8}]}>
                   <TouchableOpacity style={styles.backButton}>
                     <Image source={IMAGES.restore} style={styles.restore} />
                     <Text style={styles.backText}>Restore</Text>
@@ -506,7 +509,7 @@ const TripHome = (props: Props) => {
                   </TouchableOpacity>
                 </View>
               )}
-               ListFooterComponent={() => {
+              ListFooterComponent={() => {
                 return (
                   <View style={{marginTop: hp(8)}}>
                     <CardImageText
@@ -518,6 +521,17 @@ const TripHome = (props: Props) => {
                 );
               }}
               leftOpenValue={75}
+              onRowOpen={(rowKey, rowMap, toValue) => {
+                if (toValue < 0) {
+                  console.log('Swiped left');
+                  setShowCard(true);
+                } else {
+                  console.log('Swiped right');
+                }
+              }}
+              onRowClose={(rowKey, rowMap) => {
+                setShowCard(false);
+              }}
             />
             {/* <FlatList
               data={[1, 2, 3]}
@@ -775,15 +789,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   optioncontainer: {
-    backgroundColor: colors._BD2332,
-    borderRadius: 18,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingTop: hp(36),
-    paddingBottom: hp(22),
-    paddingHorizontal: wp(33),
-    marginTop: hp(12),
+    marginBottom: hp(8),
   },
   label: {
     ...commonFontStyle(500, 10, colors.white),

@@ -29,6 +29,7 @@ import {SwipeListView} from 'react-native-swipe-list-view';
 
 const cards = [
   {
+    id:1,
     title: 'Samuri Japanese Restaurant',
     location: '979 Lomas Santa Fe Dr, Solana Beach...',
     lists: 31,
@@ -36,18 +37,21 @@ const cards = [
     onPress: () => navigateTo(SCREENS.EventDetails),
   },
   {
+    id:2,
     title: 'Mt. Hood Timber Lodge',
     location: 'National park in California',
     lists: 23,
     image: 'https://source.unsplash.com/600x400/?unesco,heritage',
   },
   {
+    id:3,
     title: 'Samuri Japanese Restaurant',
     location: '979 Lomas Santa Fe Dr, Solana Beach...',
     lists: 6,
     image: 'https://source.unsplash.com/600x400/?london,big-ben',
   },
   {
+    id:4,
     title: 'Mt. Hood Timber Lodge',
     location: 'National park in California',
     lists: 11,
@@ -57,6 +61,7 @@ const cards = [
 
 const SharedListDetails = () => {
   const [select, setSelect] = useState('List View');
+  const [showCard, setShowCard] = useState(false);
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const handlePresentModalPress = useCallback(() => {
@@ -126,7 +131,7 @@ const SharedListDetails = () => {
               </Text>
             </TouchableOpacity>
           </View>
-          <OptionBar container={styles.optioncontainer} />
+          {showCard && <OptionBar container={styles.optioncontainer} />}
           <SwipeListView
             data={cards}
             ItemSeparatorComponent={() => (
@@ -138,8 +143,10 @@ const SharedListDetails = () => {
                 <View style={styles.rowFront}>
                   <PlacesCard
                     onCardPress={() => {
-                      data?.item?.onPress && data?.item?.onPress();
+                      // data?.item?.onPress && data?.item?.onPress();
+                      navigateTo(SCREENS.EventDetails,{item:data?.item})
                     }}
+                    id={data?.item?.id}
                     title={data?.item?.title}
                     location={data?.item?.location}
                     likeCount={data?.item.lists}
@@ -167,6 +174,17 @@ const SharedListDetails = () => {
               </View>
             )}
             leftOpenValue={75}
+            onRowOpen={(rowKey, rowMap, toValue) => {
+              if (toValue < 0) {
+                console.log('Swiped left');
+                setShowCard(true);
+              } else {
+                console.log('Swiped right');
+              }
+            }}
+            onRowClose={(rowKey, rowMap) => {
+              setShowCard(false);
+            }}
           />
           {/* <FlatList
             data={cards}

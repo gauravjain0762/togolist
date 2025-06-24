@@ -99,7 +99,11 @@ export default function TabNavigator() {
         name={SCREENS.NotificationScreen}
         component={NotificationScreen}
       />
-      <Tab.Screen name={SCREENS.ProfileScreen} component={ProfileScreen} />
+      <Tab.Screen 
+      name={SCREENS.ProfileScreen}
+       component={ProfileScreen} 
+        
+      />
     </Tab.Navigator>
   );
 }
