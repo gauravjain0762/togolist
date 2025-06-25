@@ -93,7 +93,7 @@ const FoodPlace = () => {
         backImg={IMAGES.back1}
         backIconStyle={styles.back}
         showSearch={false}
-        moreImg={IMAGES.more}
+        moreImg={IMAGES.more_icon}
         moreIconStyle={styles.more}
         headerStyle={styles.header}
       />

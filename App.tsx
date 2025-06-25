@@ -92,3 +92,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+
+
+//
+//  RNSharedElementTransitionManager.m
+//  react-native-shared-element
+//
+// - (dispatch_queue_t)methodQueue {
+//   return dispatch_get_main_queue();
+// }

@@ -39,7 +39,7 @@ const PlacesCard: FC<card> = ({
   id,
 }) => {
   return (
-    <TouchableOpacity onPress={onCardPress}>
+    <TouchableOpacity activeOpacity={1} onPress={onCardPress}>
       <SharedElement id={`item.${id}.image`}>
       <ImageBackground
         source={IMAGES.bg1} // Replace with actual pyramid image URL

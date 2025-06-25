@@ -14,7 +14,7 @@ import {colors} from '../../theme/colors';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {IMAGES} from '../../assets/Images';
 import {AppStyles} from '../../theme/appStyles';
-import { SharedElement } from 'react-navigation-shared-element';
+import {SharedElement} from 'react-native-shared-element';
 
 type card = {
   Togolist?: boolean;

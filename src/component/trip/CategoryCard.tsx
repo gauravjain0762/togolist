@@ -41,7 +41,7 @@ const CategoryCard: FC<card> = ({
   showAddList,
 }: any) => {
   return (
-    <TouchableOpacity onPress={onCardPress}>
+    <TouchableOpacity activeOpacity={1} onPress={onCardPress}>
       <ImageBackground
         source={IMAGES.bg1} // Replace with actual pyramid image URL
         style={[styles.container, BGStyle]}

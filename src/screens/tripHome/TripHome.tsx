@@ -144,7 +144,7 @@ const TripHome = (props: Props) => {
           active={activeTab === 'tab1'}
           onPress={() => {
             setActiveTab('tab1');
-             setShowCard(false);
+            setShowCard(false);
           }}
         />
         <NavItem
@@ -152,7 +152,7 @@ const TripHome = (props: Props) => {
           active={activeTab === 'tab2'}
           onPress={() => {
             setActiveTab('tab2');
-             setShowCard(false);
+            setShowCard(false);
           }}
         />
         <NavItem
@@ -160,7 +160,7 @@ const TripHome = (props: Props) => {
           active={activeTab === 'tab3'}
           onPress={() => {
             setActiveTab('tab3');
-             setShowCard(false);
+            setShowCard(false);
           }}
         />
         <NavItem
@@ -169,7 +169,7 @@ const TripHome = (props: Props) => {
           keyValue={true}
           onPress={() => {
             setActiveTab('tab4');
-             setShowCard(false);
+            setShowCard(false);
           }}
         />
       </View>
@@ -265,9 +265,11 @@ const TripHome = (props: Props) => {
                     activeOpacity={1}
                     containerStyle={{borderRadius: 0}}
                     onPress={() => {
-                      navigateTo(SCREENS.NewTrip, {
-                        tag: `TripCard-${index?.toString()}`,
-                      });
+                      navigateTo(SCREENS.TripsDetails);
+
+                      // navigateTo(SCREENS.NewTrip, {
+                      //   tag: `TripCard-${index?.toString()}`,
+                      // });
                     }}
                   />
                 </View>
@@ -389,6 +391,7 @@ const TripHome = (props: Props) => {
                 <View style={styles.rowFront}>
                   <TripCardBottomText
                     title={'Peru Explorations'}
+                    activeOpacity={1}
                     location={'Peru, South Ameria'}
                     showDay={false}
                     dayValue={0}
@@ -485,6 +488,7 @@ const TripHome = (props: Props) => {
                     location={'Toronto, Canada'}
                     showDay={false}
                     dayValue={0}
+                    activeOpacity={1}
                     showDayTime={'Sept 2024'}
                     containerStyle={{marginTop: 8}}
                     onPress={() => {

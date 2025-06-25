@@ -292,7 +292,7 @@ const ProfileScreen = (props: Props) => {
             <Text style={styles.userName}>Raymond Daily</Text>
             <Text style={styles.userSubText}>@raydaily</Text>
             <View style={styles.statsRow}>
-              <ListView subText={'Saves'} value={'122'} />
+              <ListView subText={'Followers'} value={'122'} />
               <ListView subText={'Saves'} value={'67'} />
               <ListView subText={'Listings'} value={'37K'} />
             </View>
