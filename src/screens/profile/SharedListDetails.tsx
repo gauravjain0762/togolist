@@ -144,7 +144,8 @@ const SharedListDetails = () => {
                   <PlacesCard
                     onCardPress={() => {
                       // data?.item?.onPress && data?.item?.onPress();
-                      navigateTo(SCREENS.EventDetails,{item:data?.item})
+                       navigateTo(SCREENS.EventDetails,{item:data?.item,data:cards})
+                      
                     }}
                     id={data?.item?.id}
                     title={data?.item?.title}

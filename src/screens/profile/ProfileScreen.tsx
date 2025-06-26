@@ -85,6 +85,7 @@ const mockData = [
 
 const events = [
   {
+    id:1,
     date: 'April 23',
     title: 'BBQ Festival',
     location: 'San Diego',
@@ -93,6 +94,7 @@ const events = [
     isPrivate: false,
   },
   {
+    id:2,
     date: 'May 2',
     title: 'Jazz Night',
     location: 'San Diego',
@@ -101,6 +103,7 @@ const events = [
     isPrivate: true,
   },
   {
+    id:3,
     date: 'May 10',
     title: 'Lafayette',
     location: 'San Diego',
@@ -109,6 +112,7 @@ const events = [
     isPrivate: false,
   },
   {
+    id:4,
     date: 'May 26',
     title: 'CRSSD',
     location: 'San Diego',
@@ -117,6 +121,27 @@ const events = [
     isPrivate: true,
   },
 ];
+
+
+const UpcommingEvents = [
+  {
+    id:1,
+    date: 'April 23',
+    title: 'Canada Expereince',
+    image: 'https://your-cdn.com/bbq.jpg',
+    isPrivate: false,
+  },
+  {
+     id:2,
+    date: 'May 2',
+    title: 'Europe Adventure',
+    image: 'https://your-cdn.com/jazz.jpg',
+    isPrivate: true,
+  },
+];
+
+
+
 
 const ProfileScreen = (props: Props) => {
   const [selectedTab, setSelectedTab] = useState('Lists');
@@ -563,7 +588,7 @@ const ProfileScreen = (props: Props) => {
               <>
                 <CardBottomText title={'Start Planning...'} />
                 <FlatList
-                  data={events}
+                  data={UpcommingEvents}
                   numColumns={2}
                   keyExtractor={(_, index) => index.toString()}
                   columnWrapperStyle={{
@@ -575,7 +600,7 @@ const ProfileScreen = (props: Props) => {
                     <TravelCardLock
                       {...item}
                       onPress={() => {
-                        navigateTo(SCREENS.Shared);
+                        navigateTo(SCREENS.UpcomingListDetails,{item:item});
                       }}
                     />
                   )}
@@ -610,7 +635,7 @@ const ProfileScreen = (props: Props) => {
                     <TravelCardLock
                       {...item}
                       onPress={() => {
-                        navigateTo(SCREENS.Shared);
+                         navigateTo(SCREENS.EventDetails,{item:item,data:events})
                       }}
                     />
                   )}

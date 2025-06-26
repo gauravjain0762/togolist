@@ -53,41 +53,42 @@ const reference = [
   },
 ];
 
-const cards = [
-  {
-    id: 1,
-    title: 'Samuri Japanese Restaurant',
-    location: '979 Lomas Santa Fe Dr, Solana Beach...',
-    lists: 31,
-    image: 'https://source.unsplash.com/600x400/?egypt,pyramids',
-    onPress: () => navigateTo(SCREENS.EventDetails),
-  },
-  {
-    id: 2,
-    title: 'Mt. Hood Timber Lodge',
-    location: 'National park in California',
-    lists: 23,
-    image: 'https://source.unsplash.com/600x400/?unesco,heritage',
-  },
-  {
-    id: 3,
-    title: 'Samuri Japanese Restaurant',
-    location: '979 Lomas Santa Fe Dr, Solana Beach...',
-    lists: 6,
-    image: 'https://source.unsplash.com/600x400/?london,big-ben',
-  },
-  {
-    id: 4,
-    title: 'Mt. Hood Timber Lodge',
-    location: 'National park in California',
-    lists: 11,
-    image: 'https://source.unsplash.com/600x400/?peru,mountains',
-  },
-];
+// const cards = [
+//   {
+//     id: 1,
+//     title: 'Samuri Japanese Restaurant',
+//     location: '979 Lomas Santa Fe Dr, Solana Beach...',
+//     lists: 31,
+//     image: 'https://source.unsplash.com/600x400/?egypt,pyramids',
+//     onPress: () => navigateTo(SCREENS.EventDetails),
+//   },
+//   {
+//     id: 2,
+//     title: 'Mt. Hood Timber Lodge',
+//     location: 'National park in California',
+//     lists: 23,
+//     image: 'https://source.unsplash.com/600x400/?unesco,heritage',
+//   },
+//   {
+//     id: 3,
+//     title: 'Samuri Japanese Restaurant',
+//     location: '979 Lomas Santa Fe Dr, Solana Beach...',
+//     lists: 6,
+//     image: 'https://source.unsplash.com/600x400/?london,big-ben',
+//   },
+//   {
+//     id: 4,
+//     title: 'Mt. Hood Timber Lodge',
+//     location: 'National park in California',
+//     lists: 11,
+//     image: 'https://source.unsplash.com/600x400/?peru,mountains',
+//   },
+// ];
 
 const EventDetails = ({route}) => {
-  const {item: initialItem} = route.params; // Get the single item passed
+  const {item: initialItem,data:cards} = route.params; // Get the single item passed
   const navigation = useNavigation();
+  
   const flatListRef = useRef(null);
 
   // Find the initial index of the passed item within the hardcoded data

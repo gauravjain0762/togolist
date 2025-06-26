@@ -29,6 +29,7 @@ export const SCREENS = {
   SecurityScreen: 'SecurityScreen',
   SubscriptionScreenSetting: 'SubscriptionScreenSetting',
   SharedListDetails: 'SharedListDetails',
+  UpcomingListDetails: 'UpcomingListDetails',
   FoodPlace: 'FoodPlace',
   EventDetails: 'EventDetails',
   ExperienceScreen: 'ExperienceScreen',
@@ -81,6 +82,7 @@ export interface ScreenNames {
   SecurityScreen: string;
   SubscriptionScreenSetting: string;
   SharedListDetails: string;
+  UpcomingListDetails: string;
   FoodPlace: string;
   EventDetails: string;
   ExperienceScreen: string;

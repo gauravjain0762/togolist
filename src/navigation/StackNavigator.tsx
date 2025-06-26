@@ -52,6 +52,7 @@ import TripPlanner from '../component/trip/TripPlanner';
 import TripExplore from '../screens/tripHome/TripExplore';
 import ShapeScreen from '../screens/shape/ShapeScreen';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
+import UpcomingListDetails from '../screens/profile/UpcomingListDetails';
 
 export type RootStackParamList = {
   TripHome: undefined;
@@ -319,6 +320,46 @@ const StackNavigator: FC = () => {
       <Stack.Screen
         name={SCREENS.EventDetails}
         component={EventDetails}
+        options={() => ({
+          headerShown: false,
+          gestureEnabled: false, // Disables swipe back gesture for now, adjust as needed
+          transitionSpec: {
+            // Customize timing for open and close animations
+            open: {animation: 'timing', config: {duration: 1000}}, // Open animation duration
+            close: {animation: 'timing', config: {duration: 800}}, // Close animation duration
+          },
+          cardStyleInterpolator: ({current: {progress}}) => ({
+            cardStyle: {
+              // This makes the new screen fade in/out during the transition
+              opacity: progress,
+            },
+          }),
+        })}
+        // **CRITICAL: Enable the sharedElements function here**
+        sharedElements={(route, otherRoute, showing) => {
+          const {item} = route.params; // Get the item data passed from the list screen
+          return [
+            {
+              id: `${item?.title}`, // Unique ID for the temperature text
+              animation: 'fade', // Optional: how the shared element itself animates (e.g., 'fade', 'move')
+              resize: 'clip', // Optional: how the element resizes ('clip', 'stretch', 'none')
+            },
+            {
+              id: `item.${item?.id}.image`, // Unique ID for the temperature text
+              animation: 'fade', // Optional: how the shared element itself animates (e.g., 'fade', 'move')
+              resize: 'clip', // Optional: how the element resizes ('clip', 'stretch', 'none')
+            },
+            {
+              id: `${item?.location}`, // Unique ID for the city name text
+              animation: 'fade',
+              resize: 'clip',
+            },
+          ];
+        }}
+      />
+       <Stack.Screen
+        name={SCREENS.UpcomingListDetails}
+        component={UpcomingListDetails}
         options={() => ({
           headerShown: false,
           gestureEnabled: false, // Disables swipe back gesture for now, adjust as needed

@@ -24,49 +24,53 @@ const TravelCardLock = ({
   isPrivate,
   date,
   attendees,
-  onPress
-}:any) => {
+  onPress,
+}: any) => {
   return (
-    <TouchableOpacity onPress={()=>{
-      onPress && onPress()
-    }}>
-
-    <ImageBackground
-      source={IMAGES.bg}
-      style={styles.card}
-      imageStyle={styles.image}>
-      <LinearGradient
-        colors={['transparent', 'rgba(0,0,0,0.6)']}
-        style={styles.overlay}>
-        <View style={styles.container}>
-          <View style={styles.topRow}>
-            <Text style={styles.date}>{date}</Text>
-            {isPrivate && (
-              <Image
-                source={IMAGES.loca_icon}
-                style={{width: 16, height: 16}}
-              />
-            )}
-          </View>
-          <View>
-            <Text style={styles.title}>{title}</Text>
-            <View style={styles.footer}>
-              <View style={styles.locationRow}>
+    <TouchableOpacity
+      onPress={() => {
+        onPress && onPress();
+      }}>
+      <ImageBackground
+        source={IMAGES.bg}
+        style={styles.card}
+        imageStyle={styles.image}>
+        <LinearGradient
+          colors={['transparent', 'rgba(0,0,0,0.6)']}
+          style={styles.overlay}>
+          <View style={styles.container}>
+            <View style={styles.topRow}>
+              <Text style={styles.date}>{date}</Text>
+              {isPrivate && (
                 <Image
-                  source={IMAGES.locationWhite}
+                  source={IMAGES.loca_icon}
                   style={{width: 16, height: 16}}
                 />
-                <Text style={styles.location}>{location}</Text>
-              </View>
-              <View style={styles.avatarStack}>
-                <Image source={IMAGES.user_icon} style={[styles.avatar]} />
-                <Text style={styles.metaText}>{attendees}</Text>
+              )}
+            </View>
+            <View>
+              <Text style={styles.title}>{title}</Text>
+              <View style={styles.footer}>
+                {location && (
+                  <View style={styles.locationRow}>
+                    <Image
+                      source={IMAGES.locationWhite}
+                      style={{width: 16, height: 16}}
+                    />
+                    <Text style={styles.location}>{location}</Text>
+                  </View>
+                )}
+                {attendees && (
+                  <View style={styles.avatarStack}>
+                    <Image source={IMAGES.user_icon} style={[styles.avatar]} />
+                    <Text style={styles.metaText}>{attendees}</Text>
+                  </View>
+                )}
               </View>
             </View>
           </View>
-        </View>
-      </LinearGradient>
-    </ImageBackground>
+        </LinearGradient>
+      </ImageBackground>
     </TouchableOpacity>
   );
 };
@@ -92,7 +96,6 @@ const styles = StyleSheet.create({
   },
   title: {
     ...commonFontStyle(600, 16, colors.white),
-    marginBottom: 8,
   },
   footer: {
     flexDirection: 'row',
@@ -103,6 +106,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
+    marginTop: 8,
   },
   location: {
     ...commonFontStyle(600, 11, colors.white),
