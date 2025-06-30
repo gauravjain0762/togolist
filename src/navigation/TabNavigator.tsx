@@ -20,6 +20,7 @@ const Tab = createBottomTabNavigator();
 
 // Custom Tab Bar Component
 const CustomTabBar = ({state, navigation}: any) => {
+  
   return (
     <View>
       <View style={[styles.tabBarContainer]}>
@@ -47,10 +48,31 @@ const CustomTabBar = ({state, navigation}: any) => {
               iconName = IMAGES.user;
           }
 
+            const onPress = () => {
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: route.key,
+            canPreventDefault: true,
+          });
+
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate(route.name, route.params);
+          }
+        };
+
+         const onLongPress = () => {
+          navigation.emit({
+            type: 'tabLongPress',
+            target: route.key,
+          });
+        };
+
           return (
             <TouchableOpacity
               key={route.name}
-              onPress={() => navigation.navigate(route.name)}
+               onPress={onPress}
+            onLongPress={onLongPress}
+              // onPress={() => navigation.navigate(route.name,{ from: 'button' })}
               style={[
                 styles.tabButton,
                 {
@@ -90,7 +112,7 @@ export default function TabNavigator() {
       initialRouteName={SCREENS.ProfileScreen}
       tabBar={(props: any) => <CustomTabBar {...props} />}>
       <Tab.Screen name={SCREENS.SearchScreen} component={SearchScreen} />
-      <Tab.Screen name={SCREENS.TripHome} component={TripHome} />
+      <Tab.Screen name={SCREENS.TripHome} component={TripHome}  />
       <Tab.Screen
         name={SCREENS.CreateListScreen}
         component={CreateListScreen}
@@ -117,11 +139,11 @@ const styles = StyleSheet.create({
   },
   tabBarContainer: {
     flexDirection: 'row',
-    gap: 15,
+    gap: 2,
     alignSelf: 'center',
     alignItems: 'center',
-    justifyContent: 'space-around',
-    paddingHorizontal: 10,
+    justifyContent: 'center',
+    paddingHorizontal: 40,
     borderTopWidth: 1,
     borderColor: '#E3E3E3',
     backgroundColor: colors.white,

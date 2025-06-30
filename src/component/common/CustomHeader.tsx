@@ -32,6 +32,7 @@ type header = {
   moreIconStyle?: ImageStyle;
   moreImg?: ImageURISource;
   headerStyle?: ViewStyle;
+  showBack: any;
 };
 
 const CustomHeader: FC<header> = ({
@@ -50,19 +51,23 @@ const CustomHeader: FC<header> = ({
   moreIconStyle,
   moreImg,
   headerStyle,
+  showBack,
 }) => {
   return (
     <View style={[styles.header, headerStyle]}>
-      <TouchableOpacity
-        onPress={() => onBack() || navigationRef.goBack()}
-        style={styles.left}>
-        <Image
-          source={backImg || IMAGES.back}
-          style={[styles.backIcon, backIconStyle]}
-        />
-        <Text style={[styles.title, titleStyle]}>{title}</Text>
-      </TouchableOpacity>
-
+      {showBack ? (
+        <TouchableOpacity
+          onPress={() => onBack() || navigationRef.goBack()}
+          style={styles.left}>
+          <Image
+            source={backImg || IMAGES.back}
+            style={[styles.backIcon, backIconStyle]}
+          />
+          <Text style={[styles.title, titleStyle]}>{title}</Text>
+        </TouchableOpacity>
+      ) : (
+        <View />
+      )}
       <View style={styles.row}>
         {showSearch && (
           <TouchableOpacity onPress={onSearchPress} style={styles.searchButton}>
@@ -92,6 +97,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    // height:48
   },
   left: {
     flexDirection: 'row',
@@ -122,7 +128,7 @@ const styles = StyleSheet.create({
     height: 24,
     tintColor: colors._787878,
     resizeMode: 'contain',
-    marginRight:6
+    marginRight: 6,
   },
 });
 

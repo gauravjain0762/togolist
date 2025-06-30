@@ -20,6 +20,7 @@ const GuideRequest = () => {
   return (
     <SafeAreaView style={[AppStyles.flex, styles.mainContainer]}>
       <CustomHeader
+       showBack={true}
         backImg={IMAGES.back1}
         backIconStyle={styles.back}
         showSearch={false}

@@ -39,6 +39,7 @@ import HeaderTextIcon from '../../component/common/HeaderTextIcon';
 import TravelCardLock from '../../component/common/TravelCardLock';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {API} from '../../utils/apiConstant';
+import {useNavigation} from '@react-navigation/native';
 
 type Props = {};
 
@@ -176,12 +177,24 @@ const SearchScreen = (props: Props) => {
   const handlePresentAddlistPress = useCallback(() => {
     bottomSheetAddListRef.current?.present();
   }, []);
-  function NavItem({icon, library, active, onPress, keyValue}) {
+
+  const navigation = useNavigation();
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', () => {
+      setActiveTab('hot');
+      setSelect('List View');
+      // Do something, like scroll to top or reset list
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  function NavItem({icon, library, active, onPress, keyValue, IconStyle}) {
     return (
       <TouchableOpacity onPress={onPress} style={styles.navItem}>
         <Image
           source={icon}
-          style={keyValue ? styles.tabIcon1 : styles.tabIcon}
+          style={[keyValue ? styles.tabIcon1 : styles.tabIcon, IconStyle]}
         />
         {active && <View style={styles.activeBar} />}
       </TouchableOpacity>
@@ -269,10 +282,11 @@ const SearchScreen = (props: Props) => {
             />
             <NavItem
               icon={
-                activeTab === 'location' ? IMAGES.Subtract_on : IMAGES.Subtract
+                activeTab === 'location' ? IMAGES.Subtract : IMAGES.Subtract
               }
               active={activeTab === 'location'}
               keyValue={true}
+              IconStyle={activeTab === 'location' ? styles.iconStyle :{}}
               onPress={() => {
                 setActiveTab('location');
               }}
@@ -305,13 +319,18 @@ const SearchScreen = (props: Props) => {
               keyExtractor={(_, index) => index.toString()}
               contentContainerStyle={AppStyles.P16}
               columnWrapperStyle={{
-                paddingTop: hp(10),
+                // paddingTop: hp(10),
                 justifyContent: 'space-between',
-                paddingBottom: hp(16),
+                paddingVertical: hp(4),
               }}
-              renderItem={({item}) => <ExploreCard {...item} onPress={()=>{
-                navigateTo(SCREENS.Shared)
-              }} />}
+              renderItem={({item}) => (
+                <ExploreCard
+                  {...item}
+                  onPress={() => {
+                    navigateTo(SCREENS.Shared);
+                  }}
+                />
+              )}
             />
           )}
           {activeTab == 'location' && (
@@ -354,12 +373,23 @@ const SearchScreen = (props: Props) => {
               {select == 'List View' && (
                 <>
                   <FlatList
-                    data={[1,2]}
+                    data={[1, 2]}
                     showsVerticalScrollIndicator={false}
                     nestedScrollEnabled
                     keyExtractor={(_, index) => index.toString()}
-                    renderItem={({item}) => <DiscoverNewSpotsCard {...item}  imageStyle={{marginHorizontal:  Platform.OS == 'ios' ? 0: 16}} />}
-                    contentContainerStyle={{paddingBottom: hp(16), gap: hp(8),paddingHorizontal:16}}
+                    renderItem={({item}) => (
+                      <DiscoverNewSpotsCard
+                        {...item}
+                        imageStyle={{
+                          marginHorizontal: Platform.OS == 'ios' ? 0 : 16,
+                        }}
+                      />
+                    )}
+                    contentContainerStyle={{
+                      paddingBottom: hp(16),
+                      gap: hp(8),
+                      paddingHorizontal: 16,
+                    }}
                   />
                 </>
               )}
@@ -389,24 +419,43 @@ const SearchScreen = (props: Props) => {
                   <Text style={styles.title}>Find a Host</Text>
                   <TouchableOpacity style={[styles.inputBox]}>
                     <Image source={IMAGES.location} style={styles.icon} />
-                    <Text style={styles.placeholder}>Location</Text>
+                    <Text style={styles.placeholder}>Set Location</Text>
                   </TouchableOpacity>
-                  <View style={styles.Eventrow}>
-                    <TouchableOpacity style={styles.card1}>
-                      <Image source={IMAGES.canlder} style={styles.icon1} />
-                      <Text style={styles.cardText}>Start Date</Text>
+                  <View style={[styles.inputBox, {marginVertical: 4}]}>
+                    <TouchableOpacity
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        flex: 0.8,
+                      }}>
+                      <Image
+                        source={IMAGES.canlder}
+                        style={[styles.icon, {marginRight: 10}]}
+                      />
+                      <Text style={styles.placeholder}>Start Date</Text>
                     </TouchableOpacity>
-                      <TouchableOpacity style={styles.card1}>
-                      <Image source={IMAGES.canlder} style={styles.icon1} />
-                      <Text style={styles.cardText}>End Date</Text>
+                    <View
+                      style={{
+                        height: 24,
+                        borderWidth: 1,
+                        borderColor: '#999999',
+                        marginRight: 10,
+                      }}
+                    />
+                    <TouchableOpacity style={{flex: 0.9}}>
+                      {/* <Image source={IMAGES.canlder} style={styles.icon1} /> */}
+                      <Text style={styles.placeholder}>End Date</Text>
                     </TouchableOpacity>
-                    
-                    <TouchableOpacity style={styles.BGcard}>
+
+                    {/* <TouchableOpacity style={styles.BGcard}>
                       <Image source={IMAGES.clock} style={styles.icon1} />
                       <Text style={styles.cardText}>Length</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                   </View>
-                  <Button title="Find Local Guides" />
+                  <Button
+                    title="Find Local Guides"
+                    BtnStyle={{paddingVertical: hp(12)}}
+                  />
                 </>
               </ImageBackground>
               <View style={styles.guiderow}>
@@ -421,9 +470,9 @@ const SearchScreen = (props: Props) => {
                   numColumns={2}
                   columnWrapperStyle={{
                     justifyContent: 'space-between',
-                    gap: wp(8),
+                    gap: wp(4),
                   }}
-                  contentContainerStyle={{gap: wp(16)}}
+                  contentContainerStyle={{gap: wp(4)}}
                   renderItem={({item, index}) => <ProfileCard />}
                 />
               </View>
@@ -461,9 +510,14 @@ const SearchScreen = (props: Props) => {
                   marginBottom: 16,
                 }}
                 style={{marginTop: 10}}
-                renderItem={({item}) => <TravelCardLock {...item}  onPress={()=>{
-                  navigateTo(SCREENS.Shared)
-                }}/>}
+                renderItem={({item}) => (
+                  <TravelCardLock
+                    {...item}
+                    onPress={() => {
+                      navigateTo(SCREENS.Shared);
+                    }}
+                  />
+                )}
               />
 
               <View style={styles.headerrow}>
@@ -476,7 +530,14 @@ const SearchScreen = (props: Props) => {
                 showsVerticalScrollIndicator={false}
                 nestedScrollEnabled
                 keyExtractor={(_, index) => index.toString()}
-                renderItem={({item}) => <DiscoverNewSpotsCard {...item}  imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0: 16}} />}
+                renderItem={({item}) => (
+                  <DiscoverNewSpotsCard
+                    {...item}
+                    imageStyle={{
+                      marginHorizontal: Platform.OS == 'ios' ? 0 : 16,
+                    }}
+                  />
+                )}
                 contentContainerStyle={{paddingBottom: hp(16), gap: hp(8)}}
               />
             </View>
@@ -490,7 +551,7 @@ const SearchScreen = (props: Props) => {
           <View style={{paddingVertical: hp(28)}}>
             <DiscoverNewSpotsCard
               onPressAdd={() => handlePresentAddlistPress()}
-               imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0: 16}}
+              imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0 : 16}}
             />
           </View>
         }
@@ -505,7 +566,7 @@ const SearchScreen = (props: Props) => {
               showInfo={false}
               showRating={false}
               isShowOptions={false}
-               imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0: 16}}
+              imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0 : 16}}
             />
             <View style={styles.optionContainer}>
               <View style={styles.row}>
@@ -581,7 +642,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   heading: {
-    marginVertical: 10,
+    marginVertical: 8,
     ...commonFontStyle(700, 34, colors.black),
     flex: 1,
   },
@@ -600,6 +661,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 9,
     backgroundColor: colors.white,
+    marginVertical: 0,
+    marginBottom: 8,
   },
   searchInput: {
     flex: 1,
@@ -644,10 +707,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: hp(29),
+    marginTop: hp(16),
     marginHorizontal: wp(16),
     gap: wp(60),
-    marginBottom: hp(28),
+    marginBottom: hp(16),
   },
   activeBar: {
     marginTop: 4,
@@ -656,7 +719,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     backgroundColor: '#000',
     position: 'absolute',
-    bottom: -5,
+    bottom: -6,
   },
   tabIcon: {
     width: 34,
@@ -664,9 +727,14 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   tabIcon1: {
-    width: 21,
+    width: 24,
     height: 29,
     resizeMode: 'contain',
+  },
+  iconStyle: {
+    tintColor: colors.black,
+    width: 24,
+    height: 29,
   },
   navItem: {
     alignItems: 'center',
@@ -742,18 +810,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 20,
     overflow: 'hidden',
-    padding: wp(24),
+    padding: wp(16),
   },
   title: {
     ...commonFontStyle(700, 24, colors.white),
     marginBottom: 10,
   },
   placeholder: {
-    ...commonFontStyle(500, 16, '#3C3C4399'),
+    ...commonFontStyle(500, 18, '#3C3C4399'),
   },
   inputBox: {
     backgroundColor: colors.white,
-    borderRadius: 16,
+    borderRadius: 14,
     paddingHorizontal: 7,
     flexDirection: 'row',
     alignItems: 'center',
@@ -761,13 +829,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
-    paddingVertical: hp(16),
+    paddingVertical: hp(12),
   },
   icon: {
     height: 24,
     width: 24,
     resizeMode: 'contain',
-    marginRight: 5,
+    marginRight: 4,
   },
   icon1: {
     height: 16,
@@ -819,7 +887,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: hp(24),
+    paddingTop: hp(12),
+    paddingHorizontal: 6,
+    marginBottom: 4,
   },
   guideTitle: {
     ...commonFontStyle(600, 18, colors.black),
@@ -834,7 +904,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: wp(16),
-    marginTop: hp(16),
+    marginTop: hp(12),
     height: hp(280),
     gap: hp(8),
   },

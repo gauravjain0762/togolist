@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
 import {commonFontStyle, hp, SCREEN_HEIGHT, SCREEN_WIDTH, wp} from '../../theme/fonts';
@@ -21,7 +21,7 @@ import CustomBtn from '../../component/common/CustomBtn';
 import RenderPrivacyOption from '../../component/createNew/RenderPrivacyOption';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import Swiper from 'react-native-swiper';
 
 const options = [
@@ -43,6 +43,8 @@ const CreateListScreen = () => {
   const [activeOption, setActiveOption] = useState(
     params?.bucketScreen ? 'Bucket List' : 'List',
   );
+
+
 
   const swiperRef = useRef(null);
   const [privacy, setPrivacy] = useState<'public' | 'private'>('public');

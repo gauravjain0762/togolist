@@ -56,6 +56,7 @@ const TripTogolistsScreen = ({navigate}: any) => {
       <CustomHeader
         title={params?.showTitle ? ' Peru Explorations' : 'Trips'}
         showSearch={false}
+         showBack={true}
         onMorePress={() => {}}
       />
       <View style={[{paddingHorizontal: 20}]}>

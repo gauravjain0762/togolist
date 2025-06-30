@@ -73,6 +73,7 @@ const SharedListDetails = () => {
   return (
     <SafeAreaView style={[AppStyles.flex, styles.mainContainer]}>
       <CustomHeader
+       showBack={true}
         backImg={IMAGES.back1}
         backIconStyle={styles.back}
         showSearch={false}
@@ -91,7 +92,7 @@ const SharedListDetails = () => {
               <View style={styles.infoRow}>
                 <Text style={styles.text}>San Diego</Text>
                 <Text style={styles.separator}>|</Text>
-                <Text style={styles.text}>5 Lists</Text>
+                <Text style={styles.text}>5 Places</Text>
                 <Text style={styles.separator}>|</Text>
                 <Image source={IMAGES.world} style={styles.icon} />
                 <Text style={[styles.text, styles.textWithIcon]}>Public</Text>
@@ -131,7 +132,7 @@ const SharedListDetails = () => {
               </Text>
             </TouchableOpacity>
           </View>
-          {showCard && <OptionBar container={styles.optioncontainer} />}
+          {/* {showCard && <OptionBar container={styles.optioncontainer} />} */}
           <SwipeListView
             data={cards}
             ItemSeparatorComponent={() => (
@@ -159,20 +160,10 @@ const SharedListDetails = () => {
             }}
             disableRightSwipe
             swipeToOpenPercent={30}
-            rightOpenValue={-150}
-            renderHiddenItem
+                   rightOpenValue={-354}
             renderHiddenItem={(data, rowMap) => (
-              <View style={styles.rowBack}>
-                <TouchableOpacity style={styles.backButton}>
-                  <Image source={IMAGES.restore} style={styles.restore} />
-                  <Text style={styles.backText}>Restore</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.backButton, {marginTop: hp(4)}]}>
-                  <Image source={IMAGES.remove} style={styles.remove} />
-                  <Text style={styles.backText}>Delete</Text>
-                </TouchableOpacity>
-              </View>
+               <OptionBar container={styles.optioncontainer} />
+              
             )}
             leftOpenValue={75}
             onRowOpen={(rowKey, rowMap, toValue) => {

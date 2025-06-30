@@ -1,4 +1,6 @@
 import {
+  Animated,
+  Dimensions,
   FlatList,
   Image,
   ImageBackground,
@@ -9,7 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
 import {IMAGES} from '../../assets/Images';
@@ -28,8 +30,11 @@ import CustomBtn from '../../component/common/CustomBtn';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import TogolistPro from '../../component/common/TogolistPro';
 import CategoryCard from '../../component/trip/CategoryCard';
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import HeaderTextIcon from '../../component/common/HeaderTextIcon';
+import {SharedElement} from 'react-native-shared-element';
+import {navigateTo} from '../../utils/commonFunction';
+import {SCREENS} from '../../navigation/screenNames';
 
 const categories = [
   {
@@ -55,6 +60,8 @@ const categories = [
   },
 ];
 
+const {width} = Dimensions.get('window');
+
 const reference = [
   {
     image: 'https://via.placeholder.com/300x200?text=Tropical',
@@ -66,7 +73,35 @@ const reference = [
   },
 ];
 
-const PastTripDetails = () => {
+const PastTripDetails = ({route}: any) => {
+  const {item: initialItem, data: cards} = route.params; // Get the single item passed
+  const navigation = useNavigation();
+
+  const flatListRef = useRef(null);
+
+  // Find the initial index of the passed item within the hardcoded data
+  const initialIndex = cards.findIndex(
+    dataItem => dataItem.id === initialItem.id,
+  ); //
+
+  // Use a state to control FlatList visibility after scrolling
+  const [flatListReady, setFlatListReady] = useState(false);
+
+  useEffect(() => {
+    // Only scroll if initialIndex is found and FlatListRef exists
+    if (flatListRef.current && initialIndex !== -1) {
+      // Small timeout to allow shared element transition to start
+      const timer = setTimeout(() => {
+        flatListRef.current.scrollToIndex({
+          index: initialIndex,
+          animated: false,
+        });
+        setFlatListReady(true); // Mark FlatList as ready
+      }, 50); // Adjust delay as needed
+      return () => clearTimeout(timer);
+    }
+  }, [initialIndex]);
+
   const [privacy, setPrivacy] = useState<'public' | 'private'>('public');
   const {params} = useRoute();
   const [showTogolistPro, setShowTogolistPro] = useState(true);
@@ -101,268 +136,350 @@ const PastTripDetails = () => {
     [reference],
   );
 
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const listener = scrollX.addListener(({value}) => {
+      const index = Math.round(value / width);
+      setActiveIndex(index);
+    });
+
+    return () => scrollX.removeListener(listener);
+  }, []);
+
+  const getDotStyle = (index: number) => {
+    const distance = Math.abs(index - activeIndex);
+
+    // Shrink size and opacity with distance from activeIndex
+    const size = 11 - distance * 1.2; // main: 8, second: 6.8, third: 5.6, etc.
+    const clampedSize = Math.max(size, 2); // minimum size
+    const opacity = 1 - distance * 0.15; // main: 1, then reduce
+
+    return {
+      width: clampedSize,
+      height: clampedSize,
+      borderRadius: clampedSize / 2,
+      marginHorizontal: 8,
+      backgroundColor: `#E3E3E3`,
+    };
+  };
+
+  const scrollX = useRef(new Animated.Value(0)).current; // Animated value for scroll position
+  const renderPaginationDots = () => {
+    const dotPosition = Animated.divide(scrollX, width); // Calculate active dot position
+    return (
+      <View style={styles.paginationContainer}>
+        <Image
+          source={IMAGES.map1}
+          style={{width: 17, height: 17, resizeMode: 'contain'}}
+        />
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          {cards.map((_, index) => {
+            return <View key={index} style={getDotStyle(index)} />;
+          })}
+        </View>
+        <Image
+          source={IMAGES.menu1}
+          style={{width: 17, height: 17, resizeMode: 'contain'}}
+        />
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader
         backImg={IMAGES.back1}
         backIconStyle={styles.back}
+        showBack={true}
         showSearch={false}
         moreImg={IMAGES.more_icon}
         moreIconStyle={styles.more}
         headerStyle={styles.header}
         title={params?.pastTrips ? 'Past Trips' : 'Trips'}
       />
-      {step == 2 && (
+      {/* {step == 2 && (
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={[AppStyles.P16, {gap: hp(8)}]}>
-          <ImageBackground
-            source={IMAGES.bbq}
-            imageStyle={styles.placeimges}
-            style={styles.place}>
-            <Text style={styles.placeTitle}>{'BBQ Festival'}</Text>
-            <View style={styles.location}>
-              <Text style={styles.address}>{'Starts in 60 Days'}</Text>
-            </View>
-            <View style={styles.timecontainer}>
-              <Text style={styles.time}>{'May 10'}</Text>
-              <Image source={IMAGES.arrow} style={styles.arrow} />
-              <Text style={styles.time}>{'May 11'}</Text>
-            </View>
-          </ImageBackground>
-          {showTogolistPro ? (
-                      <TogolistPro
-                        cardStyle={{marginBottom: 18}}
-                        onClosePress={() => {
-                          setShowTogolistPro(false);
-                        }}
-                      />
-                    ):  <View style={{marginBottom: 18}} />}
           
-          <LinearView containerStyle={styles.notificationRow}>
-            <Text style={styles.notificationtitle}>{'Share trip '}</Text>
-            <TouchableOpacity
-              onPress={() => {
-                handlePresentModalSharePress();
-              }}>
-              <Image source={IMAGES.share1} style={styles.notification} />
-            </TouchableOpacity>
-          </LinearView>
-          <View style={[AppStyles.row, {marginTop: 8}]}>
-            <Text style={[styles.Tripphoto, {flex: 1}]}>
-              {'Trip Togolists'}
-            </Text>
-            <TouchableOpacity>
-              <Image source={IMAGES.add_icon} style={styles.addicon} />
-            </TouchableOpacity>
-          </View>
+        </ScrollView>
+      )} */}
 
-          <FlatList
-            data={categories}
-            showsVerticalScrollIndicator={false}
-            renderItem={({item}) => {
-              return (
-                <CategoryCard
-                  // onCardPress={() => {
-                  //   navigateTo(SCREENS.BucketListDetails);
-                  // }}
-                  title={item?.title}
-                  Togolist={item?.category}
-                  Lists
-                  listCount={item?.places}
-                  showAddList={true}
-                />
-              );
-            }}
-          />
-          <LinearView>
-            <Text style={styles.headerTitle}>{'People'}</Text>
-            <View style={[styles.row, styles.people]}>
-              {[1, 3].map((user, index) => (
-                <Image
-                  source={{
-                    uri: 'https://randomuser.me/api/portraits/men/32.jpg',
-                  }}
-                  style={[
-                    styles.avatar,
-                    {marginLeft: index === 0 ? 20 : -10, zIndex: 1},
-                  ]}
-                />
-              ))}
-              <TouchableOpacity
-                onPress={() => {
-                  // navigateTo(SCREENS.CollaboratorsScreen);
-                }}>
-                <Image source={IMAGES.addIcon} style={[styles.avatar1]} />
-              </TouchableOpacity>
-            </View>
-          </LinearView>
-
-          <LinearView>
-            <Text style={styles.headerTitle}>{'Notes'}</Text>
-            <View style={[styles.infoContainor]}>
-              <TextInput
-                style={styles.label}
-                placeholder="Trip planning and goals of the trip..."
-                placeholderTextColor={'#787878'}
-              />
-            </View>
-            <TouchableOpacity
-              onPress={() => handlePresentModalPress()}
-              style={styles.postbtn}>
-              <Text style={styles.btntxt}>{'Post'}</Text>
-            </TouchableOpacity>
-            <View
-              style={[
-                styles.horizontal_divider,
-                {marginTop: 0, marginHorizontal: 10},
-              ]}
-            />
-            <View style={styles.container1}>
-              {/* Top: Avatar + Name */}
-              <View style={styles.userheader}>
-                <Image
-                  source={{
-                    uri: 'https://randomuser.me/api/portraits/women/75.jpg',
-                  }}
-                  style={styles.avatar2}
-                />
-                <Text style={styles.username}>Emily</Text>
-              </View>
-
-              {/* Comment text */}
-              <Text style={styles.commentText}>
-                What is everyone’s preference for area for our accommodation?
-              </Text>
-
-              {/* Footer: Comment count + View all */}
-              <TouchableOpacity style={styles.footer}>
-                <Image
-                  source={IMAGES.message_icon}
-                  style={styles.message_icon}
-                />
-                <Text style={styles.commentCount}>10</Text>
-                <Text style={styles.viewAll}>View all comments</Text>
-              </TouchableOpacity>
-            </View>
-          </LinearView>
-          <LinearView>
-            <View style={styles.photoContainor}>
-              <Text style={styles.todoTitle}>{'To Do List'}</Text>
-            </View>
-            <View>
-              <Checklist
-                data={[
-                  {
-                    id: '1',
-                    label: 'Things to do for the trip...',
-                    checked: false,
-                  },
-                ]}
-              />
-            </View>
-          </LinearView>
-          <LinearView>
-            <View style={styles.photoContainor}>
-              <View style={styles.uploadRow}>
-                <Text style={styles.uploadTitle}>{'Uploads'}</Text>
-                <Image source={IMAGES.info} style={styles.infoIcon} />
-              </View>
-              <TouchableOpacity onPress={() => setUpload(!upload)}>
-                <Image source={IMAGES.add_icon} style={styles.addicon} />
-              </TouchableOpacity>
-            </View>
-            {upload ? (
-              <FlatList
-                data={[1, 2, 3, 4]}
-                numColumns={2}
-                contentContainerStyle={{gap: wp(15), padding: wp(20)}}
-                columnWrapperStyle={{
-                  gap: wp(15),
-                  justifyContent: 'space-between',
-                }}
-                renderItem={({item, index}) => (
-                  <Image source={IMAGES.bg1} style={styles.upload} />
+      {initialIndex !== -1 && ( // Only render FlatList if initial item is found
+        <FlatList
+          ref={flatListRef}
+          data={cards}
+          contentContainerStyle={[{gap: hp(8)}]}
+          renderItem={({item}) => {
+            return (
+              <ScrollView
+                style={styles.scroll}
+                contentContainerStyle={[{gap: hp(8)}]}>
+                <ImageBackground
+                  source={IMAGES.trips_bg}
+                  imageStyle={styles.placeimges}
+                  style={styles.place}>
+                  <SharedElement id={item?.title}>
+                    <Text style={styles.placeTitle}>{item?.title}</Text>
+                  </SharedElement>
+                  <View style={styles.location}>
+                    <SharedElement id={item?.location}>
+                      <Text style={styles.address}>{'Starts in 60 Days'}</Text>
+                    </SharedElement>
+                  </View>
+                  <View style={styles.timecontainer}>
+                    <Text style={styles.time}>{'May 10'}</Text>
+                    <Image source={IMAGES.arrow} style={styles.arrow} />
+                    <Text style={styles.time}>{'May 11'}</Text>
+                  </View>
+                </ImageBackground>
+                {showTogolistPro ? (
+                  <TogolistPro
+                    cardStyle={{marginBottom: 18}}
+                    onClosePress={() => {
+                      setShowTogolistPro(false);
+                    }}
+                  />
+                ) : (
+                  <View style={{marginBottom: 18}} />
                 )}
-              />
-            ) : (
-              <Text style={styles.description}>
-                {'Photos, flight & hotel info & other docs...'}
-              </Text>
-            )}
-          </LinearView>
-          <LinearView containerStyle={[styles.Budgatecard]}>
-            <View style={[styles.budgaterow, {marginBottom: hp(18)}]}>
-              <View style={styles.uploadRow}>
-                <Text style={styles.Budgettitle}>Spending</Text>
-                <Image source={IMAGES.info} style={styles.infoIcon} />
-              </View>
-              <Image source={IMAGES.edit_icon} style={styles.edit} />
-            </View>
-            {[
-              ['Flights', '$0'],
-              ['Hotel', '$0'],
-              ['Food', '$0'],
-              ['Tickets', '$0'],
-              ['New item', '$0'],
-              ['Total', '$0'],
-            ].map(([label, value], i) => (
-              <>
-                {i === 5 && (
-                  <View style={[styles.devider, {marginVertical: hp(4)}]} />
-                )}
-                <View style={styles.achievementRow} key={i}>
-                  <Text
-                    style={[
-                      styles.achievementLabel,
-                      i === 4 && styles.totalLabel1,
-                      i === 5 && styles.totalLabel,
-                    ]}>
-                    {label}
+
+                <LinearView containerStyle={styles.notificationRow}>
+                  <Text style={styles.notificationtitle}>{'Share trip '}</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      handlePresentModalSharePress();
+                    }}>
+                    <Image source={IMAGES.share1} style={styles.notification} />
+                  </TouchableOpacity>
+                </LinearView>
+                <View style={[AppStyles.row, {marginTop: 8}]}>
+                  <Text style={[styles.Tripphoto, {flex: 1}]}>
+                    {'Trip Togolists'}
                   </Text>
-                  <Text
-                    style={[
-                      styles.achievementValue,
-                      i === 4 && styles.totalValue1,
-                      i === 5 && styles.totalValue,
-                    ]}>
-                    {value}
-                  </Text>
+                  <TouchableOpacity>
+                    <Image source={IMAGES.add_icon} style={styles.addicon} />
+                  </TouchableOpacity>
                 </View>
-              </>
-            ))}
-          </LinearView>
-          <LinearView containerStyle={styles.photos}>
-            <HeaderTextIcon
-              headerStyle={styles.phototitle}
-              title={'References'}
-              showAddIcon={true}
-              showDown={false}
-              titleStyle={commonFontStyle(700, 24, colors._1B1515)}
-              onAddPress={() => setReferences(!references)}
-            />
-            {references ? (
-              <FlatList
-                data={reference}
-                numColumns={2}
-                keyExtractor={(_, index) => index.toString()}
-                columnWrapperStyle={{
-                  justifyContent: 'space-between',
-                  marginBottom: 16,
-                  gap: wp(15),
-                }}
-                style={{marginTop: hp(16)}}
-                renderItem={({item}) => <SocialCard {...item} />}
-              />
-            ) : (
-              <Text
-                style={[styles.description, {padding: 0, paddingTop: hp(16)}]}>
-                Save reference links to relevant social media posts, blogs &
-                more...
-              </Text>
-            )}
-          </LinearView>
-          {/* <LinearView containerStyle={styles.rainRow}>
+
+                <FlatList
+                  data={categories}
+                  showsVerticalScrollIndicator={false}
+                  renderItem={({item}) => {
+                    return (
+                      <CategoryCard
+                        // onCardPress={() => {
+                        //   navigateTo(SCREENS.BucketListDetails);
+                        // }}
+                        onCardPress={() => {
+                          navigateTo(SCREENS.ThingsTogolistsScreen, {
+                            isBack: true,
+                          });
+                        }}
+                        title={item?.title}
+                        Togolist={item?.category}
+                        Lists
+                        listCount={item?.places}
+                        showAddList={true}
+                      />
+                    );
+                  }}
+                />
+                <LinearView>
+                  <Text style={styles.headerTitle}>{'People'}</Text>
+                  <View style={[styles.row, styles.people]}>
+                    {[1, 3].map((user, index) => (
+                      <Image
+                        source={{
+                          uri: 'https://randomuser.me/api/portraits/men/32.jpg',
+                        }}
+                        style={[
+                          styles.avatar,
+                          {marginLeft: index === 0 ? 20 : -10, zIndex: 1},
+                        ]}
+                      />
+                    ))}
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigateTo(SCREENS.CollaboratorsScreen);
+                      }}>
+                      <Image source={IMAGES.addIcon} style={[styles.avatar1]} />
+                    </TouchableOpacity>
+                  </View>
+                </LinearView>
+
+                <LinearView>
+                  <Text style={styles.headerTitle}>{'Notes'}</Text>
+                  <View style={[styles.infoContainor]}>
+                    <TextInput
+                      style={styles.label}
+                      placeholder="Trip planning and goals of the trip..."
+                      placeholderTextColor={'#787878'}
+                    />
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => handlePresentModalPress()}
+                    style={styles.postbtn}>
+                    <Text style={styles.btntxt}>{'Post'}</Text>
+                  </TouchableOpacity>
+                  <View
+                    style={[
+                      styles.horizontal_divider,
+                      {marginTop: 0, marginHorizontal: 10},
+                    ]}
+                  />
+                  <View style={styles.container1}>
+                    {/* Top: Avatar + Name */}
+                    <View style={styles.userheader}>
+                      <Image
+                        source={{
+                          uri: 'https://randomuser.me/api/portraits/women/75.jpg',
+                        }}
+                        style={styles.avatar2}
+                      />
+                      <Text style={styles.username}>Emily</Text>
+                    </View>
+
+                    {/* Comment text */}
+                    <Text style={styles.commentText}>
+                      What is everyone’s preference for area for our
+                      accommodation?
+                    </Text>
+
+                    {/* Footer: Comment count + View all */}
+                    <TouchableOpacity style={styles.footer}>
+                      <Image
+                        source={IMAGES.message_icon}
+                        style={styles.message_icon}
+                      />
+                      <Text style={styles.commentCount}>10</Text>
+                      <Text style={styles.viewAll}>View all comments</Text>
+                    </TouchableOpacity>
+                  </View>
+                </LinearView>
+                <LinearView>
+                  <View style={styles.photoContainor}>
+                    <Text style={styles.todoTitle}>{'To Do List'}</Text>
+                  </View>
+                  <View>
+                    <Checklist
+                      data={[
+                        {
+                          id: '1',
+                          label: 'Things to do for the trip...',
+                          checked: false,
+                        },
+                      ]}
+                    />
+                  </View>
+                </LinearView>
+                <LinearView>
+                  <View style={styles.photoContainor}>
+                    <View style={styles.uploadRow}>
+                      <Text style={styles.uploadTitle}>{'Uploads'}</Text>
+                      <Image source={IMAGES.info} style={styles.infoIcon} />
+                    </View>
+                    <TouchableOpacity onPress={() => setUpload(!upload)}>
+                      <Image source={IMAGES.add_icon} style={styles.addicon} />
+                    </TouchableOpacity>
+                  </View>
+                  {upload ? (
+                    <FlatList
+                      data={[1, 2, 3, 4]}
+                      numColumns={2}
+                      contentContainerStyle={{gap: wp(15), padding: wp(20)}}
+                      columnWrapperStyle={{
+                        gap: wp(15),
+                        justifyContent: 'space-between',
+                      }}
+                      renderItem={({item, index}) => (
+                        <Image source={IMAGES.bg1} style={styles.upload} />
+                      )}
+                    />
+                  ) : (
+                    <Text style={styles.description}>
+                      {'Photos, flight & hotel info & other docs...'}
+                    </Text>
+                  )}
+                </LinearView>
+                <LinearView containerStyle={[styles.Budgatecard]}>
+                  <View style={[styles.budgaterow, {marginBottom: hp(18)}]}>
+                    <View style={styles.uploadRow}>
+                      <Text style={styles.Budgettitle}>Spending</Text>
+                      <Image source={IMAGES.info} style={styles.infoIcon} />
+                    </View>
+                    <Image source={IMAGES.edit_icon} style={styles.edit} />
+                  </View>
+                  {[
+                    ['Flights', '$0'],
+                    ['Hotel', '$0'],
+                    ['Food', '$0'],
+                    ['Tickets', '$0'],
+                    ['New item', '$0'],
+                    ['Total', '$0'],
+                  ].map(([label, value], i) => (
+                    <>
+                      {i === 5 && (
+                        <View
+                          style={[styles.devider, {marginVertical: hp(4)}]}
+                        />
+                      )}
+                      <View style={styles.achievementRow} key={i}>
+                        <Text
+                          style={[
+                            styles.achievementLabel,
+                            i === 4 && styles.totalLabel1,
+                            i === 5 && styles.totalLabel,
+                          ]}>
+                          {label}
+                        </Text>
+                        <Text
+                          style={[
+                            styles.achievementValue,
+                            i === 4 && styles.totalValue1,
+                            i === 5 && styles.totalValue,
+                          ]}>
+                          {value}
+                        </Text>
+                      </View>
+                    </>
+                  ))}
+                </LinearView>
+                <LinearView containerStyle={styles.photos}>
+                  <HeaderTextIcon
+                    headerStyle={styles.phototitle}
+                    title={'References'}
+                    showAddIcon={true}
+                    showDown={false}
+                    titleStyle={commonFontStyle(700, 24, colors._1B1515)}
+                    onAddPress={() => setReferences(!references)}
+                  />
+                  {references ? (
+                    <FlatList
+                      data={reference}
+                      numColumns={2}
+                      keyExtractor={(_, index) => index.toString()}
+                      columnWrapperStyle={{
+                        justifyContent: 'space-between',
+                        marginBottom: 16,
+                        gap: wp(15),
+                      }}
+                      style={{marginTop: hp(16)}}
+                      renderItem={({item}) => <SocialCard {...item} />}
+                    />
+                  ) : (
+                    <Text
+                      style={[
+                        styles.description,
+                        {padding: 0, paddingTop: hp(16)},
+                      ]}>
+                      Save reference links to relevant social media posts, blogs
+                      & more...
+                    </Text>
+                  )}
+                </LinearView>
+                {/* <LinearView containerStyle={styles.rainRow}>
             <Text>{'Need a rain check?'}</Text>
             <Button
               title="Convert to Bucket List"
@@ -370,8 +487,30 @@ const PastTripDetails = () => {
               titleStyle={{...commonFontStyle(600, 12, colors.white)}}
             />
           </LinearView> */}
-        </ScrollView>
+              </ScrollView>
+            );
+          }}
+          keyExtractor={item => item?.id}
+          horizontal
+          pagingEnabled // Enables snapping to full pages
+          showsHorizontalScrollIndicator={false}
+          // initialScrollIndex is set when component mounts via useEffect
+          getItemLayout={(data, index) => ({
+            length: width,
+            offset: width * index,
+            index,
+          })}
+          style={flatListReady ? {} : {opacity: 0}} // Hide FlatList until ready
+          onScroll={Animated.event(
+            // Capture scroll events for dot animation
+            [{nativeEvent: {contentOffset: {x: scrollX}}}],
+            {useNativeDriver: false}, // 'useNativeDriver: true' not supported for 'onScroll' with 'Animated.event' by default
+          )}
+          scrollEventThrottle={16} // Update scroll position frequently
+        />
       )}
+
+      {renderPaginationDots()}
       <CommonSheet
         title="Cover Image"
         bottomSheetModalRef={bottomSheetModalRef}
@@ -497,6 +636,15 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 5,
     paddingVertical: hp(16),
+  },
+  scroll: {
+    width: width,
+    // flex: 1,
+    // paddingHorizontal: wp(16),
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    paddingHorizontal: 20,
+    flex: 1,
   },
   icon: {
     height: wp(24),
@@ -946,5 +1094,45 @@ const styles = StyleSheet.create({
   },
   text3: {
     ...commonFontStyle(600, 14, colors.white),
+  },
+
+  paginationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    // position: 'absolute',
+    // bottom: 30, // Position at the bottom
+    // alignSelf: 'center', // Center horizontally
+    marginHorizontal: 16,
+    marginVertical: 10,
+  },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginHorizontal: 6,
+    backgroundColor: '#D3D3D3',
+  },
+  inactiveDot: {
+    backgroundColor: '#D3D3D3',
+  },
+  activeDot: {
+    backgroundColor: '#000', // black for active dot
+    width: 10,
+    height: 10,
+  },
+  mainDot: {
+    backgroundColor: '#E3E3E3',
+    width: 8,
+    height: 8,
+  },
+  secondDot: {
+    backgroundColor: '#BEBEBE',
+    width: 8,
+    height: 8,
+  },
+  thirdDot: {
+    backgroundColor: '#CDCDCD',
+    width: 8,
+    height: 8,
   },
 });

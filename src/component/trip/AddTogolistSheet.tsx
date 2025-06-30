@@ -20,6 +20,7 @@ import {commonFontStyle, hp, wp} from '../../theme/fonts';
 type sheet = {
   bottomSheetModalRef?: Ref<BottomSheetModal>;
   handleSheetChanges?: (index: any) => void;
+  onPress?: () => void;
   contentContainer?: ViewStyle;
   children?: ReactNode;
   scrollviewStyle?: ViewStyle;
@@ -35,6 +36,7 @@ const AddTogolistSheet: FC<sheet> = ({
   handleSheetChanges = () => {},
   scrollviewStyle,
   headerStyle,
+  onPress,
   title,
   titleStyle,
 }) => {
@@ -57,6 +59,7 @@ const AddTogolistSheet: FC<sheet> = ({
               title="Create trip manually"
               leftImg={IMAGES.upload}
               BtnStyle={styles.trip}
+              onPress={onPress}
             />
             <SocialBtn
               title="Sync Apple calendar"

@@ -11,7 +11,7 @@ import {
 import React from 'react';
 import {AppStyles} from '../../theme/appStyles';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {CustomHeader} from '../../component';
+import {CustomHeader, OptionBar} from '../../component';
 import {IMAGES} from '../../assets/Images';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
@@ -74,7 +74,12 @@ const cards = [
 const BucketListScreen = () => {
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
-      <CustomHeader title="Trips" showSearch={false} onMorePress={() => {}} />
+      <CustomHeader
+        title="Trips"
+        showBack={true}
+        showSearch={false}
+        onMorePress={() => {}}
+      />
       <View style={[{paddingHorizontal: 20}]}>
         {/* Title */}
         <Text style={styles.title}>Bucket List Inspo</Text>
@@ -135,42 +140,20 @@ const BucketListScreen = () => {
         }}
         disableRightSwipe
         swipeToOpenPercent={30}
-        rightOpenValue={-150}
-        renderHiddenItem
+               rightOpenValue={-354}
+        
         renderHiddenItem={(data, rowMap) => (
-          <View style={styles.rowBack}>
-            <TouchableOpacity style={styles.backButton}>
-              <Image source={IMAGES.restore} style={styles.restore} />
-              <Text style={styles.backText}>Restore</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.backButton, {marginTop: hp(4)}]}>
-              <Image source={IMAGES.remove} style={styles.remove} />
-              <Text style={styles.backText}>Delete</Text>
-            </TouchableOpacity>
-          </View>
+          <OptionBar
+            container={[
+              styles.optioncontainer,
+              {marginTop: hp(8), borderRadius: 25, height: 114,},
+            ]}
+          />
+          
         )}
         leftOpenValue={75}
       />
-      {/* <FlatList
-        data={cards}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingHorizontal: 20}}
-        renderItem={({item}) => {
-          return (
-            <CardImageView
-              onCardPress={() => {
-                navigateTo(SCREENS.BucketListDetails);
-              }}
-              title={item?.title}
-              Togolist={item?.user}
-              Worldwide={item?.location}
-              Lists
-              listCount={item.lists}
-              viewValue={item.likes}
-            />
-          );
-        }}
-      /> */}
+     
       <View style={{height: 20}} />
     </SafeAreaView>
   );
@@ -179,6 +162,9 @@ const BucketListScreen = () => {
 export default BucketListScreen;
 
 const styles = StyleSheet.create({
+  optioncontainer: {
+    marginBottom: hp(8),
+  },
   title: {
     ...commonFontStyle(700, 32, colors.black),
     marginBottom: 8,

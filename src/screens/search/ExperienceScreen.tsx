@@ -27,6 +27,7 @@ const ExperienceScreen = () => {
     <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader
         backImg={IMAGES.back1}
+         showBack={true}
         backIconStyle={styles.back}
         showSearch={false}
         moreImg={IMAGES.more_icon}

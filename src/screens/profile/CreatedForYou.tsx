@@ -61,7 +61,7 @@ const cards = [
 const CreatedForYou = () => {
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
-      <CustomHeader title="Profile" showSearch={false} onMorePress={() => {}} />
+      <CustomHeader title="Profile"  showBack={true} showSearch={false} onMorePress={() => {}} />
       <View style={[{paddingHorizontal: 20}]}>
         {/* Title */}
         <Text style={styles.title}>Created For You</Text>

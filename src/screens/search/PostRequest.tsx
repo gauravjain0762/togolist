@@ -24,6 +24,7 @@ const PostRequest = () => {
       <CustomHeader
         backImg={IMAGES.back1}
         backIconStyle={styles.back}
+         showBack={true}
         showSearch={false}
         moreImg={IMAGES.more_icon}
         moreIconStyle={styles.more}

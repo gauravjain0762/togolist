@@ -40,8 +40,8 @@ const ProfileSettingScreen = (props: Props) => {
   const [actionSheet, setActionSheet] = useState(false);
 
   const [useData, setUserData] = useState({
-    name: 'Emily',
-    useName: 'Emily',
+    name: 'Raymond Daily',
+    useName: 'raydaily',
     location: 'Toronto, Canada',
   });
 
@@ -69,7 +69,7 @@ const ProfileSettingScreen = (props: Props) => {
 
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
-      <CustomHeader title="Profile" showSearch={false} showMore={false} />
+      <CustomHeader  showBack={true} title="Profile" showSearch={false} showMore={false} />
 
       <View style={styles.searchContainer}>
         <Image source={IMAGES.search} style={styles.searchIcon} />
@@ -117,7 +117,7 @@ const ProfileSettingScreen = (props: Props) => {
             {userEdit ? (
               <View style={[{marginTop: 10}]}>
                 <View style={[AppStyles.Hcenter]}>
-                  <Image source={IMAGES.user_icon} style={[styles.userIcon]} />
+                  <Image source={IMAGES.Avatar_icon} style={[styles.userIcon]} />
                   <TouchableOpacity
                     onPress={() => {
                       setActionSheet(true);
@@ -162,10 +162,10 @@ const ProfileSettingScreen = (props: Props) => {
               </View>
             ) : (
               <View style={styles.userCardView}>
-                <Image source={IMAGES.user_icon} style={styles.userIcon} />
+                <Image source={IMAGES.Avatar_icon} style={styles.userIcon} />
                 <View style={{gap: 8}}>
-                  <Text style={styles.userName}>Emily</Text>
-                  <Text style={styles.userName1}>@Emily</Text>
+                  <Text style={styles.userName}>Raymond Daily</Text>
+                  <Text style={styles.userName1}>@raydaily</Text>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Image
                       source={IMAGES.locationWhite}
@@ -226,10 +226,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lightGray,
     borderRadius: 14,
     paddingHorizontal: wp(12),
-    paddingVertical: hp(12),
     marginBottom: 16,
     marginHorizontal: wp(16),
     marginTop: 10,
+    height:48
   },
   searchInput: {
     flex: 1,
@@ -285,11 +285,12 @@ const styles = StyleSheet.create({
   item: {
     // backgroundColor: '#F3F3F3',
     borderRadius: 16,
-    paddingVertical: 20,
+    // paddingVertical: 20,
     paddingHorizontal: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    height:49
   },
   text: {
     ...commonFontStyle(500, 14, colors.black),

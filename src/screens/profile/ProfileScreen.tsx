@@ -35,6 +35,7 @@ import Calendar from '../../component/common/Calendar';
 import TravelCard from '../../component/common/TravelCard';
 import TravelCardLock from '../../component/common/TravelCardLock';
 import {SwipeListView} from 'react-native-swipe-list-view';
+import {useNavigation} from '@react-navigation/native';
 
 type Props = {};
 
@@ -85,7 +86,7 @@ const mockData = [
 
 const events = [
   {
-    id:1,
+    id: 1,
     date: 'April 23',
     title: 'BBQ Festival',
     location: 'San Diego',
@@ -94,7 +95,7 @@ const events = [
     isPrivate: false,
   },
   {
-    id:2,
+    id: 2,
     date: 'May 2',
     title: 'Jazz Night',
     location: 'San Diego',
@@ -103,7 +104,7 @@ const events = [
     isPrivate: true,
   },
   {
-    id:3,
+    id: 3,
     date: 'May 10',
     title: 'Lafayette',
     location: 'San Diego',
@@ -112,7 +113,7 @@ const events = [
     isPrivate: false,
   },
   {
-    id:4,
+    id: 4,
     date: 'May 26',
     title: 'CRSSD',
     location: 'San Diego',
@@ -122,26 +123,22 @@ const events = [
   },
 ];
 
-
 const UpcommingEvents = [
   {
-    id:1,
+    id: 1,
     date: 'April 23',
     title: 'Canada Expereince',
     image: 'https://your-cdn.com/bbq.jpg',
     isPrivate: false,
   },
   {
-     id:2,
+    id: 2,
     date: 'May 2',
     title: 'Europe Adventure',
     image: 'https://your-cdn.com/jazz.jpg',
     isPrivate: true,
   },
 ];
-
-
-
 
 const ProfileScreen = (props: Props) => {
   const [selectedTab, setSelectedTab] = useState('Lists');
@@ -156,6 +153,16 @@ const ProfileScreen = (props: Props) => {
   const [showSavedCollections, setShowSavedCollections] = useState(true);
   const [showUpcoming, setShowUpcoming] = useState(true);
   const [showPast, setShowPast] = useState(true);
+
+  const navigation = useNavigation();
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', () => {
+      setSelectedTab('Lists');
+      // Do something, like scroll to top or reset list
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const categories = [
     {
@@ -275,6 +282,7 @@ const ProfileScreen = (props: Props) => {
         searchIconStyle={{
           tintColor: searchShow ? colors.primary1 : colors.black,
         }}
+        showBack={false}
         onSearchPress={() => {
           setSearchShow(!searchShow);
         }}
@@ -308,10 +316,7 @@ const ProfileScreen = (props: Props) => {
 
         <View style={styles.profileContainer}>
           <View style={styles.avatarView}>
-            <Image
-              source={{uri: 'https://i.pravatar.cc/150?img=11'}}
-              style={styles.avatar}
-            />
+            <Image source={IMAGES.Avatar_icon} style={styles.avatar} />
           </View>
           <View style={{flex: 1, marginLeft: 12}}>
             <Text style={styles.userName}>Raymond Daily</Text>
@@ -334,7 +339,7 @@ const ProfileScreen = (props: Props) => {
           title={'Follow'}
         />
         <LinearView
-          linearViewStyle={{marginTop: hp(18)}}
+          linearViewStyle={{marginTop: hp(16)}}
           containerStyle={{paddingVertical: 20}}>
           <View style={styles.tabContainer}>
             {tabs.map(tab => (
@@ -364,6 +369,7 @@ const ProfileScreen = (props: Props) => {
         {selectedTab == 'Lists' && (
           <>
             <HeaderTextIcon
+            headerStyle={{ marginTop: 8}}
               title={'Personal Lists'}
               show={showPersonal}
               onDownPress={() => {
@@ -402,7 +408,7 @@ const ProfileScreen = (props: Props) => {
                     );
                   })}
                 </ScrollView>
-                
+
                 <CardImage
                   onCardPress={() => {
                     navigateTo(SCREENS.CreatedForYou);
@@ -451,6 +457,7 @@ const ProfileScreen = (props: Props) => {
             )}
             <HeaderTextIcon
               title={'Collections'}
+               headerStyle={{ marginTop: 8}}
               showAddIcon={true}
               show={showCollections}
               onDownPress={() => {
@@ -466,9 +473,9 @@ const ProfileScreen = (props: Props) => {
                   keyExtractor={(_, index) => index.toString()}
                   columnWrapperStyle={{
                     justifyContent: 'space-between',
-                    marginBottom: 16,
+                    marginBottom: 8,
                   }}
-                  style={{marginTop: 10}}
+                  style={{marginTop: 8}}
                   renderItem={({item}) => (
                     <TravelCard
                       {...item}
@@ -498,15 +505,6 @@ const ProfileScreen = (props: Props) => {
         )}
         {selectedTab == 'Saved' && (
           <>
-            {showTogolistPro1 && (
-              <TogolistPro
-                onClosePress={() => {
-                  setShowTogolistPro1(false);
-                }}
-                cardStyle={{marginBottom: 0}}
-              />
-            )}
-
             {/* <View style={styles.headerView}>
               <Text style={[commonFontStyle(700, 20, colors.black)]}>
                 Saved Collections
@@ -547,6 +545,14 @@ const ProfileScreen = (props: Props) => {
                 />
               </>
             )}
+            {showTogolistPro1 && (
+              <TogolistPro
+                onClosePress={() => {
+                  setShowTogolistPro1(false);
+                }}
+                cardStyle={{marginBottom: 10}}
+              />
+            )}
           </>
         )}
         {selectedTab == 'Listings' && (
@@ -580,6 +586,7 @@ const ProfileScreen = (props: Props) => {
             <HeaderTextIcon
               title={'Upcoming '}
               show={showUpcoming}
+               headerStyle={{ marginTop: 16}}
               onDownPress={() => {
                 setShowUpcoming(!showUpcoming);
               }}
@@ -593,14 +600,14 @@ const ProfileScreen = (props: Props) => {
                   keyExtractor={(_, index) => index.toString()}
                   columnWrapperStyle={{
                     justifyContent: 'space-between',
-                    marginBottom: 16,
+                    marginBottom: 8,
                   }}
-                  style={{marginTop: 10}}
+                  style={{marginTop: 8}}
                   renderItem={({item}) => (
                     <TravelCardLock
                       {...item}
                       onPress={() => {
-                        navigateTo(SCREENS.UpcomingListDetails,{item:item});
+                        navigateTo(SCREENS.UpcomingListDetails, {item: item});
                       }}
                     />
                   )}
@@ -610,35 +617,39 @@ const ProfileScreen = (props: Props) => {
             <HeaderTextIcon
               title={'Past '}
               show={showPast}
+               headerStyle={{ marginTop: 0}}
               onDownPress={() => {
                 setShowPast(!showPast);
               }}
             />
             {showPast && (
               <>
-                <CardImageText
-                  // title={'No collections yet!'}
-                  subText={
-                    'Nothing yet! Find activities or start planning trips to view your goings history!'
-                  }
-                />
                 <FlatList
                   data={events}
                   numColumns={2}
                   keyExtractor={(_, index) => index.toString()}
                   columnWrapperStyle={{
                     justifyContent: 'space-between',
-                    marginBottom: 16,
+                    marginBottom: 8,
                   }}
-                  style={{marginTop: 10}}
+                  style={{marginTop: 8}}
                   renderItem={({item}) => (
                     <TravelCardLock
                       {...item}
                       onPress={() => {
-                         navigateTo(SCREENS.EventDetails,{item:item,data:events})
+                        navigateTo(SCREENS.EventDetails, {
+                          item: item,
+                          data: events,
+                        });
                       }}
                     />
                   )}
+                />
+                <CardImageText
+                  // title={'No collections yet!'}
+                  subText={
+                    'Nothing yet! Find activities or start planning trips to view your goings history!'
+                  }
                 />
               </>
             )}
@@ -669,8 +680,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lightGray,
     borderRadius: 14,
     paddingHorizontal: 12,
-    paddingVertical: 6,
-    marginBottom: 16,
+    // paddingVertical: 6,
+    height: 48,
   },
   searchInput: {
     flex: 1,
@@ -723,7 +734,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 0,
     marginHorizontal: 0,
-    marginTop: 12,
+    marginTop: 16,
   },
   buttonText: {
     ...commonFontStyle(600, 12, colors.white),
@@ -758,7 +769,7 @@ const styles = StyleSheet.create({
   categoryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 16,
+    marginTop: 8,
     gap: 4,
   },
   categoryButton: {

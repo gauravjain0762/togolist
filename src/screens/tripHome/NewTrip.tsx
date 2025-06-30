@@ -129,6 +129,7 @@ const NewTrip = () => {
       <CustomHeader
         backImg={IMAGES.back1}
         backIconStyle={styles.back}
+         showBack={true}
         showSearch={false}
         moreImg={IMAGES.more_icon}
         onMorePress={() => handlePresentInviteModalPress()}
@@ -250,7 +251,7 @@ const NewTrip = () => {
             disableRightSwipe
             swipeToOpenPercent={30}
             rightOpenValue={-170}
-            renderHiddenItem
+            
             renderHiddenItem={(data, rowMap) => (
               <View style={styles.rowBack}>
                 <TouchableOpacity style={styles.backButton}>

@@ -50,6 +50,7 @@ export const IMAGES = {
   location: require('./icon/create/location.png'),
   more: require('./icon/create/more.png'),
   bbq: require('./icon/create/bbq.png'),
+  trips_bg: require('./icon/create/trips_bg.png'),
   arrow: require('./icon/create/arrow.png'),
   world: require('./icon/create/world.png'),
   follower: require('./icon/create/follower.png'),
@@ -78,6 +79,7 @@ export const IMAGES = {
   search: require('./icon/tab/search.png'),
 
   //profile
+  Avatar_icon: require('./icon/profile/Avatar_icon.png'),
   more_icon: require('./icon/profile/more_icon.png'),
   add_icon: require('./icon/profile/add_icon.png'),
   been: require('./icon/profile/been.png'),

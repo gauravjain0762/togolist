@@ -48,7 +48,7 @@ const PersonalInformation = (props: Props) => {
 
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
-      <CustomHeader title="Settings" showSearch={false} showMore={false} />
+      <CustomHeader  showBack={true} title="Settings" showSearch={false} showMore={false} />
       <ScrollView style={{marginHorizontal: 16, flex: 1}}>
         <LinearView>
           <View style={{padding: 16}}>

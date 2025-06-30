@@ -54,6 +54,7 @@ const ThingsTogolistsScreen = ({navigate}: any) => {
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader
+       showBack={true}
         title={
           params?.isBack
             ? 'Back'
@@ -112,7 +113,7 @@ const ThingsTogolistsScreen = ({navigate}: any) => {
         disableRightSwipe
         swipeToOpenPercent={30}
         rightOpenValue={-140}
-        renderHiddenItem
+        
         ListFooterComponent={() => {
           return (
             <Button

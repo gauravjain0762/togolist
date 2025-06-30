@@ -15,7 +15,7 @@ import {colors} from '../../theme/colors';
 import {IMAGES} from '../../assets/Images';
 
 const {width} = Dimensions.get('window');
-const CARD_WIDTH = (width - 48) / 2; // 16 padding + 16 gap
+const CARD_WIDTH = (width - 40) / 2; // 16 padding + 16 gap
 const ExploreCard = ({title, location, image, avatar, users,onPress}) => {
   return (
     <TouchableOpacity onPress={()=>{

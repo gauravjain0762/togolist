@@ -25,6 +25,7 @@ const RequestHost = () => {
         showSearch={false}
         moreImg={IMAGES.more_icon}
         moreIconStyle={styles.more}
+         showBack={true}
         headerStyle={styles.header}
       />
       <ImageBackground

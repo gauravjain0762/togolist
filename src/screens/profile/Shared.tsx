@@ -14,6 +14,7 @@ import {colors} from '../../theme/colors';
 import {
   Button,
   CustomHeader,
+  OptionBar,
   SearchBar,
   ShareBottomSheet,
   SharedCard,
@@ -70,6 +71,7 @@ const Shared = () => {
   return (
     <SafeAreaView style={[AppStyles.flex, styles.mainContainer]}>
       <CustomHeader
+       showBack={true}
         backImg={IMAGES.back1}
         backIconStyle={styles.back}
         showSearch={false}
@@ -94,7 +96,7 @@ const Shared = () => {
               <View style={styles.infoRow}>
                 <Text style={styles.text}>San Diego</Text>
                 <Text style={styles.separator}>|</Text>
-                <Text style={styles.text}>5 Lists</Text>
+                <Text style={styles.text}>5 Places</Text>
                 <Text style={styles.separator}>|</Text>
                 <Image source={IMAGES.world} style={styles.icon} />
                 <Text style={[styles.text, styles.textWithIcon]}>Public</Text>
@@ -151,7 +153,8 @@ const Shared = () => {
                     <View style={styles.rowFront}>
                       <SharedCard
                         onCardPress={() => {
-                          data?.item?.onPress && data?.item?.onPress();
+                          navigateTo(SCREENS.SharedListDetails)
+                          // data?.item?.onPress && data?.item?.onPress();
                         }}
                         title={data?.item?.title}
                         likeCount={data?.item?.lists}
@@ -165,52 +168,32 @@ const Shared = () => {
                 }}
                 disableRightSwipe
                 swipeToOpenPercent={30}
-                rightOpenValue={-150}
-                renderHiddenItem
+                      rightOpenValue={-354}
                 renderHiddenItem={(data, rowMap) => (
-                  <View style={styles.rowBack}>
-                    <TouchableOpacity style={styles.backButton}>
-                      <Image source={IMAGES.restore} style={styles.restore} />
-                      <Text style={styles.backText}>Restore</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[styles.backButton, {marginTop: hp(4)}]}>
-                      <Image source={IMAGES.remove} style={styles.remove} />
-                      <Text style={styles.backText}>Delete</Text>
-                    </TouchableOpacity>
-                  </View>
+                  <OptionBar container={styles.optioncontainer} />
+                  // <View style={styles.rowBack}>
+                  //   <TouchableOpacity style={styles.backButton}>
+                  //     <Image source={IMAGES.restore} style={styles.restore} />
+                  //     <Text style={styles.backText}>Restore</Text>
+                  //   </TouchableOpacity>
+                  //   <TouchableOpacity
+                  //     style={[styles.backButton, {marginTop: hp(4)}]}>
+                  //     <Image source={IMAGES.remove} style={styles.remove} />
+                  //     <Text style={styles.backText}>Delete</Text>
+                  //   </TouchableOpacity>
+                  // </View>
                 )}
                 leftOpenValue={75}
               />
-              {/* <FlatList
-                data={cards}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={styles.Listcontainer}
-                ItemSeparatorComponent={() => (
-                  <View style={styles.liastseparator} />
-                )}
-                renderItem={({item}) => {
-                  return (
-                    <SharedCard
-                      onCardPress={() => {
-                        item?.onPress && item?.onPress();
-                      }}
-                      title={item?.title}
-                      likeCount={item.lists}
-                      account
-                      address
-                      place
-                      listCount={item?.lists}
-                    />
-                  );
-                }}
-              /> */}
+            
               <Button
                 leftImg={IMAGES.addlist}
                 type="outline"
                 title="Add a new list"
                 BtnStyle={styles.btn}
-                onPress={() => handlePresentModalPress()}
+                onPress={() => {
+                  navigateTo(SCREENS.CreateListScreen)
+                }}
               />
             </>
           )}
@@ -240,6 +223,10 @@ const Shared = () => {
 export default Shared;
 
 const styles = StyleSheet.create({
+    optioncontainer: {
+    marginBottom: hp(8),
+    marginHorizontal:16
+  },
   mainContainer: {
     backgroundColor: colors.white,
   },
@@ -345,7 +332,7 @@ const styles = StyleSheet.create({
   rowFront: {
     overflow: 'hidden',
     borderRadius: 10,
-    marginHorizontal: 20,
+    marginHorizontal: 16,
   },
 
   rowBack: {

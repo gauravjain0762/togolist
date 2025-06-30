@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {AppStyles} from '../../theme/appStyles';
 import {commonFontStyle, hp, SCREEN_HEIGHT} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
@@ -18,6 +18,7 @@ import CardImageBtn from '../../component/common/CardImageBtn';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
 import ActivityFeedCard from '../../component/notification/ActivityFeedCard';
+import {useNavigation} from '@react-navigation/native';
 
 const tabs = ['All', 'Updates', 'Activity Feed', 'Guide Board'];
 
@@ -134,6 +135,16 @@ const NotificationScreen = () => {
   const [selectedTab, setSelectedTab] = useState('All');
   const [selectedBtn, setSelectedBtn] = useState(false);
 
+  const navigation = useNavigation();
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', () => {
+      setSelectedTab('All');
+      // Do something, like scroll to top or reset list
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   const renderItem = ({item}) => {
     if (item.isDecision) {
       return (
@@ -224,7 +235,11 @@ const NotificationScreen = () => {
         <FlatList
           data={[1, 2]}
           renderItem={() => {
-            return <ActivityFeedCard imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0 : 20 }} />;
+            return (
+              <ActivityFeedCard
+                imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0 : 20}}
+              />
+            );
           }}
           keyExtractor={item => item.id}
           showsVerticalScrollIndicator={false}

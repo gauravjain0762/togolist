@@ -9,7 +9,7 @@ type bar = {container?: ViewStyle};
 const OptionBar: FC<bar> = ({container}) => {
   return (
     <View style={[styles.container, container]}>
-      <View style={styles.row}>
+      <View style={[styles.row,{    paddingLeft:20}]}>
         <Image source={IMAGES.send} style={styles.icon} />
         <Text style={styles.label}>{'Share'}</Text>
       </View>

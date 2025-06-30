@@ -27,6 +27,7 @@ const TripPlanner = () => {
         backImg={IMAGES.back1}
         backIconStyle={styles.back}
         showSearch={false}
+        showBack={true}
         moreImg={IMAGES.more_icon}
         moreIconStyle={styles.more}
         headerStyle={styles.header}

@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     justifyContent: 'space-between',
     padding: 10,
-    marginTop: 12,
+    marginTop: 8,
   },
   image: {
     borderRadius: 25,

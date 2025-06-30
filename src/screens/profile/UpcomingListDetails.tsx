@@ -228,6 +228,7 @@ const UpcomingListDetails = ({route}) => {
         backImg={IMAGES.back1}
         backIconStyle={styles.back}
         showSearch={false}
+         showBack={true}
         moreImg={IMAGES.more_icon}
         onMorePress={() => handlePresentInviteModalPress()}
         moreIconStyle={styles.more}

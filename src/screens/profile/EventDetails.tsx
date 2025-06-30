@@ -86,9 +86,9 @@ const reference = [
 // ];
 
 const EventDetails = ({route}) => {
-  const {item: initialItem,data:cards} = route.params; // Get the single item passed
+  const {item: initialItem, data: cards} = route.params; // Get the single item passed
   const navigation = useNavigation();
-  
+
   const flatListRef = useRef(null);
 
   // Find the initial index of the passed item within the hardcoded data
@@ -98,6 +98,9 @@ const EventDetails = ({route}) => {
 
   // Use a state to control FlatList visibility after scrolling
   const [flatListReady, setFlatListReady] = useState(false);
+  const [showComments, setShowComments] = useState(false);
+
+  const listOfComments= !showComments ? [1] : [1,2,3,4]
 
   useEffect(() => {
     // Only scroll if initialIndex is found and FlatListRef exists
@@ -205,6 +208,7 @@ const EventDetails = ({route}) => {
     <SafeAreaView style={[AppStyles.flex, styles.maincontainer]}>
       <CustomHeader
         backImg={IMAGES.back1}
+        showBack={true}
         backIconStyle={styles.back}
         showSearch={false}
         moreImg={IMAGES.more_icon}
@@ -363,41 +367,53 @@ const EventDetails = ({route}) => {
                     <View style={styles.card}>
                       <View style={styles.horizontal_divider} />
                       {/* User post */}
-                      <View
-                        style={[styles.row, {justifyContent: 'space-between'}]}>
-                        <View style={styles.row}>
-                          <Image
-                            source={{uri: 'https://i.pravatar.cc/40'}}
-                            style={styles.avatar}
-                          />
-                          <Text style={styles.username}>@emily</Text>
-                        </View>
-                        {/* Like section */}
-                        <View
-                          style={[
-                            styles.row,
-                            {justifyContent: 'flex-end', gap: wp(4)},
-                          ]}>
-                          <Image
-                            source={IMAGES.favorite}
-                            resizeMode="contain"
-                            style={styles.fav}
-                          />
-                          <Text style={styles.likeText}>100</Text>
-                        </View>
-                      </View>
+                      {listOfComments?.map(() => {
+                        return (
+                          <>
+                            <View
+                              style={[
+                                styles.row,
+                                {justifyContent: 'space-between'},
+                              ]}>
+                              <View style={styles.row}>
+                                <Image
+                                  source={{uri: 'https://i.pravatar.cc/40'}}
+                                  style={styles.avatar}
+                                />
+                                <Text style={styles.username}>@emily</Text>
+                              </View>
+                              {/* Like section */}
+                              <View
+                                style={[
+                                  styles.row,
+                                  {justifyContent: 'flex-end', gap: wp(4)},
+                                ]}>
+                                <Image
+                                  source={IMAGES.favorite}
+                                  resizeMode="contain"
+                                  style={styles.fav}
+                                />
+                                <Text style={styles.likeText}>100</Text>
+                              </View>
+                            </View>
 
-                      <Text style={styles.contentText}>
-                        You know it’s a good California burrito when you don’t
-                        need to as for guac because it’s already included. Best
-                        Cali burrito in SD imo. Their machaca burrito is killer
-                        too.
-                      </Text>
+                            <Text style={styles.contentText}>
+                              You know it’s a good California burrito when you
+                              don’t need to as for guac because it’s already
+                              included. Best Cali burrito in SD imo. Their
+                              machaca burrito is killer too.
+                            </Text>
+                          </>
+                        );
+                      })}
 
                       <View style={styles.separator} />
 
                       {/* Comments */}
                       <TouchableOpacity
+                        onPress={()=>{
+                          setShowComments(!showComments)
+                        }}
                         style={[
                           styles.row,
                           {
@@ -406,7 +422,7 @@ const EventDetails = ({route}) => {
                           },
                         ]}>
                         <Text style={styles.commentLink}>
-                          View all comments
+                          {showComments ? "Show less comments" : "View all comments"}
                         </Text>
                         <View style={[styles.row, {gap: wp(4)}]}>
                           <Image
@@ -614,6 +630,7 @@ const styles = StyleSheet.create({
   },
   event: {
     marginVertical: hp(8),
+    paddingVertical: 15,
   },
   features: {
     gap: wp(4),

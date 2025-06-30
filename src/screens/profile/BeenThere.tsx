@@ -55,6 +55,7 @@ const BeenThere = () => {
     <SafeAreaView style={[AppStyles.flex, styles.maincontainer]}>
       <CustomHeader
         backImg={IMAGES.back1}
+         showBack={true}
         backIconStyle={styles.back}
         showSearch={false}
         moreImg={IMAGES.more_icon}

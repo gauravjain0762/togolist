@@ -61,11 +61,13 @@ export default memo(ProfileCard);
 const styles = StyleSheet.create({
   card: {
     alignItems: 'center',
-    paddingVertical: hp(24),
+    // paddingVertical: hp(24),
+    paddingTop:10,
+    paddingBottom:14,
     paddingHorizontal: wp(10),
     gap: hp(8),
     flex: 1,
-    maxWidth: (SCREEN_WIDTH / 2) * 0.9,
+    maxWidth: (SCREEN_WIDTH / 2) * 0.91,
   },
   avatar: {
     width: wp(58),

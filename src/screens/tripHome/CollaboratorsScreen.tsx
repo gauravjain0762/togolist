@@ -50,6 +50,7 @@ const CollaboratorsScreen = () => {
       <CustomHeader
         title={'Trip Planner'}
         showSearch={false}
+         showBack={true}
         showMore={false}
         onMorePress={() => {}}
       />

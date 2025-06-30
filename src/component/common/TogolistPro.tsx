@@ -11,6 +11,8 @@ import React, {FC, memo} from 'react';
 import {colors} from '../../theme/colors';
 import {commonFontStyle, hp} from '../../theme/fonts';
 import {IMAGES} from '../../assets/Images';
+import { navigateTo } from '../../utils/commonFunction';
+import { SCREENS } from '../../navigation/screenNames';
 
 type button = {
   cardStyle?: ViewStyle;
@@ -30,7 +32,9 @@ const TogolistPro: FC<button> = ({cardStyle,onClosePress}:any) => {
         <Text style={styles.subtitle}>
           Use AI to help you plan your next adventure.
         </Text>
-        <TouchableOpacity style={styles.tryProButton}>
+        <TouchableOpacity onPress={()=>{
+          navigateTo(SCREENS.SubscriptionScreen)
+        }} style={styles.tryProButton}>
           <Text style={styles.tryProText}>Try Pro</Text>
         </TouchableOpacity>
       </View>

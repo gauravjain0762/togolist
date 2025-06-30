@@ -29,7 +29,7 @@ import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
 import CategoryCard from '../../component/trip/CategoryCard';
 import Checklist from '../../component/trip/Checklist';
-import { SwipeListView } from 'react-native-swipe-list-view';
+import {SwipeListView} from 'react-native-swipe-list-view';
 
 const categories = [
   {
@@ -72,6 +72,7 @@ const BucketListDetails = () => {
         backImg={IMAGES.back1}
         backIconStyle={styles.back}
         showSearch={false}
+        showBack={true}
         // moreImg={IMAGES.more_icon}
         // moreIconStyle={styles.more}
         onMorePress={() => {
@@ -148,44 +149,44 @@ const BucketListDetails = () => {
           </TouchableOpacity>
         </View>
 
-          <SwipeListView
-                data={categories}
-                // contentContainerStyle={{paddingHorizontal: 20}}
-                showsVerticalScrollIndicator={false}
-                renderItem={(data, rowMap) => {
-                  return (
-                    <View style={styles.rowFront}>
-                      <CategoryCard
-                onCardPress={() => {
-                  navigateTo(SCREENS.ThingsTogolistsScreen);
-                }}
-                title={data?.item?.title}
-                Togolist={data?.item?.category}
-                Lists
-                listCount={data?.item?.places}
-                showAddList={true}
-              />
-                    </View>
-                  );
-                }}
-                disableRightSwipe
-                swipeToOpenPercent={30}
-                rightOpenValue={-150}
-                renderHiddenItem
-                renderHiddenItem={(data, rowMap) => (
-                  <View style={styles.rowBack}>
-                    <TouchableOpacity style={styles.backButton}>
-                      <Image source={IMAGES.restore} style={styles.restore} />
-                      <Text style={styles.backText}>Restore</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.backButton, {marginTop: hp(4)}]}>
-                      <Image source={IMAGES.remove} style={styles.remove} />
-                      <Text style={styles.backText}>Delete</Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-                leftOpenValue={75}
-              />
+        <SwipeListView
+          data={categories}
+          // contentContainerStyle={{paddingHorizontal: 20}}
+          showsVerticalScrollIndicator={false}
+          renderItem={(data, rowMap) => {
+            return (
+              <View style={styles.rowFront}>
+                <CategoryCard
+                  onCardPress={() => {
+                    navigateTo(SCREENS.ThingsTogolistsScreen);
+                  }}
+                  title={data?.item?.title}
+                  Togolist={data?.item?.category}
+                  Lists
+                  listCount={data?.item?.places}
+                  showAddList={true}
+                />
+              </View>
+            );
+          }}
+          disableRightSwipe
+          swipeToOpenPercent={30}
+          rightOpenValue={-150}
+          
+          renderHiddenItem={(data, rowMap) => (
+            <View style={styles.rowBack}>
+              <TouchableOpacity style={styles.backButton}>
+                <Image source={IMAGES.restore} style={styles.restore} />
+                <Text style={styles.backText}>Restore</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.backButton, {marginTop: hp(4)}]}>
+                <Image source={IMAGES.remove} style={styles.remove} />
+                <Text style={styles.backText}>Delete</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          leftOpenValue={75}
+        />
 
         {/* <FlatList
           data={categories}
@@ -753,8 +754,7 @@ const styles = StyleSheet.create({
     ...commonFontStyle(600, 14, colors.white),
   },
 
-
-   rowFront: {
+  rowFront: {
     overflow: 'hidden',
     borderRadius: 10,
     // marginHorizontal: 20,

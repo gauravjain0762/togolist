@@ -90,6 +90,7 @@ const FoodPlace = () => {
   return (
     <SafeAreaView style={[AppStyles.flex, styles.maincontainer]}>
       <CustomHeader
+       showBack={true}
         backImg={IMAGES.back1}
         backIconStyle={styles.back}
         showSearch={false}
