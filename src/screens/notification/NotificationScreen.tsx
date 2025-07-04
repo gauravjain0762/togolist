@@ -186,13 +186,23 @@ const NotificationScreen = () => {
   return (
     <SafeAreaView
       edges={['top']}
-      style={[AppStyles.mainWhiteContainer, {paddingHorizontal: 20}]}>
-      <View style={styles.header}>
+      style={[AppStyles.mainWhiteContainer, {paddingHorizontal: 16}]}>
+      {/* <View style={styles.header}>
         <Text style={styles.greeting}>Notifications</Text>
         <TouchableOpacity onPress={()=>{
           navigateTo(SCREENS.ProfileSettingScreen)
         }}>
           <Image source={IMAGES.more_icon} style={styles.icon} />
+        </TouchableOpacity>
+      </View> */}
+
+      <View style={styles.header}>
+        <Text style={styles.greeting}>{'Notifications'}</Text>
+        <TouchableOpacity
+          onPress={() => {
+            navigateTo(SCREENS.ProfileSettingScreen);
+          }}>
+          <Image source={IMAGES.more_icon} style={[styles.moreIcon]} />
         </TouchableOpacity>
       </View>
 
@@ -296,10 +306,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+     marginTop: 8,
   },
   greeting: {
-       ...commonFontStyle(700, 32, colors.black),
-
+    
+    ...commonFontStyle(700, 34, colors.black),
+  },
+  moreIcon: {
+    width: 22,
+    height: 22,
+    tintColor: colors.black,
   },
   icon: {
     width: 22,
@@ -309,7 +325,7 @@ const styles = StyleSheet.create({
   tabContainer: {
     flexDirection: 'row',
     padding: 8,
-    marginTop:hp(10),
+    marginTop: hp(10),
     marginBottom: hp(8),
   },
   tab: {

@@ -13,7 +13,7 @@ import {AppStyles} from '../../theme/appStyles';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {CustomHeader, OptionBar} from '../../component';
 import {IMAGES} from '../../assets/Images';
-import {commonFontStyle, hp, wp} from '../../theme/fonts';
+import {commonFontStyle, hp, SCREEN_WIDTH, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import CardImage from '../../component/common/CardImage';
 import CardImageView from '../../component/trip/CardImageView';
@@ -143,7 +143,9 @@ const BucketListScreen = () => {
         }}
         disableRightSwipe
         swipeToOpenPercent={30}
-        rightOpenValue={-330}
+           swipeToOpenPercent={50}
+
+                rightOpenValue={-(SCREEN_WIDTH * 0.81)}
         renderHiddenItem={(data, rowMap) => (
           <OptionBar
             container={[

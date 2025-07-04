@@ -203,7 +203,7 @@ const ProfileScreen = (props: Props) => {
             width: 20,
             height: 26,
             resizeMode: 'contain',
-            tintColor:"#BD2332"
+            tintColor: '#BD2332',
           }}
         />
       ),
@@ -280,7 +280,7 @@ const ProfileScreen = (props: Props) => {
 
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
-      <CustomHeader
+      {/* <CustomHeader
         searchIconStyle={{
           tintColor: searchShow ? colors.primary1 : colors.black,
         }}
@@ -294,11 +294,20 @@ const ProfileScreen = (props: Props) => {
           navigateTo(SCREENS.ProfileSettingScreen);
         }}
         backIconStyle={{marginRight: wp(6)}}
-      />
+      /> */}
+      <View style={styles.header}>
+        <Text style={styles.heading}>{'Profile'}</Text>
+        <TouchableOpacity
+          onPress={() => {
+            navigateTo(SCREENS.ProfileSettingScreen);
+          }}>
+          <Image source={IMAGES.more_icon} style={[styles.moreIcon]} />
+        </TouchableOpacity>
+      </View>
       <Loader visible={false} />
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={[AppStyles.mainSide, AppStyles.flex]}>
+        style={[AppStyles.M16, AppStyles.flex]}>
         {true && (
           <View style={styles.searchContainer}>
             <Image source={IMAGES.search} style={styles.searchIcon} />
@@ -467,8 +476,8 @@ const ProfileScreen = (props: Props) => {
               onDownPress={() => {
                 setShowCollections(!showCollections);
               }}
-              onAddPress={()=>{
-                navigateTo(SCREENS.CreateListScreen)
+              onAddPress={() => {
+                navigateTo(SCREENS.CreateListScreen);
               }}
             />
 
@@ -670,10 +679,22 @@ const ProfileScreen = (props: Props) => {
 export default ProfileScreen;
 
 const styles = StyleSheet.create({
+  header: {
+    marginHorizontal: wp(16),
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 8,
+    marginBottom:10
+  },
   heading: {
-    textAlign: 'center',
-    marginVertical: 10,
-    ...commonFontStyle(600, 22, colors.black),
+    ...commonFontStyle(600, 17, colors.black),
+    // flex: 1,
+  },
+  moreIcon: {
+    width: 22,
+    height: 22,
+    tintColor: colors.black,
   },
 
   searchIcon: {
@@ -684,7 +705,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: "#78788029",
+    backgroundColor: '#78788029',
     borderRadius: 23,
     paddingHorizontal: 12,
     paddingVertical: Platform.OS == 'ios' ? 12 : 0,

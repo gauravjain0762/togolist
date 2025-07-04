@@ -353,8 +353,8 @@ const TripHome = (props: Props) => {
                 </View>
               )}
               disableRightSwipe
-              swipeToOpenPercent={30}
-              rightOpenValue={-349}
+              swipeToOpenPercent={50}
+              rightOpenValue={-(SCREEN_WIDTH * 0.82)}
               renderHiddenItem={(data, rowMap) => (
                 <OptionBar
                   container={[styles.optioncontainer, {borderRadius: 22}]}
@@ -510,8 +510,8 @@ const TripHome = (props: Props) => {
                 </View>
               )}
               disableRightSwipe
-              swipeToOpenPercent={30}
-               rightOpenValue={-349}
+              swipeToOpenPercent={50}
+              rightOpenValue={-(SCREEN_WIDTH * 0.82)}
               renderHiddenItem={(data, rowMap) => (
                 <OptionBar
                   container={[
@@ -541,7 +541,7 @@ const TripHome = (props: Props) => {
                 //   </TouchableOpacity>
                 // </View>
               )}
-              leftOpenValue={75}
+              leftOpenValue={5}
               onRowOpen={(rowKey, rowMap, toValue) => {
                 if (toValue < 0) {
                   console.log('Swiped left');
@@ -667,8 +667,8 @@ const TripHome = (props: Props) => {
                 </View>
               )}
               disableRightSwipe
-              swipeToOpenPercent={30}
-              rightOpenValue={-339}
+              swipeToOpenPercent={50}
+              rightOpenValue={-(SCREEN_WIDTH * 0.82)}
               renderHiddenItem={(data, rowMap) => (
                 <OptionBar
                   container={[
@@ -876,12 +876,13 @@ const styles = StyleSheet.create({
   headerView: {
     marginHorizontal: wp(16),
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
+     marginTop: 8,
   },
   heading: {
-    marginVertical: 10,
     ...commonFontStyle(700, 34, colors.black),
-    flex: 1,
+    // flex: 1,
   },
   moreIcon: {
     width: 22,

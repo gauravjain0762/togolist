@@ -20,7 +20,7 @@ import {
   SharedCard,
 } from '../../component';
 import {IMAGES} from '../../assets/Images';
-import {Fs, commonFontStyle, hp, wp} from '../../theme/fonts';
+import {Fs, SCREEN_WIDTH, commonFontStyle, hp, wp} from '../../theme/fonts';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
@@ -195,8 +195,9 @@ const Shared = () => {
                   );
                 }}
                 disableRightSwipe
-                swipeToOpenPercent={30}
-                rightOpenValue={-349}
+                              swipeToOpenPercent={50}
+
+                rightOpenValue={-(SCREEN_WIDTH * 0.82)}
                 renderHiddenItem={(data, rowMap) => (
                   <OptionBar
                     container={styles.optioncontainer}
