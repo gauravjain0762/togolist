@@ -47,6 +47,7 @@ const CommonSheet: FC<sheet> = ({
       <BottomSheetModal
         ref={bottomSheetModalRef}
         maxDynamicContentSize={maxDynamicContentSize}
+        style={styles.modalStyle}
         onChange={e => handleSheetChanges(e)}>
         <BottomSheetScrollView
           style={scrollviewStyle}
@@ -71,6 +72,19 @@ const CommonSheet: FC<sheet> = ({
 export default memo(CommonSheet);
 
 const styles = StyleSheet.create({
+  modalStyle: {
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    overflow: 'hidden',
+    elevation: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: -100, // shadow upwards
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+  },
   contentContainer: {
     justifyContent: 'center',
     backgroundColor: colors.white,

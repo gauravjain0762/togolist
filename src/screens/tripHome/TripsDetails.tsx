@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
 import {SCREEN_WIDTH, commonFontStyle, hp, wp} from '../../theme/fonts';
@@ -21,6 +21,7 @@ import {
 import {IMAGES} from '../../assets/Images';
 import ReactNativeModal from 'react-native-modal';
 import {PieChart} from 'react-native-gifted-charts';
+import {BlurView} from '@react-native-community/blur';
 
 const TripsDetails = () => {
   const [proModel, setProModel] = useState(false);
@@ -130,11 +131,15 @@ const TripsDetails = () => {
     },
   ];
 
+  useEffect(() => {
+    setProModel(true);
+  }, []);
+
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader
         backImg={IMAGES.back1}
-         showBack={true}
+        showBack={true}
         backIconStyle={styles.back}
         showSearch={false}
         moreImg={IMAGES.more_icon}
@@ -142,6 +147,7 @@ const TripsDetails = () => {
         headerStyle={styles.header}
         title="Trips"
       />
+
       <ScrollView
         style={{flex: 1, backgroundColor: 'white'}}
         showsVerticalScrollIndicator={false}
@@ -358,12 +364,18 @@ const TripsDetails = () => {
           ))}
         </LinearView>
       </ScrollView>
+    {proModel &&  <BlurView
+        style={StyleSheet.absoluteFill}
+        blurType="light"
+        blurAmount={3}
+        reducedTransparencyFallbackColor="white"
+      />}
       <ReactNativeModal isVisible={proModel}>
         <View style={styles.model}>
           <Text style={styles.proheader}>{'Togolist Pro'}</Text>
           <Text style={styles.info}>
             {
-              'Upgrade to pro to access premium features, track your stats, get exclusive discounts on flights, get customized deals to your favorite places & more! '
+              'Upgrade to pro to access premium features, track your stats and get customized deals! '
             }
           </Text>
           <Button
@@ -529,6 +541,8 @@ const styles = StyleSheet.create({
   btn: {
     paddingVertical: hp(8),
     paddingHorizontal: wp(17),
+    borderRadius: 10,
+    elevation: 2,
   },
   icons: {
     width: wp(20),

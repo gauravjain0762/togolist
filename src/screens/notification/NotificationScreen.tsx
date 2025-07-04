@@ -189,7 +189,9 @@ const NotificationScreen = () => {
       style={[AppStyles.mainWhiteContainer, {paddingHorizontal: 20}]}>
       <View style={styles.header}>
         <Text style={styles.greeting}>Notifications</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>{
+          navigateTo(SCREENS.ProfileSettingScreen)
+        }}>
           <Image source={IMAGES.more_icon} style={styles.icon} />
         </TouchableOpacity>
       </View>
@@ -296,17 +298,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   greeting: {
-    ...commonFontStyle(700, 34, colors.black),
+       ...commonFontStyle(700, 32, colors.black),
+
   },
   icon: {
-    width: 24,
-    height: 24,
+    width: 22,
+    height: 22,
     resizeMode: 'contain',
   },
   tabContainer: {
     flexDirection: 'row',
     padding: 8,
-    marginVertical: hp(17),
+    marginTop:hp(10),
+    marginBottom: hp(8),
   },
   tab: {
     padding: 6,

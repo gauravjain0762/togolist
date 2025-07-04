@@ -29,6 +29,7 @@ import {
   Loader,
   ProfileCard,
   SearchBar,
+  ShareBottomSheet,
 } from '../../component';
 import {useGetDashboardQuery} from '../../api/dashboardApi';
 import {navigateTo} from '../../utils/commonFunction';
@@ -40,6 +41,9 @@ import TravelCardLock from '../../component/common/TravelCardLock';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {API} from '../../utils/apiConstant';
 import {useNavigation} from '@react-navigation/native';
+import Slider from '@react-native-community/slider';
+import {set} from 'lodash';
+import CollectionModal from '../../component/explore/CollectionModal';
 
 type Props = {};
 
@@ -162,20 +166,64 @@ const CARD_DATA = [
   },
 ];
 
+const AddListCard = () => {
+  const [check, setCheck] = useState(false);
+  return (
+    <TouchableOpacity onPress={() => setCheck(!check)} style={styles.card}>
+      <ImageBackground
+        source={IMAGES.bg1}
+        imageStyle={styles.imgStyle}
+        resizeMode="cover"
+        style={styles.bg}>
+        <Text style={styles.cardTitle}>{'Tourist Attractions'}</Text>
+        <Image
+          source={check ? IMAGES.check_icon : IMAGES.add_icon1}
+          style={styles.addicon}
+        />
+      </ImageBackground>
+    </TouchableOpacity>
+  );
+};
+
 const SearchScreen = (props: Props) => {
   const [activeTab, setActiveTab] = useState('hot');
   const [select, setSelect] = useState('List View');
   const [query, setQuery] = useState('');
   const [filtered, setFiltered] = useState<string[]>([]);
+  const [radius, setRadius] = useState(15);
+
+  const [showPersonal, setShowPersonal] = useState(true);
+  const [showCollections, setShowCollections] = useState(true);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [showSavedCollections, setShowSavedCollections] = useState(false);
+  const [collectionModal, setCollectionModal] = useState(false);
+  const [newListShow, setNewListShow] = useState(false);
+  const [newListShowTitle, setNewListShowTitle] = useState('');
+  const [showPast, setShowPast] = useState(true);
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const bottomSheetModalLocationRef = useRef<BottomSheetModal>(null);
+  const bottomSheetModalMoreRef = useRef<BottomSheetModal>(null);
   const bottomSheetAddListRef = useRef<BottomSheetModal>(null);
+
+  const handlePresentModalMorePress = useCallback(() => {
+    bottomSheetModalMoreRef.current?.present();
+  }, []);
 
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
   }, []);
+  const handlePresentModalLocationPress = useCallback(() => {
+    bottomSheetModalLocationRef.current?.present();
+  }, []);
+
   const handlePresentAddlistPress = useCallback(() => {
     bottomSheetAddListRef.current?.present();
+  }, []);
+  const handlePresentAddlistClose = useCallback(() => {
+    bottomSheetAddListRef.current?.close();
+    bottomSheetModalRef.current?.close();
+    bottomSheetModalLocationRef.current?.close();
   }, []);
 
   const navigation = useNavigation();
@@ -220,27 +268,15 @@ const SearchScreen = (props: Props) => {
     navigateTo(SCREENS.ExploreSearch, {search: text});
   };
 
-  const AddListCard = useCallback(item => {
-    return (
-      <TouchableOpacity style={styles.card}>
-        <ImageBackground
-          source={IMAGES.bg1}
-          imageStyle={styles.imgStyle}
-          resizeMode="cover"
-          style={styles.bg}>
-          <Text style={styles.cardTitle}>{'Tourist Attractions'}</Text>
-          <Image source={IMAGES.add_icon} style={styles.addicon} />
-        </ImageBackground>
-      </TouchableOpacity>
-    );
-  }, []);
-
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
       {/* <Loader visible={dashboardLoading} /> */}
       <View style={styles.headerView}>
         <Text style={styles.heading}>{'Explore'}</Text>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity
+          onPress={() => {
+            handlePresentModalMorePress();
+          }}>
           <Image source={IMAGES.more_icon} style={[styles.moreIcon]} />
         </TouchableOpacity>
       </View>
@@ -286,7 +322,7 @@ const SearchScreen = (props: Props) => {
               }
               active={activeTab === 'location'}
               keyValue={true}
-              IconStyle={activeTab === 'location' ? styles.iconStyle :{}}
+              IconStyle={activeTab === 'location' ? styles.iconStyle : {}}
               onPress={() => {
                 setActiveTab('location');
               }}
@@ -337,7 +373,12 @@ const SearchScreen = (props: Props) => {
             <View style={AppStyles.flex1}>
               <View style={styles.headerRow}>
                 <Text style={styles.headerText}>Discover New Spots</Text>
-                <Text style={styles.headerText1}>15miles Radius</Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    handlePresentModalLocationPress();
+                  }}>
+                  <Text style={styles.headerText1}>Toronto, Canada</Text>
+                </TouchableOpacity>
               </View>
               <View style={styles.select}>
                 <TouchableOpacity onPress={() => setSelect('List View')}>
@@ -382,6 +423,15 @@ const SearchScreen = (props: Props) => {
                         {...item}
                         imageStyle={{
                           marginHorizontal: Platform.OS == 'ios' ? 0 : 16,
+                        }}
+                        onPressAdd={() => handlePresentAddlistPress()}
+                        onPressBeenThere={() => {
+                          navigateTo(SCREENS.BeenThere);
+                          handlePresentAddlistClose();
+                        }}
+                        onPressFavs={() => {
+                          navigateTo(SCREENS.Favorites);
+                          handlePresentAddlistClose();
                         }}
                       />
                     )}
@@ -533,6 +583,15 @@ const SearchScreen = (props: Props) => {
                 renderItem={({item}) => (
                   <DiscoverNewSpotsCard
                     {...item}
+                    onPressAdd={() => handlePresentAddlistPress()}
+              onPressBeenThere={() => {
+                navigateTo(SCREENS.BeenThere);
+                handlePresentAddlistClose();
+              }}
+              onPressFavs={() => {
+                navigateTo(SCREENS.Favorites);
+                handlePresentAddlistClose();
+              }}
                     imageStyle={{
                       marginHorizontal: Platform.OS == 'ios' ? 0 : 16,
                     }}
@@ -545,16 +604,73 @@ const SearchScreen = (props: Props) => {
         </View>
       </ScrollView>
       <CommonSheet
-        title="Details"
-        bottomSheetModalRef={bottomSheetModalRef}
+        title="Location Settings"
+        maxDynamicContentSize={270}
+        bottomSheetModalRef={bottomSheetModalLocationRef}
         children={
           <View style={{paddingVertical: hp(28)}}>
+            <View style={styles.rowStyle}>
+              <Text style={styles.locationHeaderText}>Radius</Text>
+              <Slider
+                value={radius}
+                onValueChange={value => setRadius(Math.round(value))}
+                minimumValue={1}
+                maximumValue={100}
+                minimumTrackTintColor="#B41E2A"
+                thumbTintColor="#B41E2A"
+                style={{width: '72%', left: 5}}
+              />
+              <Text style={styles.locationHeaderText1}>{radius} miles</Text>
+            </View>
+            <View style={styles.rowStyle}>
+              <Text style={styles.locationHeaderText}>Location</Text>
+              <Text style={styles.locationHeaderText1}>
+                Toronto, ON, Canada
+              </Text>
+            </View>
+            <View style={styles.rowStyle}>
+              <Text style={styles.locationHeaderText}>Location Settings</Text>
+              <View style={AppStyles.row}>
+                <Text style={styles.locationHeaderText1}>On (While Using)</Text>
+                <Text
+                  style={[
+                    styles.locationHeaderText1,
+                    {color: '#BD2332', marginLeft: 8},
+                  ]}>
+                  Change
+                </Text>
+              </View>
+            </View>
+            <TouchableOpacity style={styles.subscribeBtn}>
+              <Text style={styles.subscribeText}>Done</Text>
+            </TouchableOpacity>
+          </View>
+        }
+      />
+      <CommonSheet
+        title="Details"
+        maxDynamicContentSize={550}
+        bottomSheetModalRef={bottomSheetModalRef}
+        children={
+          <View style={{}}>
             <DiscoverNewSpotsCard
               onPressAdd={() => handlePresentAddlistPress()}
+              onPressBeenThere={() => {
+                navigateTo(SCREENS.BeenThere);
+                handlePresentAddlistClose();
+              }}
+              onPressFavs={() => {
+                navigateTo(SCREENS.Favorites);
+                handlePresentAddlistClose();
+              }}
               imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0 : 16}}
             />
           </View>
         }
+      />
+      <ShareBottomSheet
+        bottomSheetModalRef={bottomSheetModalMoreRef}
+        // handleSheetChanges={e => handleSheetChanges(e)}
       />
       <CommonSheet
         title="Add To List"
@@ -564,6 +680,7 @@ const SearchScreen = (props: Props) => {
           <View>
             <DiscoverNewSpotsCard
               showInfo={false}
+              showAddToList={true}
               showRating={false}
               isShowOptions={false}
               imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0 : 16}}
@@ -591,41 +708,115 @@ const SearchScreen = (props: Props) => {
                     titleStyle={styles.titleStyle}
                     title={'Personal Lists'}
                     headerStyle={styles.headerstyle}
+                    show={showPersonal}
+                    onDownPress={() => {
+                      setShowPersonal(!showPersonal);
+                    }}
                   />
-                  <FlatList
-                    data={[1, 2, 3, 4]}
-                    ItemSeparatorComponent={() => (
-                      <View style={{height: hp(4)}} />
-                    )}
-                    renderItem={({item, index}) => <AddListCard />}
-                  />
+                  {showPersonal && (
+                    <FlatList
+                      data={[1, 2,]}
+                      keyExtractor={(_,index)=>index.toString()}
+                      ItemSeparatorComponent={() => (
+                        <View style={{height: hp(4)}} />
+                      )}
+                      ListFooterComponent={() => {
+                        return (
+                          <TouchableOpacity
+                            onPress={() => {
+                              setCollectionModal(true);
+                              setNewListShow(true);
+                              setNewListShowTitle('Personal Lists');
+                            }}
+                            style={styles.addNewListBtn}>
+                            <Text style={styles.addNewListBtnText}>
+                              New List
+                            </Text>
+                          </TouchableOpacity>
+                        );
+                      }}
+                      renderItem={({item, index}) => {
+                        return <AddListCard />;
+                      }}
+                    />
+                  )}
                   <HeaderTextIcon
                     titleStyle={styles.titleStyle}
                     title={'Guide to LA'}
-                    headerStyle={styles.headerstyle}
+                    headerStyle={[styles.headerstyle, {marginTop: 10}]}
+                    show={showCollections}
+                    onDownPress={() => {
+                      setShowCollections(!showCollections);
+                    }}
                   />
-                  <FlatList
-                    data={[1, 2, 3, 4]}
-                    ItemSeparatorComponent={() => (
-                      <View style={{height: hp(4)}} />
-                    )}
-                    renderItem={({item, index}) => <AddListCard />}
-                  />
+                  {showCollections ? (
+                    <FlatList
+                      data={[1, 2,]}
+                      keyExtractor={(_,index)=>index.toString()}
+                      ItemSeparatorComponent={() => (
+                        <View style={{height: hp(4)}} />
+                      )}
+                      ListFooterComponent={() => {
+                        return (
+                          <TouchableOpacity
+                            onPress={() => {
+                              setCollectionModal(true);
+                              setNewListShow(true);
+                              setNewListShowTitle('Guide to LA');
+                            }}
+                            style={styles.addNewListBtn}>
+                            <Text style={styles.addNewListBtnText}>
+                              New List
+                            </Text>
+                          </TouchableOpacity>
+                        );
+                      }}
+                      renderItem={({item, index}) => {
+                        return <AddListCard />;
+                      }}
+                    />
+                  ): null}
                   <HeaderTextIcon
                     titleStyle={styles.titleStyle}
                     title={'Golf Courses'}
-                    headerStyle={styles.headerstyle}
+                    headerStyle={[styles.headerstyle, {marginTop: 10}]}
+                    show={showCalendar}
+                    onDownPress={() => {
+                      setShowCalendar(!showCalendar);
+                    }}
                   />
                   <HeaderTextIcon
                     titleStyle={styles.titleStyle}
                     title={'Cool Architecture'}
-                    headerStyle={styles.headerstyle}
+                    headerStyle={[styles.headerstyle, {marginTop: 10}]}
+                    show={showSavedCollections}
+                    onDownPress={() => {
+                      setShowSavedCollections(!showSavedCollections);
+                    }}
                   />
                 </View>
               </LinearView>
             </View>
-            <Button type="outline" BtnStyle={styles.btn} title="Create New" />
+            <Button
+              type="outline"
+              BtnStyle={styles.btn}
+              title="New Collection"
+              onPress={() => {
+                setCollectionModal(true);
+                setNewListShow(false);
+              }}
+            />
             <Button type="outline" BtnStyle={styles.btn} title="Done" />
+            <CollectionModal
+              visible={collectionModal}
+              title={
+                newListShow ? `New List: ${newListShowTitle}` : 'New Collection'
+              }
+              subInput={newListShow ? 'List Name' : 'Collection Name'}
+              onClose={() => {
+                setCollectionModal(false);
+              }}
+            />
           </View>
         }
       />
@@ -677,11 +868,14 @@ const styles = StyleSheet.create({
   },
   tag: {
     paddingHorizontal: wp(12),
-    paddingVertical: hp(5),
+    // paddingVertical: hp(5),
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#D9D9D9',
     marginTop: hp(4),
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   tagText: {
     ...commonFontStyle(600, 12, '#000'),
@@ -690,7 +884,7 @@ const styles = StyleSheet.create({
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 6,
     marginBottom: 6,
     paddingHorizontal: wp(16),
   },
@@ -741,7 +935,8 @@ const styles = StyleSheet.create({
   },
 
   subtext: {
-    marginVertical: 12,
+    marginTop: 6,
+    marginBottom: 10,
     ...commonFontStyle(600, 15, '#999999'),
   },
 
@@ -795,13 +990,14 @@ const styles = StyleSheet.create({
     ...commonFontStyle(700, 24, colors.white),
   },
   addicon: {
-    width: wp(18),
-    height: wp(18),
+    width: wp(24),
+    height: wp(24),
     alignSelf: 'flex-end',
-    tintColor: colors.white,
+    // tintColor: colors.white,
   },
   headerstyle: {
     paddingBottom: hp(9),
+    marginTop: 0,
   },
   btn: {
     marginTop: hp(8),
@@ -938,5 +1134,39 @@ const styles = StyleSheet.create({
   },
   eventTitle: {
     ...commonFontStyle(600, 18, colors.black),
+  },
+  locationHeaderText: {
+    ...commonFontStyle(500, 15, '#444444'),
+  },
+  locationHeaderText1: {
+    ...commonFontStyle(400, 15, '#444444'),
+  },
+  rowStyle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+
+  subscribeBtn: {
+    marginTop: 10,
+    backgroundColor: colors.primary1,
+    borderRadius: 12,
+    paddingVertical: 15,
+    alignItems: 'center',
+  },
+  subscribeText: {
+    ...commonFontStyle(700, 16, colors.white),
+  },
+  addNewListBtn: {
+    marginTop: 10,
+    borderRadius: 12,
+    paddingVertical: 8,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#787878',
+  },
+  addNewListBtnText: {
+    ...commonFontStyle(600, 13, '#787878'),
   },
 });

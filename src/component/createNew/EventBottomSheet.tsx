@@ -32,6 +32,7 @@ const EventBottomSheet: FC<sheet> = ({
     <BottomSheetModalProvider>
       <BottomSheetModal
         ref={bottomSheetModalRef}
+        style={styles.modalStyle}
         onChange={e => handleSheetChanges(e)}>
         <BottomSheetScrollView
           style={scrollviewStyle}
@@ -82,6 +83,19 @@ const EventBottomSheet: FC<sheet> = ({
 export default memo(EventBottomSheet);
 
 const styles = StyleSheet.create({
+    modalStyle:{
+     borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          overflow: 'hidden',
+          elevation: 20,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: -100, // shadow upwards
+          },
+          shadowOpacity: 0.3,
+          shadowRadius: 10,
+  },
   contentContainer: {
     justifyContent: 'center',
     // alignItems: 'center',

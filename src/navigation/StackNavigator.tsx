@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import {CardStyleInterpolators, createStackNavigator} from '@react-navigation/stack';
 import {useAppDispatch} from '../redux/hooks';
 import {colors} from '../theme/colors';
 import {Text} from 'react-native';
@@ -69,8 +69,8 @@ const headerStyleTransparent = {
   headerTitleAlign: 'center',
   // ...TransitionPresets.SlideFromRightIOS,
 };
-// const Stack = createStackNavigator<ScreenNames>();
-const Stack = createSharedElementStackNavigator();
+const Stack = createStackNavigator<ScreenNames>();
+// const Stack = createSharedElementStackNavigator();
 
 const LogoHeader = () => {
   return <Text>hi</Text>;
@@ -189,6 +189,10 @@ const StackNavigator: FC = () => {
     <Stack.Navigator
       // screenOptions={{animationEnabled: false}}
       initialRouteName={SCREENS.TabNavigator}
+       screenOptions={{
+        gestureDirection: 'horizontal',
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS, // 👈 right-to-left
+      }}
     >
       <Stack.Screen
         options={({navigation}) => ({headerShown: false})}
@@ -322,40 +326,40 @@ const StackNavigator: FC = () => {
         component={EventDetails}
         options={() => ({
           headerShown: false,
-          gestureEnabled: false, // Disables swipe back gesture for now, adjust as needed
-          transitionSpec: {
-            // Customize timing for open and close animations
-            open: {animation: 'timing', config: {duration: 1000}}, // Open animation duration
-            close: {animation: 'timing', config: {duration: 800}}, // Close animation duration
-          },
-          cardStyleInterpolator: ({current: {progress}}) => ({
-            cardStyle: {
-              // This makes the new screen fade in/out during the transition
-              opacity: progress,
-            },
-          }),
+          // gestureEnabled: false, // Disables swipe back gesture for now, adjust as needed
+          // transitionSpec: {
+          //   // Customize timing for open and close animations
+          //   open: {animation: 'timing', config: {duration: 1000}}, // Open animation duration
+          //   close: {animation: 'timing', config: {duration: 800}}, // Close animation duration
+          // },
+          // cardStyleInterpolator: ({current: {progress}}) => ({
+          //   cardStyle: {
+          //     // This makes the new screen fade in/out during the transition
+          //     opacity: progress,
+          //   },
+          // }),
         })}
         // **CRITICAL: Enable the sharedElements function here**
-        sharedElements={(route, otherRoute, showing) => {
-          const {item} = route.params; // Get the item data passed from the list screen
-          return [
-            {
-              id: `${item?.title}`, // Unique ID for the temperature text
-              animation: 'fade', // Optional: how the shared element itself animates (e.g., 'fade', 'move')
-              resize: 'clip', // Optional: how the element resizes ('clip', 'stretch', 'none')
-            },
-            {
-              id: `item.${item?.id}.image`, // Unique ID for the temperature text
-              animation: 'fade', // Optional: how the shared element itself animates (e.g., 'fade', 'move')
-              resize: 'clip', // Optional: how the element resizes ('clip', 'stretch', 'none')
-            },
-            {
-              id: `${item?.location}`, // Unique ID for the city name text
-              animation: 'fade',
-              resize: 'clip',
-            },
-          ];
-        }}
+        // sharedElements={(route, otherRoute, showing) => {
+        //   const {item} = route.params; // Get the item data passed from the list screen
+        //   return [
+        //     {
+        //       id: `${item?.title}`, // Unique ID for the temperature text
+        //       animation: 'fade', // Optional: how the shared element itself animates (e.g., 'fade', 'move')
+        //       resize: 'clip', // Optional: how the element resizes ('clip', 'stretch', 'none')
+        //     },
+        //     {
+        //       id: `item.${item?.id}.image`, // Unique ID for the temperature text
+        //       animation: 'fade', // Optional: how the shared element itself animates (e.g., 'fade', 'move')
+        //       resize: 'clip', // Optional: how the element resizes ('clip', 'stretch', 'none')
+        //     },
+        //     {
+        //       id: `${item?.location}`, // Unique ID for the city name text
+        //       animation: 'fade',
+        //       resize: 'clip',
+        //     },
+        //   ];
+        // }}
       />
        <Stack.Screen
         name={SCREENS.UpcomingListDetails}
@@ -363,39 +367,39 @@ const StackNavigator: FC = () => {
         options={() => ({
           headerShown: false,
           gestureEnabled: false, // Disables swipe back gesture for now, adjust as needed
-          transitionSpec: {
-            // Customize timing for open and close animations
-            open: {animation: 'timing', config: {duration: 1000}}, // Open animation duration
-            close: {animation: 'timing', config: {duration: 800}}, // Close animation duration
-          },
-          cardStyleInterpolator: ({current: {progress}}) => ({
-            cardStyle: {
-              // This makes the new screen fade in/out during the transition
-              opacity: progress,
-            },
-          }),
+          // transitionSpec: {
+          //   // Customize timing for open and close animations
+          //   open: {animation: 'timing', config: {duration: 1000}}, // Open animation duration
+          //   close: {animation: 'timing', config: {duration: 800}}, // Close animation duration
+          // },
+          // cardStyleInterpolator: ({current: {progress}}) => ({
+          //   cardStyle: {
+          //     // This makes the new screen fade in/out during the transition
+          //     opacity: progress,
+          //   },
+          // }),
         })}
         // **CRITICAL: Enable the sharedElements function here**
-        sharedElements={(route, otherRoute, showing) => {
-          const {item} = route.params; // Get the item data passed from the list screen
-          return [
-            {
-              id: `${item?.title}`, // Unique ID for the temperature text
-              animation: 'fade', // Optional: how the shared element itself animates (e.g., 'fade', 'move')
-              resize: 'clip', // Optional: how the element resizes ('clip', 'stretch', 'none')
-            },
-            {
-              id: `item.${item?.id}.image`, // Unique ID for the temperature text
-              animation: 'fade', // Optional: how the shared element itself animates (e.g., 'fade', 'move')
-              resize: 'clip', // Optional: how the element resizes ('clip', 'stretch', 'none')
-            },
-            {
-              id: `${item?.location}`, // Unique ID for the city name text
-              animation: 'fade',
-              resize: 'clip',
-            },
-          ];
-        }}
+        // sharedElements={(route, otherRoute, showing) => {
+        //   const {item} = route.params; // Get the item data passed from the list screen
+        //   return [
+        //     {
+        //       id: `${item?.title}`, // Unique ID for the temperature text
+        //       animation: 'fade', // Optional: how the shared element itself animates (e.g., 'fade', 'move')
+        //       resize: 'clip', // Optional: how the element resizes ('clip', 'stretch', 'none')
+        //     },
+        //     {
+        //       id: `item.${item?.id}.image`, // Unique ID for the temperature text
+        //       animation: 'fade', // Optional: how the shared element itself animates (e.g., 'fade', 'move')
+        //       resize: 'clip', // Optional: how the element resizes ('clip', 'stretch', 'none')
+        //     },
+        //     {
+        //       id: `${item?.location}`, // Unique ID for the city name text
+        //       animation: 'fade',
+        //       resize: 'clip',
+        //     },
+        //   ];
+        // }}
       />
       <Stack.Screen
         options={({navigation}) => ({headerShown: false})}
@@ -476,40 +480,40 @@ const StackNavigator: FC = () => {
         component={PastTripDetails}
         options={() => ({
           headerShown: false,
-          gestureEnabled: false, // Disables swipe back gesture for now, adjust as needed
-          transitionSpec: {
-            // Customize timing for open and close animations
-            open: {animation: 'timing', config: {duration: 1000}}, // Open animation duration
-            close: {animation: 'timing', config: {duration: 800}}, // Close animation duration
-          },
-          cardStyleInterpolator: ({current: {progress}}) => ({
-            cardStyle: {
-              // This makes the new screen fade in/out during the transition
-              opacity: progress,
-            },
-          }),
+          // gestureEnabled: false, // Disables swipe back gesture for now, adjust as needed
+          // transitionSpec: {
+          //   // Customize timing for open and close animations
+          //   open: {animation: 'timing', config: {duration: 1000}}, // Open animation duration
+          //   close: {animation: 'timing', config: {duration: 800}}, // Close animation duration
+          // },
+          // cardStyleInterpolator: ({current: {progress}}) => ({
+          //   cardStyle: {
+          //     // This makes the new screen fade in/out during the transition
+          //     opacity: progress,
+          //   },
+          // }),
         })}
         // **CRITICAL: Enable the sharedElements function here**
-        sharedElements={(route, otherRoute, showing) => {
-          const {item} = route.params; // Get the item data passed from the list screen
-          return [
-            {
-              id: `${item?.title}`, // Unique ID for the temperature text
-              animation: 'fade', // Optional: how the shared element itself animates (e.g., 'fade', 'move')
-              resize: 'clip', // Optional: how the element resizes ('clip', 'stretch', 'none')
-            },
-            {
-              id: `item.${item?.id}.image`, // Unique ID for the temperature text
-              animation: 'fade', // Optional: how the shared element itself animates (e.g., 'fade', 'move')
-              resize: 'clip', // Optional: how the element resizes ('clip', 'stretch', 'none')
-            },
-            {
-              id: `${item?.location}`, // Unique ID for the city name text
-              animation: 'fade',
-              resize: 'clip',
-            },
-          ];
-        }}
+        // sharedElements={(route, otherRoute, showing) => {
+        //   const {item} = route.params; // Get the item data passed from the list screen
+        //   return [
+        //     {
+        //       id: `${item?.title}`, // Unique ID for the temperature text
+        //       animation: 'fade', // Optional: how the shared element itself animates (e.g., 'fade', 'move')
+        //       resize: 'clip', // Optional: how the element resizes ('clip', 'stretch', 'none')
+        //     },
+        //     {
+        //       id: `item.${item?.id}.image`, // Unique ID for the temperature text
+        //       animation: 'fade', // Optional: how the shared element itself animates (e.g., 'fade', 'move')
+        //       resize: 'clip', // Optional: how the element resizes ('clip', 'stretch', 'none')
+        //     },
+        //     {
+        //       id: `${item?.location}`, // Unique ID for the city name text
+        //       animation: 'fade',
+        //       resize: 'clip',
+        //     },
+        //   ];
+        // }}
       />
       <Stack.Screen
         options={({navigation}) => ({headerShown: false})}

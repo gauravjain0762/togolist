@@ -28,6 +28,7 @@ import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {API} from '../../utils/apiConstant';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {SharedElement} from 'react-native-shared-element';
+import AddToListBottomSheet from '../../component/common/AddToListBottomSheet';
 
 const cards = [
   {
@@ -55,38 +56,61 @@ const cards = [
     lists: 11,
     image: 'https://source.unsplash.com/600x400/?peru,mountains',
   },
+  {
+    title: 'Hiking',
+    location: 'London',
+    lists: 6,
+    image: 'https://source.unsplash.com/600x400/?london,big-ben',
+  },
+  {
+    title: 'Best Coffee Spots',
+    location: 'Peru',
+    lists: 11,
+    image: 'https://source.unsplash.com/600x400/?peru,mountains',
+  },
 ];
 
 const Shared = () => {
   const [select, setSelect] = useState('List View');
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const bottomSheetAddListRef = useRef<BottomSheetModal>(null);
+
+  const handlePresentAddlistPress = useCallback(() => {
+    bottomSheetAddListRef.current?.present();
+  }, []);
+  const handlePresentAddlistClose = useCallback(() => {
+    bottomSheetAddListRef.current?.close();
+    bottomSheetModalRef.current?.close();
+  }, []);
+
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
   }, []);
   const handleSheetChanges = useCallback((index: number) => {
     console.log('handleSheetChanges', index);
+    //  bottomSheetModalRef.current?.close();
   }, []);
 
   return (
     <SafeAreaView style={[AppStyles.flex, styles.mainContainer]}>
       <CustomHeader
-       showBack={true}
+        showBack={true}
         backImg={IMAGES.back1}
         backIconStyle={styles.back}
         showSearch={false}
         moreImg={IMAGES.more_icon}
         moreIconStyle={styles.more}
         headerStyle={styles.header}
+        onMorePress={() => {
+          handlePresentModalPress();
+        }}
       />
-      <ScrollView
-        contentContainerStyle={AppStyles.flexGrow}
-        style={AppStyles.flex1}
-        showsVerticalScrollIndicator={false}>
+      <View style={AppStyles.flex1}>
         <View style={styles.containter}>
           <View style={styles.info}>
             {/* <SharedElement id={`item.${title}.city`}> */}
-              <Text style={styles.title}>{'North America'}</Text>
+            <Text style={styles.title}>{'North America'}</Text>
             {/* </SharedElement> */}
             <View style={styles.userinfo}>
               <Image source={IMAGES.avatar} style={styles.user} />
@@ -96,7 +120,7 @@ const Shared = () => {
               <View style={styles.infoRow}>
                 <Text style={styles.text}>San Diego</Text>
                 <Text style={styles.separator}>|</Text>
-                <Text style={styles.text}>5 Places</Text>
+                <Text style={styles.text}>5 Lists</Text>
                 <Text style={styles.separator}>|</Text>
                 <Image source={IMAGES.world} style={styles.icon} />
                 <Text style={[styles.text, styles.textWithIcon]}>Public</Text>
@@ -111,7 +135,10 @@ const Shared = () => {
             </View>
             <Text style={styles.travel}>{'Travel around North America.'}</Text>
           </View>
-          <SearchBar container={AppStyles.M16} searchImg={IMAGES.search1} />
+          <SearchBar
+            container={{marginHorizontal: 8}}
+            searchImg={IMAGES.search1}
+          />
           <View style={styles.select}>
             <TouchableOpacity onPress={() => setSelect('List View')}>
               <Text
@@ -145,6 +172,7 @@ const Shared = () => {
             <>
               <SwipeListView
                 data={cards}
+                nestedScrollEnabled
                 ItemSeparatorComponent={() => (
                   <View style={styles.liastseparator} />
                 )}
@@ -153,7 +181,7 @@ const Shared = () => {
                     <View style={styles.rowFront}>
                       <SharedCard
                         onCardPress={() => {
-                          navigateTo(SCREENS.SharedListDetails)
+                          navigateTo(SCREENS.SharedListDetails);
                           // data?.item?.onPress && data?.item?.onPress();
                         }}
                         title={data?.item?.title}
@@ -168,9 +196,18 @@ const Shared = () => {
                 }}
                 disableRightSwipe
                 swipeToOpenPercent={30}
-                      rightOpenValue={-354}
+                rightOpenValue={-349}
                 renderHiddenItem={(data, rowMap) => (
-                  <OptionBar container={styles.optioncontainer} />
+                  <OptionBar
+                    container={styles.optioncontainer}
+                    onAddListPress={() => {
+                      handlePresentAddlistPress();
+                    }}
+                    onBeentherePress={() => {
+                      navigateTo(SCREENS.BeenThere);
+                    }}
+                  />
+
                   // <View style={styles.rowBack}>
                   //   <TouchableOpacity style={styles.backButton}>
                   //     <Image source={IMAGES.restore} style={styles.restore} />
@@ -185,14 +222,14 @@ const Shared = () => {
                 )}
                 leftOpenValue={75}
               />
-            
+
               <Button
                 leftImg={IMAGES.addlist}
                 type="outline"
                 title="Add a new list"
                 BtnStyle={styles.btn}
                 onPress={() => {
-                  navigateTo(SCREENS.CreateListScreen)
+                  navigateTo(SCREENS.CreateListScreen);
                 }}
               />
             </>
@@ -211,9 +248,13 @@ const Shared = () => {
             />
           )}
         </View>
-      </ScrollView>
+      </View>
       <ShareBottomSheet
         bottomSheetModalRef={bottomSheetModalRef}
+        handleSheetChanges={e => handleSheetChanges(e)}
+      />
+      <AddToListBottomSheet
+        bottomSheetModalRef={bottomSheetAddListRef}
         handleSheetChanges={e => handleSheetChanges(e)}
       />
     </SafeAreaView>
@@ -223,9 +264,9 @@ const Shared = () => {
 export default Shared;
 
 const styles = StyleSheet.create({
-    optioncontainer: {
+  optioncontainer: {
     marginBottom: hp(8),
-    marginHorizontal:16
+    // marginHorizontal: 16,
   },
   mainContainer: {
     backgroundColor: colors.white,
@@ -250,11 +291,12 @@ const styles = StyleSheet.create({
   },
   containter: {
     flex: 1,
+    paddingHorizontal: wp(16),
   },
   info: {
-    paddingHorizontal: wp(24),
-    marginTop: hp(10),
-    gap: hp(12),
+    paddingHorizontal: wp(8),
+    // marginTop: hp(10),
+    gap: hp(8),
   },
   user: {
     resizeMode: 'contain',
@@ -311,7 +353,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: wp(8),
-    paddingHorizontal: wp(16),
+    paddingHorizontal: wp(8),
   },
   subtext: {
     marginVertical: 12,
@@ -324,7 +366,7 @@ const styles = StyleSheet.create({
     height: hp(8),
   },
   btn: {
-    marginVertical: hp(16),
+    // marginVertical: hp(10),
     paddingVertical: hp(12),
     marginHorizontal: 20,
   },
@@ -332,7 +374,7 @@ const styles = StyleSheet.create({
   rowFront: {
     overflow: 'hidden',
     borderRadius: 10,
-    marginHorizontal: 16,
+    // marginHorizontal: 16,
   },
 
   rowBack: {

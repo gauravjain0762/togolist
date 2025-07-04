@@ -12,7 +12,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../../theme/appStyles';
 import {CustomHeader, LinearView} from '../../../component';
@@ -23,6 +22,7 @@ import EditPicture from '../../../component/common/EditPicture';
 import ImagePickerModal from '../../../component/profile/ImagePickerModal';
 import {navigateTo} from '../../../utils/commonFunction';
 import {SCREENS} from '../../../navigation/screenNames';
+import React, {useCallback, useEffect, useState} from 'react';
 
 type Props = {};
 const options = [
@@ -67,9 +67,79 @@ const ProfileSettingScreen = (props: Props) => {
     // Navigate or trigger logic based on `id`
   }, []);
 
+  const ProfileView = () => {
+    return (
+      <View style={styles.userCardView}>
+        <Image source={IMAGES.Avatar_icon} style={styles.userIcon} />
+        <View style={{gap: 8}}>
+          <Text style={styles.userName}>Raymond Daily</Text>
+          <Text style={styles.userName1}>@raydaily</Text>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Image source={IMAGES.locationWhite} style={styles.locationIcon} />
+            <Text style={styles.userName2}> Toronto, Canada</Text>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
+  const ProfileEditView = () => {
+    return (
+      <View style={[{marginTop: 10}]}>
+        <View style={[AppStyles.Hcenter]}>
+          <Image source={IMAGES.Avatar_icon} style={[styles.userIcon]} />
+          <TouchableOpacity
+            onPress={() => {
+              setActionSheet(true);
+            }}>
+            <Text style={styles.uploadText}>Upload New</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={[AppStyles.row, {marginTop: 10}]}>
+          <Text style={styles.inputName}>Name</Text>
+          <TextInput
+            placeholder="Enter Name"
+            style={styles.textInput}
+            value={useData?.name}
+            onChangeText={text => {
+              setUserData({...useData, name: text});
+            }}
+          />
+        </View>
+
+        <View style={[AppStyles.row, {marginTop: 10}]}>
+          <Text style={styles.inputName}>Username</Text>
+          <TextInput
+            placeholder="Enter Name"
+            style={styles.textInput}
+            value={useData?.useName}
+            onChangeText={text => {
+              setUserData({...useData, name: text});
+            }}
+          />
+        </View>
+        <View style={[AppStyles.row, {marginTop: 10}]}>
+          <Text style={styles.inputName}>Location</Text>
+          <TextInput
+            placeholder="Enter Name"
+            style={styles.textInput}
+            value={useData?.location}
+            onChangeText={text => {
+              setUserData({...useData, name: text});
+            }}
+          />
+        </View>
+      </View>
+    );
+  };
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
-      <CustomHeader  showBack={true} title="Profile" showSearch={false} showMore={false} />
+      <CustomHeader
+        showBack={true}
+        title="Profile"
+        showSearch={false}
+        showMore={false}
+      />
 
       <View style={styles.searchContainer}>
         <Image source={IMAGES.search} style={styles.searchIcon} />
@@ -81,126 +151,67 @@ const ProfileSettingScreen = (props: Props) => {
       </View>
 
       <ScrollView style={{marginHorizontal: 16, flex: 1}}>
-        <LinearView>
-          <View style={styles.cardView}>
-            <View style={{flexDirection: 'row'}}>
-              <TouchableOpacity style={{flex: 1}}>
-                <Text style={styles.profileText}>Profile</Text>
-              </TouchableOpacity>
-              {userEdit ? (
-                <View style={[AppStyles.row, {gap: 16}]}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setUserEdit(false);
-                    }}>
-                    <Text style={styles.cancelText}>Cancel</Text>
+        <View key={userEdit ? 'edit' : 'view'}>
+          {userEdit ? (
+            <LinearView>
+              <View style={styles.cardView}>
+                <View style={{flexDirection: 'row'}}>
+                  <TouchableOpacity style={{flex: 1}}>
+                    <Text style={styles.profileText}>Profile</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setUserEdit(false);
-                    }}>
-                    <Text style={styles.cancelText}>Save</Text>
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <TouchableOpacity
-                  onPress={() => {
-                    setUserEdit(true);
-                  }}>
-                  <Image
-                    source={IMAGES.edit_icon}
-                    style={{width: 21, height: 21}}
-                  />
-                </TouchableOpacity>
-              )}
-            </View>
-            {userEdit ? (
-              <View style={[{marginTop: 10}]}>
-                <View style={[AppStyles.Hcenter]}>
-                  <Image source={IMAGES.Avatar_icon} style={[styles.userIcon]} />
-                  <TouchableOpacity
-                    onPress={() => {
-                      setActionSheet(true);
-                    }}>
-                    <Text style={styles.uploadText}>Upload New</Text>
-                  </TouchableOpacity>
-                </View>
-                <View style={[AppStyles.row, {marginTop: 10}]}>
-                  <Text style={styles.inputName}>Name</Text>
-                  <TextInput
-                    placeholder="Enter Name"
-                    style={styles.textInput}
-                    value={useData?.name}
-                    onChangeText={text => {
-                      setUserData({...useData, name: text});
-                    }}
-                  />
-                </View>
-
-                <View style={[AppStyles.row, {marginTop: 10}]}>
-                  <Text style={styles.inputName}>Username</Text>
-                  <TextInput
-                    placeholder="Enter Name"
-                    style={styles.textInput}
-                    value={useData?.useName}
-                    onChangeText={text => {
-                      setUserData({...useData, name: text});
-                    }}
-                  />
-                </View>
-                <View style={[AppStyles.row, {marginTop: 10}]}>
-                  <Text style={styles.inputName}>Location</Text>
-                  <TextInput
-                    placeholder="Enter Name"
-                    style={styles.textInput}
-                    value={useData?.location}
-                    onChangeText={text => {
-                      setUserData({...useData, name: text});
-                    }}
-                  />
-                </View>
-              </View>
-            ) : (
-              <View style={styles.userCardView}>
-                <Image source={IMAGES.Avatar_icon} style={styles.userIcon} />
-                <View style={{gap: 8}}>
-                  <Text style={styles.userName}>Raymond Daily</Text>
-                  <Text style={styles.userName1}>@raydaily</Text>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Image
-                      source={IMAGES.locationWhite}
-                      style={styles.locationIcon}
-                    />
-                    <Text style={styles.userName2}> Toronto, Canada</Text>
+                  <View style={[AppStyles.row, {gap: 16}]}>
+                    <TouchableOpacity onPress={() => setUserEdit(false)}>
+                      <Text style={styles.cancelText}>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setUserEdit(false)}>
+                      <Text style={styles.cancelText}>Save</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
+                <ProfileEditView />
               </View>
-            )}
-          </View>
-        </LinearView>
+            </LinearView>
+          ) : (
+            <LinearView>
+              <View style={styles.cardView}>
+                <View style={{flexDirection: 'row'}}>
+                  <TouchableOpacity style={{flex: 1}}>
+                    <Text style={styles.profileText}>Profile</Text>
+                  </TouchableOpacity>
 
-        <View>
-          {options?.map((option, index) => {
-            return (
-              <LinearView key={index} linearViewStyle={{marginTop: 8}}>
+                  <TouchableOpacity onPress={() => setUserEdit(true)}>
+                    <Image
+                      source={IMAGES.edit_icon}
+                      style={{width: 21, height: 21}}
+                    />
+                  </TouchableOpacity>
+                </View>
+
+                <ProfileView />
+              </View>
+            </LinearView>
+          )}
+
+          <View>
+            {options.map((option, index) => (
+              <LinearView key={option.id} linearViewStyle={{marginTop: 8}}>
                 <TouchableOpacity
-                  key={option.id}
                   style={styles.item}
                   onPress={() => handlePress(option.id)}>
                   <Text style={styles.text}>{option.label}</Text>
                   {option.isPro && <Text style={styles.proBadge}>Pro</Text>}
                 </TouchableOpacity>
               </LinearView>
-            );
-          })}
+            ))}
+          </View>
+          <ImagePickerModal
+            actionSheet={actionSheet}
+            setActionSheet={res => {
+              setActionSheet(res);
+            }}
+          />
+          <View style={{height: 30}} />
         </View>
-        <ImagePickerModal
-          actionSheet={actionSheet}
-          setActionSheet={res => {
-            setActionSheet(res);
-          }}
-        />
-        <View style={{height: 30}} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -229,7 +240,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     marginHorizontal: wp(16),
     marginTop: 10,
-    height:48
+    height: 48,
   },
   searchInput: {
     flex: 1,
@@ -290,7 +301,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height:49
+    height: 49,
   },
   text: {
     ...commonFontStyle(500, 14, colors.black),

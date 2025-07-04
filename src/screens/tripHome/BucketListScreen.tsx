@@ -117,9 +117,12 @@ const BucketListScreen = () => {
           <Text style={styles.azText}>A-Z</Text>
         </Text>
       </View>
+      <View style={{marginHorizontal:20}}>
+
       <SwipeListView
         data={cards}
-        contentContainerStyle={{paddingHorizontal: 20}}
+        nestedScrollEnabled
+        // contentContainerStyle={{paddingHorizontal: 20}}
         showsVerticalScrollIndicator={false}
         renderItem={(data, rowMap) => {
           return (
@@ -140,20 +143,19 @@ const BucketListScreen = () => {
         }}
         disableRightSwipe
         swipeToOpenPercent={30}
-               rightOpenValue={-354}
-        
+        rightOpenValue={-330}
         renderHiddenItem={(data, rowMap) => (
           <OptionBar
             container={[
               styles.optioncontainer,
-              {marginTop: hp(8), borderRadius: 25, height: 114,},
+              {marginTop: hp(8), borderRadius: 25, height: 114},
             ]}
           />
-          
         )}
         leftOpenValue={75}
       />
-     
+      </View>
+
       <View style={{height: 20}} />
     </SafeAreaView>
   );

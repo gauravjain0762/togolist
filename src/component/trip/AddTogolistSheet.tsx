@@ -44,6 +44,7 @@ const AddTogolistSheet: FC<sheet> = ({
     <BottomSheetModalProvider>
       <BottomSheetModal
         ref={bottomSheetModalRef}
+        style={styles.modalStyle}
         maxDynamicContentSize={450}
         onChange={e => handleSheetChanges(e)}>
         <BottomSheetView style={[styles.contentContainer, contentContainer]}>
@@ -82,6 +83,19 @@ const AddTogolistSheet: FC<sheet> = ({
 export default AddTogolistSheet;
 
 const styles = StyleSheet.create({
+    modalStyle:{
+     borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          overflow: 'hidden',
+          elevation: 20,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: -100, // shadow upwards
+          },
+          shadowOpacity: 0.3,
+          shadowRadius: 10,
+  },
   contentContainer: {
     justifyContent: 'center',
     backgroundColor: colors.white,

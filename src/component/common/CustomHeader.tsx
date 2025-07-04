@@ -40,6 +40,7 @@ const CustomHeader: FC<header> = ({
   onShare,
   mainHeader,
   title = 'Back',
+  headerShow,
   onSearchPress,
   onMorePress,
   searchIconStyle,
@@ -65,9 +66,9 @@ const CustomHeader: FC<header> = ({
           />
           <Text style={[styles.title, titleStyle]}>{title}</Text>
         </TouchableOpacity>
-      ) : (
-        <View />
-      )}
+      ) : headerShow ? (
+         <Text style={[styles.title, titleStyle]}>{headerShow}</Text>
+      ) : <View />}
       <View style={styles.row}>
         {showSearch && (
           <TouchableOpacity onPress={onSearchPress} style={styles.searchButton}>
@@ -114,13 +115,13 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   searchIcon: {
-    width: 18,
-    height: 18,
+    width: 20,
+    height: 20,
     tintColor: colors.black,
   },
   moreIcon: {
-    width: 18,
-    height: 18,
+    width: 20,
+    height: 20,
     tintColor: colors.black,
   },
   backIcon: {

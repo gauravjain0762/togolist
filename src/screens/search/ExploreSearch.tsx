@@ -18,6 +18,8 @@ import DiscoverNewSpotsCard from '../../component/explore/DiscoverNewSpotsCard';
 import TravelCardLock from '../../component/common/TravelCardLock';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {API} from '../../utils/apiConstant';
+import { navigateTo } from '../../utils/commonFunction';
+import { SCREENS } from '../../navigation/screenNames';
 
 let data = ['Lists', 'Places', 'Events', 'Itineraries', 'Profiles'];
 
@@ -95,7 +97,7 @@ const ExploreSearch = () => {
     <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader
         backImg={IMAGES.back1}
-         showBack={true}
+        showBack={true}
         backIconStyle={styles.back}
         showSearch={false}
         moreImg={IMAGES.more_icon}
@@ -187,8 +189,20 @@ const ExploreSearch = () => {
                     showsVerticalScrollIndicator={false}
                     nestedScrollEnabled
                     keyExtractor={(_, index) => index.toString()}
-                    
-                    renderItem={({item}) => <DiscoverNewSpotsCard {...item}  imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0: 16}} />}
+                    renderItem={({item}) => (
+                      <DiscoverNewSpotsCard
+                        {...item}
+                        imageStyle={{
+                          marginHorizontal: Platform.OS == 'ios' ? 0 : 16,
+                        }}
+                        onPressBeenThere={() => {
+                          navigateTo(SCREENS.BeenThere);
+                        }}
+                        onPressFavs={() => {
+                          navigateTo(SCREENS.Favorites);
+                        }}
+                      />
+                    )}
                     contentContainerStyle={{paddingBottom: hp(16), gap: hp(8)}}
                   />
                 )}

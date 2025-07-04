@@ -12,14 +12,17 @@ import {
 } from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
-import {commonFontStyle, hp, wp} from '../../theme/fonts';
+import {commonFontStyle, hp, SCREEN_WIDTH, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {IMAGES} from '../../assets/Images';
 import {LinearView} from '..';
 import {AppStyles} from '../../theme/appStyles';
+import Swiper from 'react-native-swiper';
 
 const DiscoverNewSpotsCard: FC<{
   onPressAdd?: () => void;
+  onPressBeenThere?: () => void;
+  onPressFavs?: () => void;
   title?: string;
   location?: string;
   image?: ImageProps;
@@ -36,22 +39,27 @@ const DiscoverNewSpotsCard: FC<{
   avatar,
   users,
   onPressAdd = () => {},
+  onPressBeenThere = () => {},
+  onPressFavs = () => {},
   isShowOptions = true,
   showInfo = true,
   showRating = true,
   containerStyle,
-  imageStyle
+  imageStyle,
+  showAddToList
 }) => {
-  return (
+  
+  if(showAddToList){
+      return (
     <LinearView>
       <View style={[{paddingVertical: wp(20)}, containerStyle]}>
         <Image
           source={{
             uri: 'https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U',
           }}
-          style={[styles.imageStyle,imageStyle]}
+          style={[styles.imageStyle, imageStyle]}
         />
-        <Text style={styles.title}>Communal Coffee</Text>
+        <Text style={[styles.title,{  paddingHorizontal: wp(20),marginTop:18}]}>Communal Coffee</Text>
 
         <View
           style={{
@@ -62,6 +70,78 @@ const DiscoverNewSpotsCard: FC<{
           <Image source={IMAGES.locationWhite} style={styles.locationIcon} />
           <Text style={styles.userName2}>Toronto, Canada</Text>
         </View>
+      </View>
+    </LinearView>
+  );
+  }
+
+  return (
+    <LinearView>
+      <View style={[{paddingVertical: wp(20)}, containerStyle]}>
+        {/* <Image
+          source={{
+            uri: 'https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U',
+          }}
+          style={[styles.imageStyle, imageStyle]}
+        /> */}
+
+        <View
+          style={{
+            paddingHorizontal: wp(20),
+            marginBottom: 8,
+            flexDirection: 'row',
+          }}>
+          <View style={{flex:1}}>
+            <View style={{ flexDirection: 'row',alignItems:'center'}}>
+              <Text style={[styles.title,{flex:1}]}>Communal Coffee</Text>
+              {showRating && (
+                <View style={styles.footer}>
+                  <View style={AppStyles.row}>
+                    <Image
+                      source={IMAGES.star}
+                      style={styles.star}
+                      resizeMode="contain"
+                    />
+                    <Text style={styles.review}>{'4.5'}</Text>
+                  </View>
+                  <Text style={styles.googlereview}>{'(16k)'}</Text>
+                </View>
+              )}
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Image
+                source={IMAGES.locationWhite}
+                style={styles.locationIcon}
+              />
+              <Text style={styles.userName2}>Toronto, Canada</Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.sliderContainer}>
+          <Swiper
+            paginationStyle={styles.paginationStyle}
+            dotStyle={styles.dotStyle}
+            activeDotStyle={styles.dotStyle}
+            dotColor={colors._BD2332_0_3}
+            activeDotColor={colors._BD2332}
+            style={[styles.wrapper, {height: hp(244)}]}>
+            {[1, 2, 3].map(() => {
+              return (
+                <Image
+                  source={{
+                    uri: 'https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U',
+                  }}
+                  style={[styles.imageStyle, imageStyle]}
+                />
+              );
+            })}
+          </Swiper>
+        </View>
+
         {isShowOptions && (
           <View style={[AppStyles.row, styles.features]}>
             <TouchableOpacity
@@ -70,11 +150,15 @@ const DiscoverNewSpotsCard: FC<{
               <Image style={styles.add} source={IMAGES.newList} />
               <Text style={[styles.optionText]}>{'Add to list'}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.optionItem]}>
+            <TouchableOpacity
+              onPress={() => onPressBeenThere()}
+              style={[styles.optionItem]}>
               <Image style={styles.check} source={IMAGES.been} />
               <Text style={[styles.optionText]}>{'Been There'}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.optionItem]}>
+            <TouchableOpacity
+              onPress={() => onPressFavs()}
+              style={[styles.optionItem]}>
               <Image style={styles.fav} source={IMAGES.favorite} />
               <Text style={[styles.optionText]}>{'Favs'}</Text>
             </TouchableOpacity>
@@ -87,41 +171,39 @@ const DiscoverNewSpotsCard: FC<{
             Locations in North Park, South Park, and Oceanside.
           </Text>
         )}
-
-        {showRating && (
-          <View style={styles.footer}>
-            <Text style={styles.review}>{'4.5'}</Text>
-            <View style={AppStyles.row}>
-              <Image
-                source={IMAGES.star}
-                style={styles.star}
-                resizeMode="contain"
-              />
-              <Image
-                source={IMAGES.star}
-                style={styles.star}
-                resizeMode="contain"
-              />
-              <Image
-                source={IMAGES.star}
-                style={styles.star}
-                resizeMode="contain"
-              />
-              <Image
-                source={IMAGES.star}
-                style={styles.star}
-                resizeMode="contain"
-              />
-            </View>
-            <Text style={styles.googlereview}>{'16k Google reviews'}</Text>
-          </View>
-        )}
       </View>
     </LinearView>
   );
 };
 
 const styles = StyleSheet.create({
+  sliderContainer: {
+    flex: 1,
+    borderRadius: wp(20),
+    overflow: 'hidden',
+  },
+  slider: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: hp(16),
+  },
+
+  dotStyle: {
+    width: 5,
+    height: 5,
+  },
+  paginationStyle: {
+    backgroundColor: 'rgba(255, 255, 255, 0.75)',
+    left: wp(SCREEN_WIDTH / 2 - 35),
+    right: wp(SCREEN_WIDTH / 2 - 35),
+    borderRadius: 100,
+    bottom: hp(10),
+    alignSelf: 'center',
+  },
+  wrapper: {
+    height: hp(500),
+  },
   card: {
     // width: CARD_WIDTH,
     // height: 180,
@@ -139,10 +221,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   title: {
-    ...commonFontStyle(700, 24, colors.black),
-    marginBottom: 8,
-    paddingHorizontal: wp(20),
-    marginTop: hp(18),
+    ...commonFontStyle(700, 18, colors.black),
   },
 
   imageStyle: {
@@ -160,6 +239,7 @@ const styles = StyleSheet.create({
   },
   userName2: {
     ...commonFontStyle(500, 12, '#A6A6A6'),
+    marginTop: 2,
   },
   decText: {
     ...commonFontStyle(400, 14, '#5A5757'),
@@ -207,18 +287,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: wp(4),
-    marginTop: hp(10),
-    paddingHorizontal: wp(20),
+    alignSelf: 'flex-start',
+    // marginTop: hp(10),
+    // paddingHorizontal: wp(20),
   },
   googlereview: {
-    ...commonFontStyle(500, 14, colors._787878),
+    ...commonFontStyle(500, 14, '#787878'),
   },
   review: {
-    ...commonFontStyle(500, 16, colors.black),
+    ...commonFontStyle(500, 14, '#787878'),
   },
   star: {
-    width: wp(24),
-    height: wp(24),
+    width: wp(16),
+    height: wp(15),
+    tintColor: '#787878',
   },
 });
 

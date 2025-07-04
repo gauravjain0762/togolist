@@ -25,7 +25,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import Swiper from 'react-native-swiper';
 
 const options = [
-  'List',
+  'Collection',
   'Trip',
   'Bucket List',
   'Event',
@@ -41,7 +41,7 @@ const CreateListScreen = () => {
     params?.bucketScreen ? options.indexOf('Bucket List') : 0,
   );
   const [activeOption, setActiveOption] = useState(
-    params?.bucketScreen ? 'Bucket List' : 'List',
+    params?.bucketScreen ? 'Bucket List' : 'Collection',
   );
 
 
@@ -61,7 +61,7 @@ const CreateListScreen = () => {
 
   const renderBg = (key: string) => {
     switch (key) {
-      case 'List':
+      case 'Collection':
         return IMAGES.list_bg;
       case 'Trip':
         return IMAGES.trip_bg;
@@ -90,7 +90,7 @@ const CreateListScreen = () => {
 
   const slides = useMemo(() => {
     return options.map((option, index) => {
-      const isListType = ['List', 'Bucket List'].includes(option);
+      const isListType = ['Collection', 'Bucket List'].includes(option);
       const isTrip = option === 'Trip';
       const isEvent = option === 'Event';
       const showNextButton = ![
@@ -111,7 +111,7 @@ const CreateListScreen = () => {
                 {''}
               </Text> */}
               <TextInput
-                placeholder="List Name"
+                placeholder={option == 'Bucket List' ? "Last Name" : "Collection Name"}
                 placeholderTextColor={'#FFFFFF99'}
                 style={styles.title}
               />
@@ -268,7 +268,7 @@ const CreateListScreen = () => {
       {params?.bucketScreen ? (
         <>
           {['Bucket List'].map((option, index) => {
-            const isListType = ['List', 'Bucket List'].includes(option);
+            const isListType = ['Collection', 'Bucket List'].includes(option);
             const isTrip = option === 'Trip';
             const isEvent = option === 'Event';
             const showNextButton = ![

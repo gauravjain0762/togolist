@@ -4,6 +4,8 @@ import {IMAGES} from '../../assets/Images';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {LinearView} from '..';
+import { navigateTo } from '../../utils/commonFunction';
+import { SCREENS } from '../../navigation/screenNames';
 
 const StatusCard = ({title, showBucket}: any) => {
   const tabs = [
@@ -37,6 +39,8 @@ const StatusCard = ({title, showBucket}: any) => {
   ];
   const data = showBucket ? showBuckettabs : tabs;
   return (
+    <TouchableOpacity  onPress={() => navigateTo(SCREENS.TripsDetails)}>
+
     <LinearView
       linearViewStyle={{marginTop: hp(20)}}
       containerStyle={{paddingVertical: 20}}>
@@ -62,6 +66,7 @@ const StatusCard = ({title, showBucket}: any) => {
         })}
       </View>
     </LinearView>
+    </TouchableOpacity>
   );
 };
 

@@ -81,10 +81,10 @@ const SharedCard: FC<card> = ({
               </ImageBackground>
             )}
           </View>
-          <View style={[AppStyles.row, {gap: wp(4)}]}>
+          {/* <View style={[AppStyles.row, {gap: wp(4)}]}>
             <Image source={IMAGES.favorite} style={styles.fav} />
             <Text style={styles.likeCount}>{likeCount}</Text>
-          </View>
+          </View> */}
         </View>
       </ImageBackground>
     </TouchableOpacity>
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     width: wp(22),
     height: wp(22),
     resizeMode: 'contain',
-    tintColor: '#FFFFFFBF',
+    tintColor: colors._99999,
   },
   likeCount: {
     ...commonFontStyle(600, 16, '#FFFFFFBF'),

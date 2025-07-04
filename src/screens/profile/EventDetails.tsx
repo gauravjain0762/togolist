@@ -24,6 +24,9 @@ import {SwiperData} from '../../utils/constents';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useNavigation} from '@react-navigation/native';
 import {SharedElement} from 'react-native-shared-element';
+import {navigateTo} from '../../utils/commonFunction';
+import {SCREENS} from '../../navigation/screenNames';
+import AddToListBottomSheet from '../../component/common/AddToListBottomSheet';
 
 const {width} = Dimensions.get('window');
 
@@ -91,6 +94,15 @@ const EventDetails = ({route}) => {
 
   const flatListRef = useRef(null);
 
+  const bottomSheetAddListRef = useRef<BottomSheetModal>(null);
+
+  const handlePresentAddlistPress = useCallback(() => {
+    bottomSheetAddListRef.current?.present();
+  }, []);
+  const handlePresentAddlistClose = useCallback(() => {
+    bottomSheetAddListRef.current?.close();
+  }, []);
+
   // Find the initial index of the passed item within the hardcoded data
   const initialIndex = cards.findIndex(
     dataItem => dataItem.id === initialItem.id,
@@ -100,7 +112,7 @@ const EventDetails = ({route}) => {
   const [flatListReady, setFlatListReady] = useState(false);
   const [showComments, setShowComments] = useState(false);
 
-  const listOfComments= !showComments ? [1] : [1,2,3,4]
+  const listOfComments = !showComments ? [1] : [1, 2, 3, 4];
 
   useEffect(() => {
     // Only scroll if initialIndex is found and FlatListRef exists
@@ -223,27 +235,27 @@ const EventDetails = ({route}) => {
           renderItem={({item}) => {
             return (
               <ScrollView style={styles.scroll}>
-                <SharedElement id={`item.${item?.id}.image`}>
-                  <ImageBackground
-                    source={IMAGES.bbq}
-                    imageStyle={styles.placeimges}
-                    style={styles.place}>
-                    <SharedElement id={item?.title}>
-                      <Text style={styles.placeTitle}>{item?.title}</Text>
-                    </SharedElement>
-                    <View style={styles.location}>
-                      <Image source={IMAGES.wordWide} style={styles.pin} />
-                      <SharedElement id={item?.location}>
-                        <Text style={styles.address}>{item?.location}</Text>
-                      </SharedElement>
-                    </View>
-                    <View style={styles.timecontainer}>
-                      <Text style={styles.time}>{'May 10'}</Text>
-                      <Image source={IMAGES.arrow} style={styles.arrow} />
-                      <Text style={styles.time}>{'May 11'}</Text>
-                    </View>
-                  </ImageBackground>
-                </SharedElement>
+                {/* <SharedElement id={`item.${item?.id}.image`}> */}
+                <ImageBackground
+                  source={IMAGES.bbq}
+                  imageStyle={styles.placeimges}
+                  style={styles.place}>
+                  {/* <SharedElement id={item?.title}> */}
+                  <Text style={styles.placeTitle}>{item?.title}</Text>
+                  {/* </SharedElement> */}
+                  <View style={styles.location}>
+                    <Image source={IMAGES.wordWide} style={styles.pin} />
+                    {/* <SharedElement id={item?.location}> */}
+                    <Text style={styles.address}>{item?.location}</Text>
+                    {/* </SharedElement> */}
+                  </View>
+                  <View style={styles.timecontainer}>
+                    <Text style={styles.time}>{'May 10'}</Text>
+                    <Image source={IMAGES.arrow} style={styles.arrow} />
+                    <Text style={styles.time}>{'May 11'}</Text>
+                  </View>
+                </ImageBackground>
+                {/* </SharedElement> */}
                 <View style={[AppStyles.row, styles.eventContainor]}>
                   <View style={[AppStyles.row, styles.eventrow]}>
                     <Image source={IMAGES.world} style={styles.eventicon} />
@@ -261,15 +273,25 @@ const EventDetails = ({route}) => {
                   title="Follow Event"
                 />
                 <View style={[AppStyles.row, styles.features]}>
-                  <TouchableOpacity style={[styles.optionItem]}>
+                  <TouchableOpacity onPress={()=>{
+                    handlePresentAddlistPress()
+                  }} style={[styles.optionItem]}>
                     <Image style={styles.add} source={IMAGES.newList} />
                     <Text style={[styles.optionText]}>{'Add to list'}</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={[styles.optionItem]}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigateTo(SCREENS.BeenThere);
+                    }}
+                    style={[styles.optionItem]}>
                     <Image style={styles.check} source={IMAGES.been} />
                     <Text style={[styles.optionText]}>{'Been There'}</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={[styles.optionItem]}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigateTo(SCREENS.Favorites);
+                    }}
+                    style={[styles.optionItem]}>
                     <Image style={styles.fav} source={IMAGES.fav} />
                     <Text style={[styles.optionText]}>{'Favs'}</Text>
                   </TouchableOpacity>
@@ -411,8 +433,8 @@ const EventDetails = ({route}) => {
 
                       {/* Comments */}
                       <TouchableOpacity
-                        onPress={()=>{
-                          setShowComments(!showComments)
+                        onPress={() => {
+                          setShowComments(!showComments);
                         }}
                         style={[
                           styles.row,
@@ -422,7 +444,9 @@ const EventDetails = ({route}) => {
                           },
                         ]}>
                         <Text style={styles.commentLink}>
-                          {showComments ? "Show less comments" : "View all comments"}
+                          {showComments
+                            ? 'Show less comments'
+                            : 'View all comments'}
                         </Text>
                         <View style={[styles.row, {gap: wp(4)}]}>
                           <Image
@@ -519,6 +543,11 @@ const EventDetails = ({route}) => {
       )}
 
       {renderPaginationDots()}
+
+      <AddToListBottomSheet
+        bottomSheetModalRef={bottomSheetAddListRef}
+        handleSheetChanges={e => handleSheetChanges(e)}
+      />
     </SafeAreaView>
   );
 };

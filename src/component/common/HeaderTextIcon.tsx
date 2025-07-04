@@ -42,7 +42,7 @@ const HeaderTextIcon: FC<button> = ({
         {showDown && (
           <Image
             source={IMAGES.down}
-            style={[styles.downIcon, {transform: [{rotate: !show ? "0deg" : '180deg'}]}]}
+            style={[styles.downIcon, {transform: [{rotate: !show ? "270deg" : '0deg'}]}]}
           />
         )}
       </TouchableOpacity>

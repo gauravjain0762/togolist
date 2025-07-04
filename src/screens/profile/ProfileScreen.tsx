@@ -3,6 +3,7 @@ import {
   FlatList,
   Image,
   ImageBackground,
+  Platform,
   RefreshControl,
   ScrollView,
   Share,
@@ -202,6 +203,7 @@ const ProfileScreen = (props: Props) => {
             width: 20,
             height: 26,
             resizeMode: 'contain',
+            tintColor:"#BD2332"
           }}
         />
       ),
@@ -282,10 +284,12 @@ const ProfileScreen = (props: Props) => {
         searchIconStyle={{
           tintColor: searchShow ? colors.primary1 : colors.black,
         }}
+        showSearch={false}
         showBack={false}
         onSearchPress={() => {
           setSearchShow(!searchShow);
         }}
+        headerShow="Profile"
         onMorePress={() => {
           navigateTo(SCREENS.ProfileSettingScreen);
         }}
@@ -295,11 +299,11 @@ const ProfileScreen = (props: Props) => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={[AppStyles.mainSide, AppStyles.flex]}>
-        {searchShow && (
+        {true && (
           <View style={styles.searchContainer}>
             <Image source={IMAGES.search} style={styles.searchIcon} />
             <TextInput
-              placeholder="Search Profile"
+              placeholder="Search"
               placeholderTextColor={colors.gray}
               style={styles.searchInput}
             />
@@ -369,7 +373,7 @@ const ProfileScreen = (props: Props) => {
         {selectedTab == 'Lists' && (
           <>
             <HeaderTextIcon
-            headerStyle={{ marginTop: 8}}
+              headerStyle={{marginTop: 8}}
               title={'Personal Lists'}
               show={showPersonal}
               onDownPress={() => {
@@ -457,11 +461,14 @@ const ProfileScreen = (props: Props) => {
             )}
             <HeaderTextIcon
               title={'Collections'}
-               headerStyle={{ marginTop: 8}}
+              headerStyle={{marginTop: 8}}
               showAddIcon={true}
               show={showCollections}
               onDownPress={() => {
                 setShowCollections(!showCollections);
+              }}
+              onAddPress={()=>{
+                navigateTo(SCREENS.CreateListScreen)
               }}
             />
 
@@ -586,7 +593,7 @@ const ProfileScreen = (props: Props) => {
             <HeaderTextIcon
               title={'Upcoming '}
               show={showUpcoming}
-               headerStyle={{ marginTop: 16}}
+              headerStyle={{marginTop: 16}}
               onDownPress={() => {
                 setShowUpcoming(!showUpcoming);
               }}
@@ -617,7 +624,7 @@ const ProfileScreen = (props: Props) => {
             <HeaderTextIcon
               title={'Past '}
               show={showPast}
-               headerStyle={{ marginTop: 0}}
+              headerStyle={{marginTop: 0}}
               onDownPress={() => {
                 setShowPast(!showPast);
               }}
@@ -677,16 +684,16 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.lightGray,
-    borderRadius: 14,
+    backgroundColor: "#78788029",
+    borderRadius: 23,
     paddingHorizontal: 12,
-    // paddingVertical: 6,
-    height: 48,
+    paddingVertical: Platform.OS == 'ios' ? 12 : 0,
+    // height: 32,
+    marginBottom: 16,
   },
   searchInput: {
     flex: 1,
-    fontSize: 16,
-    color: colors.black,
+    ...commonFontStyle(400, 16, colors.black),
     marginLeft: 8,
   },
   profileContainer: {

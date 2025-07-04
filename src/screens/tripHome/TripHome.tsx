@@ -240,7 +240,7 @@ const TripHome = (props: Props) => {
             onPress={() => handlePresentAddTogoModalPress()}
           />
         )}
-        {activeTab == 'tab2' &&  !options &&  (
+        {activeTab == 'tab2' && !options && (
           <Button
             type="outline"
             BtnStyle={styles.btn}
@@ -298,6 +298,7 @@ const TripHome = (props: Props) => {
             {/* {true && <OptionBar container={styles.optioncontainer} />} */}
 
             <SwipeListView
+              nestedScrollEnabled
               ItemSeparatorComponent={() => (
                 <View style={{height: Platform.OS == 'ios' ? hp(12) : 8}} />
               )}
@@ -353,10 +354,11 @@ const TripHome = (props: Props) => {
               )}
               disableRightSwipe
               swipeToOpenPercent={30}
-                  rightOpenValue={-354}
+              rightOpenValue={-349}
               renderHiddenItem={(data, rowMap) => (
                 <OptionBar
                   container={[styles.optioncontainer, {borderRadius: 22}]}
+                  tripsTab
                 />
                 // <View style={styles.rowBack}>
                 //     <TouchableOpacity style={styles.backButton}>
@@ -410,6 +412,7 @@ const TripHome = (props: Props) => {
           <>
             {/* <SwipeList title={'HEllo'} /> */}
             <SwipeListView
+              nestedScrollEnabled
               data={[
                 {
                   id: 1,
@@ -488,6 +491,7 @@ const TripHome = (props: Props) => {
             </View>
 
             <SwipeListView
+              nestedScrollEnabled
               // ItemSeparatorComponent={() => <View style={{height: hp(12)}} />}
               data={[{title: 'Start Planning...', location: 'New Destination'}]}
               renderItem={({item, index}) => (
@@ -507,13 +511,14 @@ const TripHome = (props: Props) => {
               )}
               disableRightSwipe
               swipeToOpenPercent={30}
-                   rightOpenValue={-330}
+               rightOpenValue={-349}
               renderHiddenItem={(data, rowMap) => (
                 <OptionBar
                   container={[
                     styles.optioncontainer,
                     {marginTop: hp(9), marginBottom: 0, borderRadius: 25},
                   ]}
+                   tripsTab
                 />
                 // <View style={styles.rowBack}>
                 //     <TouchableOpacity style={styles.backButton}>
@@ -574,6 +579,7 @@ const TripHome = (props: Props) => {
         {options && activeTab == 'tab2' && (
           <>
             <SwipeListView
+              nestedScrollEnabled
               // ItemSeparatorComponent={() => <View style={{height: hp(12)}} />}
               data={[
                 {title: 'Start Planning...', location: 'New Destination'},
@@ -640,6 +646,7 @@ const TripHome = (props: Props) => {
 
             <SwipeListView
               data={cards}
+              nestedScrollEnabled
               renderItem={(data, index) => (
                 <View style={styles.rowFront}>
                   <TripCardBottomText
@@ -661,13 +668,14 @@ const TripHome = (props: Props) => {
               )}
               disableRightSwipe
               swipeToOpenPercent={30}
-                    rightOpenValue={-354}
+              rightOpenValue={-339}
               renderHiddenItem={(data, rowMap) => (
                 <OptionBar
                   container={[
                     styles.optioncontainer,
                     {marginTop: hp(8), marginBottom: 0, borderRadius: 23},
                   ]}
+                   tripsTab
                 />
               )}
               ListFooterComponent={() => {
@@ -740,6 +748,7 @@ const TripHome = (props: Props) => {
           <>
             <SwipeListView
               data={cards}
+              nestedScrollEnabled
               renderItem={(data, index) => (
                 <View style={styles.rowFront}>
                   <TripCardBottomText
@@ -785,10 +794,10 @@ const TripHome = (props: Props) => {
         children={
           <>
             <View style={styles.toplist}>
-              <View style={styles.row}>
+              <TouchableOpacity style={styles.row}>
                 <Text style={styles.sheetlabel}>{'Share'}</Text>
                 <Image source={IMAGES.send} style={styles.icon} />
-              </View>
+              </TouchableOpacity>
               <View style={styles.divider1} />
               <TouchableOpacity
                 onPress={() => navigateTo(SCREENS.NewTrip, {pastTrips: false})}
@@ -809,22 +818,22 @@ const TripHome = (props: Props) => {
                 <Image source={IMAGES.edit_icon} style={styles.icon} />
               </TouchableOpacity>
             </View>
-            <View style={styles.row}>
+            <TouchableOpacity  onPress={() => setshort1(!short1)} style={styles.row}>
               <Text style={styles.sheetlabel}>{'Sort by Date'}</Text>
               <GetCheckboxImage
                 onPress={() => setshort1(!short1)}
                 value={short1}
               />
-            </View>
+            </TouchableOpacity>
             <View style={styles.divider1} />
 
-            <View style={[styles.row]}>
+            <TouchableOpacity  onPress={() => setshort2(!short2)} style={[styles.row]}>
               <Text style={styles.sheetlabel}>{'Sort by Destination'}</Text>
               <GetCheckboxImage
                 onPress={() => setshort2(!short2)}
                 value={short2}
               />
-            </View>
+            </TouchableOpacity>
             <View style={styles.devider} />
 
             <TouchableOpacity
@@ -840,13 +849,13 @@ const TripHome = (props: Props) => {
               />
             </TouchableOpacity>
             <View style={styles.devider} />
-            <View style={styles.row}>
+            <TouchableOpacity style={styles.row}>
               <Text style={styles.sheetlabel}>{'Report an Issue'}</Text>
               <Image
                 source={IMAGES.report}
                 style={[styles.icon, {width: wp(24), height: hp(24)}]}
               />
-            </View>
+            </TouchableOpacity>
           </>
         }
         title="Settings"
@@ -1052,9 +1061,9 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 14,
+    borderRadius: 12,
     paddingHorizontal: 11,
-    paddingVertical: 10.2,
+    // paddingVertical: 10.2,
     borderWidth: 1,
     borderColor: '#959595',
     marginBottom: hp(16),

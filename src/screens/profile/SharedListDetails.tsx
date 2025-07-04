@@ -26,10 +26,13 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
 import {SwipeListView} from 'react-native-swipe-list-view';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import {API} from '../../utils/apiConstant';
+import AddToListBottomSheet from '../../component/common/AddToListBottomSheet';
 
 const cards = [
   {
-    id:1,
+    id: 1,
     title: 'Samuri Japanese Restaurant',
     location: '979 Lomas Santa Fe Dr, Solana Beach...',
     lists: 31,
@@ -37,31 +40,56 @@ const cards = [
     onPress: () => navigateTo(SCREENS.EventDetails),
   },
   {
-    id:2,
+    id: 2,
     title: 'Mt. Hood Timber Lodge',
     location: 'National park in California',
     lists: 23,
     image: 'https://source.unsplash.com/600x400/?unesco,heritage',
   },
   {
-    id:3,
+    id: 3,
     title: 'Samuri Japanese Restaurant',
     location: '979 Lomas Santa Fe Dr, Solana Beach...',
     lists: 6,
     image: 'https://source.unsplash.com/600x400/?london,big-ben',
   },
   {
-    id:4,
+    id: 4,
     title: 'Mt. Hood Timber Lodge',
     location: 'National park in California',
     lists: 11,
     image: 'https://source.unsplash.com/600x400/?peru,mountains',
+  },
+  {
+    id: 1,
+    title: 'Samuri Japanese Restaurant',
+    location: '979 Lomas Santa Fe Dr, Solana Beach...',
+    lists: 31,
+    image: 'https://source.unsplash.com/600x400/?egypt,pyramids',
+    onPress: () => navigateTo(SCREENS.EventDetails),
+  },
+  {
+    id: 2,
+    title: 'Mt. Hood Timber Lodge',
+    location: 'National park in California',
+    lists: 23,
+    image: 'https://source.unsplash.com/600x400/?unesco,heritage',
   },
 ];
 
 const SharedListDetails = () => {
   const [select, setSelect] = useState('List View');
   const [showCard, setShowCard] = useState(false);
+
+  const bottomSheetAddListRef = useRef<BottomSheetModal>(null);
+
+  const handlePresentAddlistPress = useCallback(() => {
+    bottomSheetAddListRef.current?.present();
+  }, []);
+  const handlePresentAddlistClose = useCallback(() => {
+    bottomSheetAddListRef.current?.close();
+    bottomSheetModalRef.current?.close();
+  }, []);
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const handlePresentModalPress = useCallback(() => {
@@ -73,15 +101,18 @@ const SharedListDetails = () => {
   return (
     <SafeAreaView style={[AppStyles.flex, styles.mainContainer]}>
       <CustomHeader
-       showBack={true}
+        showBack={true}
         backImg={IMAGES.back1}
         backIconStyle={styles.back}
         showSearch={false}
         moreImg={IMAGES.more_icon}
         moreIconStyle={styles.more}
         headerStyle={styles.header}
+        onMorePress={() => {
+          handlePresentModalPress();
+        }}
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <View style={AppStyles.flex1}>
         <View style={styles.containter}>
           <View style={styles.info}>
             <View>
@@ -133,84 +164,96 @@ const SharedListDetails = () => {
             </TouchableOpacity>
           </View>
           {/* {showCard && <OptionBar container={styles.optioncontainer} />} */}
-          <SwipeListView
-            data={cards}
-            ItemSeparatorComponent={() => (
-              <View style={styles.liastseparator} />
-            )}
-            showsVerticalScrollIndicator={false}
-            renderItem={(data, rowMap) => {
-              return (
-                <View style={styles.rowFront}>
-                  <PlacesCard
-                    onCardPress={() => {
-                      // data?.item?.onPress && data?.item?.onPress();
-                       navigateTo(SCREENS.EventDetails,{item:data?.item,data:cards})
-                      
+          {select == 'List View' && (
+            <>
+              <SwipeListView
+                data={cards}
+                nestedScrollEnabled
+                ItemSeparatorComponent={() => (
+                  <View style={styles.liastseparator} />
+                )}
+                showsVerticalScrollIndicator={false}
+                renderItem={(data, rowMap) => {
+                  return (
+                    <View style={styles.rowFront}>
+                      <PlacesCard
+                        onCardPress={() => {
+                          // data?.item?.onPress && data?.item?.onPress();
+                          navigateTo(SCREENS.EventDetails, {
+                            item: data?.item,
+                            data: cards,
+                          });
+                        }}
+                        id={data?.item?.id}
+                        title={data?.item?.title}
+                        location={data?.item?.location}
+                        likeCount={data?.item.lists}
+                        locationIcon
+                        locationStyle={styles.location}
+                      />
+                    </View>
+                  );
+                }}
+                disableRightSwipe
+                swipeToOpenPercent={30}
+                rightOpenValue={-349}
+                renderHiddenItem={(data, rowMap) => (
+                  <OptionBar
+                    container={styles.optioncontainer}
+                    onAddListPress={() => {
+                      handlePresentAddlistPress();
                     }}
-                    id={data?.item?.id}
-                    title={data?.item?.title}
-                    location={data?.item?.location}
-                    likeCount={data?.item.lists}
-                    locationIcon
-                    locationStyle={styles.location}
+                    onBeentherePress={() => {
+                      navigateTo(SCREENS.BeenThere);
+                    }}
                   />
-                </View>
-              );
-            }}
-            disableRightSwipe
-            swipeToOpenPercent={30}
-                   rightOpenValue={-354}
-            renderHiddenItem={(data, rowMap) => (
-               <OptionBar container={styles.optioncontainer} />
-              
-            )}
-            leftOpenValue={75}
-            onRowOpen={(rowKey, rowMap, toValue) => {
-              if (toValue < 0) {
-                console.log('Swiped left');
-                setShowCard(true);
-              } else {
-                console.log('Swiped right');
-              }
-            }}
-            onRowClose={(rowKey, rowMap) => {
-              setShowCard(false);
-            }}
-          />
-          {/* <FlatList
-            data={cards}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.Listcontainer}
-            ItemSeparatorComponent={() => (
-              <View style={styles.liastseparator} />
-            )}
-            renderItem={({item}) => {
-              return (
-                <PlacesCard
-                  onCardPress={() => {
-                    item?.onPress && item?.onPress();
-                  }}
-                  title={item?.title}
-                  location={item?.location}
-                  likeCount={item.lists}
-                  locationIcon
-                  locationStyle={styles.location}
-                />
-              );
-            }}
-          /> */}
-          <Button
-            leftImg={IMAGES.addlist}
-            type="outline"
-            title="Add a new place"
-            BtnStyle={styles.btn}
-            onPress={() => handlePresentModalPress()}
-          />
+                )}
+                leftOpenValue={75}
+                onRowOpen={(rowKey, rowMap, toValue) => {
+                  if (toValue < 0) {
+                    console.log('Swiped left');
+                    setShowCard(true);
+                  } else {
+                    console.log('Swiped right');
+                  }
+                }}
+                onRowClose={(rowKey, rowMap) => {
+                  setShowCard(false);
+                }}
+              />
+              <Button
+                leftImg={IMAGES.addlist}
+                type="outline"
+                title="Add a new place"
+                BtnStyle={styles.btn}
+                onPress={() => handlePresentModalPress()}
+              />
+            </>
+          )}
+
+          {select == 'Map View' && (
+            <MapView
+              style={AppStyles.flex1}
+              provider={PROVIDER_GOOGLE}
+              key={API.MAP_KEY}
+              region={{
+                latitude: 51.5065313072,
+                longitude: -0.1888825778,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+              }}
+            />
+          )}
         </View>
-      </ScrollView>
+      </View>
+
       <ShareBottomSheet
         bottomSheetModalRef={bottomSheetModalRef}
+        handleSheetChanges={e => handleSheetChanges(e)}
+      />
+
+      <AddToListBottomSheet
+        bottomSheetModalRef={bottomSheetAddListRef}
         handleSheetChanges={e => handleSheetChanges(e)}
       />
     </SafeAreaView>
@@ -240,11 +283,12 @@ const styles = StyleSheet.create({
   },
   containter: {
     paddingHorizontal: wp(16),
+    flex: 1,
   },
   info: {
     paddingHorizontal: wp(8),
-    marginTop: hp(10),
-    gap: hp(12),
+    // marginTop: hp(10),
+    gap: hp(8),
   },
   title: {
     ...commonFontStyle(700, 32, colors.black),
@@ -295,7 +339,7 @@ const styles = StyleSheet.create({
     ...commonFontStyle(700, 32, colors._999999),
   },
   btn: {
-    marginVertical: hp(16),
+    // marginVertical: hp(16),
     paddingVertical: hp(12),
   },
   Listcontainer: {},

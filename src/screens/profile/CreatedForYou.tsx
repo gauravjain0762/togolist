@@ -94,7 +94,7 @@ const CreatedForYou = () => {
         </View>
 
         <Text style={styles.byLocationText}>
-          By locatio <Text style={{color: '#999999'}}> | </Text>
+          By location <Text style={{color: '#999999'}}> | </Text>
           <Text style={styles.azText}>A-Z</Text>
         </Text>
       </View>

@@ -151,6 +151,7 @@ const BucketListDetails = () => {
 
         <SwipeListView
           data={categories}
+          nestedScrollEnabled
           // contentContainerStyle={{paddingHorizontal: 20}}
           showsVerticalScrollIndicator={false}
           renderItem={(data, rowMap) => {

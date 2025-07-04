@@ -112,7 +112,7 @@ const Experience = () => {
                 style={styles.cardimg}
               />
               <Text style={styles.cardlabel}>{'Experiences'}</Text>
-              <Text style={styles.info}>
+              <Text style={styles.info} numberOfLines={4}>
                 {'Share what you love by hosting unforgettable experiences.'}
               </Text>
             </View>
@@ -123,7 +123,7 @@ const Experience = () => {
                 style={styles.cardimg}
               />
               <Text style={styles.cardlabel}>{'Itineraries'}</Text>
-              <Text style={styles.info}>
+              <Text style={styles.info } numberOfLines={4}>
                 {
                   'Create curated  itineraries to plan epic trips for fellow travellers.'
                 }
@@ -136,7 +136,7 @@ const Experience = () => {
                 style={styles.cardimg}
               />
               <Text style={styles.cardlabel}>{'Local Guide'}</Text>
-              <Text style={styles.info}>
+              <Text style={styles.info } numberOfLines={4}>
                 {
                   'Apply to guide requests to share your local insights across the globe.'
                 }
@@ -320,6 +320,7 @@ const styles = StyleSheet.create({
   info: {
     ...commonFontStyle(600, 12, colors._787878),
     textAlign: 'center',
+    minHeight:70,
   },
   cardrow: {
     flexDirection: 'row',
