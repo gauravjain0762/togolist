@@ -57,7 +57,7 @@ const CategoryCard: FC<card> = ({
                 imageStyle={styles.image1}
                 style={styles.chip}>
                 <Image
-                  source={IMAGES.ToglistCircleIcon}
+                  source={Togolist == 'Activities' ?  IMAGES.Activities  : Togolist == 'Accommodations' ? IMAGES.Accommodations : IMAGES.Dinning}
                   style={styles.forIcon}
                 />
                 <Text style={styles.chipText}>{Togolist}</Text>

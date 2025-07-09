@@ -50,6 +50,7 @@ const cards = [
 
 const BeenThere = () => {
   const [select, setSelect] = useState('List View');
+  const [showPersonal, setShowPersonal] = useState(true);
 
   return (
     <SafeAreaView style={[AppStyles.flex, styles.maincontainer]}>
@@ -114,8 +115,12 @@ const BeenThere = () => {
               headerStyle={styles.titleheader}
               title={'San Diego'}
               showAddIcon={false}
+              show={showPersonal}
+                 onDownPress={() => {
+                setShowPersonal(!showPersonal);
+              }}
             />
-            <FlatList
+            {showPersonal &&<FlatList
               data={cards}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.Listcontainer}
@@ -132,7 +137,7 @@ const BeenThere = () => {
                   />
                 );
               }}
-            />
+            />}
             <View style={styles.place}>
               <View style={styles.row}>
                 <Text style={styles.location}>{'Los Angeles'}</Text>

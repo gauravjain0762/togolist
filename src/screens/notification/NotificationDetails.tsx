@@ -23,7 +23,7 @@ const NotificationDetails = () => {
     <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader
         backImg={IMAGES.back1}
-         showBack={true}
+        showBack={true}
         backIconStyle={styles.back}
         showSearch={false}
         moreImg={IMAGES.more_icon}
@@ -51,10 +51,13 @@ const NotificationDetails = () => {
           <TextInput
             style={styles.valueinput}
             multiline
+            numberOfLines={2}
+            textAlignVertical='top'
             placeholder="Looking for a guide to show us around Toronto! Interests are sports, breweries and shopping."
           />
         </LinearView>
-        <LinearView containerStyle={styles.valueContainer}>
+        <LinearView
+          containerStyle={[styles.valueContainer, {paddingBottom: hp(16)}]}>
           <Text style={styles.headerTitle}>{'Details'}</Text>
           {/* WHEN */}
           <Text style={styles.label}>When</Text>
@@ -136,7 +139,7 @@ const styles = StyleSheet.create({
     width: 'auto',
     resizeMode: 'contain',
     height: hp(555),
-    marginTop: hp(18),
+    marginTop: hp(10),
     justifyContent: 'flex-end',
     alignItems: 'center',
     gap: hp(4),
@@ -165,9 +168,11 @@ const styles = StyleSheet.create({
   },
   valueinput: {
     ...commonFontStyle(400, 14, colors._5A5757),
+    marginBottom:6
   },
   valueContainer: {
-    padding: wp(16),
+    paddingHorizontal: wp(16),
+    paddingTop: hp(16),
     gap: hp(10),
   },
   title: {

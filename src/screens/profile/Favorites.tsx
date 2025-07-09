@@ -94,10 +94,14 @@ const cards = [
 
 const Favorites = () => {
   const [select, setSelect] = useState('List View');
+  const [showPersonal, setShowPersonal] = useState(true);
+  const [showCollections, setShowCollections] = useState(true);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [showItineraries, setShowItineraries] = useState(false);
   return (
     <SafeAreaView style={[AppStyles.flex, styles.maincontainer]}>
       <CustomHeader
-       showBack={true}
+        showBack={true}
         backImg={IMAGES.back1}
         backIconStyle={styles.back}
         showSearch={false}
@@ -156,28 +160,37 @@ const Favorites = () => {
           <View style={styles.container}>
             <HeaderTextIcon
               headerStyle={styles.titleheader}
-              title={'Collections'}
               showAddIcon={false}
+              title={'Collections'}
+              show={showPersonal}
+              onDownPress={() => {
+                setShowPersonal(!showPersonal);
+              }}
             />
-            <FlatList
+
+            {showPersonal &&<FlatList
               data={mockData}
               numColumns={2}
               keyExtractor={(_, index) => index.toString()}
               columnWrapperStyle={{
-                paddingTop: hp(10),
+                paddingBottom: hp(10),
                 justifyContent: 'space-between',
               }}
               renderItem={({item}) => <TravelCard {...item} />}
-            />
+            />}
             <HeaderTextIcon
               headerStyle={styles.titleheader}
               title={'Places'}
               showAddIcon={false}
+              show={showCollections}
+              onDownPress={() => {
+                setShowCollections(!showCollections);
+              }}
             />
-            <FlatList
+           {showCollections && <FlatList
               data={cards}
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.Listcontainer}
+              // contentContainerStyle={styles.Listcontainer}
               ItemSeparatorComponent={() => <View style={styles.separator} />}
               renderItem={({item}) => {
                 return (
@@ -191,13 +204,17 @@ const Favorites = () => {
                   />
                 );
               }}
-            />
+            />}
             <HeaderTextIcon
               headerStyle={styles.titleheader}
               title={'Events'}
               showAddIcon={false}
+              show={showCalendar}
+              onDownPress={() => {
+                setShowCalendar(!showCalendar);
+              }}
             />
-            <FlatList
+           {showCalendar && <FlatList
               data={mockData?.slice(0, 4)}
               numColumns={2}
               keyExtractor={(_, index) => index.toString()}
@@ -206,13 +223,17 @@ const Favorites = () => {
                 justifyContent: 'space-between',
               }}
               renderItem={({item}) => <TravelCard {...item} />}
-            />
+            />}
             <HeaderTextIcon
               headerStyle={styles.titleheader}
               title={'Itineraries'}
               showAddIcon={false}
+              show={showItineraries}
+              onDownPress={() => {
+                setShowItineraries(!showItineraries);
+              }}
             />
-            <FlatList
+           {showItineraries && <FlatList
               data={mockData?.slice(0, 2)}
               numColumns={2}
               keyExtractor={(_, index) => index.toString()}
@@ -222,7 +243,7 @@ const Favorites = () => {
                 justifyContent: 'space-between',
               }}
               renderItem={({item}) => <TravelCard {...item} />}
-            />
+            />}
           </View>
         )}
         {select == 'Map View' && (
@@ -309,7 +330,7 @@ const styles = StyleSheet.create({
     height: hp(8),
   },
   Listcontainer: {
-    marginTop: hp(16),
+    // marginTop: hp(16),
   },
   titleheader: {
     marginVertical: hp(16),

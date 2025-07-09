@@ -7,20 +7,28 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
 import {CustomHeader, ExperienceCard, ProfileCard} from '..';
 import {IMAGES} from '../../assets/Images';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
+import {navigateTo} from '../../utils/commonFunction';
+import {SCREENS} from '../../navigation/screenNames';
+import AddToListBottomSheet from '../common/AddToListBottomSheet';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 let data = ['View All', 'Hosts', 'Half Day', 'Full Day', '< 4 hours'];
 
 const TripPlanner = () => {
   const [select, setSelect] = useState('View All');
   const [host, sethost] = useState(false);
+  const bottomSheetAddListRef = useRef<BottomSheetModal>(null);
 
+  const handlePresentAddlistPress = useCallback(() => {
+    bottomSheetAddListRef.current?.present();
+  }, []);
   return (
     <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader
@@ -82,11 +90,21 @@ const TripPlanner = () => {
                 contentContainerStyle={{gap: wp(16)}}
                 renderItem={({item, index}) => <ProfileCard />}
               />
-              <Text style={styles.localTitle}>{'Experiences'}</Text>
+              <Text style={styles.localTitle}>{'Guided Tours'}</Text>
               <FlatList
                 data={[1, 2]}
                 contentContainerStyle={{gap: wp(8)}}
-                renderItem={({item, index}) => <ExperienceCard />}
+                renderItem={({item, index}) => (
+                  <ExperienceCard
+                    onFavsPress={() => {
+                      navigateTo(SCREENS.Favorites);
+                    }}
+                    onAddPress={() => {
+                      handlePresentAddlistPress();
+                    }}
+                    onBookPress={() => {}}
+                  />
+                )}
               />
             </View>
             <ImageBackground
@@ -122,7 +140,14 @@ const TripPlanner = () => {
             </TouchableOpacity>
           </ImageBackground>
         )}
+
       </ScrollView>
+        <AddToListBottomSheet
+          bottomSheetModalRef={bottomSheetAddListRef}
+          maxDynamicContentSize
+          guidedTours
+          // handleSheetChanges={e => handleSheetChanges(e)}
+        />
     </SafeAreaView>
   );
 };

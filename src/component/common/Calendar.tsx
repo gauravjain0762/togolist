@@ -1,7 +1,7 @@
 import React, {memo, useState} from 'react';
 import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import dayjs from 'dayjs';
-import {commonFontStyle, wp} from '../../theme/fonts';
+import {commonFontStyle, hp, SCREEN_WIDTH, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 
 const Calendar = () => {
@@ -85,6 +85,11 @@ const Calendar = () => {
         numColumns={7}
         keyExtractor={(_, i) => i.toString()}
         scrollEnabled={false}
+        style={{marginHorizontal:10}}
+        columnWrapperStyle={{
+          justifyContent: 'space-between',
+         
+        }}
         renderItem={({item}) => {
           const isSelected = selectedDates.some(d =>
             d.isSame(item.date, 'date'),
@@ -149,7 +154,6 @@ const styles = StyleSheet.create({
   dayCell: {
     width: wp(32),
     height: wp(32),
-    marginHorizontal: wp(8),
     marginVertical: 5,
     alignItems: 'center',
     justifyContent: 'center',

@@ -321,7 +321,7 @@ const ProfileScreen = (props: Props) => {
         stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
         style={[AppStyles.M16, AppStyles.flex]}>
-        {showSearchBar && (
+        {showSearchBar ? (
           <View style={{backgroundColor:colors.white}}>
             <View style={styles.searchContainer}>
               <Image source={IMAGES.search} style={styles.searchIcon} />
@@ -332,7 +332,7 @@ const ProfileScreen = (props: Props) => {
               />
             </View>
           </View>
-        )}
+        ): <View style={{height:4}}/>}
 
         {/* <View style={styles.searchContainer}>
           <Image source={IMAGES.search} style={styles.searchIcon} />
@@ -629,7 +629,7 @@ const ProfileScreen = (props: Props) => {
                 setShowUpcoming(!showUpcoming);
               }}
             />
-            {showUpcoming && (
+            {showUpcoming ? (
               <>
                 <CardBottomText title={'Start Planning...'} />
                 <FlatList
@@ -651,11 +651,11 @@ const ProfileScreen = (props: Props) => {
                   )}
                 />
               </>
-            )}
+            ) : <View style={{height:0}} />}
             <HeaderTextIcon
               title={'Past '}
               show={showPast}
-              headerStyle={{marginTop: 0}}
+              headerStyle={{marginTop: 16}}
               onDownPress={() => {
                 setShowPast(!showPast);
               }}

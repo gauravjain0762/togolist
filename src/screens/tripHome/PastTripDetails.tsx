@@ -210,11 +210,14 @@ const PastTripDetails = ({route}: any) => {
         <FlatList
           ref={flatListRef}
           data={cards}
+          showsVerticalScrollIndicator={false}
+          
           contentContainerStyle={[{gap: hp(8)}]}
           renderItem={({item}) => {
             return (
               <ScrollView
                 style={styles.scroll}
+                showsVerticalScrollIndicator={false}
                 contentContainerStyle={[{gap: hp(8)}]}>
                 <ImageBackground
                   source={IMAGES.trips_bg}
@@ -236,13 +239,13 @@ const PastTripDetails = ({route}: any) => {
                 </ImageBackground>
                 {showTogolistPro ? (
                   <TogolistPro
-                    cardStyle={{marginBottom: 18}}
+                    cardStyle={{marginBottom: 10,marginTop:6}}
                     onClosePress={() => {
                       setShowTogolistPro(false);
                     }}
                   />
                 ) : (
-                  <View style={{marginBottom: 18}} />
+                  <View style={{marginBottom: 8}} />
                 )}
 
                 <LinearView containerStyle={styles.notificationRow}>
@@ -254,7 +257,7 @@ const PastTripDetails = ({route}: any) => {
                     <Image source={IMAGES.share1} style={styles.notification} />
                   </TouchableOpacity>
                 </LinearView>
-                <View style={[AppStyles.row, {marginTop: 8}]}>
+                <View style={[AppStyles.row, {marginTop: 0}]}>
                   <Text style={[styles.Tripphoto, {flex: 1}]}>
                     {'Trip Togolists'}
                   </Text>

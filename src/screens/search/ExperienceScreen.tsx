@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {AppStyles} from '../../theme/appStyles';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {CustomHeader, ExperienceCard, ProfileCard} from '../../component';
@@ -15,19 +15,26 @@ import {IMAGES} from '../../assets/Images';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {navigateTo} from '../../utils/commonFunction';
-import {SCREEN_NAMES} from '../../navigation/screenNames';
+import {SCREEN_NAMES, SCREENS} from '../../navigation/screenNames';
 import {useRoute} from '@react-navigation/native';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import AddToListBottomSheet from '../../component/common/AddToListBottomSheet';
 
 let data = ['View All', 'Hosts', 'Half Day', 'Full Day', '< 4 hours'];
 
 const ExperienceScreen = () => {
   const [select, setSelect] = useState('View All');
   const {params} = useRoute();
+    const bottomSheetAddListRef = useRef<BottomSheetModal>(null);
+
+  const handlePresentAddlistPress = useCallback(() => {
+    bottomSheetAddListRef.current?.present();
+  }, []);
   return (
     <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader
         backImg={IMAGES.back1}
-         showBack={true}
+        showBack={true}
         backIconStyle={styles.back}
         showSearch={false}
         moreImg={IMAGES.more_icon}
@@ -86,11 +93,23 @@ const ExperienceScreen = () => {
                   <ProfileCard followButton={false} ishire={false} />
                 )}
               />
-              <Text style={styles.localTitle}>{'Experiences'}</Text>
+              <Text style={[styles.localTitle, {paddingHorizontal: 0}]}>
+                {'Guided Tours'}
+              </Text>
               <FlatList
                 data={[1, 2]}
                 contentContainerStyle={{gap: wp(8)}}
-                renderItem={({item, index}) => <ExperienceCard />}
+                renderItem={({item, index}) => (
+                  <ExperienceCard
+                    onFavsPress={() => {
+                      navigateTo(SCREENS.Favorites);
+                    }}
+                    onAddPress={() => {
+                      handlePresentAddlistPress();
+                    }}
+                    onBookPress={() => {}}
+                  />
+                )}
               />
             </View>
             <ImageBackground
@@ -127,6 +146,12 @@ const ExperienceScreen = () => {
           </ImageBackground>
         )}
       </ScrollView>
+       <AddToListBottomSheet
+                bottomSheetModalRef={bottomSheetAddListRef}
+                maxDynamicContentSize
+                guidedTours
+                // handleSheetChanges={e => handleSheetChanges(e)}
+              />
     </SafeAreaView>
   );
 };

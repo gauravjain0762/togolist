@@ -898,7 +898,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: hp(16),
+    marginTop: hp(18.3),
     marginHorizontal: wp(48),
     backgroundColor: colors.white,
     paddingBottom: hp(20),

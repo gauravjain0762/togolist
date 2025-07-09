@@ -73,7 +73,7 @@ const StatusCard = ({title, showBucket}: any) => {
 const styles = StyleSheet.create({
   tabContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     borderRadius: 12,
     flex: 1,
   },
@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
   },
   tabItem: {
     alignItems: 'center',
+    width:wp(78)
   },
 });
 

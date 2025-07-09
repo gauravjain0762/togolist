@@ -25,7 +25,13 @@ import {
   wp,
 } from '../../theme/fonts';
 import {colors} from '../../theme/colors';
-import {Button, CommonSheet, GetCheckboxImage, LinearView} from '..';
+import {
+  Button,
+  CommonSheet,
+  ExperienceCard,
+  GetCheckboxImage,
+  LinearView,
+} from '..';
 import ColorPicker, {HueSlider, Panel1, Preview} from 'reanimated-color-picker';
 import {runOnJS} from 'react-native-reanimated';
 import DiscoverNewSpotsCard from '../explore/DiscoverNewSpotsCard';
@@ -33,7 +39,7 @@ import HeaderTextIcon from './HeaderTextIcon';
 import CollectionModal from '../explore/CollectionModal';
 import {ScrollView} from 'react-native-gesture-handler';
 import ExpandableListSection from '../explore/ExpandableListSection';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 type sheet = {
   bottomSheetModalRef?: Ref<BottomSheetModal>;
@@ -72,6 +78,7 @@ export const CustomBackground = ({style}) => {
 const AddToListBottomSheet: FC<sheet> = ({
   bottomSheetModalRef,
   maxDynamicContentSize,
+  guidedTours,
 }) => {
   const [showPersonal, setShowPersonal] = useState(true);
   const [showCollections, setShowCollections] = useState(true);
@@ -117,13 +124,17 @@ const AddToListBottomSheet: FC<sheet> = ({
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
               style={{height: SCREEN_HEIGHT * 0.61}}>
-              <DiscoverNewSpotsCard
-                showInfo={false}
-                showAddToList={true}
-                showRating={false}
-                isShowOptions={false}
-                imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0 : 16}}
-              />
+              {guidedTours ? (
+                <ExperienceCard onlyCard />
+              ) : (
+                <DiscoverNewSpotsCard
+                  showInfo={false}
+                  showAddToList={true}
+                  showRating={false}
+                  isShowOptions={false}
+                  imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0 : 16}}
+                />
+              )}
               <View style={styles.optionContainer}>
                 <View style={styles.row}>
                   {icons.map((icon, index) => (
@@ -338,7 +349,7 @@ const styles = StyleSheet.create({
     width: wp(26),
     height: wp(26),
     resizeMode: 'contain',
-     tintColor:"#999999"
+    tintColor: '#999999',
   },
 
   optionContainer: {

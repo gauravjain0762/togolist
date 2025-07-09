@@ -14,7 +14,30 @@ import {LinearView} from '..';
 
 type card = {};
 
-const ExperienceCard: FC<card> = () => {
+const ExperienceCard: FC<card> = ({onBookPress,onAddPress,onFavsPress,onlyCard}) => {
+
+  if(onlyCard){
+    return       <ImageBackground
+        source={IMAGES.event_bg} // replace with real image or local asset
+        style={styles.image}
+        imageStyle={styles.bg}>
+        <Text style={styles.title}>Beer Lovers Toronto</Text>
+        <View style={styles.chipsContainer}>
+          {['Tour', '5-10 People', '2 Hours'].map((item, idx) => (
+            <ImageBackground
+              source={IMAGES.bg6}
+              key={idx}
+              imageStyle={{borderRadius: 8}}
+              style={styles.chip}>
+              {item == 'Tour' && (
+                <Image source={IMAGES.tour} style={{width: 20, height: 16}} />
+              )}
+              <Text style={styles.chipText}>{item}</Text>
+            </ImageBackground>
+          ))}
+        </View>
+      </ImageBackground>
+  }
   return (
     <LinearView containerStyle={styles.card}>
       {/* Header Image with Title */}
@@ -24,26 +47,33 @@ const ExperienceCard: FC<card> = () => {
         imageStyle={styles.bg}>
         <Text style={styles.title}>Beer Lovers Toronto</Text>
         <View style={styles.chipsContainer}>
-          {['Tour', '5+ People', '2 Hours'].map((item, idx) => (
-            <View key={idx} style={styles.chip}>
+          {['Tour', '5-10 People', '2 Hours'].map((item, idx) => (
+            <ImageBackground
+              source={IMAGES.bg6}
+              key={idx}
+              imageStyle={{borderRadius: 8}}
+              style={styles.chip}>
+              {item == 'Tour' && (
+                <Image source={IMAGES.tour} style={{width: 20, height: 16}} />
+              )}
               <Text style={styles.chipText}>{item}</Text>
-            </View>
+            </ImageBackground>
           ))}
         </View>
       </ImageBackground>
 
       {/* Action Buttons */}
       <View style={styles.actionsContainer}>
-        <TouchableOpacity style={styles.primaryBtn}>
+        <TouchableOpacity onPress={onBookPress} style={styles.primaryBtn}>
           <Text style={styles.primaryText}>Book Tour</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.outlineBtn}>
+        <TouchableOpacity onPress={onAddPress} style={styles.outlineBtn}>
           <Image source={IMAGES.newList} style={styles.addlist} />
           <Text style={styles.outlineText}> Add to list</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.outlineBtn}>
+        <TouchableOpacity onPress={onFavsPress} style={styles.outlineBtn}>
           <Image source={IMAGES.favorite} style={styles.fav} />
           <Text style={styles.outlineText}> Favs</Text>
         </TouchableOpacity>
@@ -99,12 +129,17 @@ const styles = StyleSheet.create({
     gap: wp(8),
   },
   chip: {
-    backgroundColor: 'rgba(27, 21, 21, 0.7)',
+    // backgroundColor: 'rgba(27, 21, 21, 0.7)',
     borderRadius: wp(8),
     paddingHorizontal: wp(10),
-    paddingVertical: hp(4),
+    // paddingVertical: hp(4),
     borderWidth: 1,
     borderColor: '#FFFFFF1A',
+    flexDirection: 'row',
+    gap: 4,
+    height: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   chipText: {
     ...commonFontStyle(500, 13, colors._FAE8D1),
@@ -118,8 +153,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(16),
     paddingVertical: hp(11),
     borderRadius: wp(8),
+    alignItems: 'center',
   },
   primaryText: {
+    top: 3,
     ...commonFontStyle(500, 14, colors.white),
   },
   outlineBtn: {
@@ -177,6 +214,7 @@ const styles = StyleSheet.create({
     width: wp(15),
     height: hp(20),
     resizeMode: 'contain',
+    tintColor: '#BD2332',
   },
   fav: {
     width: wp(15),

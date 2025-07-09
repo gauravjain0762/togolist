@@ -161,6 +161,10 @@ export const IMAGES = {
   location_exo: require('./icon/explore/location_exo.png'),
 
   //tripHome
+  tour: require('./icon/tripHome/tour.png'),
+  Dinning: require('./icon/tripHome/Dinning.png'),
+  Activities: require('./icon/tripHome/Activities.png'),
+  Accommodations: require('./icon/tripHome/Accommodations.png'),
   tab4_on: require('./icon/tripHome/tab4_on.png'),
   tab4_off: require('./icon/tripHome/tab4_off.png'),
   tab3_on: require('./icon/tripHome/tab3_on.png'),

@@ -75,7 +75,7 @@ const ActivityFeedCard: FC<{
 
         <View style={{paddingHorizontal: wp(20)}}>
           <Text style={styles.label}>When</Text>
-          <View style={[styles.row, {justifyContent: 'space-between',marginTop:10}]}>
+          <View style={[styles.row, {justifyContent: 'space-between',marginVertical:5}]}>
             <Text style={styles.dateText}>April 3–5, 2025</Text>
             <View style={[styles.row, {gap: wp(4)}]}>
               {/* <TouchableOpacity style={styles.tag}>
@@ -101,7 +101,7 @@ const ActivityFeedCard: FC<{
               navigateTo(SCREEN_NAMES.NotificationDetails, {submit: true})
             }
             title="Apply to be a Guide"
-            BtnStyle={{paddingVertical: hp(8), borderRadius: 8,marginTop:10}}
+            BtnStyle={{paddingVertical: hp(10), borderRadius: 8,marginTop:10}}
             titleStyle={styles.titleStyle}
           />
         </View>
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   },
   title: {
     ...commonFontStyle(700, 24, colors.black),
-    marginBottom: 8,
+    marginBottom: 2,
     paddingHorizontal: wp(20),
     marginTop: hp(18),
   },
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   },
   decText: {
     ...commonFontStyle(400, 14, '#5A5757'),
-    marginVertical: 6,
+    marginVertical: 10,
     paddingHorizontal: wp(20),
   },
   features: {
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
 
   label: {
     ...commonFontStyle(600, 16, colors._444444),
-    marginTop:10
+    // marginBottom:10
   },
   dateText: {
     ...commonFontStyle(600, 18, colors._BD2332),

@@ -132,7 +132,7 @@ const TripsDetails = () => {
   ];
 
   useEffect(() => {
-    setProModel(true);
+    // setProModel(true);
   }, []);
 
   return (
@@ -176,7 +176,7 @@ const TripsDetails = () => {
               <Text style={styles.statLabel}>Days</Text>
             </View>
           </View>
-          <View style={styles.statsRow}>
+          <View style={[styles.statsRow,{marginTop:4,marginBottom:4}]}>
             <View style={styles.statBox}>
               <Text style={styles.statValue}>$5.2k</Text>
               <Text style={styles.statLabel}>Spending</Text>
@@ -189,13 +189,13 @@ const TripsDetails = () => {
         </LinearView>
 
         {/* Profile */}
-        <LinearView containerStyle={[styles.card, {gap: hp(16)}]}>
-          <View style={styles.row}>
+        <LinearView containerStyle={[styles.card, {gap: hp(0)}]}>
+          <View style={[styles.row,{}]}>
             <Text style={styles.title}>Profile</Text>
             <Image source={IMAGES.send} style={styles.send} />
           </View>
 
-          <View style={styles.profileRow}>
+          <View style={[styles.profileRow,{marginTop:16}]}>
             {pieData.map((label, i) => (
               <View key={i} style={styles.profileCircle}>
                 <ProgressRingChart
@@ -213,7 +213,7 @@ const TripsDetails = () => {
               </View>
             ))}
           </View>
-          <Text style={styles.howTravel}>{'How You Travel'}</Text>
+          <Text style={[styles.howTravel,{marginTop:20,marginBottom:4}]}>{'How You Travel'}</Text>
           <Text style={styles.howYouTravel}>
             You’re not afraid to mix it up and love a good adventure! You’re in
             the <Text style={styles.boldRed}>top 10%</Text> of traveler in the{' '}
@@ -408,9 +408,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(16),
   },
   card: {
-    marginHorizontal: wp(16),
+    // marginHorizontal: wp(16),
     borderRadius: wp(12),
-    padding: wp(16),
+    padding: wp(24),
     justifyContent: 'center',
   },
   title: {...commonFontStyle(700, 24, colors._1B1515)},
@@ -420,7 +420,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: wp(20),
+    // paddingHorizontal: wp(20),
   },
   statBox: {
     alignItems: 'center',

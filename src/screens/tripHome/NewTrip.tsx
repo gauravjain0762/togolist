@@ -14,7 +14,7 @@ import React, {useCallback, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
 import {IMAGES} from '../../assets/Images';
-import {commonFontStyle, hp, sharedTransition, wp} from '../../theme/fonts';
+import {commonFontStyle, hp, SCREEN_HEIGHT, sharedTransition, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {
   Button,
@@ -554,6 +554,7 @@ const NewTrip = () => {
       <CommonSheet
         title="Cover Image"
         bottomSheetModalRef={bottomSheetModalRef}
+        maxDynamicContentSize={SCREEN_HEIGHT * 0.9}
         children={
           <View style={styles.container}>
             <Button
@@ -859,7 +860,7 @@ const styles = StyleSheet.create({
     width: wp(48),
     height: wp(48),
     borderRadius: 48,
-    borderWidth: 2,
+    // borderWidth: 2,
     left: wp(-20),
   },
   people: {
