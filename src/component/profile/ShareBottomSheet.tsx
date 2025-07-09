@@ -61,6 +61,7 @@ const ShareBottomSheet: FC<sheet> = ({
   contentContainer,
   children,
   scrollviewStyle,
+  maxDynamicContentSize
 }) => {
   const [short, setshort] = useState(false);
   const [short1, setshort1] = useState(false);
@@ -99,8 +100,8 @@ const ShareBottomSheet: FC<sheet> = ({
       <BottomSheetModal
         ref={bottomSheetModalRef}
         // index={1}
-        maxDynamicContentSize={450}
-        snapPoints={['25%', '50%']}
+        // maxDynamicContentSize={100}
+        snapPoints={['75%', '75%']}
         backgroundComponent={CustomBackground}
         onChange={e => handleSheetChanges(e)}
         style={styles.modalStyle}>

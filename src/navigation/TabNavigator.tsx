@@ -20,7 +20,6 @@ const Tab = createBottomTabNavigator();
 
 // Custom Tab Bar Component
 const CustomTabBar = ({state, navigation}: any) => {
-  
   return (
     <View>
       <View style={[styles.tabBarContainer]}>
@@ -30,7 +29,7 @@ const CustomTabBar = ({state, navigation}: any) => {
           let iconName;
           switch (route.name) {
             case SCREENS.TripHome:
-              iconName =  IMAGES.tab1;
+              iconName = IMAGES.trips;
               break;
             case SCREENS.SearchScreen:
               iconName = IMAGES.search;
@@ -42,36 +41,36 @@ const CustomTabBar = ({state, navigation}: any) => {
               iconName = IMAGES.shape;
               break;
             case SCREENS.ProfileScreen:
-              iconName = IMAGES.user;
+              iconName = IMAGES.Avatar_icon;
               break;
             default:
               iconName = IMAGES.user;
           }
 
-            const onPress = () => {
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: route.key,
-            canPreventDefault: true,
-          });
+          const onPress = () => {
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: route.key,
+              canPreventDefault: true,
+            });
 
-          if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name, route.params);
-          }
-        };
+            if (!isFocused && !event.defaultPrevented) {
+              navigation.navigate(route.name, route.params);
+            }
+          };
 
-         const onLongPress = () => {
-          navigation.emit({
-            type: 'tabLongPress',
-            target: route.key,
-          });
-        };
+          const onLongPress = () => {
+            navigation.emit({
+              type: 'tabLongPress',
+              target: route.key,
+            });
+          };
 
           return (
             <TouchableOpacity
               key={route.name}
-               onPress={onPress}
-            onLongPress={onLongPress}
+              onPress={onPress}
+              onLongPress={onLongPress}
               // onPress={() => navigation.navigate(route.name,{ from: 'button' })}
               style={[
                 styles.tabButton,
@@ -85,7 +84,7 @@ const CustomTabBar = ({state, navigation}: any) => {
                   defaultSource={iconName}
                   style={styles.carImage}
                   resizeMode="contain"
-                  tintColor={isFocused ? '#BD2332' : colors.black}
+                  tintColor={ colors.black}
                 />
               ) : (
                 <FastImage
@@ -93,7 +92,7 @@ const CustomTabBar = ({state, navigation}: any) => {
                   defaultSource={iconName}
                   style={styles.image}
                   resizeMode="contain"
-                  tintColor={isFocused ? '#BD2332' : colors.black}
+                  // tintColor={ colors.black}
                 />
               )}
             </TouchableOpacity>
@@ -112,7 +111,7 @@ export default function TabNavigator() {
       initialRouteName={SCREENS.ProfileScreen}
       tabBar={(props: any) => <CustomTabBar {...props} />}>
       <Tab.Screen name={SCREENS.SearchScreen} component={SearchScreen} />
-      <Tab.Screen name={SCREENS.TripHome} component={TripHome}  />
+      <Tab.Screen name={SCREENS.TripHome} component={TripHome} />
       <Tab.Screen
         name={SCREENS.CreateListScreen}
         component={CreateListScreen}
@@ -121,11 +120,7 @@ export default function TabNavigator() {
         name={SCREENS.NotificationScreen}
         component={NotificationScreen}
       />
-      <Tab.Screen 
-      name={SCREENS.ProfileScreen}
-       component={ProfileScreen} 
-        
-      />
+      <Tab.Screen name={SCREENS.ProfileScreen} component={ProfileScreen} />
     </Tab.Navigator>
   );
 }
@@ -139,11 +134,11 @@ const styles = StyleSheet.create({
   },
   tabBarContainer: {
     flexDirection: 'row',
-    gap: 2,
+    // gap: 2,
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 40,
+    // paddingHorizontal: 40,
     borderTopWidth: 1,
     borderColor: '#E3E3E3',
     backgroundColor: colors.white,
@@ -154,18 +149,19 @@ const styles = StyleSheet.create({
   tabButton: {
     width: wp(65),
     height: hp(65),
-    borderRadius: 60,
+    // borderRadius: 60,
     // backgroundColor: colors._181818,
     justifyContent: 'center',
     alignItems: 'center',
   },
 
   image: {
-    width: hp(28),
-    height: hp(28),
+    width: hp(24),
+    height: hp(24),
+    resizeMode:'contain'
   },
   carImage: {
-    width: hp(26),
+    width: hp(28),
     height: hp(37),
     resizeMode: 'contain',
   },

@@ -187,7 +187,7 @@ const UpcomingListDetails = ({route}) => {
     const distance = Math.abs(index - activeIndex);
 
     // Shrink size and opacity with distance from activeIndex
-    const size = 11 - distance * 1.2; // main: 8, second: 6.8, third: 5.6, etc.
+    const size = 8 - distance * 1.2; // main: 8, second: 6.8, third: 5.6, etc.
     const clampedSize = Math.max(size, 2); // minimum size
     const opacity = 1 - distance * 0.15; // main: 1, then reduce
 
@@ -195,7 +195,7 @@ const UpcomingListDetails = ({route}) => {
       width: clampedSize,
       height: clampedSize,
       borderRadius: clampedSize / 2,
-      marginHorizontal: 8,
+      marginHorizontal: 6.5,
       backgroundColor: `#E3E3E3`,
     };
   };
@@ -968,7 +968,7 @@ const styles = StyleSheet.create({
     width: wp(48),
     height: wp(48),
     borderRadius: 48,
-    borderWidth: 2,
+    // borderWidth: 1,
     left: wp(-20),
   },
   people: {

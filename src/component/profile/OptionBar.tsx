@@ -55,7 +55,7 @@ const OptionBar: FC<bar> = ({
     <View style={[styles.container, container]}>
       <TouchableOpacity
         onPress={onSharePress}
-        style={[styles.row, {paddingLeft: 20}]}>
+        style={[styles.row, {paddingLeft: wp(38)}]}>
         <Image source={IMAGES.send} style={styles.icon} />
         <Text style={styles.label}>{'Share'}</Text>
       </TouchableOpacity>
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop: hp(36),
     paddingBottom: hp(22),
-    paddingHorizontal: wp(33),
+    paddingHorizontal: wp(30),
   },
   icon: {
     width: wp(30),

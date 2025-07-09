@@ -37,9 +37,11 @@ const SharedCard: FC<card> = ({
   address,
   place,
   listCount,
+  exploreCard,
+  onLongPress
 }) => {
   return (
-    <TouchableOpacity activeOpacity={1} onPress={onCardPress}>
+    <TouchableOpacity onLongPress={onLongPress} activeOpacity={1} onPress={onCardPress}>
       <ImageBackground
         source={IMAGES.bg1} // Replace with actual pyramid image URL
         style={[styles.container, BGStyle]}
@@ -52,32 +54,32 @@ const SharedCard: FC<card> = ({
           <View style={styles.bottomRow}>
             {account && (
               <ImageBackground
-                source={IMAGES.bg5}
+                source={exploreCard? IMAGES.bg6 : IMAGES.bg5}
                 resizeMode="cover"
                 imageStyle={styles.image1}
                 style={styles.chip}>
-                <Image source={IMAGES.avatar} style={styles.forIcon} />
-                <Text style={styles.chipText}>jessica123</Text>
+                <Image source={IMAGES.avatar} style={exploreCard ? styles.forIcon1 :styles.forIcon} />
+                <Text style={exploreCard ? styles.chipText1 : styles.chipText}>jessica123</Text>
               </ImageBackground>
             )}
 
             {address && (
               <ImageBackground
-                source={IMAGES.bg5}
+                source={exploreCard? IMAGES.bg6 : IMAGES.bg5}
                 resizeMode="cover"
                 imageStyle={styles.image1}
                 style={styles.chip}>
-                <Image source={IMAGES.wordWide} style={styles.forIcon1} />
-                <Text style={styles.chipText}>San Diego</Text>
+                <Image source={IMAGES.wordWide} style={exploreCard ? styles.forIcon1 :styles.forIcon1} />
+                <Text style={exploreCard ? styles.chipText1 : styles.chipText}>San Diego</Text>
               </ImageBackground>
             )}
             {place && (
               <ImageBackground
-                source={IMAGES.bg5}
+                source={exploreCard? IMAGES.bg6 : IMAGES.bg5}
                 resizeMode="cover"
                 imageStyle={styles.image1}
                 style={styles.chip}>
-                <Text style={styles.chipText}>{listCount} Places</Text>
+                <Text style={exploreCard ? styles.chipText1 : styles.chipText}>{listCount} Places</Text>
               </ImageBackground>
             )}
           </View>
@@ -137,10 +139,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     alignItems: 'center',
+    gap:4
   },
   chipText: {
-    marginLeft: 6,
+    // marginLeft: 6,
     ...commonFontStyle(500, 13, '#FAE8D1'),
+  },
+  chipText1: {
+    // marginLeft: 6,
+    ...commonFontStyle(500, 13, '#FFFFFF'),
   },
 
   forIcon: {
@@ -152,6 +159,7 @@ const styles = StyleSheet.create({
     width: 18,
     height: 18,
     resizeMode: 'contain',
+    tintColor:colors.white
   },
   image1: {
     borderRadius: 8,

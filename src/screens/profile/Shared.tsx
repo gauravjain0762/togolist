@@ -13,6 +13,7 @@ import {AppStyles} from '../../theme/appStyles';
 import {colors} from '../../theme/colors';
 import {
   Button,
+  CommonSheet,
   CustomHeader,
   OptionBar,
   SearchBar,
@@ -29,6 +30,8 @@ import {API} from '../../utils/apiConstant';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {SharedElement} from 'react-native-shared-element';
 import AddToListBottomSheet from '../../component/common/AddToListBottomSheet';
+import {useRoute} from '@react-navigation/native';
+import DuplicateListBottomSheet from '../../component/common/DuplicateListBottomSheet';
 
 const cards = [
   {
@@ -71,7 +74,16 @@ const cards = [
 ];
 
 const Shared = () => {
+  const {params} = useRoute();
+  const exploreCard = params?.exploreCard;
+  const headerTitle = params?.headerTitle;
   const [select, setSelect] = useState('List View');
+  const [saveValue, setSaveValue] = useState(false);
+
+  const bottomSheetModalQuickAddRef = useRef<BottomSheetModal>(null);
+  const handlePresentModalQuickAddPress = useCallback(() => {
+    bottomSheetModalQuickAddRef.current?.present();
+  }, []);
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const bottomSheetAddListRef = useRef<BottomSheetModal>(null);
@@ -80,6 +92,7 @@ const Shared = () => {
     bottomSheetAddListRef.current?.present();
   }, []);
   const handlePresentAddlistClose = useCallback(() => {
+    bottomSheetModalQuickAddRef.current?.close();
     bottomSheetAddListRef.current?.close();
     bottomSheetModalRef.current?.close();
   }, []);
@@ -104,41 +117,101 @@ const Shared = () => {
         headerStyle={styles.header}
         onMorePress={() => {
           handlePresentModalPress();
+          // handlePresentAddlistPress();
         }}
       />
       <View style={AppStyles.flex1}>
         <View style={styles.containter}>
-          <View style={styles.info}>
-            {/* <SharedElement id={`item.${title}.city`}> */}
-            <Text style={styles.title}>{'North America'}</Text>
-            {/* </SharedElement> */}
-            <View style={styles.userinfo}>
-              <Image source={IMAGES.avatar} style={styles.user} />
-              <Text style={styles.username}>{'@ray'}</Text>
-            </View>
-            <View style={styles.network}>
-              <View style={styles.infoRow}>
-                <Text style={styles.text}>San Diego</Text>
-                <Text style={styles.separator}>|</Text>
-                <Text style={styles.text}>5 Lists</Text>
-                <Text style={styles.separator}>|</Text>
-                <Image source={IMAGES.world} style={styles.icon} />
-                <Text style={[styles.text, styles.textWithIcon]}>Public</Text>
+          {select == 'Map View' ? (
+            <View style={styles.info}>
+              <View style={styles.network}>
+                <View style={styles.infoRow}>
+                  <Text style={styles.title}>
+                    {headerTitle ? headerTitle : 'North America'}
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    setSaveValue(!saveValue);
+                  }}
+                  style={styles.bookmarkRow}>
+                  <Image
+                    source={IMAGES.save_cion}
+                    style={[
+                      styles.icon,
+                      {
+                        width: wp(16),
+                        height: wp(16),
+                        tintColor: saveValue ? '#BD2332' : '#3C3C4399',
+                      },
+                    ]}
+                  />
+                  <Text
+                    style={[
+                      styles.text,
+                      {color: saveValue ? '#BD2332' : '#3C3C4399'},
+                    ]}>
+                    1.2K
+                  </Text>
+                </TouchableOpacity>
               </View>
-              <View style={styles.bookmarkRow}>
-                <Image
-                  source={IMAGES.save_cion}
-                  style={[styles.icon, {width: wp(16), height: wp(16)}]}
-                />
-                <Text style={styles.text}>1.2K</Text>
-              </View>
             </View>
-            <Text style={styles.travel}>{'Travel around North America.'}</Text>
-          </View>
-          <SearchBar
+          ) : (
+            <View style={styles.info}>
+              {/* <SharedElement id={`item.${title}.city`}> */}
+              <Text style={styles.title}>
+                {headerTitle ? headerTitle : 'North America'}
+              </Text>
+              {/* </SharedElement> */}
+              <View style={styles.userinfo}>
+                <Image source={IMAGES.avatar} style={styles.user} />
+                <Text style={styles.username}>{'@ray'}</Text>
+              </View>
+              <View style={styles.network}>
+                <View style={styles.infoRow}>
+                  <Image source={IMAGES.location_exo} style={styles.icon1} />
+                  <Text style={[styles.text, styles.textWithIcon]}>
+                    5 Lists
+                  </Text>
+                  <Text style={styles.separator}>|</Text>
+                  <Image source={IMAGES.world} style={styles.icon} />
+                  <Text style={[styles.text, styles.textWithIcon]}>Public</Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    setSaveValue(!saveValue);
+                  }}
+                  style={styles.bookmarkRow}>
+                  <Image
+                    source={IMAGES.save_cion}
+                    style={[
+                      styles.icon,
+                      {
+                        width: wp(16),
+                        height: wp(16),
+                        tintColor: saveValue ? '#BD2332' : '#3C3C4399',
+                      },
+                    ]}
+                  />
+                  <Text
+                    style={[
+                      styles.text,
+                      {color: saveValue ? '#BD2332' : '#3C3C4399'},
+                    ]}>
+                    1.2K
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.travel}>
+                {'Travel around North America.'}
+              </Text>
+            </View>
+          )}
+
+          {/* <SearchBar
             container={{marginHorizontal: 8}}
             searchImg={IMAGES.search1}
-          />
+          /> */}
           <View style={styles.select}>
             <TouchableOpacity onPress={() => setSelect('List View')}>
               <Text
@@ -173,6 +246,7 @@ const Shared = () => {
               <SwipeListView
                 data={cards}
                 nestedScrollEnabled
+                showsVerticalScrollIndicator={false}
                 ItemSeparatorComponent={() => (
                   <View style={styles.liastseparator} />
                 )}
@@ -182,21 +256,28 @@ const Shared = () => {
                       <SharedCard
                         onCardPress={() => {
                           navigateTo(SCREENS.SharedListDetails);
+                          navigateTo(SCREENS.SharedListDetails, {
+                            exploreCard: exploreCard,
+                            headerTitle: headerTitle,
+                          });
                           // data?.item?.onPress && data?.item?.onPress();
+                        }}
+                        onLongPress={() => {
+                          handlePresentModalQuickAddPress();
                         }}
                         title={data?.item?.title}
                         likeCount={data?.item?.lists}
-                        account
+                        // account
                         address
                         place
                         listCount={data?.item?.lists}
+                        exploreCard={exploreCard}
                       />
                     </View>
                   );
                 }}
                 disableRightSwipe
-                              swipeToOpenPercent={50}
-
+                swipeToOpenPercent={50}
                 rightOpenValue={-(SCREEN_WIDTH * 0.82)}
                 renderHiddenItem={(data, rowMap) => (
                   <OptionBar
@@ -224,15 +305,17 @@ const Shared = () => {
                 leftOpenValue={75}
               />
 
-              <Button
-                leftImg={IMAGES.addlist}
-                type="outline"
-                title="Add a new list"
-                BtnStyle={styles.btn}
-                onPress={() => {
-                  navigateTo(SCREENS.CreateListScreen);
-                }}
-              />
+              {!exploreCard && (
+                <Button
+                  leftImg={IMAGES.addlist}
+                  type="outline"
+                  title="Add a new list"
+                  BtnStyle={styles.btn}
+                  onPress={() => {
+                    navigateTo(SCREENS.CreateListScreen);
+                  }}
+                />
+              )}
             </>
           )}
           {select == 'Map View' && (
@@ -250,13 +333,43 @@ const Shared = () => {
           )}
         </View>
       </View>
+      <CommonSheet
+        title="Quick Add"
+        maxDynamicContentSize={270}
+        bottomSheetModalRef={bottomSheetModalQuickAddRef}
+        children={
+          <View style={{gap: 4}}>
+            <Button
+              type="outline"
+              BtnStyle={styles.QuickAdd}
+              leftImgStyle={styles.leftImgStyle}
+              titleStyle={styles.titleStyle1}
+              leftImg={IMAGES.newList}
+              title="Duplicate List"
+              onPress={()=>{
+                handlePresentAddlistClose()
+                handlePresentAddlistPress()
+              }}
+            />
+            <Button
+              type="outline"
+              leftImg={IMAGES.Send}
+              titleStyle={styles.titleStyle1}
+              leftImgStyle={styles.leftImgStyle2}
+              BtnStyle={styles.QuickAdd1}
+              title="Share"
+            />
+          </View>
+        }
+      />
       <ShareBottomSheet
         bottomSheetModalRef={bottomSheetModalRef}
         handleSheetChanges={e => handleSheetChanges(e)}
       />
-      <AddToListBottomSheet
+      <DuplicateListBottomSheet
         bottomSheetModalRef={bottomSheetAddListRef}
         handleSheetChanges={e => handleSheetChanges(e)}
+        exploreCard={exploreCard}
       />
     </SafeAreaView>
   );
@@ -267,7 +380,6 @@ export default Shared;
 const styles = StyleSheet.create({
   optioncontainer: {
     marginBottom: hp(8),
-    // marginHorizontal: 16,
   },
   mainContainer: {
     backgroundColor: colors.white,
@@ -292,10 +404,10 @@ const styles = StyleSheet.create({
   },
   containter: {
     flex: 1,
-    paddingHorizontal: wp(16),
+    paddingHorizontal: wp(8),
   },
   info: {
-    paddingHorizontal: wp(8),
+    paddingHorizontal: wp(16),
     // marginTop: hp(10),
     gap: hp(8),
   },
@@ -335,7 +447,7 @@ const styles = StyleSheet.create({
     ...commonFontStyle(500, 18, colors._999999),
   },
   textWithIcon: {
-    marginLeft: 4,
+    marginLeft: wp(4),
   },
   network: {
     flexDirection: 'row',
@@ -347,6 +459,11 @@ const styles = StyleSheet.create({
     height: wp(24),
     resizeMode: 'contain',
   },
+  icon1: {
+    width: wp(16),
+    height: wp(20),
+    resizeMode: 'contain',
+  },
   travel: {
     ...commonFontStyle(400, 16, colors.black),
   },
@@ -354,7 +471,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: wp(8),
-    paddingHorizontal: wp(8),
+    paddingHorizontal: wp(14),
   },
   subtext: {
     marginVertical: 12,
@@ -367,7 +484,7 @@ const styles = StyleSheet.create({
     height: hp(8),
   },
   btn: {
-    // marginVertical: hp(10),
+    marginTop: hp(6),
     paddingVertical: hp(12),
     marginHorizontal: 20,
   },
@@ -408,5 +525,38 @@ const styles = StyleSheet.create({
     width: wp(18),
     height: wp(18),
     resizeMode: 'contain',
+  },
+
+  QuickAdd: {
+    flex: 1,
+    gap: 4,
+    borderRadius: 12,
+    paddingVertical: hp(7.5),
+  },
+  QuickAdd1: {
+    flex: 1,
+    gap: 4,
+    borderRadius: 12,
+    height: hp(35),
+    paddingVertical: hp(7),
+  },
+  leftImgStyle: {
+    width: wp(14),
+    height: wp(20),
+    resizeMode: 'contain',
+    tintColor: '#BD2332',
+  },
+  leftImgStyle1: {
+    width: wp(21),
+    height: wp(18),
+    resizeMode: 'contain',
+  },
+  leftImgStyle2: {
+    width: wp(21),
+    height: wp(21),
+    resizeMode: 'contain',
+  },
+  titleStyle1: {
+    ...commonFontStyle(500, 14, '#BD2332'),
   },
 });

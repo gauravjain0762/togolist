@@ -28,6 +28,7 @@ import ExploreCard from '../../component/explore/ExploreCard';
 import HeaderTextIcon from '../../component/common/HeaderTextIcon';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
+import AddToListBottomSheet from '../../component/common/AddToListBottomSheet';
 
 const CARD_DATA = [
   {
@@ -213,7 +214,12 @@ const TripExplore = () => {
           </View>
         }
       />
-      <CommonSheet
+           <AddToListBottomSheet
+                    bottomSheetModalRef={bottomSheetAddListRef}
+                    // maxDynamicContentSize
+                    // handleSheetChanges={e => handleSheetChanges(e)}
+                  />
+      {/* <CommonSheet
         title="Add To List"
         bottomSheetModalRef={bottomSheetAddListRef}
         maxDynamicContentSize={SCREEN_HEIGHT - hp(150)}
@@ -285,7 +291,7 @@ const TripExplore = () => {
             <Button type="outline" BtnStyle={styles.btn} title="Done" />
           </View>
         }
-      />
+      /> */}
     </SafeAreaView>
   );
 };

@@ -22,6 +22,9 @@ export const AppStyles = StyleSheet.create({
   P16: {
     paddingHorizontal: wp(16),
   },
+  P12: {
+    paddingHorizontal: wp(12),
+  },
   M16: {
     marginHorizontal: wp(16),
   },

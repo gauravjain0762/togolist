@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    ...commonFontStyle(600, 16, colors.white),
+    ...commonFontStyle(600, 12, colors.white),
   },
   footer: {
     flexDirection: 'row',

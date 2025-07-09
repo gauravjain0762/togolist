@@ -69,17 +69,17 @@ const styles = StyleSheet.create({
     ...commonFontStyle(700, 18, colors.white),
   },
   outlinebtn: {
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: colors._BD2332,
-    paddingVertical: hp(18),
+    paddingVertical: hp(12),
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 14,
+    borderRadius: 8,
     gap: wp(8),
     flexDirection: 'row',
   },
   outlinetitle: {
-    ...commonFontStyle(700, 18, colors._BD2332),
+    ...commonFontStyle(600, 13, colors._BD2332),
   },
   leftimg: {
     width: wp(30),

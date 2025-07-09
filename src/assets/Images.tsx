@@ -101,6 +101,7 @@ export const IMAGES = {
   bg3: require('./icon/profile/bg3.png'),
   bg4: require('./icon/profile/bg4.png'),
   bg5: require('./icon/profile/bg5.png'),
+  bg6: require('./icon/profile/bg6.png'),
   locationWhite: require('./icon/profile/locationWhite.png'),
   user_icon: require('./icon/profile/user_icon.png'),
   loca_icon: require('./icon/profile/loca_icon.png'),
@@ -138,6 +139,7 @@ export const IMAGES = {
   //Explore
   user1: require('./icon/explore/user1.png'),
   Subtract: require('./icon/explore/Subtract.png'),
+  mdi_instagram: require('./icon/explore/mdi_instagram.png'),
   solar: require('./icon/explore/solar.png'),
   calendar_star: require('./icon/explore/calendar_star.png'),
   user1_on: require('./icon/explore/user1_on.png'),
@@ -153,6 +155,10 @@ export const IMAGES = {
   book: require('./icon/profile/book.png'),
   clock: require('./icon/explore/clock.png'),
   profile_badge: require('./icon/explore/profile_badge.png'),
+  Vector: require('./icon/explore/Vector.png'),
+  Send: require('./icon/explore/Send.png'),
+  Heart: require('./icon/explore/Heart.png'),
+  location_exo: require('./icon/explore/location_exo.png'),
 
   //tripHome
   tab4_on: require('./icon/tripHome/tab4_on.png'),
@@ -197,4 +203,8 @@ export const IMAGES = {
   Archive: require('./icon/tripHome/Archive.png'),
   BucketList: require('./icon/tripHome/BucketList.png'),
   BuildItinerary: require('./icon/tripHome/BuildItinerary.png'),
+  
+  
+  //Image
+  explor_bg: require('./image/dummy/explor_bg.png'),
 };

@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {CustomHeader, ProfileCard, SearchBar} from '../../component';
 import {IMAGES} from '../../assets/Images';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -18,10 +18,58 @@ import DiscoverNewSpotsCard from '../../component/explore/DiscoverNewSpotsCard';
 import TravelCardLock from '../../component/common/TravelCardLock';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {API} from '../../utils/apiConstant';
-import { navigateTo } from '../../utils/commonFunction';
-import { SCREENS } from '../../navigation/screenNames';
+import {navigateTo} from '../../utils/commonFunction';
+import {SCREENS} from '../../navigation/screenNames';
+import TravelCard from '../../component/common/TravelCard';
+import AddToListBottomSheet from '../../component/common/AddToListBottomSheet';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
-let data = ['Lists', 'Places', 'Events', 'Itineraries', 'Profiles'];
+let data = ['Collections', 'Places', 'Events', 'Listings', 'Profiles'];
+
+const mockData = [
+  {
+    title: 'Aesthetics',
+    location: 'World Wide',
+    image: 'https://via.placeholder.com/300x200?text=Aesthetics',
+    users: [
+      {avatar: 'https://randomuser.me/api/portraits/men/1.jpg'},
+      {avatar: 'https://randomuser.me/api/portraits/women/2.jpg'},
+      {avatar: 'https://randomuser.me/api/portraits/men/3.jpg'},
+      {avatar: 'https://randomuser.me/api/portraits/women/4.jpg'},
+      {avatar: 'https://randomuser.me/api/portraits/men/5.jpg'},
+    ],
+  },
+  {
+    title: 'Tropical Explorations',
+    location: 'South America',
+    image: 'https://via.placeholder.com/300x200?text=Tropical',
+    users: [{avatar: 'https://randomuser.me/api/portraits/men/1.jpg'}],
+  },
+  {
+    title: 'Golf Courses',
+    location: 'South America',
+    image: 'https://via.placeholder.com/300x200?text=Golf',
+    users: [{avatar: 'https://randomuser.me/api/portraits/men/1.jpg'}],
+  },
+  {
+    title: 'Vibes',
+    location: 'South America',
+    image: 'https://via.placeholder.com/300x200?text=Vibes',
+    users: [{avatar: 'https://randomuser.me/api/portraits/men/1.jpg'}],
+  },
+  {
+    title: 'Golf Courses',
+    location: 'South America',
+    image: 'https://via.placeholder.com/300x200?text=Golf',
+    users: [{avatar: 'https://randomuser.me/api/portraits/men/1.jpg'}],
+  },
+  {
+    title: 'Vibes',
+    location: 'South America',
+    image: 'https://via.placeholder.com/300x200?text=Vibes',
+    users: [{avatar: 'https://randomuser.me/api/portraits/men/1.jpg'}],
+  },
+];
 
 const events = [
   {
@@ -91,8 +139,15 @@ const events = [
 ];
 
 const ExploreSearch = () => {
-  const [select, setSelect] = useState('Lists');
+  const [select, setSelect] = useState('Collections');
   const [select1, setSelect1] = useState('List View');
+
+  const bottomSheetAddListRef = useRef<BottomSheetModal>(null);
+
+  const handlePresentModalMorePress = useCallback(() => {
+    bottomSheetAddListRef.current?.present();
+  }, []);
+
   return (
     <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader
@@ -119,7 +174,12 @@ const ExploreSearch = () => {
             <FlatList
               data={data}
               horizontal
-              contentContainerStyle={styles.listContainer}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={[
+                styles.listContainer,
+                {marginBottom: select == 'Places' ? hp(0) : hp(8)},
+              ]}
               ItemSeparatorComponent={() => <View style={styles.separator} />}
               renderItem={({item, index}) => (
                 <TouchableOpacity
@@ -142,7 +202,27 @@ const ExploreSearch = () => {
               )}
             />
           </View>
-          {select == 'Lists' && (
+          {select == 'Collections' && (
+            <View>
+              {/* <View style={styles.headerrow}>
+                <Text style={styles.eventTitle}>{'Events in Mexico'}</Text>
+                <Text style={styles.location}>{'50miles Radius'}</Text>
+              </View> */}
+              <FlatList
+                data={mockData}
+                numColumns={2}
+                keyExtractor={(_, index) => index.toString()}
+                columnWrapperStyle={{
+                  justifyContent: 'space-between',
+                  marginTop: 8,
+                }}
+                contentContainerStyle={AppStyles.P16}
+                // style={{marginTop: 10}}
+                renderItem={({item}) => <TravelCard {...item} isSave />}
+              />
+            </View>
+          )}
+          {select == 'Places' && (
             <View style={[AppStyles.flex1]}>
               <View style={styles.headerrow}>
                 <View style={styles.select}>
@@ -182,7 +262,11 @@ const ExploreSearch = () => {
                 </View>
                 <Text style={styles.location}>{'Mexico'}</Text>
               </View>
-              <View style={[AppStyles.flex1]}>
+              <View
+                style={[
+                  AppStyles.flex1,
+                  {marginHorizontal: select1 == 'Map View' ? 0 : 12},
+                ]}>
                 {select1 == 'List View' && (
                   <FlatList
                     data={[1, 2]}
@@ -193,7 +277,10 @@ const ExploreSearch = () => {
                       <DiscoverNewSpotsCard
                         {...item}
                         imageStyle={{
-                          marginHorizontal: Platform.OS == 'ios' ? 0 : 16,
+                          marginHorizontal: Platform.OS == 'ios' ? 0 : 20,
+                        }}
+                        onPressAdd={() => {
+                          handlePresentModalMorePress();
                         }}
                         onPressBeenThere={() => {
                           navigateTo(SCREENS.BeenThere);
@@ -222,6 +309,7 @@ const ExploreSearch = () => {
               </View>
             </View>
           )}
+
           {select == 'Events' && (
             <View>
               <View style={styles.headerrow}>
@@ -242,7 +330,7 @@ const ExploreSearch = () => {
               />
             </View>
           )}
-          {select == 'Itineraries' && (
+          {select == 'Listings' && (
             <>
               <View style={styles.headerrow}>
                 <Text style={styles.eventTitle}>{'Mexico Itineraries'}</Text>
@@ -270,12 +358,13 @@ const ExploreSearch = () => {
                   justifyContent: 'space-between',
                   gap: wp(8),
                 }}
-                contentContainerStyle={{gap: wp(16), paddingHorizontal: wp(16)}}
+                contentContainerStyle={{gap: wp(8), paddingHorizontal: wp(16)}}
                 renderItem={({item, index}) => (
                   <ProfileCard
                     followStyle={{backgroundColor: colors.white}}
                     followText={{...commonFontStyle(500, 12, colors._BD2332)}}
                     ishire={false}
+                    showRight={true}
                   />
                 )}
               />
@@ -283,6 +372,11 @@ const ExploreSearch = () => {
           )}
         </View>
       </ScrollView>
+      <AddToListBottomSheet
+        bottomSheetModalRef={bottomSheetAddListRef}
+        maxDynamicContentSize
+        // handleSheetChanges={e => handleSheetChanges(e)}
+      />
     </SafeAreaView>
   );
 };
@@ -322,21 +416,21 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   listContainer: {
-    marginBottom: hp(16),
+    marginBottom: hp(8),
     paddingHorizontal: wp(16),
   },
   btn: {
     borderWidth: 1,
     borderColor: colors._D9D9D9,
     borderRadius: 10,
-    paddingHorizontal: wp(6),
-    paddingVertical: hp(6),
+    paddingHorizontal: wp(4),
+    paddingVertical: hp(4),
   },
   btnText: {
     ...commonFontStyle(600, 14, colors._99999),
   },
   separator: {
-    width: wp(8),
+    width: wp(2),
   },
   select: {
     flexDirection: 'row',
@@ -355,11 +449,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: wp(16),
+    marginTop: hp(8),
   },
   eventTitle: {
     ...commonFontStyle(600, 18, colors.black),
   },
   list: {
     flex: 1,
+    marginTop: hp(8),
   },
 });

@@ -15,7 +15,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {commonFontStyle, hp, SCREEN_WIDTH, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {IMAGES} from '../../assets/Images';
-import {LinearView} from '..';
+import {Button, LinearView} from '..';
 import {AppStyles} from '../../theme/appStyles';
 import Swiper from 'react-native-swiper';
 
@@ -46,33 +46,38 @@ const DiscoverNewSpotsCard: FC<{
   showRating = true,
   containerStyle,
   imageStyle,
-  showAddToList
+  showAddToList,
+  followEvent,
+  onEventPress
 }) => {
-  
-  if(showAddToList){
-      return (
-    <LinearView>
-      <View style={[{paddingVertical: wp(20)}, containerStyle]}>
-        <Image
-          source={{
-            uri: 'https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U',
-          }}
-          style={[styles.imageStyle, imageStyle]}
-        />
-        <Text style={[styles.title,{  paddingHorizontal: wp(20),marginTop:18}]}>Communal Coffee</Text>
+  if (showAddToList) {
+    return (
+      <LinearView>
+        <View style={[{paddingVertical: wp(20)}, containerStyle]}>
+          <Image
+            source={{
+              uri: 'https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U',
+            }}
+            style={[styles.imageStyle, imageStyle]}
+          />
+          <Text
+            style={[styles.title, {paddingHorizontal: wp(20), marginTop: 18}]}>
+            Communal Coffee
+          </Text>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingHorizontal: wp(20),
-          }}>
-          <Image source={IMAGES.locationWhite} style={styles.locationIcon} />
-          <Text style={styles.userName2}>Toronto, Canada</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              paddingHorizontal: wp(20),
+              gap:4
+            }}>
+            <Image source={IMAGES.locationWhite} style={styles.locationIcon} />
+            <Text style={styles.userName2}>Toronto, Canada</Text>
+          </View>
         </View>
-      </View>
-    </LinearView>
-  );
+      </LinearView>
+    );
   }
 
   return (
@@ -88,12 +93,12 @@ const DiscoverNewSpotsCard: FC<{
         <View
           style={{
             paddingHorizontal: wp(20),
-            marginBottom: 8,
+            marginBottom: hp(8),
             flexDirection: 'row',
           }}>
-          <View style={{flex:1}}>
-            <View style={{ flexDirection: 'row',alignItems:'center'}}>
-              <Text style={[styles.title,{flex:1}]}>Communal Coffee</Text>
+          <View style={{flex: 1,gap:2}}>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text style={[styles.title, {flex: 1}]}>Communal Coffee</Text>
               {showRating && (
                 <View style={styles.footer}>
                   <View style={AppStyles.row}>
@@ -112,6 +117,7 @@ const DiscoverNewSpotsCard: FC<{
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
+                gap:4
               }}>
               <Image
                 source={IMAGES.locationWhite}
@@ -133,7 +139,7 @@ const DiscoverNewSpotsCard: FC<{
               return (
                 <Image
                   source={{
-                    uri: 'https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U',
+                    uri: 'https://cdn.pixabay.com/photo/2016/02/10/13/35/hotel-1191718_1280.jpg',
                   }}
                   style={[styles.imageStyle, imageStyle]}
                 />
@@ -141,6 +147,7 @@ const DiscoverNewSpotsCard: FC<{
             })}
           </Swiper>
         </View>
+       {followEvent && <Button title='Follow Event' titleStyle={styles.titleStyle} BtnStyle={styles.btnStyle} onPress={onEventPress} />}
 
         {isShowOptions && (
           <View style={[AppStyles.row, styles.features]}>
@@ -166,9 +173,7 @@ const DiscoverNewSpotsCard: FC<{
         )}
         {showInfo && (
           <Text style={styles.decText}>
-            A charming café that doubles as a florist, offering a serene
-            atmosphere with a variety of craft coffee drinks and seasonal menus.
-            Locations in North Park, South Park, and Oceanside.
+            {'Cozy cafe serving up artisan bites and baked goods.'}
           </Text>
         )}
       </View>
@@ -195,7 +200,7 @@ const styles = StyleSheet.create({
   },
   paginationStyle: {
     backgroundColor: 'rgba(255, 255, 255, 0.75)',
-    left: wp(SCREEN_WIDTH / 2 - 35),
+    left: wp(SCREEN_WIDTH / 2 - 34),
     right: wp(SCREEN_WIDTH / 2 - 35),
     borderRadius: 100,
     bottom: hp(10),
@@ -239,33 +244,34 @@ const styles = StyleSheet.create({
   },
   userName2: {
     ...commonFontStyle(500, 12, '#A6A6A6'),
-    marginTop: 2,
+    // marginTop: 2,
   },
   decText: {
     ...commonFontStyle(400, 14, '#5A5757'),
-    marginVertical: 6,
+    // marginVertical: 6,
     paddingHorizontal: wp(20),
   },
   features: {
     gap: wp(4),
     flex: 1,
     flexWrap: 'wrap',
-    marginVertical: hp(10),
+    marginVertical: hp(8),
     paddingLeft: wp(20),
   },
   add: {
-    width: wp(15),
+    width: wp(14),
     height: hp(20),
     resizeMode: 'contain',
+    tintColor:"#BD2332"
   },
   check: {
-    width: wp(20),
+    width: wp(22),
     height: wp(20),
     resizeMode: 'contain',
   },
   fav: {
     width: wp(21),
-    height: wp(18),
+    height: wp(20),
     resizeMode: 'contain',
   },
   optionItem: {
@@ -273,7 +279,7 @@ const styles = StyleSheet.create({
     borderColor: colors.primary1,
     borderRadius: 12,
     paddingHorizontal: wp(12),
-    paddingVertical: hp(10),
+    paddingVertical: hp(7),
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
@@ -301,6 +307,15 @@ const styles = StyleSheet.create({
     width: wp(16),
     height: wp(15),
     tintColor: '#787878',
+  },
+  btnStyle:{
+    paddingVertical:8,
+    marginHorizontal:wp(20),
+    marginTop:hp(8),
+    borderRadius:10
+  },
+    titleStyle: {
+    ...commonFontStyle(600, 16, colors.white),
   },
 });
 

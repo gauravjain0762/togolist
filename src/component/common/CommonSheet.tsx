@@ -47,6 +47,7 @@ const CommonSheet: FC<sheet> = ({
       <BottomSheetModal
         ref={bottomSheetModalRef}
         maxDynamicContentSize={maxDynamicContentSize}
+        
         style={styles.modalStyle}
         onChange={e => handleSheetChanges(e)}>
         <BottomSheetScrollView

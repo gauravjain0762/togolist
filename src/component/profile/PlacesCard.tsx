@@ -37,9 +37,10 @@ const PlacesCard: FC<card> = ({
   locationIcon = false,
   locationStyle,
   id,
+  onLongPress
 }) => {
   return (
-    <TouchableOpacity activeOpacity={1} onPress={onCardPress}>
+    <TouchableOpacity onLongPress={onLongPress} activeOpacity={1} onPress={onCardPress}>
       <SharedElement id={`item.${id}.image`}>
       <ImageBackground
         source={IMAGES.bg1} // Replace with actual pyramid image URL
@@ -61,7 +62,7 @@ const PlacesCard: FC<card> = ({
         <View style={[AppStyles.row, styles.footer]}>
           <Image source={IMAGES.food} style={styles.food} />
           <View style={[AppStyles.row, {gap: wp(4)}]}>
-            <Image source={IMAGES.favorite} style={styles.fav} />
+            <Image source={IMAGES.favorite} style={[styles.fav,{  tintColor: id ==1 ? "#BD2332": colors._99999,}]} />
             <Text style={styles.likeCount}>{likeCount}</Text>
           </View>
         </View>
@@ -108,5 +109,6 @@ const styles = StyleSheet.create({
     width: wp(18),
     height: wp(18),
     resizeMode: 'contain',
+    tintColor:colors.white
   },
 });

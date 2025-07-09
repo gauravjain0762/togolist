@@ -149,7 +149,17 @@ const EventDetails = ({route}) => {
           style={styles.socialImg}
           imageStyle={{borderRadius: 25}}
           source={IMAGES.bg}>
-          <Text style={styles.platform}>{item?.platform}</Text>
+          <View style={AppStyles.row}>
+            <Text style={styles.platform}>{item?.platform}</Text>
+            <Image
+              source={IMAGES.mdi_instagram}
+              style={{
+                width: wp(17),
+                height: wp(17),
+                resizeMode: 'contain',
+              }}
+            />
+          </View>
           <Text style={styles.post}>{'Post by @emily '}</Text>
         </ImageBackground>
       );
@@ -178,11 +188,11 @@ const EventDetails = ({route}) => {
     return () => scrollX.removeListener(listener);
   }, []);
 
-  const getDotStyle = (index: number) => {
+   const getDotStyle = (index: number) => {
     const distance = Math.abs(index - activeIndex);
 
     // Shrink size and opacity with distance from activeIndex
-    const size = 11 - distance * 1.2; // main: 8, second: 6.8, third: 5.6, etc.
+    const size = 8 - distance * 1.2; // main: 8, second: 6.8, third: 5.6, etc.
     const clampedSize = Math.max(size, 2); // minimum size
     const opacity = 1 - distance * 0.15; // main: 1, then reduce
 
@@ -190,7 +200,7 @@ const EventDetails = ({route}) => {
       width: clampedSize,
       height: clampedSize,
       borderRadius: clampedSize / 2,
-      marginHorizontal: 8,
+      marginHorizontal: 6.5,
       backgroundColor: `#E3E3E3`,
     };
   };
@@ -273,9 +283,11 @@ const EventDetails = ({route}) => {
                   title="Follow Event"
                 />
                 <View style={[AppStyles.row, styles.features]}>
-                  <TouchableOpacity onPress={()=>{
-                    handlePresentAddlistPress()
-                  }} style={[styles.optionItem]}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      handlePresentAddlistPress();
+                    }}
+                    style={[styles.optionItem]}>
                     <Image style={styles.add} source={IMAGES.newList} />
                     <Text style={[styles.optionText]}>{'Add to list'}</Text>
                   </TouchableOpacity>
@@ -299,14 +311,15 @@ const EventDetails = ({route}) => {
                 <View style={styles.buttonContainer}>
                   <TouchableOpacity style={styles.button}>
                     <Image
-                      source={IMAGES.location}
+                      source={IMAGES.canlder}
                       style={{
                         width: wp(18),
                         height: wp(18),
                         resizeMode: 'contain',
+                        tintColor: colors.black,
                       }}
                     />
-                    <Text style={styles.buttonText}>Place</Text>
+                    <Text style={styles.buttonText}>Event</Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity style={styles.button}>
@@ -487,12 +500,15 @@ const EventDetails = ({route}) => {
                       keyExtractor={(_, index) => index.toString()}
                       columnWrapperStyle={{
                         justifyContent: 'space-between',
-                        marginBottom: 16,
+                        marginTop: 16,
                         gap: wp(15),
                       }}
-                      style={{marginTop: hp(16)}}
+                      // style={{marginTop: hp(16)}}
                       renderItem={({item}) => (
-                        <TravelCard {...item} BGStyle={styles.bg} />
+                        <TravelCard
+                          {...item}
+                          BGStyle={[styles.bg, {height: hp(150)}]}
+                        />
                       )}
                     />
                   </LinearView>
@@ -511,10 +527,10 @@ const EventDetails = ({route}) => {
                       keyExtractor={(_, index) => index.toString()}
                       columnWrapperStyle={{
                         justifyContent: 'space-between',
-                        marginBottom: 16,
+                        marginTop: 16,
                         gap: wp(15),
                       }}
-                      style={{marginTop: hp(16)}}
+                      // style={{marginTop: hp(16)}}
                       renderItem={({item}) => <SocialCard {...item} />}
                     />
                   </LinearView>
@@ -546,6 +562,7 @@ const EventDetails = ({route}) => {
 
       <AddToListBottomSheet
         bottomSheetModalRef={bottomSheetAddListRef}
+        maxDynamicContentSize={true}
         handleSheetChanges={e => handleSheetChanges(e)}
       />
     </SafeAreaView>
@@ -585,7 +602,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     height: hp(555),
     marginBottom: wp(18),
-    marginTop: hp(21),
+    marginTop: hp(5),
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
@@ -668,6 +685,7 @@ const styles = StyleSheet.create({
     width: wp(15),
     height: hp(20),
     resizeMode: 'contain',
+    tintColor: '#BD2332',
   },
   check: {
     width: wp(22),
@@ -852,6 +870,7 @@ const styles = StyleSheet.create({
   },
   platform: {
     ...commonFontStyle(600, 11, colors.white),
+    flex:1
   },
   post: {
     ...commonFontStyle(500, 10, colors.white),

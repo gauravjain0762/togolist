@@ -12,6 +12,8 @@ import {SCREEN_WIDTH, commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {LinearView} from '..';
 import {IMAGES} from '../../assets/Images';
+import { navigateTo } from '../../utils/commonFunction';
+import { SCREEN_NAMES, SCREENS } from '../../navigation/screenNames';
 
 type card = {
   followButton?: boolean;
@@ -27,13 +29,18 @@ const ProfileCard: FC<card> = ({
   ishire = true,
   followStyle,
   followText,
+  showRight
 }) => {
   return (
+    <TouchableOpacity onPress={()=>{
+      navigateTo(SCREEN_NAMES.PostRequest)
+    }}>
+
     <LinearView containerStyle={[styles.card, cardStyle]}>
       <Image source={IMAGES.profile} style={styles.avatar} />
       <View style={styles.row}>
         <Text style={styles.username}>@Emily </Text>
-        <Image style={styles.badge} source={IMAGES.profile_badge} />
+       {!showRight && <Image style={styles.badge} source={IMAGES.profile_badge} />}
       </View>
       <View style={styles.stats}>
         <Image source={IMAGES.favorite} style={styles.fav} />
@@ -53,6 +60,7 @@ const ProfileCard: FC<card> = ({
         </TouchableOpacity>
       )}
     </LinearView>
+    </TouchableOpacity>
   );
 };
 

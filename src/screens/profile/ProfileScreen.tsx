@@ -16,7 +16,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
-import {commonFontStyle, hp, wp} from '../../theme/fonts';
+import {commonFontStyle, hp, SCREEN_WIDTH, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {IMAGES} from '../../assets/Images';
 import {navigationRef} from '../../navigation/RootContainer';
@@ -154,6 +154,16 @@ const ProfileScreen = (props: Props) => {
   const [showSavedCollections, setShowSavedCollections] = useState(true);
   const [showUpcoming, setShowUpcoming] = useState(true);
   const [showPast, setShowPast] = useState(true);
+  const [showSearchBar, setShowSearchBar] = useState(false);
+
+  const handleScroll = event => {
+    const scrollY = event.nativeEvent.contentOffset.y;
+    if (scrollY > 190 && !showSearchBar) {
+      setShowSearchBar(true);
+    } else if (scrollY <= 190 && showSearchBar) {
+      setShowSearchBar(false);
+    }
+  };
 
   const navigation = useNavigation();
   useEffect(() => {
@@ -306,18 +316,24 @@ const ProfileScreen = (props: Props) => {
       </View>
       <Loader visible={false} />
       <ScrollView
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
         style={[AppStyles.M16, AppStyles.flex]}>
-        {true && (
-          <View style={styles.searchContainer}>
-            <Image source={IMAGES.search} style={styles.searchIcon} />
-            <TextInput
-              placeholder="Search"
-              placeholderTextColor={colors.gray}
-              style={styles.searchInput}
-            />
+        {showSearchBar && (
+          <View style={{backgroundColor:colors.white}}>
+            <View style={styles.searchContainer}>
+              <Image source={IMAGES.search} style={styles.searchIcon} />
+              <TextInput
+                placeholder="Search"
+                placeholderTextColor={colors.gray}
+                style={styles.searchInput}
+              />
+            </View>
           </View>
         )}
+
         {/* <View style={styles.searchContainer}>
           <Image source={IMAGES.search} style={styles.searchIcon} />
           <TextInput
@@ -327,57 +343,62 @@ const ProfileScreen = (props: Props) => {
           />
         </View> */}
 
-        <View style={styles.profileContainer}>
-          <View style={styles.avatarView}>
-            <Image source={IMAGES.Avatar_icon} style={styles.avatar} />
-          </View>
-          <View style={{flex: 1, marginLeft: 12}}>
-            <Text style={styles.userName}>Raymond Daily</Text>
-            <Text style={styles.userSubText}>@raydaily</Text>
-            <View style={styles.statsRow}>
-              <ListView subText={'Followers'} value={'122'} />
-              <ListView subText={'Saves'} value={'67'} />
-              <ListView subText={'Listings'} value={'37K'} />
+        <View style={{backgroundColor:colors.white}}>
+          <View style={styles.profileContainer}>
+            <View style={styles.avatarView}>
+              <Image source={IMAGES.Avatar_icon} style={styles.avatar} />
+            </View>
+            <View style={{flex: 1, marginLeft: 12}}>
+              <Text style={styles.userName}>Raymond Daily</Text>
+              <Text style={styles.userSubText}>@raydaily</Text>
+              <View style={styles.statsRow}>
+                <ListView subText={'Followers'} value={'122'} />
+                <ListView subText={'Saves'} value={'67'} />
+                <ListView subText={'Listings'} value={'37K'} />
+              </View>
             </View>
           </View>
-        </View>
-
-        <Text style={styles.decText}>
-          San Diegan that loves to travel and share with friends along the way.
-        </Text>
-        <CustomBtn
-          buttonText={styles.buttonText}
-          style={styles.button2}
-          onPress={() => {}}
-          title={'Follow'}
-        />
-        <LinearView
-          linearViewStyle={{marginTop: hp(16)}}
-          containerStyle={{paddingVertical: 20}}>
-          <View style={styles.tabContainer}>
-            {tabs.map(tab => (
-              <TouchableOpacity
-                key={tab.key}
-                onPress={() => setSelectedTab(tab.key)}
-                style={styles.tabItem}>
-                {tab.icon}
-                <Text
-                  style={[
-                    commonFontStyle(
-                      500,
-                      14,
-                      selectedTab === tab.key ? colors.black : colors.gray,
-                    ),
-                    {marginTop: 4},
-                  ]}>
-                  {' '}
-                  {tab.key}{' '}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-          {/* <Text style={styles.description}>{'Add a description...'}</Text> */}
-        </LinearView>
+           <Text style={styles.decText}>
+            San Diegan that loves to travel and share with friends along the
+            way.
+          </Text>
+          <CustomBtn
+            buttonText={styles.buttonText}
+            style={styles.button2}
+            onPress={() => {}}
+            title={'Follow'}
+          />
+      
+        
+         
+          <LinearView
+            linearViewStyle={{marginTop: hp(16)}}
+            containerStyle={{paddingVertical: 20}}>
+            <View style={styles.tabContainer}>
+              {tabs.map(tab => (
+                <TouchableOpacity
+                  key={tab.key}
+                  onPress={() => setSelectedTab(tab.key)}
+                  style={styles.tabItem}>
+                  {tab.icon}
+                  <Text
+                    style={[
+                      commonFontStyle(
+                        500,
+                        14,
+                        selectedTab === tab.key ? colors.black : colors.gray,
+                      ),
+                      {marginTop: 4},
+                    ]}>
+                    {' '}
+                    {tab.key}{' '}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+            {/* <Text style={styles.description}>{'Add a description...'}</Text> */}
+          </LinearView>
+        
 
         {selectedTab == 'Lists' && (
           <>
@@ -547,7 +568,7 @@ const ProfileScreen = (props: Props) => {
                   keyExtractor={(_, index) => index.toString()}
                   columnWrapperStyle={{
                     justifyContent: 'space-between',
-                    marginBottom: 16,
+                    marginBottom: 8,
                   }}
                   style={{marginTop: 10}}
                   renderItem={({item}) => (
@@ -556,6 +577,7 @@ const ProfileScreen = (props: Props) => {
                       onPress={() => {
                         navigateTo(SCREENS.Shared);
                       }}
+                      BGStyle={styles.bg}
                     />
                   )}
                 />
@@ -566,7 +588,7 @@ const ProfileScreen = (props: Props) => {
                 onClosePress={() => {
                   setShowTogolistPro1(false);
                 }}
-                cardStyle={{marginBottom: 10}}
+                cardStyle={{marginBottom: 10, marginTop: 0}}
               />
             )}
           </>
@@ -671,6 +693,7 @@ const ProfileScreen = (props: Props) => {
             )}
           </>
         )}
+          </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -685,7 +708,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 8,
-    marginBottom:10
+    marginBottom: 10,
   },
   heading: {
     ...commonFontStyle(600, 17, colors.black),
@@ -705,12 +728,13 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#78788029',
-    borderRadius: 23,
+    backgroundColor: colors.white,
+    borderRadius: 10,
     paddingHorizontal: 12,
-    paddingVertical: Platform.OS == 'ios' ? 12 : 0,
-    // height: 32,
-    marginBottom: 16,
+    paddingVertical: Platform.OS == 'ios' ? 8 : 0,
+    marginBottom: 5,
+    borderWidth:1,
+    borderColor:"#959595"
   },
   searchInput: {
     flex: 1,
@@ -924,5 +948,9 @@ const styles = StyleSheet.create({
     width: wp(18),
     height: wp(18),
     resizeMode: 'contain',
+  },
+  bg: {
+    width: (SCREEN_WIDTH - 40) / 2,
+    flex: 1,
   },
 });

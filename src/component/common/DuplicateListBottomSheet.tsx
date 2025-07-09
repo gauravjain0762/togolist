@@ -25,15 +25,20 @@ import {
   wp,
 } from '../../theme/fonts';
 import {colors} from '../../theme/colors';
-import {Button, CommonSheet, GetCheckboxImage, LinearView} from '..';
+import {
+  Button,
+  CommonSheet,
+  GetCheckboxImage,
+  LinearView,
+  SharedCard,
+} from '..';
 import ColorPicker, {HueSlider, Panel1, Preview} from 'reanimated-color-picker';
 import {runOnJS} from 'react-native-reanimated';
 import DiscoverNewSpotsCard from '../explore/DiscoverNewSpotsCard';
 import HeaderTextIcon from './HeaderTextIcon';
 import CollectionModal from '../explore/CollectionModal';
 import {ScrollView} from 'react-native-gesture-handler';
-import ExpandableListSection from '../explore/ExpandableListSection';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 type sheet = {
   bottomSheetModalRef?: Ref<BottomSheetModal>;
@@ -69,9 +74,9 @@ export const CustomBackground = ({style}) => {
   );
 };
 
-const AddToListBottomSheet: FC<sheet> = ({
+const DuplicateListBottomSheet: FC<sheet> = ({
   bottomSheetModalRef,
-  maxDynamicContentSize,
+  exploreCard,
 }) => {
   const [showPersonal, setShowPersonal] = useState(true);
   const [showCollections, setShowCollections] = useState(true);
@@ -105,30 +110,29 @@ const AddToListBottomSheet: FC<sheet> = ({
 
   return (
     <CommonSheet
-      title="Add To List"
+      title="Duplicate List"
       bottomSheetModalRef={bottomSheetModalRef}
-      maxDynamicContentSize={
-        maxDynamicContentSize ? SCREEN_HEIGHT * 0.82 : SCREEN_HEIGHT * 0.8
-      }
+      maxDynamicContentSize={1000}
       children={
         <>
-          <View style={{paddingBottom: 10}}>
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-              style={{height: SCREEN_HEIGHT * 0.61}}>
-              <DiscoverNewSpotsCard
-                showInfo={false}
-                showAddToList={true}
-                showRating={false}
-                isShowOptions={false}
-                imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0 : 16}}
+          <View>
+            <ScrollView style={{height: SCREEN_HEIGHT * 0.65}}>
+              <SharedCard
+                onCardPress={() => {}}
+                onLongPress={() => {}}
+                title={'Fav Food Spots'}
+                likeCount={'2'}
+                // account
+                address
+                place
+                listCount={3}
+                exploreCard={exploreCard}
               />
               <View style={styles.optionContainer}>
                 <View style={styles.row}>
                   {icons.map((icon, index) => (
                     <TouchableOpacity
-                      key={icon}
+                      key={index}
                       onPress={() => setSelectedTab(index)}>
                       <Image
                         style={[
@@ -143,142 +147,98 @@ const AddToListBottomSheet: FC<sheet> = ({
                 <LinearView
                   containerStyle={styles.containerStyle}
                   linearViewStyle={styles.listContainer}>
-                  {selectedTab === 0 && (
-                    <View>
-                      <ExpandableListSection
-                        title="Personal Lists"
+                  <View>
+                    <HeaderTextIcon
+                      titleStyle={styles.titleStyle}
+                      title={'Personal Lists'}
+                      headerStyle={styles.headerstyle}
+                      show={showPersonal}
+                      onDownPress={() => {
+                        setShowPersonal(!showPersonal);
+                      }}
+                    />
+                    {showPersonal && (
+                      <FlatList
                         data={[1, 2]}
-                        onAddPress={() => {
-                          setCollectionModal(true);
-                          setNewListShow(true);
-                          setNewListShowTitle('Personal Lists');
+                        keyExtractor={(_, index) => index.toString()}
+                        ItemSeparatorComponent={() => (
+                          <View style={{height: hp(4)}} />
+                        )}
+                        ListFooterComponent={() => {
+                          return (
+                            <TouchableOpacity
+                              onPress={() => {
+                                setCollectionModal(true);
+                                setNewListShow(true);
+                                setNewListShowTitle('Personal Lists');
+                              }}
+                              style={styles.addNewListBtn}>
+                              <Text style={styles.addNewListBtnText}>
+                                New List
+                              </Text>
+                            </TouchableOpacity>
+                          );
+                        }}
+                        renderItem={({item, index}) => {
+                          return <AddListCard />;
                         }}
                       />
-                      <ExpandableListSection
-                        title="Guide to LA"
+                    )}
+                    <HeaderTextIcon
+                      titleStyle={styles.titleStyle}
+                      title={'Guide to LA'}
+                      headerStyle={[styles.headerstyle, {marginTop: 10}]}
+                      show={showCollections}
+                      onDownPress={() => {
+                        setShowCollections(!showCollections);
+                      }}
+                    />
+                    {showCollections ? (
+                      <FlatList
                         data={[1, 2]}
-                        onAddPress={() => {
-                          setCollectionModal(true);
-                          setNewListShow(true);
-                          setNewListShowTitle('Guide to LA');
+                        keyExtractor={(_, index) => index.toString()}
+                        ItemSeparatorComponent={() => (
+                          <View style={{height: hp(4)}} />
+                        )}
+                        ListFooterComponent={() => {
+                          return (
+                            <TouchableOpacity
+                              onPress={() => {
+                                setCollectionModal(true);
+                                setNewListShow(true);
+                                setNewListShowTitle('Guide to LA');
+                              }}
+                              style={styles.addNewListBtn}>
+                              <Text style={styles.addNewListBtnText}>
+                                New List
+                              </Text>
+                            </TouchableOpacity>
+                          );
                         }}
-                        headerStyle={[{marginTop: 12}]}
-                      />
-                      <ExpandableListSection
-                        title="Golf Courses"
-                        data={[]}
-                        onAddPress={() => {
-                          setCollectionModal(true);
-                          setNewListShow(true);
-                          setNewListShowTitle('Golf Courses');
-                        }}
-                        headerStyle={[{marginTop: 12}]}
-                      />
-
-                      <ExpandableListSection
-                        title="Cool Architecture"
-                        data={[]}
-                        onAddPress={() => {
-                          setCollectionModal(true);
-                          setNewListShow(true);
-                          setNewListShowTitle('Cool Architecture');
-                        }}
-                        headerStyle={[{marginTop: 12}]}
-                      />
-                    </View>
-                  )}
-                  {selectedTab === 1 && (
-                    <View>
-                      <ExpandableListSection
-                        title="Toronto Weekend"
-                        data={[1, 2]}
-                        onAddPress={() => {
-                          setCollectionModal(true);
-                          setNewListShow(true);
-                          setNewListShowTitle('Toronto Weekend');
+                        renderItem={({item, index}) => {
+                          return <AddListCard />;
                         }}
                       />
-                      <ExpandableListSection
-                        title="Trip to Turkey"
-                        data={[1, 2]}
-                        onAddPress={() => {
-                          setCollectionModal(true);
-                          setNewListShow(true);
-                          setNewListShowTitle('Trip to Turkey');
-                        }}
-                        headerStyle={[{marginTop: 12}]}
-                      />
-                      <ExpandableListSection
-                        title="Mexico"
-                        data={[]}
-                        onAddPress={() => {
-                          setCollectionModal(true);
-                          setNewListShow(true);
-                          setNewListShowTitle('Mexico');
-                        }}
-                        headerStyle={[{marginTop: 12}]}
-                      />
-
-                      <ExpandableListSection
-                        title="Canada Road Trip"
-                        data={[]}
-                        onAddPress={() => {
-                          setCollectionModal(true);
-                          setNewListShow(true);
-                          setNewListShowTitle('Canada Road Trip');
-                        }}
-                        headerStyle={[{marginTop: 12}]}
-                      />
-                    </View>
-                  )}
-                  {selectedTab === 2 && (
-                    <View>
-                      <ExpandableListSection
-                        title="Japan Dream"
-                        data={[1, 2]}
-                        onAddPress={() => {
-                          setCollectionModal(true);
-                          setNewListShow(true);
-                          setNewListShowTitle('Japan Dream');
-                        }}
-                      />
-
-                      <ExpandableListSection
-                        title="West Coast Adventure"
-                        data={[]}
-                        onAddPress={() => {
-                          setCollectionModal(true);
-                          setNewListShow(true);
-                          setNewListShowTitle('West Coast Adventure');
-                        }}
-                        headerStyle={[{marginTop: 12}]}
-                      />
-                    </View>
-                  )}
-                  {selectedTab === 3 && (
-                    <View>
-                      <ExpandableListSection
-                        title="France Itinerary"
-                        data={[1, 2]}
-                        onAddPress={() => {
-                          setCollectionModal(true);
-                          setNewListShow(true);
-                          setNewListShowTitle('France Itinerary');
-                        }}
-                      />
-
-                      <ExpandableListSection
-                        title="Two Weeks in Costa Rica "
-                        data={[]}
-                        onAddPress={() => {
-                          setCollectionModal(true);
-                          setNewListShow(true);
-                          setNewListShowTitle('Two Weeks in Costa Rica ');
-                        }}
-                        headerStyle={[{marginTop: 12}]}
-                      />
-                    </View>
-                  )}
+                    ) : null}
+                    <HeaderTextIcon
+                      titleStyle={styles.titleStyle}
+                      title={'Golf Courses'}
+                      headerStyle={[styles.headerstyle, {marginTop: 10}]}
+                      show={showCalendar}
+                      onDownPress={() => {
+                        setShowCalendar(!showCalendar);
+                      }}
+                    />
+                    <HeaderTextIcon
+                      titleStyle={styles.titleStyle}
+                      title={'Cool Architecture'}
+                      headerStyle={[styles.headerstyle, {marginTop: 10}]}
+                      show={showSavedCollections}
+                      onDownPress={() => {
+                        setShowSavedCollections(!showSavedCollections);
+                      }}
+                    />
+                  </View>
                 </LinearView>
               </View>
             </ScrollView>
@@ -291,7 +251,9 @@ const AddToListBottomSheet: FC<sheet> = ({
                 setNewListShow(false);
               }}
             />
-            <Button type="outline" BtnStyle={styles.btn} title="Done" />
+            <Button type="outline" BtnStyle={styles.btn} title="Done" onPress={()=>{
+              bottomSheetModalRef.current?.close()
+            }} />
             <CollectionModal
               visible={collectionModal}
               title={
@@ -309,13 +271,9 @@ const AddToListBottomSheet: FC<sheet> = ({
   );
 };
 
-export default memo(AddToListBottomSheet);
+export default memo(DuplicateListBottomSheet);
 
 const styles = StyleSheet.create({
-  activeIcon: {
-    tintColor: 'black', // Highlight active icon
-  },
-
   modalStyle: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -338,7 +296,11 @@ const styles = StyleSheet.create({
     width: wp(26),
     height: wp(26),
     resizeMode: 'contain',
-     tintColor:"#999999"
+    tintColor:"#999999"
+  },
+
+   activeIcon: {
+    tintColor: 'black', // Highlight active icon
   },
 
   optionContainer: {
@@ -346,7 +308,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     marginTop: hp(16),
     overflow: 'hidden',
-    // marginBottom: hp(8),
+    marginBottom: hp(8),
   },
   listContainer: {
     borderRadius: 0,

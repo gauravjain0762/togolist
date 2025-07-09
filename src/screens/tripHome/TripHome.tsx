@@ -518,7 +518,7 @@ const TripHome = (props: Props) => {
                     styles.optioncontainer,
                     {marginTop: hp(9), marginBottom: 0, borderRadius: 25},
                   ]}
-                   tripsTab
+                  tripsTab
                 />
                 // <View style={styles.rowBack}>
                 //     <TouchableOpacity style={styles.backButton}>
@@ -675,7 +675,7 @@ const TripHome = (props: Props) => {
                     styles.optioncontainer,
                     {marginTop: hp(8), marginBottom: 0, borderRadius: 23},
                   ]}
-                   tripsTab
+                  tripsTab
                 />
               )}
               ListFooterComponent={() => {
@@ -818,7 +818,9 @@ const TripHome = (props: Props) => {
                 <Image source={IMAGES.edit_icon} style={styles.icon} />
               </TouchableOpacity>
             </View>
-            <TouchableOpacity  onPress={() => setshort1(!short1)} style={styles.row}>
+            <TouchableOpacity
+              onPress={() => setshort1(!short1)}
+              style={styles.row}>
               <Text style={styles.sheetlabel}>{'Sort by Date'}</Text>
               <GetCheckboxImage
                 onPress={() => setshort1(!short1)}
@@ -827,7 +829,9 @@ const TripHome = (props: Props) => {
             </TouchableOpacity>
             <View style={styles.divider1} />
 
-            <TouchableOpacity  onPress={() => setshort2(!short2)} style={[styles.row]}>
+            <TouchableOpacity
+              onPress={() => setshort2(!short2)}
+              style={[styles.row]}>
               <Text style={styles.sheetlabel}>{'Sort by Destination'}</Text>
               <GetCheckboxImage
                 onPress={() => setshort2(!short2)}
@@ -878,7 +882,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-     marginTop: 8,
+    marginTop: 8,
   },
   heading: {
     ...commonFontStyle(700, 34, colors.black),
@@ -1073,5 +1077,6 @@ const styles = StyleSheet.create({
     flex: 1,
     ...commonFontStyle(600, 12, colors.black),
     marginLeft: 8,
+    paddingVertical: Platform.OS == 'ios' ? 10.2 : 10.2,
   },
 });

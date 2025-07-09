@@ -16,7 +16,14 @@ import {
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
-import {commonFontStyle, Fs, hp, SCREEN_HEIGHT, wp} from '../../theme/fonts';
+import {
+  commonFontStyle,
+  Fs,
+  hp,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+  wp,
+} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {IMAGES} from '../../assets/Images';
 import {navigationRef} from '../../navigation/RootContainer';
@@ -44,6 +51,7 @@ import {useNavigation} from '@react-navigation/native';
 import Slider from '@react-native-community/slider';
 import {set} from 'lodash';
 import CollectionModal from '../../component/explore/CollectionModal';
+import AddToListBottomSheet from '../../component/common/AddToListBottomSheet';
 
 type Props = {};
 
@@ -116,12 +124,16 @@ const events = [
 
 const categories = [
   {label: 'Top Rated Nearby 🏆'},
-  {label: 'Entertainment 🎭'},
+  {label: 'Entertainment🎡'},
   {label: 'Outdoors 🌲'},
-  {label: 'Wellness 🧘'},
-  {label: 'Shopping 🎪'},
-  {label: 'Fun 🎳'},
-  {label: 'More'},
+  {label: 'Wellness🧘'},
+  {label: 'Shopping🛍️'},
+  {label: 'Activities🎯'},
+  {label: 'Cafes☕'},
+  {label: 'Restaurants🍛'},
+  {label: 'Nightlife🍸'},
+  {label: 'Museums🏛️'},
+  {label: 'Landmarks🗽'},
 ];
 
 const SUGGESTIONS = [
@@ -185,12 +197,15 @@ const AddListCard = () => {
   );
 };
 
+const MAX_VISIBLE = 6; // number of chips to show before "+ X More"
+
 const SearchScreen = (props: Props) => {
   const [activeTab, setActiveTab] = useState('hot');
   const [select, setSelect] = useState('List View');
   const [query, setQuery] = useState('');
   const [filtered, setFiltered] = useState<string[]>([]);
   const [radius, setRadius] = useState(15);
+  const [expanded, setExpanded] = useState(false);
 
   const [showPersonal, setShowPersonal] = useState(true);
   const [showCollections, setShowCollections] = useState(true);
@@ -205,25 +220,52 @@ const SearchScreen = (props: Props) => {
   const bottomSheetModalLocationRef = useRef<BottomSheetModal>(null);
   const bottomSheetModalMoreRef = useRef<BottomSheetModal>(null);
   const bottomSheetAddListRef = useRef<BottomSheetModal>(null);
+  const bottomSheetModalQuickAddRef = useRef<BottomSheetModal>(null);
 
   const handlePresentModalMorePress = useCallback(() => {
     bottomSheetModalMoreRef.current?.present();
+    bottomSheetModalRef.current?.close();
+    bottomSheetModalLocationRef.current?.close();
+    bottomSheetAddListRef.current?.close();
+    bottomSheetModalRef.current?.close();
+  }, []);
+
+  const handlePresentModalQuickAddPress = useCallback(() => {
+    bottomSheetModalQuickAddRef.current?.present();
+    bottomSheetModalRef.current?.close();
+    bottomSheetAddListRef.current?.close();
+    bottomSheetModalLocationRef.current?.close();
+    bottomSheetModalMoreRef.current?.close();
   }, []);
 
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
+    bottomSheetAddListRef.current?.close();
+    bottomSheetModalLocationRef.current?.close();
+    bottomSheetModalMoreRef.current?.close();
+    bottomSheetModalQuickAddRef.current?.close();
   }, []);
   const handlePresentModalLocationPress = useCallback(() => {
     bottomSheetModalLocationRef.current?.present();
+    bottomSheetAddListRef.current?.close();
+    bottomSheetModalRef.current?.close();
+    bottomSheetModalMoreRef.current?.close();
+    bottomSheetModalQuickAddRef.current?.close();
   }, []);
 
   const handlePresentAddlistPress = useCallback(() => {
     bottomSheetAddListRef.current?.present();
+    bottomSheetModalRef.current?.close();
+    bottomSheetModalLocationRef.current?.close();
+    bottomSheetModalMoreRef.current?.close();
+    bottomSheetModalQuickAddRef.current?.close();
   }, []);
   const handlePresentAddlistClose = useCallback(() => {
     bottomSheetAddListRef.current?.close();
-    bottomSheetModalRef.current?.close();
     bottomSheetModalLocationRef.current?.close();
+    bottomSheetModalRef.current?.close();
+    bottomSheetModalMoreRef.current?.close();
+    bottomSheetModalQuickAddRef.current?.close();
   }, []);
 
   const navigation = useNavigation();
@@ -268,6 +310,12 @@ const SearchScreen = (props: Props) => {
     navigateTo(SCREENS.ExploreSearch, {search: text});
   };
 
+  const visibleCategories = expanded
+    ? categories
+    : categories.slice(0, MAX_VISIBLE);
+
+  const hiddenCount = categories.length - MAX_VISIBLE;
+
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
       {/* <Loader visible={dashboardLoading} /> */}
@@ -282,38 +330,62 @@ const SearchScreen = (props: Props) => {
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
+        stickyHeaderIndices={[2]}
         style={AppStyles.flex1}
         contentContainerStyle={AppStyles.flexGrow}>
-        <View style={AppStyles.flex1}>
-          <View style={AppStyles.P16}>
-            <SearchBar
-              container={styles.searchBox}
-              placeholder="Search"
-              handleSelect={handleSelect}
-              Filterdata={filtered}
-              onChangeText={handleSearch}
-              value={query}
-              data={SUGGESTIONS}
-              inputStyle={styles.searchInput}
-              IconStyle={{width: 17, height: 15, tintColor: '#A4A4A4'}}
-            />
-          </View>
+        {/* <View style={AppStyles.flex1}> */}
+        <View style={AppStyles.P16}>
+          <SearchBar
+            container={styles.searchBox}
+            placeholder="Search"
+            handleSelect={handleSelect}
+            Filterdata={filtered}
+            onChangeText={handleSearch}
+            value={query}
+            data={SUGGESTIONS}
+            inputStyle={styles.searchInput}
+            IconStyle={{width: 17, height: 15, tintColor: '#A4A4A4'}}
+          />
+        </View>
 
-          {/* Category Chips */}
+        {/* Category Chips */}
+        {select !== 'Map View' ? (
           <View style={styles.tagsContainer}>
-            {categories.map((cat, index) => (
+            {visibleCategories.map((cat, index) => (
               <TouchableOpacity key={index} style={styles.tag}>
                 <Text style={styles.tagText}>{cat.label}</Text>
               </TouchableOpacity>
             ))}
-          </View>
+            {!expanded && hiddenCount > 0 && (
+              <TouchableOpacity
+                onPress={() => setExpanded(true)}
+                style={styles.tag}>
+                <Text style={styles.tagText}>+ {hiddenCount} More</Text>
+              </TouchableOpacity>
+            )}
 
+            {expanded && (
+              <TouchableOpacity
+                onPress={() => setExpanded(false)}
+                style={styles.tag}>
+                <Text style={[styles.tagText, {color: '#BD2332'}]}>
+                  See Less
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        ) : (
+          <View style={{marginBottom: hp(4)}} />
+        )}
+
+        <View>
           <View style={styles.tabView}>
             <NavItem
               icon={activeTab === 'hot' ? IMAGES.solar : IMAGES.solar_off}
               active={activeTab === 'hot'}
               onPress={() => {
                 setActiveTab('hot');
+                setSelect('List View');
               }}
             />
             <NavItem
@@ -325,13 +397,16 @@ const SearchScreen = (props: Props) => {
               IconStyle={activeTab === 'location' ? styles.iconStyle : {}}
               onPress={() => {
                 setActiveTab('location');
+                setSelect('List View');
               }}
             />
             <NavItem
-              icon={activeTab === 'profile' ? IMAGES.user1_on : IMAGES.user1}
+              icon={activeTab === 'profile' ? IMAGES.user1_on : IMAGES.user1_on}
               active={activeTab === 'profile'}
+              IconStyle={activeTab === 'profile' ? styles.iconStyle2 : {}}
               onPress={() => {
                 setActiveTab('profile');
+                setSelect('List View');
               }}
             />
             <NavItem
@@ -343,9 +418,13 @@ const SearchScreen = (props: Props) => {
               active={activeTab === 'events'}
               onPress={() => {
                 setActiveTab('events');
+                setSelect('List View');
               }}
             />
           </View>
+        </View>
+
+        <View style={{flex: 1}}>
           {activeTab == 'hot' && (
             <FlatList
               data={CARD_DATA}
@@ -353,7 +432,7 @@ const SearchScreen = (props: Props) => {
               showsVerticalScrollIndicator={false}
               nestedScrollEnabled
               keyExtractor={(_, index) => index.toString()}
-              contentContainerStyle={AppStyles.P16}
+              contentContainerStyle={AppStyles.P12}
               columnWrapperStyle={{
                 // paddingTop: hp(10),
                 justifyContent: 'space-between',
@@ -363,23 +442,31 @@ const SearchScreen = (props: Props) => {
                 <ExploreCard
                   {...item}
                   onPress={() => {
-                    navigateTo(SCREENS.Shared);
+                    navigateTo(SCREENS.Shared, {
+                      exploreCard: true,
+                      headerTitle: item?.title,
+                    });
+                  }}
+                  onLongPress={() => {
+                    handlePresentModalQuickAddPress();
                   }}
                 />
               )}
             />
           )}
           {activeTab == 'location' && (
-            <View style={AppStyles.flex1}>
-              <View style={styles.headerRow}>
-                <Text style={styles.headerText}>Discover New Spots</Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    handlePresentModalLocationPress();
-                  }}>
-                  <Text style={styles.headerText1}>Toronto, Canada</Text>
-                </TouchableOpacity>
-              </View>
+            <View style={[AppStyles.flex1, {marginTop: 5}]}>
+              {select !== 'Map View' && (
+                <View style={styles.headerRow}>
+                  <Text style={styles.headerText}>Discover New Spots</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      handlePresentModalLocationPress();
+                    }}>
+                    <Text style={styles.headerText1}>Toronto, Canada</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
               <View style={styles.select}>
                 <TouchableOpacity onPress={() => setSelect('List View')}>
                   <Text
@@ -422,7 +509,7 @@ const SearchScreen = (props: Props) => {
                       <DiscoverNewSpotsCard
                         {...item}
                         imageStyle={{
-                          marginHorizontal: Platform.OS == 'ios' ? 0 : 16,
+                          marginHorizontal: Platform.OS == 'ios' ? 0 : 20,
                         }}
                         onPressAdd={() => handlePresentAddlistPress()}
                         onPressBeenThere={() => {
@@ -460,7 +547,8 @@ const SearchScreen = (props: Props) => {
             </View>
           )}
           {activeTab == 'profile' && (
-            <View style={[AppStyles.P16, {paddingBottom: hp(16)}]}>
+            <View
+              style={[AppStyles.P16, {paddingBottom: hp(16), marginTop: 6}]}>
               <ImageBackground
                 source={IMAGES.requestHost_bg}
                 resizeMode="cover"
@@ -505,6 +593,9 @@ const SearchScreen = (props: Props) => {
                   <Button
                     title="Find Local Guides"
                     BtnStyle={{paddingVertical: hp(12)}}
+                    onPress={() => {
+                      navigateTo(SCREENS.Experience);
+                    }}
                   />
                 </>
               </ImageBackground>
@@ -546,12 +637,12 @@ const SearchScreen = (props: Props) => {
           )}
           {activeTab == 'events' && (
             <View style={AppStyles.P16}>
-              <View style={styles.headerrow}>
-                <Text style={styles.eventTitle}>{'Events Near You'}</Text>
-                <Text style={styles.location}>{'50miles Radius'}</Text>
+              <View style={styles.headerrow1}>
+                <Text style={styles.eventTitle}>{'Activities Near You'}</Text>
+                <Text style={styles.location}>{'50  miles'}</Text>
               </View>
 
-              <FlatList
+              {/* <FlatList
                 data={events}
                 numColumns={2}
                 keyExtractor={(_, index) => index.toString()}
@@ -568,11 +659,11 @@ const SearchScreen = (props: Props) => {
                     }}
                   />
                 )}
-              />
+              /> */}
 
               <View style={styles.headerrow}>
-                <Text style={styles.eventTitle}>{'Experiences  Near You'}</Text>
-                <Text style={styles.location}>{'50miles Radius'}</Text>
+                <Text style={styles.eventTitle}>{'Events'}</Text>
+                {/* <Text style={styles.location}>{'50miles Radius'}</Text> */}
               </View>
 
               <FlatList
@@ -583,15 +674,22 @@ const SearchScreen = (props: Props) => {
                 renderItem={({item}) => (
                   <DiscoverNewSpotsCard
                     {...item}
+                    onEventPress={() => {
+                      navigateTo(SCREENS.EventDetails, {
+                        item: item,
+                        data: events,
+                      });
+                    }}
+                    followEvent={true}
                     onPressAdd={() => handlePresentAddlistPress()}
-              onPressBeenThere={() => {
-                navigateTo(SCREENS.BeenThere);
-                handlePresentAddlistClose();
-              }}
-              onPressFavs={() => {
-                navigateTo(SCREENS.Favorites);
-                handlePresentAddlistClose();
-              }}
+                    onPressBeenThere={() => {
+                      navigateTo(SCREENS.BeenThere);
+                      handlePresentAddlistClose();
+                    }}
+                    onPressFavs={() => {
+                      navigateTo(SCREENS.Favorites);
+                      handlePresentAddlistClose();
+                    }}
                     imageStyle={{
                       marginHorizontal: Platform.OS == 'ios' ? 0 : 16,
                     }}
@@ -602,35 +700,46 @@ const SearchScreen = (props: Props) => {
             </View>
           )}
         </View>
+        {/* </View> */}
       </ScrollView>
       <CommonSheet
         title="Location Settings"
-        maxDynamicContentSize={270}
+        maxDynamicContentSize={260}
         bottomSheetModalRef={bottomSheetModalLocationRef}
         children={
           <View style={{paddingVertical: hp(28)}}>
             <View style={styles.rowStyle}>
               <Text style={styles.locationHeaderText}>Radius</Text>
-              <Slider
-                value={radius}
-                onValueChange={value => setRadius(Math.round(value))}
-                minimumValue={1}
-                maximumValue={100}
-                minimumTrackTintColor="#B41E2A"
-                thumbTintColor="#B41E2A"
-                style={{width: '72%', left: 5}}
-              />
-              <Text style={styles.locationHeaderText1}>{radius} miles</Text>
-            </View>
-            <View style={styles.rowStyle}>
-              <Text style={styles.locationHeaderText}>Location</Text>
-              <Text style={styles.locationHeaderText1}>
-                Toronto, ON, Canada
+              <View style={{flex: 1}}>
+                <Slider
+                  value={radius}
+                  onValueChange={value => setRadius(Math.round(value))}
+                  minimumValue={1}
+                  maximumValue={100}
+                  minimumTrackTintColor="#B41E2A"
+                  thumbTintColor="#B41E2A"
+                  style={{width: '100%', left: 5}}
+                />
+              </View>
+              <Text
+                style={[
+                  styles.locationHeaderText1,
+                  {width: 70, textAlign: 'right'},
+                ]}>
+                {radius} miles
               </Text>
             </View>
             <View style={styles.rowStyle}>
-              <Text style={styles.locationHeaderText}>Location Settings</Text>
-              <View style={AppStyles.row}>
+              <Text style={styles.locationHeaderText}>Location</Text>
+              <View style={[AppStyles.row, styles.cardLine]}>
+                <Text style={styles.locationHeaderText1}>
+                  Toronto, ON, Canada
+                </Text>
+              </View>
+            </View>
+            <View style={styles.rowStyle}>
+              <Text style={[styles.locationHeaderText]}>Location Settings</Text>
+              <View style={[AppStyles.row, styles.cardLine]}>
                 <Text style={styles.locationHeaderText1}>On (While Using)</Text>
                 <Text
                   style={[
@@ -644,6 +753,45 @@ const SearchScreen = (props: Props) => {
             <TouchableOpacity style={styles.subscribeBtn}>
               <Text style={styles.subscribeText}>Done</Text>
             </TouchableOpacity>
+          </View>
+        }
+      />
+      <CommonSheet
+        title="Quick Add"
+        maxDynamicContentSize={270}
+        bottomSheetModalRef={bottomSheetModalQuickAddRef}
+        children={
+          <View style={{}}>
+            <View
+              style={[
+                AppStyles.row,
+                {marginBottom: hp(4), justifyContent: 'space-between'},
+              ]}>
+              <Button
+                type="outline"
+                BtnStyle={styles.QuickAdd}
+                leftImgStyle={styles.leftImgStyle}
+                titleStyle={styles.titleStyle1}
+                leftImg={IMAGES.Vector}
+                title="Save Collection"
+              />
+              <Button
+                type="outline"
+                leftImg={IMAGES.Heart}
+                titleStyle={styles.titleStyle1}
+                leftImgStyle={styles.leftImgStyle1}
+                BtnStyle={styles.QuickAdd}
+                title="Favs"
+              />
+            </View>
+            <Button
+              type="outline"
+              leftImg={IMAGES.Send}
+              titleStyle={styles.titleStyle1}
+              leftImgStyle={styles.leftImgStyle2}
+              BtnStyle={styles.QuickAdd1}
+              title="Share"
+            />
           </View>
         }
       />
@@ -672,7 +820,12 @@ const SearchScreen = (props: Props) => {
         bottomSheetModalRef={bottomSheetModalMoreRef}
         // handleSheetChanges={e => handleSheetChanges(e)}
       />
-      <CommonSheet
+      <AddToListBottomSheet
+        bottomSheetModalRef={bottomSheetAddListRef}
+        // maxDynamicContentSize
+        // handleSheetChanges={e => handleSheetChanges(e)}
+      />
+      {/* <CommonSheet
         title="Add To List"
         bottomSheetModalRef={bottomSheetAddListRef}
         maxDynamicContentSize={SCREEN_HEIGHT - hp(150)}
@@ -715,8 +868,8 @@ const SearchScreen = (props: Props) => {
                   />
                   {showPersonal && (
                     <FlatList
-                      data={[1, 2,]}
-                      keyExtractor={(_,index)=>index.toString()}
+                      data={[1, 2]}
+                      keyExtractor={(_, index) => index.toString()}
                       ItemSeparatorComponent={() => (
                         <View style={{height: hp(4)}} />
                       )}
@@ -751,8 +904,8 @@ const SearchScreen = (props: Props) => {
                   />
                   {showCollections ? (
                     <FlatList
-                      data={[1, 2,]}
-                      keyExtractor={(_,index)=>index.toString()}
+                      data={[1, 2]}
+                      keyExtractor={(_, index) => index.toString()}
                       ItemSeparatorComponent={() => (
                         <View style={{height: hp(4)}} />
                       )}
@@ -775,7 +928,7 @@ const SearchScreen = (props: Props) => {
                         return <AddListCard />;
                       }}
                     />
-                  ): null}
+                  ) : null}
                   <HeaderTextIcon
                     titleStyle={styles.titleStyle}
                     title={'Golf Courses'}
@@ -819,7 +972,7 @@ const SearchScreen = (props: Props) => {
             />
           </View>
         }
-      />
+      /> */}
     </SafeAreaView>
   );
 };
@@ -865,6 +1018,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 2,
     paddingHorizontal: wp(16),
+    marginBottom: hp(16),
   },
   tag: {
     paddingHorizontal: wp(12),
@@ -884,9 +1038,8 @@ const styles = StyleSheet.create({
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 6,
     marginBottom: 6,
-    paddingHorizontal: wp(16),
+    paddingHorizontal: wp(22),
   },
 
   headerText: {
@@ -901,41 +1054,50 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: hp(16),
-    marginHorizontal: wp(16),
-    gap: wp(60),
-    marginBottom: hp(16),
+
+    gap: wp(59),
+    paddingBottom: hp(12),
+    backgroundColor: colors.white,
   },
   activeBar: {
     marginTop: 4,
     width: 36,
-    height: 3,
+    height: 2,
     borderRadius: 100,
     backgroundColor: '#000',
     position: 'absolute',
     bottom: -6,
   },
   tabIcon: {
-    width: 34,
-    height: 34,
+    width: 28,
+    height: 28,
     resizeMode: 'contain',
   },
   tabIcon1: {
-    width: 24,
-    height: 29,
+    width: 21,
+    height: 26,
     resizeMode: 'contain',
   },
   iconStyle: {
     tintColor: colors.black,
-    width: 24,
-    height: 29,
+    width: 21,
+    height: 26,
+    resizeMode: 'contain',
+  },
+  iconStyle2: {
+    tintColor: colors.black,
+    width: wp(28),
+    height: wp(28),
+    resizeMode: 'contain',
   },
   navItem: {
     alignItems: 'center',
+    // width: wp(28),
+    // height: wp(28),
   },
 
   subtext: {
-    marginTop: 6,
+    // marginTop: 6,
     marginBottom: 10,
     ...commonFontStyle(600, 15, '#999999'),
   },
@@ -944,7 +1106,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: wp(8),
-    paddingHorizontal: wp(16),
+    paddingHorizontal: wp(22),
   },
   row: {
     flexDirection: 'row',
@@ -1130,7 +1292,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: hp(16),
+    paddingTop: hp(16),
+    paddingBottom: 4,
+  },
+  headerrow1: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: hp(6),
   },
   eventTitle: {
     ...commonFontStyle(600, 18, colors.black),
@@ -1144,8 +1313,16 @@ const styles = StyleSheet.create({
   rowStyle: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
     marginBottom: 8,
+  },
+  cardLine: {
+    borderBottomWidth: 1,
+    flex: 1,
+    justifyContent: 'flex-end',
+    borderBottomColor: '#E3E3E3',
+    marginLeft: 10,
+    paddingBottom: 4,
   },
 
   subscribeBtn: {
@@ -1168,5 +1345,38 @@ const styles = StyleSheet.create({
   },
   addNewListBtnText: {
     ...commonFontStyle(600, 13, '#787878'),
+  },
+
+  QuickAdd: {
+    // flex:1,
+    width: SCREEN_WIDTH * 0.455,
+    gap: 4,
+    borderRadius: 12,
+    paddingVertical: hp(9),
+  },
+  QuickAdd1: {
+    flex: 1,
+    gap: 4,
+    borderRadius: 12,
+    height: hp(35),
+    paddingVertical: hp(9),
+  },
+  leftImgStyle: {
+    width: wp(14),
+    height: wp(17),
+    resizeMode: 'contain',
+  },
+  leftImgStyle1: {
+    width: wp(21),
+    height: wp(18),
+    resizeMode: 'contain',
+  },
+  leftImgStyle2: {
+    width: wp(21),
+    height: wp(21),
+    resizeMode: 'contain',
+  },
+  titleStyle1: {
+    ...commonFontStyle(500, 14, '#BD2332'),
   },
 });

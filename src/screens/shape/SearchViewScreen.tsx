@@ -29,6 +29,7 @@ import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {API} from '../../utils/apiConstant';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import HeaderTextIcon from '../../component/common/HeaderTextIcon';
+import AddToListBottomSheet from '../../component/common/AddToListBottomSheet';
 
 const events = [
   {
@@ -268,7 +269,12 @@ const SearchViewScreen = () => {
           />
         </View>
       </ScrollView>
-      <CommonSheet
+       <AddToListBottomSheet
+              bottomSheetModalRef={bottomSheetAddListRef}
+              // maxDynamicContentSize
+              // handleSheetChanges={e => handleSheetChanges(e)}
+            />
+      {/* <CommonSheet
         title="Add To List"
         bottomSheetModalRef={bottomSheetAddListRef}
         maxDynamicContentSize={
@@ -346,7 +352,7 @@ const SearchViewScreen = () => {
             />
           </View>
         }
-      />
+      /> */}
     </SafeAreaView>
   );
 };

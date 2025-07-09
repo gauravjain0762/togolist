@@ -18,6 +18,29 @@ import {SwiperData} from '../../utils/constents';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
 
+const cardData = [
+  {
+    title: 'Experiences',
+    image:
+      'https://cdn.pixabay.com/photo/2019/10/04/16/58/restaurant-4526062_1280.jpg',
+    description: 'Share what you love by hosting unforgettable experiences.',
+  },
+  {
+    title: 'Itineraries',
+    image:
+      'https://cdn.pixabay.com/photo/2019/10/04/16/58/restaurant-4526062_1280.jpg',
+    description:
+      'Create curated itineraries to plan epic trips for fellow travellers.',
+  },
+  {
+    title: 'Local Guide',
+    image:
+      'https://cdn.pixabay.com/photo/2019/10/04/16/58/restaurant-4526062_1280.jpg',
+    description:
+      'Apply to guide requests to share your local insights across the globe.',
+  },
+];
+
 const Experience = () => {
   const slides = useMemo(() => {
     // This will only re-compute if `data` changes.
@@ -80,7 +103,7 @@ const Experience = () => {
   return (
     <SafeAreaView style={[AppStyles.flex, styles.mainContainer]}>
       <CustomHeader
-       showBack={true}
+        showBack={true}
         backImg={IMAGES.back1}
         backIconStyle={styles.back}
         showSearch={false}
@@ -99,49 +122,25 @@ const Experience = () => {
           style={styles.slide1}>
           <Text style={styles.title}>{'Listings'}</Text>
           <Text style={styles.text}>
-            {'Create itineraries and experiences to earn with Togolist.'}
+            {'Create itineraries and experiences to earn with\nTogolist.'}
           </Text>
         </ImageBackground>
         <LinearView>
           <Text style={styles.container}>{'Create. Explore. Connect.'}</Text>
           <View style={styles.cardrow}>
-            <View style={styles.card}>
-              <Image
-                source={IMAGES.intro2}
-                resizeMode="cover"
-                style={styles.cardimg}
-              />
-              <Text style={styles.cardlabel}>{'Experiences'}</Text>
-              <Text style={styles.info} numberOfLines={4}>
-                {'Share what you love by hosting unforgettable experiences.'}
-              </Text>
-            </View>
-            <View style={styles.card}>
-              <Image
-                source={IMAGES.intro2}
-                resizeMode="cover"
-                style={styles.cardimg}
-              />
-              <Text style={styles.cardlabel}>{'Itineraries'}</Text>
-              <Text style={styles.info } numberOfLines={4}>
-                {
-                  'Create curated  itineraries to plan epic trips for fellow travellers.'
-                }
-              </Text>
-            </View>
-            <View style={styles.card}>
-              <Image
-                source={IMAGES.intro2}
-                resizeMode="cover"
-                style={styles.cardimg}
-              />
-              <Text style={styles.cardlabel}>{'Local Guide'}</Text>
-              <Text style={styles.info } numberOfLines={4}>
-                {
-                  'Apply to guide requests to share your local insights across the globe.'
-                }
-              </Text>
-            </View>
+            {cardData.map((item, index) => (
+              <View  style={styles.card}>
+                <Image
+                  source={{uri: item.image}}
+                  style={styles.cardimg}
+                  resizeMode="cover"
+                />
+                <Text style={styles.cardlabel}>{item.title}</Text>
+                <Text style={styles.info} numberOfLines={4}>
+                  {item.description}
+                </Text>
+              </View>
+            ))}
           </View>
         </LinearView>
         <LinearView>
@@ -320,7 +319,7 @@ const styles = StyleSheet.create({
   info: {
     ...commonFontStyle(600, 12, colors._787878),
     textAlign: 'center',
-    minHeight:70,
+    minHeight: 70,
   },
   cardrow: {
     flexDirection: 'row',

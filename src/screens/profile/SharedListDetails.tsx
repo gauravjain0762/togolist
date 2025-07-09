@@ -12,6 +12,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
 import {
   Button,
+  CommonSheet,
   CustomHeader,
   OptionBar,
   PlacesCard,
@@ -29,6 +30,7 @@ import {SwipeListView} from 'react-native-swipe-list-view';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {API} from '../../utils/apiConstant';
 import AddToListBottomSheet from '../../component/common/AddToListBottomSheet';
+import {useRoute} from '@react-navigation/native';
 
 const cards = [
   {
@@ -78,8 +80,16 @@ const cards = [
 ];
 
 const SharedListDetails = () => {
+  const {params} = useRoute();
+  const exploreCard = params?.exploreCard;
+  const headerTitle = params?.headerTitle;
   const [select, setSelect] = useState('List View');
   const [showCard, setShowCard] = useState(false);
+
+  const bottomSheetModalQuickAddRef = useRef<BottomSheetModal>(null);
+  const handlePresentModalQuickAddPress = useCallback(() => {
+    bottomSheetModalQuickAddRef.current?.present();
+  }, []);
 
   const bottomSheetAddListRef = useRef<BottomSheetModal>(null);
 
@@ -116,24 +126,28 @@ const SharedListDetails = () => {
         <View style={styles.containter}>
           <View style={styles.info}>
             <View>
-              <Text style={styles.graytitle}>{'North America'}</Text>
+              <Text style={styles.graytitle}>
+                {headerTitle ? headerTitle : 'North America'}
+              </Text>
               <Text style={styles.title}>{'Fav Food Spots'}</Text>
             </View>
-            <View style={styles.network}>
-              <View style={styles.infoRow}>
-                <Text style={styles.text}>San Diego</Text>
-                <Text style={styles.separator}>|</Text>
-                <Text style={styles.text}>5 Places</Text>
-                <Text style={styles.separator}>|</Text>
-                <Image source={IMAGES.world} style={styles.icon} />
-                <Text style={[styles.text, styles.textWithIcon]}>Public</Text>
+            {select !== 'Map View' && (
+              <View style={styles.network}>
+                <View style={styles.infoRow}>
+                  {/* <Text style={styles.text}>San Diego</Text>
+                <Text style={styles.separator}>|</Text> */}
+                  <Text style={styles.text}>5 Places</Text>
+                  <Text style={styles.separator}>|</Text>
+                  <Image source={IMAGES.world} style={styles.icon} />
+                  <Text style={[styles.text, styles.textWithIcon]}>Public</Text>
+                </View>
               </View>
-            </View>
+            )}
           </View>
-          <SearchBar
+          {/* <SearchBar
             container={{marginHorizontal: 0}}
             searchImg={IMAGES.search1}
-          />
+          /> */}
           <View style={styles.select}>
             <TouchableOpacity onPress={() => setSelect('List View')}>
               <Text
@@ -149,7 +163,9 @@ const SharedListDetails = () => {
               </Text>
             </TouchableOpacity>
             <Text style={[styles.subtext, {fontSize: Fs(18)}]}>{'|'}</Text>
-            <TouchableOpacity onPress={() => setSelect('Map View')}>
+            <TouchableOpacity
+              style={{flex: 1}}
+              onPress={() => setSelect('Map View')}>
               <Text
                 style={[
                   styles.subtext,
@@ -162,6 +178,7 @@ const SharedListDetails = () => {
                 Map View
               </Text>
             </TouchableOpacity>
+            <Image source={IMAGES.location_exo} style={styles.icon1} />
           </View>
           {/* {showCard && <OptionBar container={styles.optioncontainer} />} */}
           {select == 'List View' && (
@@ -184,6 +201,9 @@ const SharedListDetails = () => {
                             data: cards,
                           });
                         }}
+                        onLongPress={() => {
+                          handlePresentModalQuickAddPress();
+                        }}
                         id={data?.item?.id}
                         title={data?.item?.title}
                         location={data?.item?.location}
@@ -195,8 +215,7 @@ const SharedListDetails = () => {
                   );
                 }}
                 disableRightSwipe
-                  swipeToOpenPercent={50}
-
+                swipeToOpenPercent={50}
                 rightOpenValue={-(SCREEN_WIDTH * 0.82)}
                 renderHiddenItem={(data, rowMap) => (
                   <OptionBar
@@ -222,13 +241,15 @@ const SharedListDetails = () => {
                   setShowCard(false);
                 }}
               />
-              <Button
-                leftImg={IMAGES.addlist}
-                type="outline"
-                title="Add a new place"
-                BtnStyle={styles.btn}
-                onPress={() => handlePresentModalPress()}
-              />
+              {!exploreCard && (
+                <Button
+                  leftImg={IMAGES.addlist}
+                  type="outline"
+                  title="Add a new place"
+                  BtnStyle={styles.btn}
+                  onPress={() => handlePresentModalPress()}
+                />
+              )}
             </>
           )}
 
@@ -248,7 +269,65 @@ const SharedListDetails = () => {
         </View>
       </View>
 
+      <CommonSheet
+        title="Quick Add"
+        maxDynamicContentSize={270}
+        bottomSheetModalRef={bottomSheetModalQuickAddRef}
+        children={
+          <View style={{}}>
+            <View
+              style={[
+                AppStyles.row,
+                {marginBottom: hp(4), justifyContent: 'space-between'},
+              ]}>
+              <Button
+                type="outline"
+                BtnStyle={styles.QuickAdd}
+                leftImgStyle={styles.leftImgStyle}
+                titleStyle={styles.titleStyle1}
+                leftImg={IMAGES.newList}
+                title="Add to list"
+                onPress={() => {
+                  handlePresentAddlistPress();
+                }}
+              />
+              <Button
+                type="outline"
+                BtnStyle={styles.QuickAdd}
+                leftImgStyle={styles.leftImgStyle1}
+                titleStyle={styles.titleStyle1}
+                leftImg={IMAGES.been}
+                title="Been There"
+                onPress={() => {
+                  navigateTo(SCREENS.BeenThere);
+                }}
+              />
+              <Button
+                type="outline"
+                leftImg={IMAGES.Heart}
+                titleStyle={styles.titleStyle1}
+                leftImgStyle={styles.leftImgStyle3}
+                BtnStyle={styles.QuickAdd}
+                title="Favs"
+                onPress={() => {
+                  navigateTo(SCREENS.Favorites);
+                }}
+              />
+            </View>
+            <Button
+              type="outline"
+              leftImg={IMAGES.Send}
+              titleStyle={styles.titleStyle1}
+              leftImgStyle={styles.leftImgStyle2}
+              BtnStyle={styles.QuickAdd1}
+              title="Share"
+            />
+          </View>
+        }
+      />
+
       <ShareBottomSheet
+        maxDynamicContentSize={700}
         bottomSheetModalRef={bottomSheetModalRef}
         handleSheetChanges={e => handleSheetChanges(e)}
       />
@@ -283,11 +362,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(16),
   },
   containter: {
-    paddingHorizontal: wp(16),
+    paddingHorizontal: wp(8),
     flex: 1,
   },
   info: {
-    paddingHorizontal: wp(8),
+    paddingHorizontal: wp(16),
     // marginTop: hp(10),
     gap: hp(8),
   },
@@ -324,6 +403,11 @@ const styles = StyleSheet.create({
     height: wp(24),
     resizeMode: 'contain',
   },
+  icon1: {
+    width: wp(19),
+    height: wp(24),
+    resizeMode: 'contain',
+  },
   travel: {
     ...commonFontStyle(400, 16, colors.black),
   },
@@ -331,6 +415,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: wp(8),
+    paddingLeft: wp(14),
+    paddingRight: wp(8),
   },
   subtext: {
     marginVertical: 12,
@@ -340,7 +426,7 @@ const styles = StyleSheet.create({
     ...commonFontStyle(700, 32, colors._999999),
   },
   btn: {
-    // marginVertical: hp(16),
+    marginTop: hp(6),
     paddingVertical: hp(12),
   },
   Listcontainer: {},
@@ -391,5 +477,44 @@ const styles = StyleSheet.create({
     width: wp(18),
     height: wp(18),
     resizeMode: 'contain',
+  },
+
+  QuickAdd: {
+    // flex:1,
+    width: SCREEN_WIDTH * 0.3,
+    gap: 4,
+    borderRadius: 12,
+    paddingVertical: hp(7),
+  },
+  QuickAdd1: {
+    flex: 1,
+    gap: 4,
+    borderRadius: 12,
+    height: hp(35),
+    paddingVertical: hp(9),
+  },
+  leftImgStyle: {
+    width: wp(14),
+    height: wp(21),
+    resizeMode: 'contain',
+    tintColor: '#BD2332',
+  },
+  leftImgStyle1: {
+    width: wp(21),
+    height: wp(21),
+    resizeMode: 'contain',
+  },
+  leftImgStyle3: {
+    width: wp(21),
+    height: wp(21),
+    resizeMode: 'contain',
+  },
+  leftImgStyle2: {
+    width: wp(21),
+    height: wp(21),
+    resizeMode: 'contain',
+  },
+  titleStyle1: {
+    ...commonFontStyle(500, 14, '#BD2332'),
   },
 });
