@@ -164,8 +164,8 @@ const Shared = () => {
               </Text>
               {/* </SharedElement> */}
               <View style={styles.userinfo}>
-                <Image source={IMAGES.avatar} style={styles.user} />
-                <Text style={styles.username}>{'@ray'}</Text>
+                <Image source={IMAGES.Avatar_icon} style={styles.user} />
+                <Text style={styles.username}>{'@raydaily'}</Text>
               </View>
               <View style={styles.network}>
                 <View style={styles.infoRow}>
@@ -279,6 +279,20 @@ const Shared = () => {
                 disableRightSwipe
                 swipeToOpenPercent={50}
                 rightOpenValue={-(SCREEN_WIDTH * 0.82)}
+                ListFooterComponent={() => {
+                  return (
+                    <Button
+                      leftImg={IMAGES.addlist}
+                      type="outline"
+                      title="Add a new list"
+                      BtnStyle={styles.btn}
+                      titleStyle={styles.btnText}
+                      onPress={() => {
+                        navigateTo(SCREENS.CreateListScreen);
+                      }}
+                    />
+                  );
+                }}
                 renderHiddenItem={(data, rowMap) => (
                   <OptionBar
                     container={styles.optioncontainer}
@@ -304,18 +318,6 @@ const Shared = () => {
                 )}
                 leftOpenValue={75}
               />
-
-              {!exploreCard && (
-                <Button
-                  leftImg={IMAGES.addlist}
-                  type="outline"
-                  title="Add a new list"
-                  BtnStyle={styles.btn}
-                  onPress={() => {
-                    navigateTo(SCREENS.CreateListScreen);
-                  }}
-                />
-              )}
             </>
           )}
           {select == 'Map View' && (
@@ -346,9 +348,9 @@ const Shared = () => {
               titleStyle={styles.titleStyle1}
               leftImg={IMAGES.newList}
               title="Duplicate List"
-              onPress={()=>{
-                handlePresentAddlistClose()
-                handlePresentAddlistPress()
+              onPress={() => {
+                handlePresentAddlistClose();
+                handlePresentAddlistPress();
               }}
             />
             <Button
@@ -393,8 +395,8 @@ const styles = StyleSheet.create({
   more: {
     tintColor: undefined,
     resizeMode: 'contain',
-    width: wp(24),
-    height: wp(24),
+    width: 22,
+    height: 22,
   },
   header: {
     paddingHorizontal: wp(16),
@@ -484,9 +486,14 @@ const styles = StyleSheet.create({
     height: hp(8),
   },
   btn: {
-    marginTop: hp(6),
-    paddingVertical: hp(12),
-    marginHorizontal: 20,
+    marginTop: hp(16),
+    paddingVertical: hp(4),
+    marginHorizontal: 2,
+    borderRadius:14
+  },
+  btnText:{
+    ...commonFontStyle(700, 18, "#BD2332"),
+
   },
 
   rowFront: {

@@ -187,7 +187,7 @@ const PastTripDetails = ({route}: any) => {
   };
 
   return (
-    <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
+    <SafeAreaView style={[AppStyles.flex, styles.maincontainer]}>
       <CustomHeader
         backImg={IMAGES.back1}
         backIconStyle={styles.back}
@@ -211,8 +211,7 @@ const PastTripDetails = ({route}: any) => {
           ref={flatListRef}
           data={cards}
           showsVerticalScrollIndicator={false}
-          
-          contentContainerStyle={[{gap: hp(8)}]}
+          // contentContainerStyle={[{gap: hp(8)}]}
           renderItem={({item}) => {
             return (
               <ScrollView
@@ -671,8 +670,8 @@ const styles = StyleSheet.create({
   more: {
     tintColor: undefined,
     resizeMode: 'contain',
-    width: wp(24),
-    height: wp(24),
+    width: 22,
+    height: 22,
   },
   header: {
     paddingHorizontal: wp(16),

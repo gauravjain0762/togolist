@@ -403,8 +403,8 @@ const styles = StyleSheet.create({
   more: {
     tintColor: undefined,
     resizeMode: 'contain',
-    width: wp(24),
-    height: wp(24),
+    width: 22,
+    height: 22,
   },
   header: {
     paddingHorizontal: wp(16),

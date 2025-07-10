@@ -73,7 +73,7 @@ const cards = [
 ];
 const BucketListScreen = () => {
   return (
-    <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
+    <SafeAreaView edges={['top','bottom']} style={[AppStyles.flex, styles.mainContainer]}>
       <CustomHeader
         title="Trips"
         showBack={true}
@@ -82,24 +82,26 @@ const BucketListScreen = () => {
       />
       <View style={[{paddingHorizontal: 20}]}>
         {/* Title */}
-        <Text style={styles.title}>Bucket List Inspo</Text>
+        <View style={[{paddingHorizontal: 4}]}>
+          <Text style={styles.title}>Bucket List Inspo</Text>
 
-        {/* Byline */}
-        <View style={styles.bylineContainer}>
-          <Image source={IMAGES.ToglistCircleIcon} style={styles.icon} />
-          <Text style={styles.bylineText}>
-            By <Text style={styles.boldText}>Togolist</Text>
+          {/* Byline */}
+          <View style={styles.bylineContainer}>
+            <Image source={IMAGES.ToglistCircleIcon} style={styles.icon} />
+            <Text style={styles.bylineText}>
+              By <Text style={styles.boldText}>Togolist</Text>
+            </Text>
+          </View>
+
+          {/* Location + Collection count */}
+          <Text style={styles.subtext}>Worldwide | 11 Collections</Text>
+
+          {/* Description */}
+          <Text style={styles.description}>
+            Find places to go in epic destinations. Collection curated by{' '}
+            <Text style={styles.boldText1}>Togolist</Text>
           </Text>
         </View>
-
-        {/* Location + Collection count */}
-        <Text style={styles.subtext}>Worldwide | 11 Collections</Text>
-
-        {/* Description */}
-        <Text style={styles.description}>
-          Find places to go in epic destinations. Collection curated by{' '}
-          <Text style={styles.boldText1}>Togolist</Text>
-        </Text>
 
         <View style={styles.searchContainer}>
           <Image source={IMAGES.search} style={styles.searchIcon} />
@@ -117,48 +119,48 @@ const BucketListScreen = () => {
           <Text style={styles.azText}>A-Z</Text>
         </Text>
       </View>
-      <View style={{marginHorizontal:20}}>
-
-      <SwipeListView
-        data={cards}
-        nestedScrollEnabled
-        // contentContainerStyle={{paddingHorizontal: 20}}
-        showsVerticalScrollIndicator={false}
-        renderItem={(data, rowMap) => {
-          return (
-            <View style={styles.rowFront}>
-              <CardImageView
-                onCardPress={() => {
-                  navigateTo(SCREENS.BucketListDetails);
-                }}
-                title={data?.item?.title}
-                Togolist={data?.item?.user}
-                Worldwide={data?.item?.location}
-                Lists
-                listCount={data?.item.lists}
-                viewValue={data?.item.likes}
+      <View style={[AppStyles.flex1,{marginHorizontal: 16,}]}>
+          <SwipeListView
+            data={cards}
+            // nestedScrollEnabled
+            // style={{flex: 1}}
+            // contentContainerStyle={{paddingHorizontal: 20}}
+            showsVerticalScrollIndicator={false}
+            renderItem={(data, rowMap) => {
+              return (
+                <View style={styles.rowFront}>
+                  <CardImageView
+                    onCardPress={() => {
+                      navigateTo(SCREENS.BucketListDetails);
+                    }}
+                    title={data?.item?.title}
+                    Togolist={data?.item?.user}
+                    Worldwide={data?.item?.location}
+                    Lists
+                    listCount={data?.item.lists}
+                    viewValue={data?.item.likes}
+                  />
+                </View>
+              );
+            }}
+            disableRightSwipe
+            swipeToOpenPercent={30}
+            swipeToOpenPercent={50}
+            rightOpenValue={-(SCREEN_WIDTH * 0.81)}
+            renderHiddenItem={(data, rowMap) => (
+              <OptionBar
+                container={[
+                  styles.optioncontainer,
+                  {marginTop: hp(8), borderRadius: 25, height: 114},
+                ]}
               />
-            </View>
-          );
-        }}
-        disableRightSwipe
-        swipeToOpenPercent={30}
-           swipeToOpenPercent={50}
-
-                rightOpenValue={-(SCREEN_WIDTH * 0.81)}
-        renderHiddenItem={(data, rowMap) => (
-          <OptionBar
-            container={[
-              styles.optioncontainer,
-              {marginTop: hp(8), borderRadius: 25, height: 114},
-            ]}
+            )}
+            leftOpenValue={75}
           />
-        )}
-        leftOpenValue={75}
-      />
+       
       </View>
 
-      <View style={{height: 20}} />
+      {/* <View style={{height: 20}} /> */}
     </SafeAreaView>
   );
 };
@@ -204,6 +206,7 @@ const styles = StyleSheet.create({
   },
   byLocationText: {
     ...commonFontStyle(500, 18, colors.primary1),
+    marginHorizontal:2
   },
   azText: {
     ...commonFontStyle(500, 18, '#999999'),

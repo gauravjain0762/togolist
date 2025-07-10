@@ -1,5 +1,7 @@
 import {
   Alert,
+  Animated,
+  Easing,
   FlatList,
   Image,
   ImageBackground,
@@ -315,6 +317,41 @@ const SearchScreen = (props: Props) => {
     : categories.slice(0, MAX_VISIBLE);
 
   const hiddenCount = categories.length - MAX_VISIBLE;
+  const [showSearchBar, setShowSearchBar] = useState(false);
+
+  const [searchBarAnim] = useState(new Animated.Value(0)); // 0 = hidden, 1 = visible
+
+  const handleScroll = event => {
+    const scrollY = event.nativeEvent.contentOffset.y;
+
+    if (scrollY > 50) {
+      setShowSearchBar(true)
+      Animated.timing(searchBarAnim, {
+        toValue: 1,
+        duration: 250,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      }).start();
+    } else {
+       setShowSearchBar(false)
+      Animated.timing(searchBarAnim, {
+        toValue: 0,
+        duration: 200,
+        easing: Easing.in(Easing.ease),
+        useNativeDriver: true,
+      }).start();
+    }
+  };
+
+  const searchBarTranslateY = searchBarAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-460, 0], // Adjust height as needed
+  });
+
+  const searchBarOpacity = searchBarAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
 
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
@@ -328,12 +365,17 @@ const SearchScreen = (props: Props) => {
           <Image source={IMAGES.more_icon} style={[styles.moreIcon]} />
         </TouchableOpacity>
       </View>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        stickyHeaderIndices={[2]}
-        style={AppStyles.flex1}
-        contentContainerStyle={AppStyles.flexGrow}>
-        {/* <View style={AppStyles.flex1}> */}
+     {showSearchBar && <Animated.View
+        style={{
+          // position: 'absolute',
+          // top: 100,
+          // left: 0,
+          // right: 0,
+          transform: [{translateY: searchBarTranslateY}],
+          // opacity: searchBarOpacity,
+          backgroundColor: colors.white,
+          zIndex: 10,
+        }}>
         <View style={AppStyles.P16}>
           <SearchBar
             container={styles.searchBox}
@@ -377,52 +419,60 @@ const SearchScreen = (props: Props) => {
         ) : (
           <View style={{marginBottom: hp(4)}} />
         )}
-
-        <View>
-          <View style={styles.tabView}>
-            <NavItem
-              icon={activeTab === 'hot' ? IMAGES.solar : IMAGES.solar_off}
-              active={activeTab === 'hot'}
-              onPress={() => {
-                setActiveTab('hot');
-                setSelect('List View');
-              }}
-            />
-            <NavItem
-              icon={
-                activeTab === 'location' ? IMAGES.Subtract : IMAGES.Subtract
-              }
-              active={activeTab === 'location'}
-              keyValue={true}
-              IconStyle={activeTab === 'location' ? styles.iconStyle : {}}
-              onPress={() => {
-                setActiveTab('location');
-                setSelect('List View');
-              }}
-            />
-            <NavItem
-              icon={activeTab === 'profile' ? IMAGES.user1_on : IMAGES.user1_on}
-              active={activeTab === 'profile'}
-              IconStyle={activeTab === 'profile' ? styles.iconStyle2 : {}}
-              onPress={() => {
-                setActiveTab('profile');
-                setSelect('List View');
-              }}
-            />
-            <NavItem
-              icon={
-                activeTab === 'events'
-                  ? IMAGES.calendar_star_on
-                  : IMAGES.calendar_star
-              }
-              active={activeTab === 'events'}
-              onPress={() => {
-                setActiveTab('events');
-                setSelect('List View');
-              }}
-            />
-          </View>
+      </Animated.View>}
+      <View>
+        <View style={styles.tabView}>
+          <NavItem
+            icon={activeTab === 'hot' ? IMAGES.solar : IMAGES.solar_off}
+            active={activeTab === 'hot'}
+            onPress={() => {
+              setActiveTab('hot');
+              setSelect('List View');
+            }}
+          />
+          <NavItem
+            icon={activeTab === 'location' ? IMAGES.Subtract : IMAGES.Subtract}
+            active={activeTab === 'location'}
+            keyValue={true}
+            IconStyle={activeTab === 'location' ? styles.iconStyle : {}}
+            onPress={() => {
+              setActiveTab('location');
+              setSelect('List View');
+            }}
+          />
+          <NavItem
+            icon={activeTab === 'profile' ? IMAGES.user1_on : IMAGES.user1_on}
+            active={activeTab === 'profile'}
+            IconStyle={activeTab === 'profile' ? styles.iconStyle2 : {}}
+            onPress={() => {
+              setActiveTab('profile');
+              setSelect('List View');
+            }}
+          />
+          <NavItem
+            icon={
+              activeTab === 'events'
+                ? IMAGES.calendar_star_on
+                : IMAGES.calendar_star
+            }
+            active={activeTab === 'events'}
+            onPress={() => {
+              setActiveTab('events');
+              setSelect('List View');
+            }}
+          />
         </View>
+      </View>
+
+      <ScrollView
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        // stickyHeaderIndices={[0]}
+        showsVerticalScrollIndicator={false}
+        // stickyHeaderIndices={[2]}
+        style={AppStyles.flex1}
+        contentContainerStyle={AppStyles.flexGrow}>
+        {/* <View style={AppStyles.flex1}> */}
 
         <View style={{flex: 1}}>
           {activeTab == 'hot' && (

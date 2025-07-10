@@ -1,5 +1,7 @@
 import {
+  Animated,
   Dimensions,
+  Easing,
   FlatList,
   Image,
   ImageBackground,
@@ -155,15 +157,39 @@ const ProfileScreen = (props: Props) => {
   const [showUpcoming, setShowUpcoming] = useState(true);
   const [showPast, setShowPast] = useState(true);
   const [showSearchBar, setShowSearchBar] = useState(false);
+  const [searchBarAnim] = useState(new Animated.Value(0)); // 0 = hidden, 1 = visible
 
   const handleScroll = event => {
     const scrollY = event.nativeEvent.contentOffset.y;
-    if (scrollY > 190 && !showSearchBar) {
-      setShowSearchBar(true);
-    } else if (scrollY <= 190 && showSearchBar) {
-      setShowSearchBar(false);
+
+    if (scrollY > 50) {
+      setShowSearchBar(true)
+      Animated.timing(searchBarAnim, {
+        toValue: 1,
+        duration: 250,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      }).start();
+    } else {
+       setShowSearchBar(false)
+      Animated.timing(searchBarAnim, {
+        toValue: 0,
+        duration: 200,
+        easing: Easing.in(Easing.ease),
+        useNativeDriver: true,
+      }).start();
     }
   };
+
+  const searchBarTranslateY = searchBarAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-60, 0], // Adjust height as needed
+  });
+
+  const searchBarOpacity = searchBarAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
 
   const navigation = useNavigation();
   useEffect(() => {
@@ -315,24 +341,38 @@ const ProfileScreen = (props: Props) => {
         </TouchableOpacity>
       </View>
       <Loader visible={false} />
+      {showSearchBar && <Animated.View
+          style={{
+            // position: 'absolute',
+            // top: 0,
+            // left: 0,
+            // right: 0,
+            transform: [{translateY: searchBarTranslateY}],
+            opacity: searchBarOpacity,
+            backgroundColor: colors.white,
+            zIndex: 10,
+            marginHorizontal:16
+          }}>
+          <View style={styles.searchContainer}>
+            <Image source={IMAGES.search} style={styles.searchIcon} />
+            <TextInput
+              placeholder="Search"
+              placeholderTextColor={colors.gray}
+              style={styles.searchInput}
+            />
+          </View>
+        </Animated.View>}
       <ScrollView
         onScroll={handleScroll}
         scrollEventThrottle={16}
-        stickyHeaderIndices={[0]}
+        // stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
         style={[AppStyles.M16, AppStyles.flex]}>
-        {showSearchBar ? (
-          <View style={{backgroundColor:colors.white}}>
-            <View style={styles.searchContainer}>
-              <Image source={IMAGES.search} style={styles.searchIcon} />
-              <TextInput
-                placeholder="Search"
-                placeholderTextColor={colors.gray}
-                style={styles.searchInput}
-              />
-            </View>
-          </View>
-        ): <View style={{height:4}}/>}
+        {/* {showSearchBar ? ( */}
+       
+        {/* ) : (
+          <View style={{height: 4}} />
+        )} */}
 
         {/* <View style={styles.searchContainer}>
           <Image source={IMAGES.search} style={styles.searchIcon} />
@@ -343,7 +383,7 @@ const ProfileScreen = (props: Props) => {
           />
         </View> */}
 
-        <View style={{backgroundColor:colors.white}}>
+        <View style={{backgroundColor: colors.white}}>
           <View style={styles.profileContainer}>
             <View style={styles.avatarView}>
               <Image source={IMAGES.Avatar_icon} style={styles.avatar} />
@@ -358,7 +398,7 @@ const ProfileScreen = (props: Props) => {
               </View>
             </View>
           </View>
-           <Text style={styles.decText}>
+          <Text style={styles.decText}>
             San Diegan that loves to travel and share with friends along the
             way.
           </Text>
@@ -368,9 +408,7 @@ const ProfileScreen = (props: Props) => {
             onPress={() => {}}
             title={'Follow'}
           />
-      
-        
-         
+
           <LinearView
             linearViewStyle={{marginTop: hp(16)}}
             containerStyle={{paddingVertical: 20}}>
@@ -398,60 +436,60 @@ const ProfileScreen = (props: Props) => {
             </View>
             {/* <Text style={styles.description}>{'Add a description...'}</Text> */}
           </LinearView>
-        
 
-        {selectedTab == 'Lists' && (
-          <>
-            <HeaderTextIcon
-              headerStyle={{marginTop: 8}}
-              title={'Personal Lists'}
-              show={showPersonal}
-              onDownPress={() => {
-                setShowPersonal(!showPersonal);
-              }}
-            />
-            {showPersonal && (
-              <>
-                <ScrollView
-                  showsHorizontalScrollIndicator={false}
-                  horizontal
-                  contentContainerStyle={styles.categoryRow}>
-                  {categories.map(category => {
-                    return (
-                      <LinearView>
-                        <TouchableOpacity
-                          key={category.key}
-                          onPress={() => (
-                            setSelectedCategory(category.key),
-                            category?.onPress && category?.onPress()
-                          )}
-                          style={[
-                            styles.categoryButton,
-                            styles.categoryButtonActive,
-                          ]}>
-                          {category.icon}
-                          <Text
+          {selectedTab == 'Lists' && (
+            <>
+              <HeaderTextIcon
+                headerStyle={{marginTop: 8}}
+                title={'Personal Lists'}
+                show={showPersonal}
+                onDownPress={() => {
+                  setShowPersonal(!showPersonal);
+                }}
+              />
+              {showPersonal && (
+                <>
+                  <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    horizontal
+                    contentContainerStyle={styles.categoryRow}>
+                    {categories.map(category => {
+                      return (
+                        <LinearView>
+                          <TouchableOpacity
+                            key={category.key}
+                            onPress={() => (
+                              setSelectedCategory(category.key),
+                              category?.onPress && category?.onPress()
+                            )}
                             style={[
-                              commonFontStyle(500, 14, colors.black),
-                              {marginLeft: 6},
+                              styles.categoryButton,
+                              styles.categoryButtonActive,
                             ]}>
-                            {category.key}
-                          </Text>
-                        </TouchableOpacity>
-                      </LinearView>
-                    );
-                  })}
-                </ScrollView>
+                            {category.icon}
+                            <Text
+                              style={[
+                                commonFontStyle(500, 14, colors.black),
+                                {marginLeft: 6},
+                              ]}>
+                              {category.key}
+                            </Text>
+                          </TouchableOpacity>
+                        </LinearView>
+                      );
+                    })}
+                  </ScrollView>
 
-                <CardImage
-                  onCardPress={() => {
-                    navigateTo(SCREENS.CreatedForYou);
-                  }}
-                  title={'For You'}
-                  Togolist
-                  Worldwide
-                />
-                {/* <SwipeListView
+                  <CardImage
+                    onCardPress={() => {
+                      navigateTo(SCREENS.CreatedForYou);
+                    }}
+                    title={'For You'}
+                    Togolist
+                    Worldwide
+                  />
+                  {/* <SwipeListView
                   data={[1]}
                   ItemSeparatorComponent={() => (
                     <View style={{height: hp(12)}} />
@@ -487,213 +525,215 @@ const ProfileScreen = (props: Props) => {
                   )}
                   leftOpenValue={75}
                 /> */}
-              </>
-            )}
-            <HeaderTextIcon
-              title={'Collections'}
-              headerStyle={{marginTop: 8}}
-              showAddIcon={true}
-              show={showCollections}
-              onDownPress={() => {
-                setShowCollections(!showCollections);
-              }}
-              onAddPress={() => {
-                navigateTo(SCREENS.CreateListScreen);
-              }}
-            />
-
-            {showCollections && (
-              <>
-                <FlatList
-                  data={mockData}
-                  numColumns={2}
-                  keyExtractor={(_, index) => index.toString()}
-                  columnWrapperStyle={{
-                    justifyContent: 'space-between',
-                    marginBottom: 8,
-                  }}
-                  style={{marginTop: 8}}
-                  renderItem={({item}) => (
-                    <TravelCard
-                      {...item}
-                      onPress={() => {
-                        navigateTo(SCREENS.Shared);
-                      }}
-                    />
-                  )}
-                />
-                <CardImageText
-                  title={'No collections yet!'}
-                  subText={
-                    'Start saving places to create your \nfirst collection.'
-                  }
-                />
-              </>
-            )}
-
-            {showTogolistPro && (
-              <TogolistPro
-                onClosePress={() => {
-                  setShowTogolistPro(false);
+                </>
+              )}
+              <HeaderTextIcon
+                title={'Collections'}
+                headerStyle={{marginTop: 8}}
+                showAddIcon={true}
+                show={showCollections}
+                onDownPress={() => {
+                  setShowCollections(!showCollections);
+                }}
+                onAddPress={() => {
+                  navigateTo(SCREENS.CreateListScreen);
                 }}
               />
-            )}
-          </>
-        )}
-        {selectedTab == 'Saved' && (
-          <>
-            {/* <View style={styles.headerView}>
+
+              {showCollections && (
+                <>
+                  <FlatList
+                    data={mockData}
+                    numColumns={2}
+                    keyExtractor={(_, index) => index.toString()}
+                    columnWrapperStyle={{
+                      justifyContent: 'space-between',
+                      marginBottom: 8,
+                    }}
+                    style={{marginTop: 8}}
+                    renderItem={({item}) => (
+                      <TravelCard
+                        {...item}
+                        onPress={() => {
+                          navigateTo(SCREENS.Shared);
+                        }}
+                      />
+                    )}
+                  />
+                  <CardImageText
+                    title={'No collections yet!'}
+                    subText={
+                      'Start saving places to create your \nfirst collection.'
+                    }
+                  />
+                </>
+              )}
+
+              {showTogolistPro && (
+                <TogolistPro
+                  onClosePress={() => {
+                    setShowTogolistPro(false);
+                  }}
+                />
+              )}
+            </>
+          )}
+          {selectedTab == 'Saved' && (
+            <>
+              {/* <View style={styles.headerView}>
               <Text style={[commonFontStyle(700, 20, colors.black)]}>
                 Saved Collections
               </Text>
               <Image source={IMAGES.down} style={styles.downIcon} />
             </View> */}
 
-            <HeaderTextIcon
-              title={'Saved Collections'}
-              showAddIcon={false}
-              show={showSavedCollections}
-              onDownPress={() => {
-                setShowSavedCollections(!showSavedCollections);
-              }}
-            />
-
-            {showSavedCollections && (
-              <>
-                <CardBottomText title={'Explore Collections'} />
-
-                <FlatList
-                  data={mockData}
-                  numColumns={2}
-                  keyExtractor={(_, index) => index.toString()}
-                  columnWrapperStyle={{
-                    justifyContent: 'space-between',
-                    marginBottom: 8,
-                  }}
-                  style={{marginTop: 10}}
-                  renderItem={({item}) => (
-                    <TravelCard
-                      {...item}
-                      onPress={() => {
-                        navigateTo(SCREENS.Shared);
-                      }}
-                      BGStyle={styles.bg}
-                    />
-                  )}
-                />
-              </>
-            )}
-            {showTogolistPro1 && (
-              <TogolistPro
-                onClosePress={() => {
-                  setShowTogolistPro1(false);
+              <HeaderTextIcon
+                title={'Saved Collections'}
+                showAddIcon={false}
+                show={showSavedCollections}
+                onDownPress={() => {
+                  setShowSavedCollections(!showSavedCollections);
                 }}
-                cardStyle={{marginBottom: 10, marginTop: 0}}
               />
-            )}
-          </>
-        )}
-        {selectedTab == 'Listings' && (
-          <>
-            <CardImageBtn
-              text1={'Coming Soon...'}
-              text2={'Monetize Your Account'}
-              text3={
-                'Create experiences & trip itineraries for account monetization opportunities'
-              }
-              btnText={'Learn More'}
-              onBtnPress={() => {}}
-            />
-          </>
-        )}
 
-        {selectedTab == 'Going' && (
-          <>
-            <HeaderTextIcon
-              title={'Calendar View'}
-              show={showCalendar}
-              onDownPress={() => {
-                setShowCalendar(!showCalendar);
-              }}
-            />
-            {showCalendar && (
-              <View style={{flex: 1, justifyContent: 'center'}}>
-                <Calendar />
-              </View>
-            )}
-            <HeaderTextIcon
-              title={'Upcoming '}
-              show={showUpcoming}
-              headerStyle={{marginTop: 16}}
-              onDownPress={() => {
-                setShowUpcoming(!showUpcoming);
-              }}
-            />
-            {showUpcoming ? (
-              <>
-                <CardBottomText title={'Start Planning...'} />
-                <FlatList
-                  data={UpcommingEvents}
-                  numColumns={2}
-                  keyExtractor={(_, index) => index.toString()}
-                  columnWrapperStyle={{
-                    justifyContent: 'space-between',
-                    marginBottom: 8,
+              {showSavedCollections && (
+                <>
+                  <CardBottomText title={'Explore Collections'} />
+
+                  <FlatList
+                    data={mockData}
+                    numColumns={2}
+                    keyExtractor={(_, index) => index.toString()}
+                    columnWrapperStyle={{
+                      justifyContent: 'space-between',
+                      marginBottom: 8,
+                    }}
+                    style={{marginTop: 10}}
+                    renderItem={({item}) => (
+                      <TravelCard
+                        {...item}
+                        onPress={() => {
+                          navigateTo(SCREENS.Shared);
+                        }}
+                        BGStyle={styles.bg}
+                      />
+                    )}
+                  />
+                </>
+              )}
+              {showTogolistPro1 && (
+                <TogolistPro
+                  onClosePress={() => {
+                    setShowTogolistPro1(false);
                   }}
-                  style={{marginTop: 8}}
-                  renderItem={({item}) => (
-                    <TravelCardLock
-                      {...item}
-                      onPress={() => {
-                        navigateTo(SCREENS.UpcomingListDetails, {item: item});
-                      }}
-                    />
-                  )}
+                  cardStyle={{marginBottom: 10, marginTop: 0}}
                 />
-              </>
-            ) : <View style={{height:0}} />}
-            <HeaderTextIcon
-              title={'Past '}
-              show={showPast}
-              headerStyle={{marginTop: 16}}
-              onDownPress={() => {
-                setShowPast(!showPast);
-              }}
-            />
-            {showPast && (
-              <>
-                <FlatList
-                  data={events}
-                  numColumns={2}
-                  keyExtractor={(_, index) => index.toString()}
-                  columnWrapperStyle={{
-                    justifyContent: 'space-between',
-                    marginBottom: 8,
-                  }}
-                  style={{marginTop: 8}}
-                  renderItem={({item}) => (
-                    <TravelCardLock
-                      {...item}
-                      onPress={() => {
-                        navigateTo(SCREENS.EventDetails, {
-                          item: item,
-                          data: events,
-                        });
-                      }}
-                    />
-                  )}
-                />
-                <CardImageText
-                  // title={'No collections yet!'}
-                  subText={
-                    'Nothing yet! Find activities or start planning trips to view your goings history!'
-                  }
-                />
-              </>
-            )}
-          </>
-        )}
-          </View>
+              )}
+            </>
+          )}
+          {selectedTab == 'Listings' && (
+            <>
+              <CardImageBtn
+                text1={'Coming Soon...'}
+                text2={'Monetize Your Account'}
+                text3={
+                  'Create experiences & trip itineraries for account monetization opportunities'
+                }
+                btnText={'Learn More'}
+                onBtnPress={() => {}}
+              />
+            </>
+          )}
+
+          {selectedTab == 'Going' && (
+            <>
+              <HeaderTextIcon
+                title={'Calendar View'}
+                show={showCalendar}
+                onDownPress={() => {
+                  setShowCalendar(!showCalendar);
+                }}
+              />
+              {showCalendar && (
+                <View style={{flex: 1, justifyContent: 'center'}}>
+                  <Calendar />
+                </View>
+              )}
+              <HeaderTextIcon
+                title={'Upcoming '}
+                show={showUpcoming}
+                headerStyle={{marginTop: 16}}
+                onDownPress={() => {
+                  setShowUpcoming(!showUpcoming);
+                }}
+              />
+              {showUpcoming ? (
+                <>
+                  <CardBottomText title={'Start Planning...'} />
+                  <FlatList
+                    data={UpcommingEvents}
+                    numColumns={2}
+                    keyExtractor={(_, index) => index.toString()}
+                    columnWrapperStyle={{
+                      justifyContent: 'space-between',
+                      marginBottom: 8,
+                    }}
+                    style={{marginTop: 8}}
+                    renderItem={({item}) => (
+                      <TravelCardLock
+                        {...item}
+                        onPress={() => {
+                          navigateTo(SCREENS.UpcomingListDetails, {item: item});
+                        }}
+                      />
+                    )}
+                  />
+                </>
+              ) : (
+                <View style={{height: 0}} />
+              )}
+              <HeaderTextIcon
+                title={'Past '}
+                show={showPast}
+                headerStyle={{marginTop: 16}}
+                onDownPress={() => {
+                  setShowPast(!showPast);
+                }}
+              />
+              {showPast && (
+                <>
+                  <FlatList
+                    data={events}
+                    numColumns={2}
+                    keyExtractor={(_, index) => index.toString()}
+                    columnWrapperStyle={{
+                      justifyContent: 'space-between',
+                      marginBottom: 8,
+                    }}
+                    style={{marginTop: 8}}
+                    renderItem={({item}) => (
+                      <TravelCardLock
+                        {...item}
+                        onPress={() => {
+                          navigateTo(SCREENS.EventDetails, {
+                            item: item,
+                            data: events,
+                          });
+                        }}
+                      />
+                    )}
+                  />
+                  <CardImageText
+                    // title={'No collections yet!'}
+                    subText={
+                      'Nothing yet! Find activities or start planning trips to view your goings history!'
+                    }
+                  />
+                </>
+              )}
+            </>
+          )}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -733,8 +773,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: Platform.OS == 'ios' ? 8 : 0,
     marginBottom: 5,
-    borderWidth:1,
-    borderColor:"#959595"
+    borderWidth: 1,
+    borderColor: '#959595',
   },
   searchInput: {
     flex: 1,

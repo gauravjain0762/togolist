@@ -116,7 +116,7 @@ const DuplicateListBottomSheet: FC<sheet> = ({
       children={
         <>
           <View>
-            <ScrollView style={{height: SCREEN_HEIGHT * 0.65}}>
+            <ScrollView showsVerticalScrollIndicator={false} style={{height: SCREEN_HEIGHT * 0.65}}>
               <SharedCard
                 onCardPress={() => {}}
                 onLongPress={() => {}}

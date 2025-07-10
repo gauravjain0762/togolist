@@ -94,7 +94,7 @@ const CustomHeader: FC<header> = ({
 const styles = StyleSheet.create({
   header: {
     paddingVertical: 12,
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -119,10 +119,11 @@ const styles = StyleSheet.create({
     height: 20,
     tintColor: colors.black,
   },
-  moreIcon: {
-    width: 20,
-    height: 20,
+ moreIcon: {
+     width: 22,
+    height: 22,
     tintColor: colors.black,
+    resizeMode:'contain'
   },
   backIcon: {
     width: 11,

@@ -150,7 +150,7 @@ const ProfileSettingScreen = (props: Props) => {
         />
       </View>
 
-      <ScrollView style={{marginHorizontal: 16, flex: 1}}>
+      <ScrollView showsVerticalScrollIndicator={false} style={{marginHorizontal: 16, flex: 1}}>
         <View key={userEdit ? 'edit' : 'view'}>
           {userEdit ? (
             <LinearView>

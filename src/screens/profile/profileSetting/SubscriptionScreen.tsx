@@ -89,7 +89,7 @@ const SubscriptionScreen = (props: Props) => {
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader  showBack={true} title="Settings" showSearch={false} showMore={false} />
-      <ScrollView style={{marginHorizontal: 16, flex: 1}}>
+      <ScrollView style={{marginHorizontal: 16, flex: 1}} showsVerticalScrollIndicator={false}>
         <LinearView>
           <View style={{padding: 16}}>
             <Text style={styles.heading}>Subscription</Text>

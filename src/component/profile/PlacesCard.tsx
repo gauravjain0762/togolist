@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {FC, memo} from 'react';
+import React, {FC, memo, useState} from 'react';
 import {IMAGES} from '../../assets/Images';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
@@ -37,36 +37,50 @@ const PlacesCard: FC<card> = ({
   locationIcon = false,
   locationStyle,
   id,
-  onLongPress
+  onLongPress,
 }) => {
+  const [likeUser, setLikeUser] = useState(false);
   return (
-    <TouchableOpacity onLongPress={onLongPress} activeOpacity={1} onPress={onCardPress}>
+    <TouchableOpacity
+      onLongPress={onLongPress}
+      activeOpacity={1}
+      onPress={onCardPress}>
       <SharedElement id={`item.${id}.image`}>
-      <ImageBackground
-        source={IMAGES.bg1} // Replace with actual pyramid image URL
-        style={[styles.container, BGStyle]}
-        imageStyle={[styles.image, BgImgStyle]}>
-        <View style={[{gap: wp(4)}]}>
-          <SharedElement id={title}>
-            <Text style={styles.title}>{title}</Text>
-          </SharedElement>
-          <View style={[AppStyles.row, {gap: wp(4)}]}>
-            {locationIcon && (
-              <Image source={IMAGES.wordWide} style={styles.pin} />
-            )}
-            <SharedElement id={location}>
-              <Text style={[styles.location, locationStyle]}>{location}</Text>
+        <ImageBackground
+          source={IMAGES.bg1} // Replace with actual pyramid image URL
+          style={[styles.container, BGStyle]}
+          imageStyle={[styles.image, BgImgStyle]}>
+          <View style={[{gap: wp(4)}]}>
+            <SharedElement id={title}>
+              <Text style={styles.title}>{title}</Text>
             </SharedElement>
+            <View style={[AppStyles.row, {gap: wp(4)}]}>
+              {locationIcon && (
+                <Image source={IMAGES.wordWide} style={styles.pin} />
+              )}
+              <SharedElement id={location}>
+                <Text style={[styles.location, locationStyle]}>{location}</Text>
+              </SharedElement>
+            </View>
           </View>
-        </View>
-        <View style={[AppStyles.row, styles.footer]}>
-          <Image source={IMAGES.food} style={styles.food} />
-          <View style={[AppStyles.row, {gap: wp(4)}]}>
-            <Image source={IMAGES.favorite} style={[styles.fav,{  tintColor: id ==1 ? "#BD2332": colors._99999,}]} />
-            <Text style={styles.likeCount}>{likeCount}</Text>
+          <View style={[AppStyles.row, styles.footer]}>
+            <Image source={IMAGES.food} style={styles.food} />
+            <TouchableOpacity
+              onPress={() => {
+                setLikeUser(!likeUser);
+              }}
+              style={[AppStyles.row, {gap: wp(4)}]}>
+              <Image
+                source={IMAGES.favorite}
+                style={[
+                  styles.fav,
+                  {tintColor: likeUser ? '#BD2332' : colors._99999},
+                ]}
+              />
+              <Text style={styles.likeCount}>{likeCount}</Text>
+            </TouchableOpacity>
           </View>
-        </View>
-      </ImageBackground>
+        </ImageBackground>
       </SharedElement>
     </TouchableOpacity>
   );
@@ -109,6 +123,6 @@ const styles = StyleSheet.create({
     width: wp(18),
     height: wp(18),
     resizeMode: 'contain',
-    tintColor:colors.white
+    tintColor: colors.white,
   },
 });

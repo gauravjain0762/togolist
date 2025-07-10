@@ -244,7 +244,7 @@ const EventDetails = ({route}) => {
           data={cards}
           renderItem={({item}) => {
             return (
-              <ScrollView style={styles.scroll}>
+              <ScrollView showsVerticalScrollIndicator={false} style={styles.scroll}>
                 {/* <SharedElement id={`item.${item?.id}.image`}> */}
                 <ImageBackground
                   source={IMAGES.bbq}
@@ -581,8 +581,8 @@ const styles = StyleSheet.create({
   more: {
     tintColor: undefined,
     resizeMode: 'contain',
-    width: wp(24),
-    height: wp(24),
+    width: 22,
+    height: 22,
   },
   header: {
     paddingHorizontal: wp(16),

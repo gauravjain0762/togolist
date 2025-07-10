@@ -55,7 +55,7 @@ const CollaboratorsScreen = () => {
         onMorePress={() => {}}
       />
       <View style={[styles.horizontal_divider]} />
-      <ScrollView contentContainerStyle={{marginHorizontal: 20}}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{marginHorizontal: 20}}>
         <Text style={styles.title}>
           {params?.FriendsGoing ? 'Friends Going' : 'Collaborators'}
         </Text>

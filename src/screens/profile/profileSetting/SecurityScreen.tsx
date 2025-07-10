@@ -31,7 +31,7 @@ const SecurityScreen = (props: Props) => {
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader  showBack={true} title="Settings" showSearch={false} showMore={false} />
-      <ScrollView style={{marginHorizontal: 16, flex: 1}}>
+      <ScrollView showsVerticalScrollIndicator={false} style={{marginHorizontal: 16, flex: 1}}>
         <LinearView>
           <View style={{padding: 24}}>
             <Text style={styles.header}>Security</Text>
