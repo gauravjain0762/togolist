@@ -15,8 +15,15 @@ import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREEN_NAMES} from '../../navigation/screenNames';
+import Animated from 'react-native-reanimated';
+import CustomTabBar from '../../component/common/CustomTabBar';
+import { useScrollHideAnimation } from '../../hook/useScrollHideAnimation';
 
 const RequestHost = () => {
+    const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+      80,
+      10,
+    );
   return (
     <SafeAreaView style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader
@@ -54,6 +61,10 @@ const RequestHost = () => {
           />
         </>
       </ImageBackground>
+         {isVisible && <SafeAreaView edges={['top']} />}
+      <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };

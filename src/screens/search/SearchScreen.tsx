@@ -300,6 +300,7 @@ const SearchScreen = (props: Props) => {
       const matched = SUGGESTIONS.filter(item =>
         item.toLowerCase().startsWith(lowerText),
       );
+      console.log('>>>>>>', matched);
       setFiltered(matched);
     } else {
       setFiltered([]);
@@ -325,18 +326,18 @@ const SearchScreen = (props: Props) => {
     const scrollY = event.nativeEvent.contentOffset.y;
 
     if (scrollY > 50) {
-      setShowSearchBar(true)
+      setShowSearchBar(true);
       Animated.timing(searchBarAnim, {
         toValue: 1,
-        duration: 250,
+        duration: 100,
         easing: Easing.out(Easing.ease),
         useNativeDriver: true,
       }).start();
     } else {
-       setShowSearchBar(false)
+      setShowSearchBar(false);
       Animated.timing(searchBarAnim, {
         toValue: 0,
-        duration: 200,
+        duration: 100,
         easing: Easing.in(Easing.ease),
         useNativeDriver: true,
       }).start();
@@ -365,61 +366,63 @@ const SearchScreen = (props: Props) => {
           <Image source={IMAGES.more_icon} style={[styles.moreIcon]} />
         </TouchableOpacity>
       </View>
-     {showSearchBar && <Animated.View
-        style={{
-          // position: 'absolute',
-          // top: 100,
-          // left: 0,
-          // right: 0,
-          transform: [{translateY: searchBarTranslateY}],
-          // opacity: searchBarOpacity,
-          backgroundColor: colors.white,
-          zIndex: 10,
-        }}>
-        <View style={AppStyles.P16}>
-          <SearchBar
-            container={styles.searchBox}
-            placeholder="Search"
-            handleSelect={handleSelect}
-            Filterdata={filtered}
-            onChangeText={handleSearch}
-            value={query}
-            data={SUGGESTIONS}
-            inputStyle={styles.searchInput}
-            IconStyle={{width: 17, height: 15, tintColor: '#A4A4A4'}}
-          />
-        </View>
-
-        {/* Category Chips */}
-        {select !== 'Map View' ? (
-          <View style={styles.tagsContainer}>
-            {visibleCategories.map((cat, index) => (
-              <TouchableOpacity key={index} style={styles.tag}>
-                <Text style={styles.tagText}>{cat.label}</Text>
-              </TouchableOpacity>
-            ))}
-            {!expanded && hiddenCount > 0 && (
-              <TouchableOpacity
-                onPress={() => setExpanded(true)}
-                style={styles.tag}>
-                <Text style={styles.tagText}>+ {hiddenCount} More</Text>
-              </TouchableOpacity>
-            )}
-
-            {expanded && (
-              <TouchableOpacity
-                onPress={() => setExpanded(false)}
-                style={styles.tag}>
-                <Text style={[styles.tagText, {color: '#BD2332'}]}>
-                  See Less
-                </Text>
-              </TouchableOpacity>
-            )}
+      {showSearchBar && (
+        <Animated.View
+          style={{
+            // position: 'absolute',
+            // top: 100,
+            // left: 0,
+            // right: 0,
+            transform: [{translateY: searchBarTranslateY}],
+            // opacity: searchBarOpacity,
+            backgroundColor: colors.white,
+            zIndex: 10,
+          }}>
+          <View style={AppStyles.P16}>
+            <SearchBar
+              container={styles.searchBox}
+              placeholder="Search"
+              handleSelect={handleSelect}
+              Filterdata={filtered}
+              onChangeText={handleSearch}
+              value={query}
+              data={SUGGESTIONS}
+              inputStyle={styles.searchInput}
+              IconStyle={{width: 17, height: 15, tintColor: '#A4A4A4'}}
+            />
           </View>
-        ) : (
-          <View style={{marginBottom: hp(4)}} />
-        )}
-      </Animated.View>}
+
+          {/* Category Chips */}
+          {select !== 'Map View' ? (
+            <View style={styles.tagsContainer}>
+              {visibleCategories.map((cat, index) => (
+                <TouchableOpacity key={index} style={styles.tag}>
+                  <Text style={styles.tagText}>{cat.label}</Text>
+                </TouchableOpacity>
+              ))}
+              {!expanded && hiddenCount > 0 && (
+                <TouchableOpacity
+                  onPress={() => setExpanded(true)}
+                  style={styles.tag}>
+                  <Text style={styles.tagText}>+ {hiddenCount} More</Text>
+                </TouchableOpacity>
+              )}
+
+              {expanded && (
+                <TouchableOpacity
+                  onPress={() => setExpanded(false)}
+                  style={styles.tag}>
+                  <Text style={[styles.tagText, {color: '#BD2332'}]}>
+                    See Less
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          ) : (
+            <View style={{marginBottom: hp(4)}} />
+          )}
+        </Animated.View>
+      )}
       <View>
         <View style={styles.tabView}>
           <NavItem
@@ -464,7 +467,7 @@ const SearchScreen = (props: Props) => {
         </View>
       </View>
 
-      <ScrollView
+      <Animated.ScrollView
         onScroll={handleScroll}
         scrollEventThrottle={16}
         // stickyHeaderIndices={[0]}
@@ -751,7 +754,7 @@ const SearchScreen = (props: Props) => {
           )}
         </View>
         {/* </View> */}
-      </ScrollView>
+      </Animated.ScrollView>
       <CommonSheet
         title="Location Settings"
         maxDynamicContentSize={260}

@@ -17,6 +17,9 @@ import Swiper from 'react-native-swiper';
 import {SwiperData} from '../../utils/constents';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
+import Animated from 'react-native-reanimated';
+import CustomTabBar from '../../component/common/CustomTabBar';
+import { useScrollHideAnimation } from '../../hook/useScrollHideAnimation';
 
 const cardData = [
   {
@@ -42,6 +45,11 @@ const cardData = [
 ];
 
 const Experience = () => {
+    const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+      80,
+      10,
+    );
+  
   const slides = useMemo(() => {
     // This will only re-compute if `data` changes.
     // If `data` is static, this will run only once.
@@ -111,7 +119,8 @@ const Experience = () => {
         title="Profile"
         titleStyle={styles.headertitle}
       />
-      <ScrollView
+      <Animated.ScrollView
+      onScroll={scrollHandler}
         contentContainerStyle={[AppStyles.flexGrow, {gap: hp(8)}]}
         showsVerticalScrollIndicator={false}
         style={styles.scroll}>
@@ -260,7 +269,11 @@ const Experience = () => {
           </View>
         </LinearView>
         <GradientBtn BtnStyle={styles.bottombtn} title="Coming Soon..." />
-      </ScrollView>
+      </Animated.ScrollView>
+
+       <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };

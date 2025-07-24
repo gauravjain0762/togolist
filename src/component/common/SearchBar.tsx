@@ -60,7 +60,7 @@ const SearchBar: FC<search> = ({
           {...props}
         />
       </View>
-      {Filterdata.length > 0 && (
+      {Filterdata?.length > 0 && (
         <FlatList
           data={Filterdata}
           keyExtractor={item => item}

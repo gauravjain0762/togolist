@@ -15,7 +15,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
 import {commonFontStyle, hp, SCREEN_WIDTH, wp} from '../../theme/fonts';
@@ -159,27 +159,45 @@ const ProfileScreen = (props: Props) => {
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [searchBarAnim] = useState(new Animated.Value(0)); // 0 = hidden, 1 = visible
 
-  const handleScroll = event => {
-    const scrollY = event.nativeEvent.contentOffset.y;
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const scrollOffsetY = useRef(0);
 
-    if (scrollY > 50) {
-      setShowSearchBar(true)
-      Animated.timing(searchBarAnim, {
-        toValue: 1,
-        duration: 250,
-        easing: Easing.out(Easing.ease),
-        useNativeDriver: true,
-      }).start();
-    } else {
-       setShowSearchBar(false)
-      Animated.timing(searchBarAnim, {
-        toValue: 0,
-        duration: 200,
-        easing: Easing.in(Easing.ease),
-        useNativeDriver: true,
-      }).start();
-    }
-  };
+  useEffect(() => {
+    Animated.timing(searchBarAnim, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true,
+    }).start(() => setShowSearchBar(false));
+  }, []);
+
+  const handleScroll = Animated.event(
+    [{nativeEvent: {contentOffset: {y: scrollY}}}],
+    {
+      useNativeDriver: true,
+      listener: event => {
+        const currentOffset = event.nativeEvent.contentOffset.y;
+
+        if (currentOffset > scrollOffsetY.current && currentOffset > 50) {
+          // Scrolling down
+          Animated.timing(searchBarAnim, {
+            toValue: 0,
+            duration: 200,
+            useNativeDriver: true,
+          }).start(() => setShowSearchBar(false));
+        } else if (currentOffset < scrollOffsetY.current - 5) {
+          // Scrolling up
+          setShowSearchBar(true);
+          Animated.timing(searchBarAnim, {
+            toValue: 1,
+            duration: 250,
+            useNativeDriver: true,
+          }).start();
+        }
+
+        scrollOffsetY.current = currentOffset;
+      },
+    },
+  );
 
   const searchBarTranslateY = searchBarAnim.interpolate({
     inputRange: [0, 1],
@@ -341,7 +359,8 @@ const ProfileScreen = (props: Props) => {
         </TouchableOpacity>
       </View>
       <Loader visible={false} />
-      {showSearchBar && <Animated.View
+      {showSearchBar && (
+        <Animated.View
           style={{
             // position: 'absolute',
             // top: 0,
@@ -351,7 +370,7 @@ const ProfileScreen = (props: Props) => {
             opacity: searchBarOpacity,
             backgroundColor: colors.white,
             zIndex: 10,
-            marginHorizontal:16
+            marginHorizontal: 16,
           }}>
           <View style={styles.searchContainer}>
             <Image source={IMAGES.search} style={styles.searchIcon} />
@@ -361,15 +380,16 @@ const ProfileScreen = (props: Props) => {
               style={styles.searchInput}
             />
           </View>
-        </Animated.View>}
-      <ScrollView
+        </Animated.View>
+      )}
+      <Animated.ScrollView
         onScroll={handleScroll}
         scrollEventThrottle={16}
         // stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
         style={[AppStyles.M16, AppStyles.flex]}>
         {/* {showSearchBar ? ( */}
-       
+
         {/* ) : (
           <View style={{height: 4}} />
         )} */}
@@ -383,7 +403,7 @@ const ProfileScreen = (props: Props) => {
           />
         </View> */}
 
-        <View style={{backgroundColor: colors.white}}>
+        <View style={{backgroundColor: colors.white, marginTop: 6}}>
           <View style={styles.profileContainer}>
             <View style={styles.avatarView}>
               <Image source={IMAGES.Avatar_icon} style={styles.avatar} />
@@ -734,7 +754,7 @@ const ProfileScreen = (props: Props) => {
             </>
           )}
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
     </SafeAreaView>
   );
 };

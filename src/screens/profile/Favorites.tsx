@@ -19,6 +19,9 @@ import TravelCard from '../../component/common/TravelCard';
 import CardImage from '../../component/common/CardImage';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {API} from '../../utils/apiConstant';
+import Animated from 'react-native-reanimated';
+import CustomTabBar from '../../component/common/CustomTabBar';
+import { useScrollHideAnimation } from '../../hook/useScrollHideAnimation';
 
 const mockData = [
   {
@@ -98,6 +101,10 @@ const Favorites = () => {
   const [showCollections, setShowCollections] = useState(true);
   const [showCalendar, setShowCalendar] = useState(false);
   const [showItineraries, setShowItineraries] = useState(false);
+     const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+        80,
+        10,
+      );
   return (
     <SafeAreaView style={[AppStyles.flex, styles.maincontainer]}>
       <CustomHeader
@@ -109,13 +116,15 @@ const Favorites = () => {
         moreIconStyle={styles.more}
         headerStyle={styles.header}
       />
-      <ScrollView
+      <Animated.ScrollView
         style={AppStyles.flex1}
+         onScroll={scrollHandler}
         contentContainerStyle={AppStyles.flexGrow}
         showsVerticalScrollIndicator={false}>
         <View style={styles.intro}>
           <Text style={styles.daily}>{'Ray Daily’s'}</Text>
           <Text style={styles.title}>{'Favorites'}</Text>
+         {select !== 'Map View' && <>
           <View style={styles.bylineContainer}>
             <Image source={IMAGES.worldwide} style={styles.icon} />
             <Text style={styles.subtext}>Worldwide | 11 Favs</Text>
@@ -126,6 +135,8 @@ const Favorites = () => {
             }
           </Text>
           <SearchBar searchImg={IMAGES.search1} />
+          </>}
+
           <View style={styles.select}>
             <TouchableOpacity onPress={() => setSelect('List View')}>
               <Text
@@ -259,7 +270,11 @@ const Favorites = () => {
             }}
           />
         )}
-      </ScrollView>
+      </Animated.ScrollView>
+
+      <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };

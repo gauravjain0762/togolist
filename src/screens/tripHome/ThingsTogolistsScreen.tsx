@@ -23,6 +23,9 @@ import CategoryCard from '../../component/trip/CategoryCard';
 import {useRoute} from '@react-navigation/native';
 import {navigationRef} from '../../navigation/RootContainer';
 import {SwipeListView} from 'react-native-swipe-list-view';
+import Animated from 'react-native-reanimated';
+import CustomTabBar from '../../component/common/CustomTabBar';
+import { useScrollHideAnimation } from '../../hook/useScrollHideAnimation';
 
 const categories = [
   {
@@ -46,10 +49,43 @@ const categories = [
     image: 'https://example.com/eat.jpg',
     iconName: 'restaurant-outline',
   },
+   {
+    title: 'Places to Stay',
+    category: 'Accommodations',
+    places: 0,
+    image: 'https://example.com/stay.jpg',
+    iconName: 'home-outline',
+  },
+  {
+    title: 'Where to Eat',
+    category: 'Dinning',
+    places: 0,
+    image: 'https://example.com/eat.jpg',
+    iconName: 'restaurant-outline',
+  },
+   {
+    title: 'Places to Stay',
+    category: 'Accommodations',
+    places: 0,
+    image: 'https://example.com/stay.jpg',
+    iconName: 'home-outline',
+  },
+  {
+    title: 'Where to Eat',
+    category: 'Dinning',
+    places: 0,
+    image: 'https://example.com/eat.jpg',
+    iconName: 'restaurant-outline',
+  },
 ];
 
 const ThingsTogolistsScreen = ({navigate}: any) => {
   const {params} = useRoute();
+
+    const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+      80,
+      10,
+    );
 
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
@@ -91,6 +127,8 @@ const ThingsTogolistsScreen = ({navigate}: any) => {
         <Text style={{color: '#999999'}}> | </Text>
         <Text style={styles.azText}>A-Z</Text>
       </Text>
+                  <Animated.ScrollView  showsVerticalScrollIndicator={false}  style={{flex: 1}} onScroll={scrollHandler}>
+      
       <SwipeListView
         data={categories}
         nestedScrollEnabled
@@ -107,6 +145,7 @@ const ThingsTogolistsScreen = ({navigate}: any) => {
                 Togolist={data?.item?.category}
                 Lists
                 listCount={data?.item?.places}
+                BGStyle={{marginTop:8}}
               />
             </View>
           );
@@ -122,6 +161,7 @@ const ThingsTogolistsScreen = ({navigate}: any) => {
               type="outline"
               title="Add a new place"
               BtnStyle={styles.btn}
+              titleStyle={styles.titleStyle}
               onPress={() =>
                 navigateTo(SCREENS.AddTripTogolistsScreen, {
                   sources: params?.isBack ? true : false,
@@ -144,40 +184,12 @@ const ThingsTogolistsScreen = ({navigate}: any) => {
         )}
         leftOpenValue={75}
       />
-      {/* <FlatList
-        data={categories}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingHorizontal: 20}}
-        renderItem={({item}) => {
-          return (
-            <CategoryCard
-              onCardPress={() => {
-                navigateTo(SCREENS.TripTogolistsScreen, {showTitle: true});
-              }}
-              title={item?.title}
-              Togolist={item?.category}
-              Lists
-              listCount={item?.places}
-            />
-          );
-        }}
-        ListFooterComponent={() => {
-          return (
-            <Button
-              leftImg={IMAGES.addlist}
-              type="outline"
-              title="Add a new place"
-              BtnStyle={styles.btn}
-              onPress={() =>
-                navigateTo(SCREENS.AddTripTogolistsScreen, {
-                  sources: params?.isBack ? true : false,
-                })
-              }
-            />
-          );
-        }}
-      /> */}
+      </Animated.ScrollView>
+      
       <View style={{height: 20}} />
+       <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };
@@ -241,8 +253,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lightGray,
     borderRadius: 14,
     paddingHorizontal: 12,
-    paddingVertical: 12,
-    marginVertical: 15,
+    paddingVertical: 4,
+    marginBottom: 15,
+    marginTop:5
   },
   searchInput: {
     flex: 1,
@@ -252,8 +265,11 @@ const styles = StyleSheet.create({
   },
 
   btn: {
-    marginVertical: hp(16),
+    marginVertical: hp(8),
     paddingVertical: hp(12),
+  },
+  titleStyle:{
+    ...commonFontStyle(700, 18, colors.primary1),
   },
 
   rowFront: {
@@ -272,7 +288,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: hp(16),
     gap: wp(30),
     overflow: 'hidden',
-    marginTop: 12,
+    marginTop: 8,
+    marginBottom:5,
+    // height: 110,
     // marginLeft:30
     // marginHorizontal: 20,
   },

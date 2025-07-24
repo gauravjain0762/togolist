@@ -39,13 +39,14 @@ const ShareTripSheet: FC<sheet> = ({
   scrollviewStyle,
   title,
   titleStyle,
+  isVisible
 }) => {
   return (
     <BottomSheetModalProvider>
       <BottomSheetModal
         ref={bottomSheetModalRef}
          style={styles.modalStyle}
-        maxDynamicContentSize={SCREEN_HEIGHT * 0.8}
+        maxDynamicContentSize={isVisible ? SCREEN_HEIGHT * 0.9 : SCREEN_HEIGHT * 0.8}
         onChange={e => handleSheetChanges(e)}>
         <BottomSheetView style={[styles.contentContainer, contentContainer]}>
           <View style={[styles.header, headerStyle]}>
@@ -55,7 +56,7 @@ const ShareTripSheet: FC<sheet> = ({
               <Image source={IMAGES.close} style={styles.close} />
             </TouchableOpacity>
           </View>
-          <SafeAreaView edges={['bottom']} style={styles.container}>
+          <SafeAreaView edges={['bottom']} style={[styles.container,{marginBottom:isVisible ? 80 : 0}]}>
             <TouchableOpacity style={styles.outlinedBtn}>
               <Image source={IMAGES.addIcon1} style={styles.addicon} />
               <Text style={styles.outlinedBtnText}>Add friends</Text>

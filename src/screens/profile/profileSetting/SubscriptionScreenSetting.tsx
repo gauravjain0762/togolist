@@ -19,6 +19,9 @@ import {CustomHeader, LinearView} from '../../../component';
 import {colors} from '../../../theme/colors';
 import {commonFontStyle, hp, wp} from '../../../theme/fonts';
 import {IMAGES} from '../../../assets/Images';
+import Animated from 'react-native-reanimated';
+import CustomTabBar from '../../../component/common/CustomTabBar';
+import { useScrollHideAnimation } from '../../../hook/useScrollHideAnimation';
 
 type Props = {};
 
@@ -108,11 +111,15 @@ const plans1 = [
 
 const SubscriptionScreenSetting = (props: Props) => {
   const [selected, setSelected] = useState('annual');
-
+    const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+        80,
+        10,
+      );
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader  showBack={true} title="Settings" showSearch={false} showMore={false} />
-      <ScrollView showsVerticalScrollIndicator={false} style={{marginHorizontal: 16, flex: 1}}>
+      <Animated.ScrollView
+                        onScroll={scrollHandler} showsVerticalScrollIndicator={false} style={{marginHorizontal: 16, flex: 1}}>
         <LinearView>
           <View style={{padding: 24}}>
             <Text style={styles.header}>Subscription</Text>
@@ -194,7 +201,11 @@ const SubscriptionScreenSetting = (props: Props) => {
             </TouchableOpacity>
           </View>
         </LinearView>
-      </ScrollView>
+      </Animated.ScrollView>
+
+       <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };

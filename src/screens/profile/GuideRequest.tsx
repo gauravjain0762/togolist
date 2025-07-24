@@ -15,8 +15,15 @@ import {Button, CustomHeader, GradientBtn, LinearView} from '../../component';
 import {IMAGES} from '../../assets/Images';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
+import Animated from 'react-native-reanimated';
+import CustomTabBar from '../../component/common/CustomTabBar';
+import { useScrollHideAnimation } from '../../hook/useScrollHideAnimation';
 
 const GuideRequest = () => {
+    const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+        80,
+        10,
+      );
   return (
     <SafeAreaView style={[AppStyles.flex, styles.mainContainer]}>
       <CustomHeader
@@ -28,7 +35,8 @@ const GuideRequest = () => {
         title="Profile"
         titleStyle={styles.headertitle}
       />
-      <ScrollView
+      <Animated.ScrollView
+            onScroll={scrollHandler}
         contentContainerStyle={[AppStyles.flexGrow, {gap: hp(8)}]}
         showsVerticalScrollIndicator={false}
         style={styles.scroll}>
@@ -128,7 +136,11 @@ const GuideRequest = () => {
           </View>
         </LinearView>
         <GradientBtn BtnStyle={styles.bottombtn} title="Coming Soon..." />
-      </ScrollView>
+      </Animated.ScrollView>
+
+       <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };

@@ -18,10 +18,17 @@ import {
   LinearView,
 } from '../../component';
 import {IMAGES} from '../../assets/Images';
-import {commonFontStyle, hp, wp} from '../../theme/fonts';
+import {commonFontStyle, hp, SCREEN_HEIGHT, wp} from '../../theme/fonts';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import CustomTabBar from '../../component/common/CustomTabBar';
+import Reanimated from 'react-native-reanimated';
+import {useScrollHideAnimation} from '../../hook/useScrollHideAnimation';
 
 const PlaceDetails = () => {
+  const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+    80,
+    10,
+  );
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
@@ -33,13 +40,14 @@ const PlaceDetails = () => {
     <SafeAreaView style={[AppStyles.flex, styles.container]}>
       <CustomHeader
         backImg={IMAGES.back1}
-         showBack={true}
+        showBack={true}
         backIconStyle={styles.back}
         showSearch={false}
         moreImg={IMAGES.more_icon}
         moreIconStyle={styles.more}
       />
-      <ScrollView
+      <Reanimated.ScrollView
+        onScroll={scrollHandler}
         contentContainerStyle={AppStyles.flexGrow}
         showsVerticalScrollIndicator={false}
         style={styles.scroll}>
@@ -153,11 +161,20 @@ const PlaceDetails = () => {
             </TouchableOpacity>
           </LinearView>
         </View>
-      </ScrollView>
+      </Reanimated.ScrollView>
       <EventBottomSheet
         bottomSheetModalRef={bottomSheetModalRef}
         handleSheetChanges={e => handleSheetChanges(e)}
+        maxDynamicContentSize={
+          isVisible ? SCREEN_HEIGHT * 0.9 : SCREEN_HEIGHT * 0.813
+        }
+        isVisible={isVisible}
       />
+
+      {isVisible && <SafeAreaView edges={['top']} />}
+      <Reanimated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Reanimated.View>
     </SafeAreaView>
   );
 };
@@ -177,7 +194,7 @@ const styles = StyleSheet.create({
   more: {
     tintColor: undefined,
     resizeMode: 'contain',
-     width: 22,
+    width: 22,
     height: 22,
   },
   place: {

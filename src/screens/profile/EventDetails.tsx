@@ -27,6 +27,10 @@ import {SharedElement} from 'react-native-shared-element';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
 import AddToListBottomSheet from '../../component/common/AddToListBottomSheet';
+import {navigationRef} from '../../navigation/RootContainer';
+import CustomTabBar from '../../component/common/CustomTabBar';
+import {useScrollHideAnimation} from '../../hook/useScrollHideAnimation';
+import Reanimated from 'react-native-reanimated';
 
 const {width} = Dimensions.get('window');
 
@@ -89,7 +93,12 @@ const reference = [
 // ];
 
 const EventDetails = ({route}) => {
-  const {item: initialItem, data: cards} = route.params; // Get the single item passed
+  const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+    80,
+    10,
+  );
+  const {item: initialItem, data: cards, onGoBack, showEvent} = route.params; // Get the single item passed
+
   const navigation = useNavigation();
 
   const flatListRef = useRef(null);
@@ -188,7 +197,7 @@ const EventDetails = ({route}) => {
     return () => scrollX.removeListener(listener);
   }, []);
 
-   const getDotStyle = (index: number) => {
+  const getDotStyle = (index: number) => {
     const distance = Math.abs(index - activeIndex);
 
     // Shrink size and opacity with distance from activeIndex
@@ -209,20 +218,36 @@ const EventDetails = ({route}) => {
   const renderPaginationDots = () => {
     const dotPosition = Animated.divide(scrollX, width); // Calculate active dot position
     return (
-      <View style={styles.paginationContainer}>
-        <Image
-          source={IMAGES.map1}
-          style={{width: 17, height: 17, resizeMode: 'contain'}}
-        />
+      <View
+        style={[
+          styles.paginationContainer,
+          {marginBottom: isVisible ? 10 : 0},
+        ]}>
+        <TouchableOpacity
+          onPress={() => {
+            onGoBack && onGoBack('Map View');
+            navigationRef.goBack();
+          }}>
+          <Image
+            source={IMAGES.map1}
+            style={{width: 17, height: 17, resizeMode: 'contain'}}
+          />
+        </TouchableOpacity>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           {cards.map((_, index) => {
             return <View key={index} style={getDotStyle(index)} />;
           })}
         </View>
-        <Image
-          source={IMAGES.menu1}
-          style={{width: 17, height: 17, resizeMode: 'contain'}}
-        />
+        <TouchableOpacity
+          onPress={() => {
+            onGoBack && onGoBack('List View');
+            navigationRef.goBack();
+          }}>
+          <Image
+            source={IMAGES.menu1}
+            style={{width: 17, height: 17, resizeMode: 'contain'}}
+          />
+        </TouchableOpacity>
       </View>
     );
   };
@@ -244,7 +269,14 @@ const EventDetails = ({route}) => {
           data={cards}
           renderItem={({item}) => {
             return (
-              <ScrollView showsVerticalScrollIndicator={false} style={styles.scroll}>
+              //       <Reanimated.ScrollView
+              // showsVerticalScrollIndicator={false}
+              // style={{flex: 1}}
+              // onScroll={scrollHandler}>
+              <Reanimated.ScrollView
+                onScroll={scrollHandler}
+                showsVerticalScrollIndicator={false}
+                style={styles.scroll}>
                 {/* <SharedElement id={`item.${item?.id}.image`}> */}
                 <ImageBackground
                   source={IMAGES.bbq}
@@ -277,11 +309,15 @@ const EventDetails = ({route}) => {
                     <Text style={styles.graylabel}>{'1.2K Follows'}</Text>
                   </View>
                 </View>
-                <Button
-                  titleStyle={styles.btn}
-                  BtnStyle={styles.event}
-                  title="Follow Event"
-                />
+                {!showEvent ? (
+                  <Button
+                    titleStyle={styles.btn}
+                    BtnStyle={styles.event}
+                    title="Follow Event"
+                  />
+                ) : (
+                  <View style={{height: 16}} />
+                )}
                 <View style={[AppStyles.row, styles.features]}>
                   <TouchableOpacity
                     onPress={() => {
@@ -535,7 +571,9 @@ const EventDetails = ({route}) => {
                     />
                   </LinearView>
                 </View>
-              </ScrollView>
+                {/* <View style={{height: 180}} /> */}
+              </Reanimated.ScrollView>
+              //  </Reanimated.ScrollView>
             );
           }}
           keyExtractor={item => item?.id}
@@ -559,12 +597,16 @@ const EventDetails = ({route}) => {
       )}
 
       {renderPaginationDots()}
-
       <AddToListBottomSheet
         bottomSheetModalRef={bottomSheetAddListRef}
         maxDynamicContentSize={true}
         handleSheetChanges={e => handleSheetChanges(e)}
+        isVisible={isVisible}
       />
+      {isVisible && <SafeAreaView edges={['top']} />}
+      <Reanimated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Reanimated.View>
     </SafeAreaView>
   );
 };
@@ -870,7 +912,7 @@ const styles = StyleSheet.create({
   },
   platform: {
     ...commonFontStyle(600, 11, colors.white),
-    flex:1
+    flex: 1,
   },
   post: {
     ...commonFontStyle(500, 10, colors.white),
@@ -889,10 +931,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     // position: 'absolute',
-    // bottom: 30, // Position at the bottom
+    // : 10, // Position at the bottom
     // alignSelf: 'center', // Center horizontally
-    marginHorizontal: 16,
-    marginVertical: 10,
+    marginHorizontal: 20,
+    marginTop: 8,
+    backgroundColor: colors.white,
   },
   dot: {
     width: 8,

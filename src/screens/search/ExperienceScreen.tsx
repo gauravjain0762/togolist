@@ -17,15 +17,22 @@ import {colors} from '../../theme/colors';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREEN_NAMES, SCREENS} from '../../navigation/screenNames';
 import {useRoute} from '@react-navigation/native';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import AddToListBottomSheet from '../../component/common/AddToListBottomSheet';
+import Animated from 'react-native-reanimated';
+import { useScrollHideAnimation } from '../../hook/useScrollHideAnimation';
+import CustomTabBar from '../../component/common/CustomTabBar';
 
 let data = ['View All', 'Hosts', 'Half Day', 'Full Day', '< 4 hours'];
 
 const ExperienceScreen = () => {
+    const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+      80,
+      10,
+    );
   const [select, setSelect] = useState('View All');
   const {params} = useRoute();
-    const bottomSheetAddListRef = useRef<BottomSheetModal>(null);
+  const bottomSheetAddListRef = useRef<BottomSheetModal>(null);
 
   const handlePresentAddlistPress = useCallback(() => {
     bottomSheetAddListRef.current?.present();
@@ -42,7 +49,7 @@ const ExperienceScreen = () => {
         headerStyle={styles.header}
         title="Explore"
       />
-      <ScrollView
+      <Animated.ScrollView  onScroll={scrollHandler}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{flexGrow: 1}}
         style={AppStyles.flex1}>
@@ -145,13 +152,17 @@ const ExperienceScreen = () => {
             </TouchableOpacity>
           </ImageBackground>
         )}
-      </ScrollView>
-       <AddToListBottomSheet
-                bottomSheetModalRef={bottomSheetAddListRef}
-                maxDynamicContentSize
-                guidedTours
-                // handleSheetChanges={e => handleSheetChanges(e)}
-              />
+      </Animated.ScrollView>
+      <AddToListBottomSheet
+        bottomSheetModalRef={bottomSheetAddListRef}
+          maxDynamicContentSize={true}
+         isVisible={isVisible}
+        guidedTours
+        // handleSheetChanges={e => handleSheetChanges(e)}
+      />
+       <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };
@@ -168,7 +179,7 @@ const styles = StyleSheet.create({
   more: {
     tintColor: undefined,
     resizeMode: 'contain',
- width: 22,
+    width: 22,
     height: 22,
   },
   header: {

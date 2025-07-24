@@ -1,4 +1,5 @@
 import {
+  // Animated,
   FlatList,
   Image,
   ScrollView,
@@ -20,8 +21,17 @@ import {
   ShareBottomSheet,
   SharedCard,
 } from '../../component';
+import Animated from 'react-native-reanimated';
+
 import {IMAGES} from '../../assets/Images';
-import {Fs, SCREEN_WIDTH, commonFontStyle, hp, wp} from '../../theme/fonts';
+import {
+  Fs,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+  commonFontStyle,
+  hp,
+  wp,
+} from '../../theme/fonts';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
@@ -32,6 +42,8 @@ import {SharedElement} from 'react-native-shared-element';
 import AddToListBottomSheet from '../../component/common/AddToListBottomSheet';
 import {useRoute} from '@react-navigation/native';
 import DuplicateListBottomSheet from '../../component/common/DuplicateListBottomSheet';
+import CustomTabBar from '../../component/common/CustomTabBar';
+import {useScrollHideAnimation} from '../../hook/useScrollHideAnimation';
 
 const cards = [
   {
@@ -74,6 +86,10 @@ const cards = [
 ];
 
 const Shared = () => {
+  const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+    80,
+    10,
+  );
   const {params} = useRoute();
   const exploreCard = params?.exploreCard;
   const headerTitle = params?.headerTitle;
@@ -106,7 +122,9 @@ const Shared = () => {
   }, []);
 
   return (
-    <SafeAreaView style={[AppStyles.flex, styles.mainContainer]}>
+    <SafeAreaView
+      edges={['top', 'bottom']}
+      style={[AppStyles.flex, styles.mainContainer]}>
       <CustomHeader
         showBack={true}
         backImg={IMAGES.back1}
@@ -242,10 +260,13 @@ const Shared = () => {
             </TouchableOpacity>
           </View>
           {select == 'List View' && (
-            <>
+            <Animated.ScrollView  showsVerticalScrollIndicator={false}  style={{flex: 1}} onScroll={scrollHandler}>
               <SwipeListView
                 data={cards}
+                scrollEnabled
                 nestedScrollEnabled
+                scrollEventThrottle={16}
+                // onScroll={scrollHandler}
                 showsVerticalScrollIndicator={false}
                 ItemSeparatorComponent={() => (
                   <View style={styles.liastseparator} />
@@ -280,6 +301,9 @@ const Shared = () => {
                 swipeToOpenPercent={50}
                 rightOpenValue={-(SCREEN_WIDTH * 0.82)}
                 ListFooterComponent={() => {
+                  if(exploreCard){
+                    return null
+                  }
                   return (
                     <Button
                       leftImg={IMAGES.addlist}
@@ -318,7 +342,7 @@ const Shared = () => {
                 )}
                 leftOpenValue={75}
               />
-            </>
+            </Animated.ScrollView>
           )}
           {select == 'Map View' && (
             <MapView
@@ -340,7 +364,7 @@ const Shared = () => {
         maxDynamicContentSize={270}
         bottomSheetModalRef={bottomSheetModalQuickAddRef}
         children={
-          <View style={{gap: 4}}>
+          <View style={{gap: 4, marginBottom: isVisible ? 70 : 0}}>
             <Button
               type="outline"
               BtnStyle={styles.QuickAdd}
@@ -365,14 +389,20 @@ const Shared = () => {
         }
       />
       <ShareBottomSheet
+        maxDynamicContentSize={SCREEN_HEIGHT * 0.9}
         bottomSheetModalRef={bottomSheetModalRef}
-        handleSheetChanges={e => handleSheetChanges(e)}
-      />
+        handleSheetChanges={e => handleSheetChanges(e)}>
+        {isVisible && <View style={{height: 80}} />}
+      </ShareBottomSheet>
       <DuplicateListBottomSheet
         bottomSheetModalRef={bottomSheetAddListRef}
         handleSheetChanges={e => handleSheetChanges(e)}
         exploreCard={exploreCard}
+        isVisible={isVisible}
       />
+      <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };
@@ -489,11 +519,10 @@ const styles = StyleSheet.create({
     marginTop: hp(16),
     paddingVertical: hp(4),
     marginHorizontal: 2,
-    borderRadius:14
+    borderRadius: 14,
   },
-  btnText:{
-    ...commonFontStyle(700, 18, "#BD2332"),
-
+  btnText: {
+    ...commonFontStyle(700, 18, '#BD2332'),
   },
 
   rowFront: {

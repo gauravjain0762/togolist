@@ -77,6 +77,7 @@ const InviteFriendsSheet: FC<sheet> = ({
   scrollviewStyle,
   title,
   titleStyle,
+  isVisible
 }) => {
   const [searchText, setSearchText] = useState('');
 
@@ -106,7 +107,7 @@ const InviteFriendsSheet: FC<sheet> = ({
       <BottomSheetModal
         ref={bottomSheetModalRef}
         style={styles.modalStyle}
-        maxDynamicContentSize={SCREEN_HEIGHT * 0.8}
+        maxDynamicContentSize={isVisible ? SCREEN_HEIGHT * 0.9 : SCREEN_HEIGHT * 0.8}
         onChange={e => handleSheetChanges(e)}>
         <BottomSheetView style={[styles.contentContainer, contentContainer]}>
           <View style={[styles.header, headerStyle]}>
@@ -116,7 +117,7 @@ const InviteFriendsSheet: FC<sheet> = ({
               <Image source={IMAGES.close} style={styles.close} />
             </TouchableOpacity>
           </View>
-          <SafeAreaView edges={['bottom']} style={styles.container}>
+          <SafeAreaView edges={['bottom']} style={[styles.container,{marginBottom:isVisible ? 70:0}]}>
             <ScrollView
               contentContainerStyle={AppStyles.flexGrow}
               showsVerticalScrollIndicator={false}

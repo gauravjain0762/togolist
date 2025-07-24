@@ -29,6 +29,9 @@ import HeaderTextIcon from '../../component/common/HeaderTextIcon';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
 import AddToListBottomSheet from '../../component/common/AddToListBottomSheet';
+import {useScrollHideAnimation} from '../../hook/useScrollHideAnimation';
+import Animated from 'react-native-reanimated';
+import CustomTabBar from '../../component/common/CustomTabBar';
 
 const CARD_DATA = [
   {
@@ -74,6 +77,10 @@ const categories = [
 ];
 
 const TripExplore = () => {
+  const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+    80,
+    10,
+  );
   const [activeTab, setActiveTab] = useState('hot');
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -180,7 +187,8 @@ const TripExplore = () => {
             }}
           />
         </View>
-        <ScrollView
+        <Animated.ScrollView
+        onScroll={scrollHandler}
           showsVerticalScrollIndicator={false}
           style={{marginTop: 20, flex: 1}}
           contentContainerStyle={AppStyles.flexGrow}>
@@ -200,7 +208,8 @@ const TripExplore = () => {
               renderItem={({item}) => <ExploreCard {...item} />}
             />
           )}
-        </ScrollView>
+          <View style={{height:80}}/>
+        </Animated.ScrollView>
       </View>
       <CommonSheet
         title="Details"
@@ -208,17 +217,17 @@ const TripExplore = () => {
         children={
           <View style={{paddingVertical: hp(28)}}>
             <DiscoverNewSpotsCard
-             imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0: 16}}
+              imageStyle={{marginHorizontal: Platform.OS == 'ios' ? 0 : 16}}
               onPressAdd={() => handlePresentAddlistPress()}
             />
           </View>
         }
       />
-           <AddToListBottomSheet
-                    bottomSheetModalRef={bottomSheetAddListRef}
-                    // maxDynamicContentSize
-                    // handleSheetChanges={e => handleSheetChanges(e)}
-                  />
+      <AddToListBottomSheet
+        bottomSheetModalRef={bottomSheetAddListRef}
+        // maxDynamicContentSize
+        // handleSheetChanges={e => handleSheetChanges(e)}
+      />
       {/* <CommonSheet
         title="Add To List"
         bottomSheetModalRef={bottomSheetAddListRef}
@@ -292,6 +301,11 @@ const TripExplore = () => {
           </View>
         }
       /> */}
+
+      {isVisible && <SafeAreaView edges={['top']} />}
+      <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };

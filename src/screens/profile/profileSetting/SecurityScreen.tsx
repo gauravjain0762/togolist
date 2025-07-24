@@ -20,6 +20,9 @@ import {CustomHeader, LinearView} from '../../../component';
 import {colors} from '../../../theme/colors';
 import {commonFontStyle, hp, wp} from '../../../theme/fonts';
 import CustomToggle from '../../../component/common/CustomToggle';
+import {useScrollHideAnimation} from '../../../hook/useScrollHideAnimation';
+import Animated from 'react-native-reanimated';
+import CustomTabBar from '../../../component/common/CustomTabBar';
 
 type Props = {};
 
@@ -27,11 +30,22 @@ const SecurityScreen = (props: Props) => {
   const [likeNotifs, setLikeNotifs] = useState(true);
   const [commentNotifs, setCommentNotifs] = useState(false);
   const [savedNotifs, setSavedNotifs] = useState(false);
-
+  const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+    80,
+    10,
+  );
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
-      <CustomHeader  showBack={true} title="Settings" showSearch={false} showMore={false} />
-      <ScrollView showsVerticalScrollIndicator={false} style={{marginHorizontal: 16, flex: 1}}>
+      <CustomHeader
+        showBack={true}
+        title="Settings"
+        showSearch={false}
+        showMore={false}
+      />
+      <Animated.ScrollView
+        onScroll={scrollHandler}
+        showsVerticalScrollIndicator={false}
+        style={{marginHorizontal: 16, flex: 1}}>
         <LinearView>
           <View style={{padding: 24}}>
             <Text style={styles.header}>Security</Text>
@@ -77,7 +91,11 @@ const SecurityScreen = (props: Props) => {
         <TouchableOpacity style={styles.btnView}>
           <Text style={styles.btnText}>Delete Account</Text>
         </TouchableOpacity>
-      </ScrollView>
+      </Animated.ScrollView>
+
+      <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };
@@ -114,12 +132,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.primary1,
     paddingVertical: 15,
-    marginTop:8,
-    borderRadius:10
+    marginTop: 8,
+    borderRadius: 10,
   },
   btnText: {
     ...commonFontStyle(700, 16, colors.primary1),
-    textAlign:"center"
+    textAlign: 'center',
   },
 });
-

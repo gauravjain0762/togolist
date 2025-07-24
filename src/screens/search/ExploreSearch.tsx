@@ -8,7 +8,13 @@ import {
   View,
 } from 'react-native';
 import React, {useCallback, useRef, useState} from 'react';
-import {CustomHeader, ProfileCard, SearchBar} from '../../component';
+import {
+  CustomHeader,
+  ExperienceCard,
+  ExploreProfileCard,
+  ProfileCard,
+  SearchBar,
+} from '../../component';
 import {IMAGES} from '../../assets/Images';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
@@ -23,6 +29,9 @@ import {SCREENS} from '../../navigation/screenNames';
 import TravelCard from '../../component/common/TravelCard';
 import AddToListBottomSheet from '../../component/common/AddToListBottomSheet';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {useScrollHideAnimation} from '../../hook/useScrollHideAnimation';
+import Animated from 'react-native-reanimated';
+import CustomTabBar from '../../component/common/CustomTabBar';
 
 let data = ['Collections', 'Places', 'Events', 'Listings', 'Profiles'];
 
@@ -139,13 +148,36 @@ const events = [
 ];
 
 const ExploreSearch = () => {
+  const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+    80,
+    10,
+  );
   const [select, setSelect] = useState('Collections');
   const [select1, setSelect1] = useState('List View');
 
   const bottomSheetAddListRef = useRef<BottomSheetModal>(null);
+  const bottomSheetModalLocationRef = useRef<BottomSheetModal>(null);
+  const bottomSheetModalMoreRef = useRef<BottomSheetModal>(null);
+  const bottomSheetModalQuickAddRef = useRef<BottomSheetModal>(null);
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
   const handlePresentModalMorePress = useCallback(() => {
     bottomSheetAddListRef.current?.present();
+  }, []);
+
+  const handlePresentAddlistPress = useCallback(() => {
+    bottomSheetAddListRef.current?.present();
+    bottomSheetModalRef.current?.close();
+    bottomSheetModalLocationRef.current?.close();
+    bottomSheetModalMoreRef.current?.close();
+    bottomSheetModalQuickAddRef.current?.close();
+  }, []);
+  const handlePresentAddlistClose = useCallback(() => {
+    bottomSheetAddListRef.current?.close();
+    bottomSheetModalLocationRef.current?.close();
+    bottomSheetModalRef.current?.close();
+    bottomSheetModalMoreRef.current?.close();
+    bottomSheetModalQuickAddRef.current?.close();
   }, []);
 
   return (
@@ -160,7 +192,7 @@ const ExploreSearch = () => {
         headerStyle={styles.header}
         title="Explore"
       />
-      <ScrollView
+      <Animated.ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scroll}>
         <SearchBar
@@ -317,16 +349,34 @@ const ExploreSearch = () => {
                 <Text style={styles.location}>{'50miles Radius'}</Text>
               </View>
               <FlatList
-                data={events}
-                numColumns={2}
+                data={[1, 2, 3, 4]}
                 keyExtractor={(_, index) => index.toString()}
-                columnWrapperStyle={{
-                  justifyContent: 'space-between',
-                  marginBottom: 16,
-                }}
                 contentContainerStyle={AppStyles.P16}
                 style={{marginTop: 10}}
-                renderItem={({item}) => <TravelCardLock {...item} />}
+                renderItem={({item}) => (
+                  <DiscoverNewSpotsCard
+                    {...item}
+                    onEventPress={() => {
+                      navigateTo(SCREENS.EventDetails, {
+                        item: item,
+                        data: events,
+                      });
+                    }}
+                    followEvent={true}
+                    onPressAdd={() => handlePresentAddlistPress()}
+                    onPressBeenThere={() => {
+                      navigateTo(SCREENS.BeenThere);
+                      handlePresentAddlistClose();
+                    }}
+                    onPressFavs={() => {
+                      navigateTo(SCREENS.Favorites);
+                      handlePresentAddlistClose();
+                    }}
+                    imageStyle={{
+                      marginHorizontal: Platform.OS == 'ios' ? 0 : 16,
+                    }}
+                  />
+                )}
               />
             </View>
           )}
@@ -336,16 +386,22 @@ const ExploreSearch = () => {
                 <Text style={styles.eventTitle}>{'Mexico Itineraries'}</Text>
               </View>
               <FlatList
-                data={events}
-                numColumns={2}
+                data={[1, 2, 3, 4]}
                 contentContainerStyle={AppStyles.P16}
                 keyExtractor={(_, index) => index.toString()}
-                columnWrapperStyle={{
-                  justifyContent: 'space-between',
-                  marginBottom: 16,
-                }}
                 style={{marginTop: 10}}
-                renderItem={({item}) => <TravelCardLock {...item} />}
+                renderItem={({item}) => (
+                  <ExperienceCard
+                    onFavsPress={() => {
+                      navigateTo(SCREENS.Favorites);
+                    }}
+                    onAddPress={() => {
+                      handlePresentAddlistPress();
+                    }}
+                    onBookPress={() => {}}
+                    TourImg={IMAGES.tour1}
+                  />
+                )}
               />
             </>
           )}
@@ -353,30 +409,24 @@ const ExploreSearch = () => {
             <View style={styles.list}>
               <FlatList
                 data={[1, 2, 3, 4, 5, 6]}
-                numColumns={2}
-                columnWrapperStyle={{
-                  justifyContent: 'space-between',
-                  gap: wp(8),
-                }}
                 contentContainerStyle={{gap: wp(8), paddingHorizontal: wp(16)}}
-                renderItem={({item, index}) => (
-                  <ProfileCard
-                    followStyle={{backgroundColor: colors.white}}
-                    followText={{...commonFontStyle(500, 12, colors._BD2332)}}
-                    ishire={false}
-                    showRight={true}
-                  />
-                )}
+                renderItem={({item, index}) => <ExploreProfileCard />}
               />
             </View>
           )}
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
       <AddToListBottomSheet
         bottomSheetModalRef={bottomSheetAddListRef}
         maxDynamicContentSize
+        isVisible={isVisible}
         // handleSheetChanges={e => handleSheetChanges(e)}
       />
+
+      {isVisible && <SafeAreaView edges={['top']} />}
+      <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };
@@ -393,7 +443,7 @@ const styles = StyleSheet.create({
   more: {
     tintColor: undefined,
     resizeMode: 'contain',
-   width: 22,
+    width: 22,
     height: 22,
   },
   header: {

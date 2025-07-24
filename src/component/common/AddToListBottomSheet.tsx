@@ -79,6 +79,7 @@ const AddToListBottomSheet: FC<sheet> = ({
   bottomSheetModalRef,
   maxDynamicContentSize,
   guidedTours,
+  isVisible
 }) => {
   const [showPersonal, setShowPersonal] = useState(true);
   const [showCollections, setShowCollections] = useState(true);
@@ -115,11 +116,11 @@ const AddToListBottomSheet: FC<sheet> = ({
       title="Add To List"
       bottomSheetModalRef={bottomSheetModalRef}
       maxDynamicContentSize={
-        maxDynamicContentSize ? SCREEN_HEIGHT * 0.82 : SCREEN_HEIGHT * 0.8
+        maxDynamicContentSize ? isVisible ? SCREEN_HEIGHT * 0.89  : SCREEN_HEIGHT * 0.82 : isVisible ? SCREEN_HEIGHT * 0.89 : SCREEN_HEIGHT * 0.813
       }
       children={
         <>
-          <View style={{paddingBottom: 10}}>
+          <View style={{paddingBottom: maxDynamicContentSize ? isVisible?  90 :10 :10}}>
             <ScrollView
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}

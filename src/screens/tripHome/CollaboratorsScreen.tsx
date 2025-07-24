@@ -15,6 +15,9 @@ import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {IMAGES} from '../../assets/Images';
 import {colors} from '../../theme/colors';
 import {useRoute} from '@react-navigation/native';
+import Animated from 'react-native-reanimated';
+import CustomTabBar from '../../component/common/CustomTabBar';
+import {useScrollHideAnimation} from '../../hook/useScrollHideAnimation';
 
 const users = [
   {
@@ -41,6 +44,10 @@ const options = [
 ];
 
 const CollaboratorsScreen = () => {
+  const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+    80,
+    10,
+  );
   const [searchText, setSearchText] = useState('');
   const [selected, setSelected] = useState('going');
   const {params} = useRoute();
@@ -50,12 +57,15 @@ const CollaboratorsScreen = () => {
       <CustomHeader
         title={'Trip Planner'}
         showSearch={false}
-         showBack={true}
+        showBack={true}
         showMore={false}
         onMorePress={() => {}}
       />
       <View style={[styles.horizontal_divider]} />
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{marginHorizontal: 20}}>
+      <Animated.ScrollView
+        onScroll={scrollHandler}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{marginHorizontal: 20}}>
         <Text style={styles.title}>
           {params?.FriendsGoing ? 'Friends Going' : 'Collaborators'}
         </Text>
@@ -169,7 +179,12 @@ const CollaboratorsScreen = () => {
             BtnStyle={{marginVertical: 10, paddingVertical: hp(12)}}
           />
         </LinearView>
-      </ScrollView>
+      </Animated.ScrollView>
+
+      {isVisible && <SafeAreaView edges={['top']} />}
+      <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };

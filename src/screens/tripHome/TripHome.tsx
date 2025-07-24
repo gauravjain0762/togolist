@@ -54,7 +54,6 @@ const cards = [
     location: '979 Lomas Santa Fe Dr, Solana Beach...',
     lists: 31,
     image: 'https://source.unsplash.com/600x400/?egypt,pyramids',
-    onPress: () => navigateTo(SCREENS.EventDetails),
   },
   {
     id: 2,

@@ -23,6 +23,7 @@ import Checklist from './trip/Checklist';
 import InviteFriendsSheet from './trip/InviteFriendsSheet';
 import ShareTripSheet from './trip/ShareTripSheet';
 import ProgressRingChart from './trip/ProgressRingChart';
+import ExploreProfileCard from './explore/ExploreProfileCard';
 
 export {
   Loader,
@@ -50,4 +51,5 @@ export {
   InviteFriendsSheet,
   ShareTripSheet,
   ProgressRingChart,
+  ExploreProfileCard,
 };

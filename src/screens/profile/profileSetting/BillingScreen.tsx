@@ -19,10 +19,17 @@ import {CustomHeader, LinearView} from '../../../component';
 import {colors} from '../../../theme/colors';
 import {commonFontStyle, hp, wp} from '../../../theme/fonts';
 import {IMAGES} from '../../../assets/Images';
+import { useScrollHideAnimation } from '../../../hook/useScrollHideAnimation';
+import Animated from 'react-native-reanimated';
+import CustomTabBar from '../../../component/common/CustomTabBar';
 
 type Props = {};
 
 const BillingScreen = (props: Props) => {
+      const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+          80,
+          10,
+        );
   const billingOptions = [
     {
       title: 'Payment methods',
@@ -44,7 +51,8 @@ const BillingScreen = (props: Props) => {
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader  showBack={true} title="Settings" showSearch={false} showMore={false} />
-      <ScrollView showsVerticalScrollIndicator={false} style={{marginHorizontal: 16, flex: 1}}>
+      <Animated.ScrollView
+                        onScroll={scrollHandler} showsVerticalScrollIndicator={false} style={{marginHorizontal: 16, flex: 1}}>
         <LinearView>
           <View style={{padding: 24}}>
             <Text style={styles.header}>Billing</Text>
@@ -72,7 +80,11 @@ const BillingScreen = (props: Props) => {
             ))}
           </View>
         </LinearView>
-      </ScrollView>
+      </Animated.ScrollView>
+
+       <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };

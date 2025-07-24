@@ -18,6 +18,9 @@ import {AppStyles} from '../../../theme/appStyles';
 import {CustomHeader, LinearView} from '../../../component';
 import {colors} from '../../../theme/colors';
 import {commonFontStyle, hp, wp} from '../../../theme/fonts';
+import Animated from 'react-native-reanimated';
+import CustomTabBar from '../../../component/common/CustomTabBar';
+import {useScrollHideAnimation} from '../../../hook/useScrollHideAnimation';
 
 type Props = {};
 
@@ -28,6 +31,11 @@ const PersonalInformation = (props: Props) => {
     {key: 'email', title: 'Email', value: 'r****y@gmail.com'},
     {key: 'address', title: 'Address', value: ''},
   ];
+
+  const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+    80,
+    10,
+  );
 
   const [info, setInfo] = useState(initialData);
   const [editingKey, setEditingKey] = useState<string | null>(null);
@@ -48,8 +56,16 @@ const PersonalInformation = (props: Props) => {
 
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
-      <CustomHeader  showBack={true} title="Settings" showSearch={false} showMore={false} />
-      <ScrollView showsVerticalScrollIndicator={false} style={{marginHorizontal: 16, flex: 1}}>
+      <CustomHeader
+        showBack={true}
+        title="Settings"
+        showSearch={false}
+        showMore={false}
+      />
+      <Animated.ScrollView
+        onScroll={scrollHandler}
+        showsVerticalScrollIndicator={false}
+        style={{marginHorizontal: 16, flex: 1}}>
         <LinearView>
           <View style={{padding: 16}}>
             <Text style={styles.header}>Personal Information</Text>
@@ -91,7 +107,11 @@ const PersonalInformation = (props: Props) => {
             ))}
           </View>
         </LinearView>
-      </ScrollView>
+      </Animated.ScrollView>
+
+      <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };
@@ -114,11 +134,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginVertical: 12,
-    marginHorizontal:16
+    marginHorizontal: 16,
   },
   title: {
     ...commonFontStyle(700, 16, colors.black),
-    marginBottom:6
+    marginBottom: 6,
   },
   value: {
     ...commonFontStyle(400, 12, colors.gray),

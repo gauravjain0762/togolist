@@ -20,14 +20,22 @@ import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREEN_NAMES} from '../../navigation/screenNames';
+import {navigationRef} from '../../navigation/RootContainer';
+import {useScrollHideAnimation} from '../../hook/useScrollHideAnimation';
+import Reanimated from 'react-native-reanimated';
+import CustomTabBar from '../../component/common/CustomTabBar';
 
 const {width} = Dimensions.get('window');
 
 const PostRequest = ({route}) => {
+  const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+    80,
+    10,
+  );
   const [activeIndex, setActiveIndex] = useState(0);
- const flatListRef = useRef(null);
-   const [flatListReady, setFlatListReady] = useState(false);
- 
+  const flatListRef = useRef(null);
+  const [flatListReady, setFlatListReady] = useState(false);
+
   useEffect(() => {
     const listener = scrollX.addListener(({value}) => {
       const index = Math.round(value / width);
@@ -58,26 +66,42 @@ const PostRequest = ({route}) => {
   const renderPaginationDots = () => {
     const dotPosition = Animated.divide(scrollX, width); // Calculate active dot position
     return (
-      <View style={styles.paginationContainer}>
-        <Image
-          source={IMAGES.map1}
-          style={{width: 17, height: 17, resizeMode: 'contain'}}
-        />
+      <View
+        style={[
+          styles.paginationContainer,
+          {marginBottom: isVisible ? 30 : 10},
+        ]}>
+        <TouchableOpacity
+          onPress={() => {
+            navigationRef.goBack();
+          }}>
+          <Image
+            source={IMAGES.map1}
+            style={{width: 17, height: 17, resizeMode: 'contain'}}
+          />
+        </TouchableOpacity>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           {[1, 3].map((_, index) => {
             return <View key={index} style={getDotStyle(index)} />;
           })}
         </View>
-        <Image
-          source={IMAGES.menu1}
-          style={{width: 17, height: 17, resizeMode: 'contain'}}
-        />
+        <TouchableOpacity
+          onPress={() => {
+            navigationRef.goBack();
+          }}>
+          <Image
+            source={IMAGES.menu1}
+            style={{width: 17, height: 17, resizeMode: 'contain'}}
+          />
+        </TouchableOpacity>
       </View>
     );
   };
 
   return (
-    <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer,{paddingBottom:10}]}>
+    <SafeAreaView
+      edges={['top']}
+      style={[AppStyles.mainWhiteContainer, {paddingBottom: 10}]}>
       <CustomHeader
         backImg={IMAGES.back1}
         backIconStyle={styles.back}
@@ -89,12 +113,18 @@ const PostRequest = ({route}) => {
       />
 
       {true && ( // Only render FlatList if initial item is found
+        // <Reanimated.ScrollView
+        // onScroll={scrollHandler}
+        //   showsVerticalScrollIndicator={false}
+        //   style={{flex: 1}}
+        //   >
         <FlatList
           ref={flatListRef}
-          data={[1,2]}
+          data={[1, 2]}
           renderItem={({item}) => {
             return (
-              <ScrollView
+              <Reanimated.ScrollView
+                onScroll={scrollHandler}
                 contentContainerStyle={styles.Scrollcontainer}
                 style={styles.scroll}
                 showsVerticalScrollIndicator={false}>
@@ -169,10 +199,11 @@ const PostRequest = ({route}) => {
                   BtnStyle={{paddingVertical: hp(15)}}
                   title="Submit Request"
                 />
-              </ScrollView>
+                {/* <View style={{height: 90}} /> */}
+              </Reanimated.ScrollView>
             );
           }}
-          keyExtractor={(_,index) => index.toString()}
+          keyExtractor={(_, index) => index.toString()}
           horizontal
           pagingEnabled // Enables snapping to full pages
           showsHorizontalScrollIndicator={false}
@@ -190,9 +221,14 @@ const PostRequest = ({route}) => {
           )}
           scrollEventThrottle={16} // Update scroll position frequently
         />
+        // </Reanimated.ScrollView>
       )}
 
       {renderPaginationDots()}
+      {isVisible && <SafeAreaView edges={['top']} />}
+      <Reanimated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Reanimated.View>
     </SafeAreaView>
   );
 };
@@ -217,7 +253,7 @@ const styles = StyleSheet.create({
   },
   scroll: {
     paddingHorizontal: wp(16),
-     width: width,
+    width: width,
   },
   placeimges: {
     borderRadius: 20,
@@ -331,8 +367,9 @@ const styles = StyleSheet.create({
     // position: 'absolute',
     // bottom: 30, // Position at the bottom
     // alignSelf: 'center', // Center horizontally
-    marginHorizontal: 16,
-    marginVertical: 10,
+    marginHorizontal: 20,
+    marginTop: 8,
+    backgroundColor: colors.white,
   },
   dot: {
     width: 8,

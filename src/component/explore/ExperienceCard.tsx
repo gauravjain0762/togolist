@@ -12,12 +12,24 @@ import {colors} from '../../theme/colors';
 import {IMAGES} from '../../assets/Images';
 import {LinearView} from '..';
 
-type card = {};
+type card = {
+  onBookPress?: () => void;
+  onAddPress?: () => void;
+  onFavsPress?: () => void;
+  onlyCard?: boolean;
+  TourImg?: any;
+};
 
-const ExperienceCard: FC<card> = ({onBookPress,onAddPress,onFavsPress,onlyCard}) => {
-
-  if(onlyCard){
-    return       <ImageBackground
+const ExperienceCard: FC<card> = ({
+  onBookPress,
+  onAddPress,
+  onFavsPress,
+  onlyCard,
+  TourImg,
+}) => {
+  if (onlyCard) {
+    return (
+      <ImageBackground
         source={IMAGES.event_bg} // replace with real image or local asset
         style={styles.image}
         imageStyle={styles.bg}>
@@ -30,13 +42,17 @@ const ExperienceCard: FC<card> = ({onBookPress,onAddPress,onFavsPress,onlyCard})
               imageStyle={{borderRadius: 8}}
               style={styles.chip}>
               {item == 'Tour' && (
-                <Image source={IMAGES.tour} style={{width: 20, height: 16}} />
+                <Image
+                  source={TourImg || IMAGES.tour}
+                  style={{width: 20, height: 16}}
+                />
               )}
               <Text style={styles.chipText}>{item}</Text>
             </ImageBackground>
           ))}
         </View>
       </ImageBackground>
+    );
   }
   return (
     <LinearView containerStyle={styles.card}>
@@ -54,7 +70,10 @@ const ExperienceCard: FC<card> = ({onBookPress,onAddPress,onFavsPress,onlyCard})
               imageStyle={{borderRadius: 8}}
               style={styles.chip}>
               {item == 'Tour' && (
-                <Image source={IMAGES.tour} style={{width: 20, height: 16}} />
+                <Image
+                  source={TourImg || IMAGES.tour}
+                  style={{width: 20, height: 16}}
+                />
               )}
               <Text style={styles.chipText}>{item}</Text>
             </ImageBackground>

@@ -23,8 +23,53 @@ import CategoryCard from '../../component/trip/CategoryCard';
 import {useRoute} from '@react-navigation/native';
 import {navigationRef} from '../../navigation/RootContainer';
 import {SwipeListView} from 'react-native-swipe-list-view';
+import Animated from 'react-native-reanimated';
+import {useScrollHideAnimation} from '../../hook/useScrollHideAnimation';
+import CustomTabBar from '../../component/common/CustomTabBar';
 
 const categories = [
+  {
+    title: 'Things to Do',
+    category: 'Activities',
+    places: 0,
+    image: 'https://example.com/ferris.jpg',
+    iconName: 'checkbox-outline',
+  },
+  {
+    title: 'Places to Stay',
+    category: 'Accommodations',
+    places: 0,
+    image: 'https://example.com/stay.jpg',
+    iconName: 'home-outline',
+  },
+  {
+    title: 'Where to Eat',
+    category: 'Dinning',
+    places: 0,
+    image: 'https://example.com/eat.jpg',
+    iconName: 'restaurant-outline',
+  },
+  {
+    title: 'Things to Do',
+    category: 'Activities',
+    places: 0,
+    image: 'https://example.com/ferris.jpg',
+    iconName: 'checkbox-outline',
+  },
+  {
+    title: 'Places to Stay',
+    category: 'Accommodations',
+    places: 0,
+    image: 'https://example.com/stay.jpg',
+    iconName: 'home-outline',
+  },
+  {
+    title: 'Where to Eat',
+    category: 'Dinning',
+    places: 0,
+    image: 'https://example.com/eat.jpg',
+    iconName: 'restaurant-outline',
+  },
   {
     title: 'Things to Do',
     category: 'Activities',
@@ -49,6 +94,11 @@ const categories = [
 ];
 
 const TripTogolistsScreen = ({navigate}: any) => {
+  const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+    80,
+    10,
+  );
+
   const {params} = useRoute();
 
   return (
@@ -56,7 +106,7 @@ const TripTogolistsScreen = ({navigate}: any) => {
       <CustomHeader
         title={params?.showTitle ? ' Peru Explorations' : 'Trips'}
         showSearch={false}
-         showBack={true}
+        showBack={true}
         onMorePress={() => {}}
       />
       <View style={[{paddingHorizontal: 20}]}>
@@ -85,85 +135,67 @@ const TripTogolistsScreen = ({navigate}: any) => {
         <Text style={{color: '#999999'}}> | </Text>
         <Text style={styles.azText}>A-Z</Text>
       </Text>
-      <SwipeListView
-        data={categories}
-        nestedScrollEnabled
-        contentContainerStyle={{paddingHorizontal: 20}}
+
+      <Animated.ScrollView
         showsVerticalScrollIndicator={false}
-        renderItem={(data, rowMap) => {
-          return (
-            <View style={styles.rowFront}>
-              <CategoryCard
-                onCardPress={() => {
-                  // navigateTo(SCREENS.ThingsTogolistsScreen, {showTitle: true});
-                }}
-                title={data?.item?.title}
-                Togolist={data?.item?.category}
-                Lists
-                listCount={data?.item?.places}
+        style={{flex: 1}}
+        onScroll={scrollHandler}>
+        <SwipeListView
+          data={categories}
+          nestedScrollEnabled
+          contentContainerStyle={{paddingHorizontal: 20}}
+          showsVerticalScrollIndicator={false}
+          renderItem={(data, rowMap) => {
+            return (
+              <View style={styles.rowFront}>
+                <CategoryCard
+                  onCardPress={() => {
+                    // navigateTo(SCREENS.ThingsTogolistsScreen, {showTitle: true});
+                  }}
+                  title={data?.item?.title}
+                  Togolist={data?.item?.category}
+                  Lists
+                  listCount={data?.item?.places}
+                  BGStyle={{marginTop: 8}}
+                />
+              </View>
+            );
+          }}
+          disableRightSwipe
+          swipeToOpenPercent={30}
+          rightOpenValue={-140}
+          renderHiddenItem
+          ListFooterComponent={() => {
+            return (
+              <Button
+                leftImg={IMAGES.addlist}
+                type="outline"
+                title="Add a new list"
+                BtnStyle={styles.btn}
+                titleStyle={styles.titleStyle}
+                onPress={() => navigateTo(SCREENS.AddTripTogolistsScreen)}
               />
+            );
+          }}
+          renderHiddenItem={(data, rowMap) => (
+            <View style={styles.rowBack}>
+              <TouchableOpacity style={styles.backButton}>
+                <Image source={IMAGES.restore} style={styles.restore} />
+                <Text style={styles.backText}>Restore</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.backButton, {marginTop: hp(4)}]}>
+                <Image source={IMAGES.remove} style={styles.remove} />
+                <Text style={styles.backText}>Delete</Text>
+              </TouchableOpacity>
             </View>
-          );
-        }}
-        disableRightSwipe
-        swipeToOpenPercent={30}
-        rightOpenValue={-140}
-        renderHiddenItem
-        ListFooterComponent={() => {
-          return (
-            <Button
-              leftImg={IMAGES.addlist}
-              type="outline"
-              title="Add a new list"
-              BtnStyle={styles.btn}
-              onPress={() => navigateTo(SCREENS.AddTripTogolistsScreen)}
-            />
-          );
-        }}
-        renderHiddenItem={(data, rowMap) => (
-          <View style={styles.rowBack}>
-            <TouchableOpacity style={styles.backButton}>
-              <Image source={IMAGES.restore} style={styles.restore} />
-              <Text style={styles.backText}>Restore</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.backButton, {marginTop: hp(4)}]}>
-              <Image source={IMAGES.remove} style={styles.remove} />
-              <Text style={styles.backText}>Delete</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-        leftOpenValue={75}
-      />
-      {/* <FlatList
-        data={categories}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingHorizontal: 20}}
-        renderItem={({item}) => {
-          return (
-            <CategoryCard
-              onCardPress={() => {
-                // navigateTo(SCREENS.ThingsTogolistsScreen, {showTitle: true});
-              }}
-              title={item?.title}
-              Togolist={item?.category}
-              Lists
-              listCount={item?.places}
-            />
-          );
-        }}
-        ListFooterComponent={() => {
-          return (
-            <Button
-              leftImg={IMAGES.addlist}
-              type="outline"
-              title="Add a new list"
-              BtnStyle={styles.btn}
-              onPress={() => navigateTo(SCREENS.AddTripTogolistsScreen)}
-            />
-          );
-        }}
-      /> */}
+          )}
+          leftOpenValue={75}
+        />
+      </Animated.ScrollView>
       <View style={{height: 20}} />
+      <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };
@@ -227,8 +259,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lightGray,
     borderRadius: 14,
     paddingHorizontal: 12,
-    paddingVertical: 6,
-    marginVertical: 15,
+    paddingVertical: 4,
+    marginBottom: 15,
+    marginTop: 5,
   },
   searchInput: {
     flex: 1,
@@ -238,10 +271,12 @@ const styles = StyleSheet.create({
   },
 
   btn: {
-    marginVertical: hp(16),
+    marginVertical: hp(8),
     paddingVertical: hp(12),
   },
-
+  titleStyle: {
+    ...commonFontStyle(700, 18, colors.primary1),
+  },
   rowFront: {
     overflow: 'hidden',
     borderRadius: 10,
@@ -258,7 +293,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: hp(16),
     gap: wp(30),
     overflow: 'hidden',
-    marginTop: 12,
+    marginTop: 8,
+    marginBottom: 5,
     // marginLeft:30
     // marginHorizontal: 20,
   },

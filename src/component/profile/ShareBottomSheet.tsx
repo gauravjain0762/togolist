@@ -100,8 +100,8 @@ const ShareBottomSheet: FC<sheet> = ({
       <BottomSheetModal
         ref={bottomSheetModalRef}
         // index={1}
-        // maxDynamicContentSize={100}
-        snapPoints={['75%', '75%']}
+        maxDynamicContentSize={maxDynamicContentSize}
+        // snapPoints={['90%', '100%']}
         backgroundComponent={CustomBackground}
         onChange={e => handleSheetChanges(e)}
         style={styles.modalStyle}>

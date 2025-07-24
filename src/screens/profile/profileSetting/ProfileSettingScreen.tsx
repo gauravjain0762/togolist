@@ -23,6 +23,9 @@ import ImagePickerModal from '../../../component/profile/ImagePickerModal';
 import {navigateTo} from '../../../utils/commonFunction';
 import {SCREENS} from '../../../navigation/screenNames';
 import React, {useCallback, useEffect, useState} from 'react';
+import Animated from 'react-native-reanimated';
+import CustomTabBar from '../../../component/common/CustomTabBar';
+import {useScrollHideAnimation} from '../../../hook/useScrollHideAnimation';
 
 type Props = {};
 const options = [
@@ -36,6 +39,10 @@ const options = [
 ];
 
 const ProfileSettingScreen = (props: Props) => {
+  const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+    80,
+    10,
+  );
   const [userEdit, setUserEdit] = useState(false);
   const [actionSheet, setActionSheet] = useState(false);
 
@@ -150,7 +157,10 @@ const ProfileSettingScreen = (props: Props) => {
         />
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} style={{marginHorizontal: 16, flex: 1}}>
+      <Animated.ScrollView
+        onScroll={scrollHandler}
+        showsVerticalScrollIndicator={false}
+        style={{marginHorizontal: 16, flex: 1,}}>
         <View key={userEdit ? 'edit' : 'view'}>
           {userEdit ? (
             <LinearView>
@@ -204,6 +214,7 @@ const ProfileSettingScreen = (props: Props) => {
               </LinearView>
             ))}
           </View>
+          <View style={{height:120}}/>
           <ImagePickerModal
             actionSheet={actionSheet}
             setActionSheet={res => {
@@ -212,7 +223,11 @@ const ProfileSettingScreen = (props: Props) => {
           />
           <View style={{height: 30}} />
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
+
+      <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };

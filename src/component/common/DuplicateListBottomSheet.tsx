@@ -77,6 +77,8 @@ export const CustomBackground = ({style}) => {
 const DuplicateListBottomSheet: FC<sheet> = ({
   bottomSheetModalRef,
   exploreCard,
+  isVisible,
+  maxDynamicContentSize,
 }) => {
   const [showPersonal, setShowPersonal] = useState(true);
   const [showCollections, setShowCollections] = useState(true);
@@ -112,11 +114,19 @@ const DuplicateListBottomSheet: FC<sheet> = ({
     <CommonSheet
       title="Duplicate List"
       bottomSheetModalRef={bottomSheetModalRef}
-      maxDynamicContentSize={1000}
+      maxDynamicContentSize={
+        maxDynamicContentSize
+          ? SCREEN_HEIGHT * 0.82
+          : isVisible
+          ? SCREEN_HEIGHT * 0.9
+          : SCREEN_HEIGHT * 0.813
+      }
       children={
         <>
-          <View>
-            <ScrollView showsVerticalScrollIndicator={false} style={{height: SCREEN_HEIGHT * 0.65}}>
+          <View style={{paddingBottom: isVisible ? 70 :10}}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              style={{height: SCREEN_HEIGHT * 0.61}}>
               <SharedCard
                 onCardPress={() => {}}
                 onLongPress={() => {}}
@@ -251,9 +261,14 @@ const DuplicateListBottomSheet: FC<sheet> = ({
                 setNewListShow(false);
               }}
             />
-            <Button type="outline" BtnStyle={styles.btn} title="Done" onPress={()=>{
-              bottomSheetModalRef.current?.close()
-            }} />
+            <Button
+              type="outline"
+              BtnStyle={styles.btn}
+              title="Done"
+              onPress={() => {
+                bottomSheetModalRef.current?.close();
+              }}
+            />
             <CollectionModal
               visible={collectionModal}
               title={
@@ -296,10 +311,10 @@ const styles = StyleSheet.create({
     width: wp(26),
     height: wp(26),
     resizeMode: 'contain',
-    tintColor:"#999999"
+    tintColor: '#999999',
   },
 
-   activeIcon: {
+  activeIcon: {
     tintColor: 'black', // Highlight active icon
   },
 

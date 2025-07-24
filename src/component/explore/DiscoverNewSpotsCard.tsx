@@ -48,7 +48,7 @@ const DiscoverNewSpotsCard: FC<{
   imageStyle,
   showAddToList,
   followEvent,
-  onEventPress
+  onEventPress,
 }) => {
   if (showAddToList) {
     return (
@@ -70,7 +70,7 @@ const DiscoverNewSpotsCard: FC<{
               flexDirection: 'row',
               alignItems: 'center',
               paddingHorizontal: wp(20),
-              gap:4
+              gap: 4,
             }}>
             <Image source={IMAGES.locationWhite} style={styles.locationIcon} />
             <Text style={styles.userName2}>Toronto, Canada</Text>
@@ -96,7 +96,7 @@ const DiscoverNewSpotsCard: FC<{
             marginBottom: hp(8),
             flexDirection: 'row',
           }}>
-          <View style={{flex: 1,gap:2}}>
+          <View style={{flex: 1, gap: 2}}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
               <Text style={[styles.title, {flex: 1}]}>Communal Coffee</Text>
               {showRating && (
@@ -117,7 +117,7 @@ const DiscoverNewSpotsCard: FC<{
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                gap:4
+                gap: 4,
               }}>
               <Image
                 source={IMAGES.locationWhite}
@@ -147,7 +147,14 @@ const DiscoverNewSpotsCard: FC<{
             })}
           </Swiper>
         </View>
-       {followEvent && <Button title='Follow Event' titleStyle={styles.titleStyle} BtnStyle={styles.btnStyle} onPress={onEventPress} />}
+        {followEvent && (
+          <Button
+            title="Follow Event"
+            titleStyle={styles.titleStyle}
+            BtnStyle={styles.btnStyle}
+            onPress={onEventPress}
+          />
+        )}
 
         {isShowOptions && (
           <View style={[AppStyles.row, styles.features]}>
@@ -262,7 +269,7 @@ const styles = StyleSheet.create({
     width: wp(14),
     height: hp(20),
     resizeMode: 'contain',
-    tintColor:"#BD2332"
+    tintColor: '#BD2332',
   },
   check: {
     width: wp(22),
@@ -308,13 +315,13 @@ const styles = StyleSheet.create({
     height: wp(15),
     tintColor: '#787878',
   },
-  btnStyle:{
-    paddingVertical:8,
-    marginHorizontal:wp(20),
-    marginTop:hp(8),
-    borderRadius:10
+  btnStyle: {
+    paddingVertical: 8,
+    marginHorizontal: wp(20),
+    marginTop: hp(8),
+    borderRadius: 10,
   },
-    titleStyle: {
+  titleStyle: {
     ...commonFontStyle(600, 16, colors.white),
   },
 });

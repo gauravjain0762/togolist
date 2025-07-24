@@ -22,9 +22,16 @@ import {IMAGES} from '../../assets/Images';
 import ReactNativeModal from 'react-native-modal';
 import {PieChart} from 'react-native-gifted-charts';
 import {BlurView} from '@react-native-community/blur';
+import Animated from 'react-native-reanimated';
+import CustomTabBar from '../../component/common/CustomTabBar';
+import {useScrollHideAnimation} from '../../hook/useScrollHideAnimation';
 
 const TripsDetails = () => {
   const [proModel, setProModel] = useState(false);
+  const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+    80,
+    10,
+  );
   const pieData = [
     {
       label: 'Wilding',
@@ -148,7 +155,8 @@ const TripsDetails = () => {
         title="Trips"
       />
 
-      <ScrollView
+      <Animated.ScrollView
+        onScroll={scrollHandler}
         style={{flex: 1, backgroundColor: 'white'}}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
@@ -176,7 +184,7 @@ const TripsDetails = () => {
               <Text style={styles.statLabel}>Days</Text>
             </View>
           </View>
-          <View style={[styles.statsRow,{marginTop:4,marginBottom:4}]}>
+          <View style={[styles.statsRow, {marginTop: 4, marginBottom: 4}]}>
             <View style={styles.statBox}>
               <Text style={styles.statValue}>$5.2k</Text>
               <Text style={styles.statLabel}>Spending</Text>
@@ -190,12 +198,12 @@ const TripsDetails = () => {
 
         {/* Profile */}
         <LinearView containerStyle={[styles.card, {gap: hp(0)}]}>
-          <View style={[styles.row,{}]}>
+          <View style={[styles.row, {}]}>
             <Text style={styles.title}>Profile</Text>
             <Image source={IMAGES.send} style={styles.send} />
           </View>
 
-          <View style={[styles.profileRow,{marginTop:16}]}>
+          <View style={[styles.profileRow, {marginTop: 16}]}>
             {pieData.map((label, i) => (
               <View key={i} style={styles.profileCircle}>
                 <ProgressRingChart
@@ -213,7 +221,9 @@ const TripsDetails = () => {
               </View>
             ))}
           </View>
-          <Text style={[styles.howTravel,{marginTop:20,marginBottom:4}]}>{'How You Travel'}</Text>
+          <Text style={[styles.howTravel, {marginTop: 20, marginBottom: 4}]}>
+            {'How You Travel'}
+          </Text>
           <Text style={styles.howYouTravel}>
             You’re not afraid to mix it up and love a good adventure! You’re in
             the <Text style={styles.boldRed}>top 10%</Text> of traveler in the{' '}
@@ -363,15 +373,28 @@ const TripsDetails = () => {
             </>
           ))}
         </LinearView>
-      </ScrollView>
-    {proModel &&  <BlurView
-        style={StyleSheet.absoluteFill}
-        blurType="light"
-        blurAmount={3}
-        reducedTransparencyFallbackColor="white"
-      />}
-      <ReactNativeModal isVisible={proModel}>
-        <View style={styles.model}>
+        {proModel && (
+          <BlurView
+            style={StyleSheet.absoluteFill}
+            blurType="light"
+            blurAmount={3}
+            reducedTransparencyFallbackColor="white"
+          />
+        )}
+      </Animated.ScrollView>
+
+      <ReactNativeModal
+        backdropOpacity={0}
+         hasBackdrop={true} 
+        statusBarTranslucent
+        style={{
+          justifyContent: 'center',
+          // margin: 0,
+          // paddingBottom: 100, // push modal up so tab is free
+          pointerEvents: 'auto',
+        }}
+        isVisible={proModel}>
+        <View style={[styles.model,{pointerEvents: 'auto' }]}>
           <Text style={styles.proheader}>{'Togolist Pro'}</Text>
           <Text style={styles.info}>
             {
@@ -385,6 +408,9 @@ const TripsDetails = () => {
           />
         </View>
       </ReactNativeModal>
+      <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };
@@ -401,7 +427,7 @@ const styles = StyleSheet.create({
   more: {
     tintColor: undefined,
     resizeMode: 'contain',
-     width: 22,
+    width: 22,
     height: 22,
   },
   header: {

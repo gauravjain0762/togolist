@@ -21,6 +21,9 @@ import {commonFontStyle, hp, wp} from '../../../theme/fonts';
 import {IMAGES} from '../../../assets/Images';
 import EditPicture from '../../../component/common/EditPicture';
 import ImagePickerModal from '../../../component/profile/ImagePickerModal';
+import Animated from 'react-native-reanimated';
+import CustomTabBar from '../../../component/common/CustomTabBar';
+import { useScrollHideAnimation } from '../../../hook/useScrollHideAnimation';
 
 type Props = {};
 
@@ -74,7 +77,10 @@ const SubscriptionScreen = (props: Props) => {
   const [userEdit, setUserEdit] = useState(false);
   const [actionSheet, setActionSheet] = useState(false);
   const [selected, setSelected] = useState('annual');
-
+    const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+        80,
+        10,
+      );
   const [useData, setUserData] = useState({
     name: 'Emily',
     useName: 'Emily',
@@ -89,7 +95,8 @@ const SubscriptionScreen = (props: Props) => {
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader  showBack={true} title="Settings" showSearch={false} showMore={false} />
-      <ScrollView style={{marginHorizontal: 16, flex: 1}} showsVerticalScrollIndicator={false}>
+      <Animated.ScrollView
+                  onScroll={scrollHandler} style={{marginHorizontal: 16, flex: 1}} showsVerticalScrollIndicator={false}>
         <LinearView>
           <View style={{padding: 16}}>
             <Text style={styles.heading}>Subscription</Text>
@@ -196,7 +203,11 @@ const SubscriptionScreen = (props: Props) => {
           </View>
         </LinearView>
         <View style={{height: hp(90)}} />
-      </ScrollView>
+      </Animated.ScrollView>
+
+       <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };

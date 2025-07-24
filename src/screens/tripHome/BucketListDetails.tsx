@@ -1,4 +1,6 @@
 import {
+  Animated,
+  Dimensions,
   FlatList,
   Image,
   ImageBackground,
@@ -9,7 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
 import {colors} from '../../theme/colors';
@@ -30,6 +32,12 @@ import {SCREENS} from '../../navigation/screenNames';
 import CategoryCard from '../../component/trip/CategoryCard';
 import Checklist from '../../component/trip/Checklist';
 import {SwipeListView} from 'react-native-swipe-list-view';
+import CustomTabBar from '../../component/common/CustomTabBar';
+import Reanimated from 'react-native-reanimated';
+import {useScrollHideAnimation} from '../../hook/useScrollHideAnimation';
+import {navigationRef} from '../../navigation/RootContainer';
+
+const {width} = Dimensions.get('window');
 
 const categories = [
   {
@@ -56,6 +64,10 @@ const categories = [
 ];
 
 const BucketListDetails = () => {
+  const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+    80,
+    10,
+  );
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const [showTogolistPro, setShowTogolistPro] = useState(true);
 
@@ -65,6 +77,94 @@ const BucketListDetails = () => {
   const handleSheetChanges = useCallback((index: number) => {
     console.log('handleSheetChanges', index);
   }, []);
+
+  const flatListRef = useRef(null);
+
+  // Find the initial index of the passed item within the hardcoded data
+  let initialIndex = 1;
+
+  // Use a state to control FlatList visibility after scrolling
+  const [flatListReady, setFlatListReady] = useState(false);
+
+  useEffect(() => {
+    // Only scroll if initialIndex is found and FlatListRef exists
+    if (flatListRef.current && initialIndex !== -1) {
+      // Small timeout to allow shared element transition to start
+      const timer = setTimeout(() => {
+        flatListRef.current.scrollToIndex({
+          index: initialIndex,
+          animated: false,
+        });
+        setFlatListReady(true); // Mark FlatList as ready
+      }, 50); // Adjust delay as needed
+      return () => clearTimeout(timer);
+    }
+  }, [initialIndex]);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const listener = scrollX.addListener(({value}) => {
+      const index = Math.round(value / width);
+      setActiveIndex(index);
+    });
+
+    return () => scrollX.removeListener(listener);
+  }, []);
+
+  const getDotStyle = (index: number) => {
+    const distance = Math.abs(index - activeIndex);
+
+    // Shrink size and opacity with distance from activeIndex
+    const size = 8 - distance * 1.2; // main: 8, second: 6.8, third: 5.6, etc.
+    const clampedSize = Math.max(size, 2); // minimum size
+    const opacity = 1 - distance * 0.15; // main: 1, then reduce
+
+    return {
+      width: clampedSize,
+      height: clampedSize,
+      borderRadius: clampedSize / 2,
+      marginHorizontal: 6.5,
+      backgroundColor: `#E3E3E3`,
+    };
+  };
+
+  const scrollX = useRef(new Animated.Value(0)).current; // Animated value for scroll position
+  const renderPaginationDots = () => {
+    const dotPosition = Animated.divide(scrollX, width); // Calculate active dot position
+    return (
+      <View
+        style={[
+          styles.paginationContainer,
+          {marginBottom: isVisible ? 0 : 0},
+        ]}>
+        <TouchableOpacity
+          onPress={() => {
+            navigationRef.goBack();
+          }}>
+          <Image
+            source={IMAGES.map1}
+            style={{width: 17, height: 17, resizeMode: 'contain'}}
+          />
+        </TouchableOpacity>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          {[1, 2].map((_, index) => {
+            return <View key={index} style={getDotStyle(index)} />;
+          })}
+        </View>
+        <TouchableOpacity
+          onPress={() => {
+            navigationRef.goBack();
+          }}>
+          <Image
+            source={IMAGES.menu1}
+            style={{width: 17, height: 17, resizeMode: 'contain'}}
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={[AppStyles.flex, styles.container]}>
       <CustomHeader
@@ -79,27 +179,43 @@ const BucketListDetails = () => {
           handlePresentModalPress();
         }}
       />
-      <ScrollView
-        contentContainerStyle={AppStyles.flexGrow}
-        showsVerticalScrollIndicator={false}
-        style={styles.scroll}>
-        <ImageBackground
-          source={IMAGES.bbq}
-          imageStyle={styles.placeimges}
-          style={styles.place}>
-          <Text style={styles.placeTitle}>{'Peru Explorations'}</Text>
-          <View style={styles.location}>
-            {/* <Image source={IMAGES.wordWide} style={styles.pin} /> */}
-            <Text style={styles.address}>{'Bucket List Trip'}</Text>
-          </View>
-          <View style={styles.timecontainer}>
-            <Text style={styles.time}>{'Your Rating:'}</Text>
-            {/* <Image source={IMAGES.arrow} style={styles.arrow} /> */}
-            <Text style={styles.time}>{'Top 10'}</Text>
-          </View>
-        </ImageBackground>
-        {/* <Button titleStyle={styles.btn} title="Admin Mode" /> */}
-        {/* <View style={[AppStyles.row, styles.eventContainor]}>
+
+      {true && ( // Only render FlatList if initial item is found
+        // <Reanimated.ScrollView
+        //   showsVerticalScrollIndicator={false}
+        //   style={{flex: 1}}
+        //   onScroll={scrollHandler}>
+          <FlatList
+            ref={flatListRef}
+            // nestedScrollEnabled
+            data={[1, 3]}
+            showsVerticalScrollIndicator={false}
+            // contentContainerStyle={[{gap: hp(8)}]}
+            renderItem={({item}) => {
+              return (
+                <Reanimated.ScrollView
+                         onScroll={scrollHandler}
+                  // contentContainerStyle={AppStyles.flexGrow}
+                  nestedScrollEnabled
+                  showsVerticalScrollIndicator={false}
+                  style={styles.scroll}>
+                  <ImageBackground
+                    source={IMAGES.bbq}
+                    imageStyle={styles.placeimges}
+                    style={styles.place}>
+                    <Text style={styles.placeTitle}>{'Peru Explorations'}</Text>
+                    <View style={styles.location}>
+                      {/* <Image source={IMAGES.wordWide} style={styles.pin} /> */}
+                      <Text style={styles.address}>{'Bucket List Trip'}</Text>
+                    </View>
+                    <View style={styles.timecontainer}>
+                      <Text style={styles.time}>{'Your Rating:'}</Text>
+                      {/* <Image source={IMAGES.arrow} style={styles.arrow} /> */}
+                      <Text style={styles.time}>{'Top 10'}</Text>
+                    </View>
+                  </ImageBackground>
+                  {/* <Button titleStyle={styles.btn} title="Admin Mode" /> */}
+                  {/* <View style={[AppStyles.row, styles.eventContainor]}>
           <View style={[AppStyles.row, styles.eventrow]}>
             <Image source={IMAGES.world} style={styles.eventicon} />
             <Text style={styles.graylabel}>{'Public Event'}</Text>
@@ -110,7 +226,7 @@ const BucketListDetails = () => {
             <Text style={styles.graylabel}>{'1.2K Follows'}</Text>
           </View>
         </View> */}
-        {/* <View style={[AppStyles.row, styles.features]}>
+                  {/* <View style={[AppStyles.row, styles.features]}>
           <TouchableOpacity style={[styles.optionItem]}>
             <Image style={styles.add} source={IMAGES.newList} />
             <Text style={[styles.optionText]}>{'Add to list'}</Text>
@@ -124,7 +240,7 @@ const BucketListDetails = () => {
             <Text style={[styles.optionText]}>{'Favs'}</Text>
           </TouchableOpacity>
         </View> */}
-        {/* <View style={[AppStyles.row, styles.selectFeatures]}>
+                  {/* <View style={[AppStyles.row, styles.selectFeatures]}>
           <TouchableOpacity style={[styles.optionItem]}>
             <Image style={styles.event} source={IMAGES.event} />
             <Text style={[styles.optionText1]}>{'Event'}</Text>
@@ -134,216 +250,240 @@ const BucketListDetails = () => {
             <Text style={[styles.optionText1]}>{'Been There'}</Text>
           </TouchableOpacity>
         </View> */}
-        {showTogolistPro && (
-          <TogolistPro
-            cardStyle={{marginTop: 8}}
-            onClosePress={() => {
-              setShowTogolistPro(false);
+                  {showTogolistPro && (
+                    <TogolistPro
+                      cardStyle={{marginTop: 8}}
+                      onClosePress={() => {
+                        setShowTogolistPro(false);
+                      }}
+                    />
+                  )}
+                  <View style={[AppStyles.row]}>
+                    <Text style={[styles.photo, {flex: 1}]}>
+                      {'Trip Togolists'}
+                    </Text>
+                    <TouchableOpacity>
+                      <Image source={IMAGES.add_icon} style={styles.addicon} />
+                    </TouchableOpacity>
+                  </View>
+
+                  <SwipeListView
+                    data={categories}
+                    nestedScrollEnabled
+                    // contentContainerStyle={{paddingHorizontal: 20}}
+                    showsVerticalScrollIndicator={false}
+                    renderItem={(data, rowMap) => {
+                      return (
+                        <View style={styles.rowFront}>
+                          <CategoryCard
+                            onCardPress={() => {
+                              navigateTo(SCREENS.ThingsTogolistsScreen);
+                            }}
+                            title={data?.item?.title}
+                            Togolist={data?.item?.category}
+                            Lists
+                            listCount={data?.item?.places}
+                            showAddList={true}
+                          />
+                        </View>
+                      );
+                    }}
+                    disableRightSwipe
+                    swipeToOpenPercent={30}
+                    rightOpenValue={-150}
+                    renderHiddenItem={(data, rowMap) => (
+                      <View style={styles.rowBack}>
+                        <TouchableOpacity style={styles.backButton}>
+                          <Image
+                            source={IMAGES.restore}
+                            style={styles.restore}
+                          />
+                          <Text style={styles.backText}>Restore</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[styles.backButton, {marginTop: hp(4)}]}>
+                          <Image source={IMAGES.remove} style={styles.remove} />
+                          <Text style={styles.backText}>Delete</Text>
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                    leftOpenValue={75}
+                  />
+
+                  <View style={styles.content}>
+                    <LinearView>
+                      <Text style={styles.headerTitle}>{'Collaborators'}</Text>
+                      <View style={styles.row}>
+                        {[1, 3].map((user, index) => (
+                          <Image
+                            source={{
+                              uri: 'https://randomuser.me/api/portraits/men/32.jpg',
+                            }}
+                            style={[
+                              styles.avatar,
+                              {marginLeft: index === 0 ? 20 : -10, zIndex: 1},
+                            ]}
+                          />
+                        ))}
+                        <TouchableOpacity
+                          onPress={() => {
+                            navigateTo(SCREENS.CollaboratorsScreen);
+                          }}>
+                          <Image
+                            source={IMAGES.addIcon}
+                            style={[styles.avatar1]}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </LinearView>
+
+                    <LinearView>
+                      <Text style={styles.headerTitle}>{'Notes'}</Text>
+                      <View style={[styles.infoContainor, {marginTop: -10}]}>
+                        <TextInput
+                          style={styles.label}
+                          placeholder="Trip planning and goals of the trip..."
+                          placeholderTextColor={'#787878'}
+                        />
+                      </View>
+                      <TouchableOpacity
+                        onPress={() => handlePresentModalPress()}
+                        style={styles.postbtn}>
+                        <Text style={styles.btntxt}>{'Post'}</Text>
+                      </TouchableOpacity>
+                      <View
+                        style={[
+                          styles.horizontal_divider,
+                          {marginTop: 0, marginHorizontal: 10},
+                        ]}
+                      />
+                      <View style={styles.container1}>
+                        {/* Top: Avatar + Name */}
+                        <View style={styles.header}>
+                          <Image
+                            source={{
+                              uri: 'https://randomuser.me/api/portraits/women/75.jpg',
+                            }}
+                            style={styles.avatar2}
+                          />
+                          <Text style={styles.username}>Emily</Text>
+                        </View>
+
+                        {/* Comment text */}
+                        <Text style={styles.commentText}>
+                          Good to know: Best time of year to visit is Oct – Dec.
+                          Good temps for hiking and mostly dry.
+                        </Text>
+
+                        {/* Footer: Comment count + View all */}
+                        <TouchableOpacity style={styles.footer}>
+                          <Image
+                            source={IMAGES.message_icon}
+                            style={styles.message_icon}
+                          />
+                          <Text style={styles.commentCount}>10</Text>
+                          <Text style={styles.viewAll}>View all comments</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </LinearView>
+                    <LinearView>
+                      <View style={styles.photoContainor}>
+                        <Text style={styles.photo}>{'What to Do'}</Text>
+                        <TouchableOpacity>
+                          <Image
+                            source={IMAGES.add_icon}
+                            style={styles.addicon}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      <View>
+                        <Checklist />
+                      </View>
+                    </LinearView>
+                    <LinearView>
+                      <View style={styles.photoContainor}>
+                        <View style={[AppStyles.row]}>
+                          <Text style={styles.photo}>{'Uploads'}</Text>
+                          <Image source={IMAGES.info} style={styles.infoIcon} />
+                        </View>
+                        <TouchableOpacity>
+                          <Image
+                            source={IMAGES.add_icon}
+                            style={styles.addicon}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      <Text style={styles.description}>
+                        {
+                          'Save reference links to relevant social media posts, blogs & more...'
+                        }
+                      </Text>
+                    </LinearView>
+                    <LinearView>
+                      <View style={styles.photoContainor}>
+                        <Text style={styles.photo}>{'References'}</Text>
+                        <TouchableOpacity>
+                          <Image
+                            source={IMAGES.add_icon}
+                            style={styles.addicon}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      <Text style={styles.description}>
+                        {
+                          'Save reference links to relevant social media posts, blogs & more...'
+                        }
+                      </Text>
+                    </LinearView>
+                    <LinearView
+                      containerStyle={[AppStyles.row, {paddingRight: 20}]}>
+                      <Text style={[styles.description, {flex: 1}]}>
+                        {'Ready to set a date?'}
+                      </Text>
+                      <Button
+                        BtnStyle={styles.btn}
+                        titleStyle={styles.titleStyle}
+                        title="Convert to Trip"
+                      />
+                    </LinearView>
+                    <LinearView
+                      containerStyle={[AppStyles.row, {paddingRight: 20}]}>
+                      <Text style={[styles.description, {flex: 1}]}>
+                        {'Turn on trip notifications'}
+                      </Text>
+                      <Image source={IMAGES.bell} style={styles.bellIcon} />
+                    </LinearView>
+                  </View>
+                </Reanimated.ScrollView>
+              );
             }}
+            keyExtractor={item => item?.id}
+            horizontal
+            pagingEnabled // Enables snapping to full pages
+            showsHorizontalScrollIndicator={false}
+            // initialScrollIndex is set when component mounts via useEffect
+            getItemLayout={(data, index) => ({
+              length: width,
+              offset: width * index,
+              index,
+            })}
+            style={flatListReady ? {} : {opacity: 0}} // Hide FlatList until ready
+            onScroll={Animated.event(
+              // Capture scroll events for dot animation
+              [{nativeEvent: {contentOffset: {x: scrollX}}}],
+              {useNativeDriver: false}, // 'useNativeDriver: true' not supported for 'onScroll' with 'Animated.event' by default
+            )}
+            scrollEventThrottle={16} // Update scroll position frequently
           />
-        )}
-        <View style={[AppStyles.row]}>
-          <Text style={[styles.photo, {flex: 1}]}>{'Trip Togolists'}</Text>
-          <TouchableOpacity>
-            <Image source={IMAGES.add_icon} style={styles.addicon} />
-          </TouchableOpacity>
-        </View>
+        // </Reanimated.ScrollView>
+      )}
 
-        <SwipeListView
-          data={categories}
-          nestedScrollEnabled
-          // contentContainerStyle={{paddingHorizontal: 20}}
-          showsVerticalScrollIndicator={false}
-          renderItem={(data, rowMap) => {
-            return (
-              <View style={styles.rowFront}>
-                <CategoryCard
-                  onCardPress={() => {
-                    navigateTo(SCREENS.ThingsTogolistsScreen);
-                  }}
-                  title={data?.item?.title}
-                  Togolist={data?.item?.category}
-                  Lists
-                  listCount={data?.item?.places}
-                  showAddList={true}
-                />
-              </View>
-            );
-          }}
-          disableRightSwipe
-          swipeToOpenPercent={30}
-          rightOpenValue={-150}
-          
-          renderHiddenItem={(data, rowMap) => (
-            <View style={styles.rowBack}>
-              <TouchableOpacity style={styles.backButton}>
-                <Image source={IMAGES.restore} style={styles.restore} />
-                <Text style={styles.backText}>Restore</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[styles.backButton, {marginTop: hp(4)}]}>
-                <Image source={IMAGES.remove} style={styles.remove} />
-                <Text style={styles.backText}>Delete</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-          leftOpenValue={75}
-        />
-
-        {/* <FlatList
-          data={categories}
-          showsVerticalScrollIndicator={false}
-          renderItem={({item}) => {
-            return (
-              <CategoryCard
-                onCardPress={() => {
-                  navigateTo(SCREENS.ThingsTogolistsScreen);
-                }}
-                title={item?.title}
-                Togolist={item?.category}
-                Lists
-                listCount={item?.places}
-                showAddList={true}
-              />
-            );
-          }}
-        /> */}
-
-        <View style={styles.content}>
-          <LinearView>
-            <Text style={styles.headerTitle}>{'Collaborators'}</Text>
-            <View style={styles.row}>
-              {[1, 3].map((user, index) => (
-                <Image
-                  source={{
-                    uri: 'https://randomuser.me/api/portraits/men/32.jpg',
-                  }}
-                  style={[
-                    styles.avatar,
-                    {marginLeft: index === 0 ? 20 : -10, zIndex: 1},
-                  ]}
-                />
-              ))}
-              <TouchableOpacity
-                onPress={() => {
-                  navigateTo(SCREENS.CollaboratorsScreen);
-                }}>
-                <Image source={IMAGES.addIcon} style={[styles.avatar1]} />
-              </TouchableOpacity>
-            </View>
-          </LinearView>
-
-          <LinearView>
-            <Text style={styles.headerTitle}>{'Notes'}</Text>
-            <View style={[styles.infoContainor, {marginTop: -10}]}>
-              <TextInput
-                style={styles.label}
-                placeholder="Trip planning and goals of the trip..."
-                placeholderTextColor={'#787878'}
-              />
-            </View>
-            <TouchableOpacity
-              onPress={() => handlePresentModalPress()}
-              style={styles.postbtn}>
-              <Text style={styles.btntxt}>{'Post'}</Text>
-            </TouchableOpacity>
-            <View
-              style={[
-                styles.horizontal_divider,
-                {marginTop: 0, marginHorizontal: 10},
-              ]}
-            />
-            <View style={styles.container1}>
-              {/* Top: Avatar + Name */}
-              <View style={styles.header}>
-                <Image
-                  source={{
-                    uri: 'https://randomuser.me/api/portraits/women/75.jpg',
-                  }}
-                  style={styles.avatar2}
-                />
-                <Text style={styles.username}>Emily</Text>
-              </View>
-
-              {/* Comment text */}
-              <Text style={styles.commentText}>
-                Good to know: Best time of year to visit is Oct – Dec. Good
-                temps for hiking and mostly dry.
-              </Text>
-
-              {/* Footer: Comment count + View all */}
-              <TouchableOpacity style={styles.footer}>
-                <Image
-                  source={IMAGES.message_icon}
-                  style={styles.message_icon}
-                />
-                <Text style={styles.commentCount}>10</Text>
-                <Text style={styles.viewAll}>View all comments</Text>
-              </TouchableOpacity>
-            </View>
-          </LinearView>
-          <LinearView>
-            <View style={styles.photoContainor}>
-              <Text style={styles.photo}>{'What to Do'}</Text>
-              <TouchableOpacity>
-                <Image source={IMAGES.add_icon} style={styles.addicon} />
-              </TouchableOpacity>
-            </View>
-            <View>
-              <Checklist />
-            </View>
-          </LinearView>
-          <LinearView>
-            <View style={styles.photoContainor}>
-              <View style={[AppStyles.row]}>
-                <Text style={styles.photo}>{'Uploads'}</Text>
-                <Image source={IMAGES.info} style={styles.infoIcon} />
-              </View>
-              <TouchableOpacity>
-                <Image source={IMAGES.add_icon} style={styles.addicon} />
-              </TouchableOpacity>
-            </View>
-            <Text style={styles.description}>
-              {
-                'Save reference links to relevant social media posts, blogs & more...'
-              }
-            </Text>
-          </LinearView>
-          <LinearView>
-            <View style={styles.photoContainor}>
-              <Text style={styles.photo}>{'References'}</Text>
-              <TouchableOpacity>
-                <Image source={IMAGES.add_icon} style={styles.addicon} />
-              </TouchableOpacity>
-            </View>
-            <Text style={styles.description}>
-              {
-                'Save reference links to relevant social media posts, blogs & more...'
-              }
-            </Text>
-          </LinearView>
-          <LinearView containerStyle={[AppStyles.row, {paddingRight: 20}]}>
-            <Text style={[styles.description, {flex: 1}]}>
-              {'Ready to set a date?'}
-            </Text>
-            <Button
-              BtnStyle={styles.btn}
-              titleStyle={styles.titleStyle}
-              title="Convert to Trip"
-            />
-          </LinearView>
-          <LinearView containerStyle={[AppStyles.row, {paddingRight: 20}]}>
-            <Text style={[styles.description, {flex: 1}]}>
-              {'Turn on trip notifications'}
-            </Text>
-            <Image source={IMAGES.bell} style={styles.bellIcon} />
-          </LinearView>
-        </View>
-      </ScrollView>
+      {renderPaginationDots()}
       <CommonSheet
         bottomSheetModalRef={bottomSheetModalRef}
-        maxDynamicContentSize={SCREEN_HEIGHT * 0.75}
+        maxDynamicContentSize={isVisible ? SCREEN_HEIGHT * 0.8 : SCREEN_HEIGHT * 0.75}
         children={
-          <>
+          <View style={{marginBottom:isVisible?40 :0}}>
             <TouchableOpacity style={styles.modalBtn}>
               <Image source={IMAGES.addIcon1} style={styles.iconStyle1} />
               <Text style={styles.modalText}>Add friends</Text>
@@ -373,10 +513,15 @@ const BucketListDetails = () => {
               </View>
             </ImageBackground>
             <View style={{height: 30}} />
-          </>
+          </View>
         }
         title="Share Trip"
       />
+
+      {isVisible && <SafeAreaView edges={['top']} />}
+      <Reanimated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Reanimated.View>
     </SafeAreaView>
   );
 };
@@ -400,11 +545,9 @@ const styles = StyleSheet.create({
     height: wp(24),
   },
   place: {
-    width: 'auto',
+   width: 'auto',
     resizeMode: 'contain',
     height: hp(555),
-    marginBottom: wp(18),
-    marginTop: hp(21),
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
@@ -415,8 +558,9 @@ const styles = StyleSheet.create({
     ...commonFontStyle(700, 32, colors.white),
   },
   scroll: {
-    flex: 1,
+    // flex: 1,
     paddingHorizontal: wp(16),
+    width: width,
   },
   pin: {
     resizeMode: 'contain',
@@ -791,5 +935,16 @@ const styles = StyleSheet.create({
     width: wp(18),
     height: wp(18),
     resizeMode: 'contain',
+  },
+
+  paginationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    // position: 'absolute',
+    // bottom: 30, // Position at the bottom
+    // alignSelf: 'center', // Center horizontally
+    marginHorizontal: 20,
+    // marginVertical: 10,
+     marginTop: 8,
   },
 });

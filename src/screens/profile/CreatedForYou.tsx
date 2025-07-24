@@ -18,6 +18,9 @@ import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import CardImage from '../../component/common/CardImage';
 import {SwipeListView} from 'react-native-swipe-list-view';
+import Animated from 'react-native-reanimated';
+import CustomTabBar from '../../component/common/CustomTabBar';
+import { useScrollHideAnimation } from '../../hook/useScrollHideAnimation';
 
 const cards = [
   {
@@ -59,6 +62,10 @@ const cards = [
 ];
 
 const CreatedForYou = () => {
+       const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+          80,
+          10,
+        );
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
       <CustomHeader title="Profile"  showBack={true} showSearch={false} onMorePress={() => {}} />
@@ -98,44 +105,10 @@ const CreatedForYou = () => {
           <Text style={styles.azText}>A-Z</Text>
         </Text>
       </View>
-      {/* <SwipeListView
+
+      <Animated.FlatList
         data={cards}
-        renderItem={(data, rowMap) => {
-          return (
-            <View style={styles.rowFront}>
-              <CardImage
-                onCardPress={() => {
-                  // navigateTo(SCREENS.CreatedForYou);
-                }}
-                title={data?.item?.title}
-                Togolist
-                Worldwide
-                Lists
-                listCount={data?.item?.lists}
-              />
-            </View>
-          );
-        }}
-        disableRightSwipe
-        swipeToOpenPercent={30}
-        rightOpenValue={-150}
-        renderHiddenItem
-        renderHiddenItem={(data, rowMap) => (
-          <View style={styles.rowBack}>
-            <TouchableOpacity style={styles.backButton}>
-              <Image source={IMAGES.restore} style={styles.restore} />
-              <Text style={styles.backText}>Restore</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.backButton, {marginTop: hp(4)}]}>
-              <Image source={IMAGES.remove} style={styles.remove} />
-              <Text style={styles.backText}>Delete</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-        leftOpenValue={75}
-      /> */}
-      <FlatList
-        data={cards}
+         onScroll={scrollHandler}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{paddingHorizontal: 20}}
         renderItem={({item}) => {
@@ -154,6 +127,10 @@ const CreatedForYou = () => {
         }}
       />
       <View style={{height: 20}} />
+
+       <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };

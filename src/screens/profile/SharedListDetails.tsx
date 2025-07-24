@@ -22,7 +22,14 @@ import {
 } from '../../component';
 import {IMAGES} from '../../assets/Images';
 import {colors} from '../../theme/colors';
-import {Fs, SCREEN_WIDTH, commonFontStyle, hp, wp} from '../../theme/fonts';
+import {
+  Fs,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+  commonFontStyle,
+  hp,
+  wp,
+} from '../../theme/fonts';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
@@ -31,6 +38,9 @@ import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {API} from '../../utils/apiConstant';
 import AddToListBottomSheet from '../../component/common/AddToListBottomSheet';
 import {useRoute} from '@react-navigation/native';
+import CustomTabBar from '../../component/common/CustomTabBar';
+import {useScrollHideAnimation} from '../../hook/useScrollHideAnimation';
+import Animated from 'react-native-reanimated';
 
 const cards = [
   {
@@ -80,6 +90,11 @@ const cards = [
 ];
 
 const SharedListDetails = () => {
+  const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+    80,
+    10,
+  );
+
   const {params} = useRoute();
   const exploreCard = params?.exploreCard;
   const headerTitle = params?.headerTitle;
@@ -109,7 +124,9 @@ const SharedListDetails = () => {
     console.log('handleSheetChanges', index);
   }, []);
   return (
-    <SafeAreaView style={[AppStyles.flex, styles.mainContainer]}>
+    <SafeAreaView
+      edges={['top', 'bottom']}
+      style={[AppStyles.flex, styles.mainContainer]}>
       <CustomHeader
         showBack={true}
         backImg={IMAGES.back1}
@@ -182,7 +199,7 @@ const SharedListDetails = () => {
           </View>
           {/* {showCard && <OptionBar container={styles.optioncontainer} />} */}
           {select == 'List View' && (
-            <>
+            <Animated.ScrollView style={{flex: 1}}  showsVerticalScrollIndicator={false} onScroll={scrollHandler}>
               <SwipeListView
                 data={cards}
                 nestedScrollEnabled
@@ -197,8 +214,12 @@ const SharedListDetails = () => {
                         onCardPress={() => {
                           // data?.item?.onPress && data?.item?.onPress();
                           navigateTo(SCREENS.EventDetails, {
+                            showEvent:exploreCard,
                             item: data?.item,
                             data: cards,
+                            onGoBack: data => {
+                              setSelect(data)
+                            },
                           });
                         }}
                         onLongPress={() => {
@@ -218,6 +239,9 @@ const SharedListDetails = () => {
                 swipeToOpenPercent={50}
                 rightOpenValue={-(SCREEN_WIDTH * 0.82)}
                 ListFooterComponent={() => {
+                  if(exploreCard){
+                    return null
+                  }
                   return (
                     <Button
                       leftImg={IMAGES.addlist}
@@ -253,7 +277,7 @@ const SharedListDetails = () => {
                   setShowCard(false);
                 }}
               />
-            </>
+            </Animated.ScrollView>
           )}
 
           {select == 'Map View' && (
@@ -277,7 +301,7 @@ const SharedListDetails = () => {
         maxDynamicContentSize={270}
         bottomSheetModalRef={bottomSheetModalQuickAddRef}
         children={
-          <View style={{}}>
+          <View style={{marginBottom: isVisible ? 70 : 0}}>
             <View
               style={[
                 AppStyles.row,
@@ -330,15 +354,21 @@ const SharedListDetails = () => {
       />
 
       <ShareBottomSheet
-        maxDynamicContentSize={700}
+        maxDynamicContentSize={SCREEN_HEIGHT * 0.9}
         bottomSheetModalRef={bottomSheetModalRef}
-        handleSheetChanges={e => handleSheetChanges(e)}
-      />
+        handleSheetChanges={e => handleSheetChanges(e)}>
+        {isVisible && <View style={{height: 80}} />}
+      </ShareBottomSheet>
 
       <AddToListBottomSheet
         bottomSheetModalRef={bottomSheetAddListRef}
+         maxDynamicContentSize={true}
+         isVisible={isVisible}
         handleSheetChanges={e => handleSheetChanges(e)}
-      />
+        />
+      <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };

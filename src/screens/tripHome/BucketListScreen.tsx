@@ -20,6 +20,9 @@ import CardImageView from '../../component/trip/CardImageView';
 import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
 import {SwipeListView} from 'react-native-swipe-list-view';
+import Animated from 'react-native-reanimated';
+import CustomTabBar from '../../component/common/CustomTabBar';
+import {useScrollHideAnimation} from '../../hook/useScrollHideAnimation';
 
 const cards = [
   {
@@ -72,8 +75,14 @@ const cards = [
   },
 ];
 const BucketListScreen = () => {
+  const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+    80,
+    10,
+  );
   return (
-    <SafeAreaView edges={['top','bottom']} style={[AppStyles.flex, styles.mainContainer]}>
+    <SafeAreaView
+      edges={['top', 'bottom']}
+      style={[AppStyles.flex, styles.mainContainer]}>
       <CustomHeader
         title="Trips"
         showBack={true}
@@ -119,7 +128,11 @@ const BucketListScreen = () => {
           <Text style={styles.azText}>A-Z</Text>
         </Text>
       </View>
-      <View style={[AppStyles.flex1,{marginHorizontal: 16,}]}>
+      <Animated.ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{flex: 1}}
+        onScroll={scrollHandler}>
+        <View style={[AppStyles.flex1, {marginHorizontal: 16}]}>
           <SwipeListView
             data={cards}
             // nestedScrollEnabled
@@ -157,9 +170,11 @@ const BucketListScreen = () => {
             )}
             leftOpenValue={75}
           />
-       
-      </View>
-
+        </View>
+      </Animated.ScrollView>
+      <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
       {/* <View style={{height: 20}} /> */}
     </SafeAreaView>
   );
@@ -206,7 +221,7 @@ const styles = StyleSheet.create({
   },
   byLocationText: {
     ...commonFontStyle(500, 18, colors.primary1),
-    marginHorizontal:2
+    marginHorizontal: 2,
   },
   azText: {
     ...commonFontStyle(500, 18, '#999999'),

@@ -25,6 +25,8 @@ const EventBottomSheet: FC<sheet> = ({
   contentContainer,
   children,
   scrollviewStyle,
+  maxDynamicContentSize,
+  isVisible
 }) => {
   const [pub, setPub] = useState(false);
   const [prv, setPrv] = useState(false);
@@ -32,6 +34,7 @@ const EventBottomSheet: FC<sheet> = ({
     <BottomSheetModalProvider>
       <BottomSheetModal
         ref={bottomSheetModalRef}
+        maxDynamicContentSize={maxDynamicContentSize}
         style={styles.modalStyle}
         onChange={e => handleSheetChanges(e)}>
         <BottomSheetScrollView
@@ -73,6 +76,7 @@ const EventBottomSheet: FC<sheet> = ({
             title="Close"
             BtnStyle={styles.btnStyle}
           />
+          <View style={{height:isVisible ? 80 :0}}/>
           {children}
         </BottomSheetScrollView>
       </BottomSheetModal>

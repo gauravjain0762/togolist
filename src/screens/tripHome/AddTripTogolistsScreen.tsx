@@ -22,6 +22,8 @@ import {SCREENS} from '../../navigation/screenNames';
 import CategoryCard from '../../component/trip/CategoryCard';
 import {navigationRef} from '../../navigation/RootContainer';
 import {useRoute} from '@react-navigation/native';
+import Animated from 'react-native-reanimated';
+import CustomTabBar from '../../component/common/CustomTabBar';
 
 const AddTripTogolistsScreen = () => {
   const {params} = useRoute();
@@ -97,10 +99,16 @@ const AddTripTogolistsScreen = () => {
       /> */}
       <Button
         title="Next"
-        BtnStyle={styles.btn}
+        BtnStyle={[styles.btn,{}]}
         onPress={() => navigateTo(SCREENS.TripExplore)}
       />
-      <View style={{height: 20}} />
+      <SafeAreaView />
+      {/* <View style={{height: 20}} /> */}
+      <Animated.View style={[AppStyles.actionBar,
+        //  animatedStyle
+         ]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };

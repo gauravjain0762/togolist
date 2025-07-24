@@ -14,7 +14,13 @@ import React, {useCallback, useRef, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {AppStyles} from '../../theme/appStyles';
 import {IMAGES} from '../../assets/Images';
-import {commonFontStyle, hp, SCREEN_HEIGHT, sharedTransition, wp} from '../../theme/fonts';
+import {
+  commonFontStyle,
+  hp,
+  SCREEN_HEIGHT,
+  sharedTransition,
+  wp,
+} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {
   Button,
@@ -38,6 +44,8 @@ import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
 import Animated from 'react-native-reanimated';
 import {SwipeListView} from 'react-native-swipe-list-view';
+import {useScrollHideAnimation} from '../../hook/useScrollHideAnimation';
+import CustomTabBar from '../../component/common/CustomTabBar';
 
 const categories = [
   {
@@ -75,6 +83,10 @@ const reference = [
 ];
 
 const NewTrip = () => {
+  const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+    80,
+    10,
+  );
   const [privacy, setPrivacy] = useState<'public' | 'private'>('public');
   const {params} = useRoute();
   const [showTogolistPro, setShowTogolistPro] = useState(true);
@@ -129,7 +141,7 @@ const NewTrip = () => {
       <CustomHeader
         backImg={IMAGES.back1}
         backIconStyle={styles.back}
-         showBack={true}
+        showBack={true}
         showSearch={false}
         moreImg={IMAGES.more_icon}
         onMorePress={() => handlePresentInviteModalPress()}
@@ -181,7 +193,8 @@ const NewTrip = () => {
         </ImageBackground>
       )}
       {step == 2 && (
-        <ScrollView
+        <Animated.ScrollView
+          onScroll={scrollHandler}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={[AppStyles.P16, {gap: hp(8)}]}>
           <ImageBackground
@@ -252,7 +265,6 @@ const NewTrip = () => {
             disableRightSwipe
             swipeToOpenPercent={30}
             rightOpenValue={-170}
-            
             renderHiddenItem={(data, rowMap) => (
               <View style={styles.rowBack}>
                 <TouchableOpacity style={styles.backButton}>
@@ -549,14 +561,16 @@ const NewTrip = () => {
               <Image source={IMAGES.bell} style={styles.notification} />
             </TouchableOpacity>
           </LinearView>
-        </ScrollView>
+        </Animated.ScrollView>
       )}
       <CommonSheet
         title="Cover Image"
         bottomSheetModalRef={bottomSheetModalRef}
-        maxDynamicContentSize={SCREEN_HEIGHT * 0.9}
+        maxDynamicContentSize={
+          isVisible ? SCREEN_HEIGHT * 0.785 : SCREEN_HEIGHT * 0.75
+        }
         children={
-          <View style={styles.container}>
+          <View style={[styles.container, {marginBottom: isVisible ? 80 : 0}]}>
             <Button
               BtnStyle={styles.photo}
               title="From Photo Library"
@@ -638,8 +652,11 @@ const NewTrip = () => {
       <CommonSheet
         bottomSheetModalRef={bottomSheetUrlModalRef}
         title="Add Social Link"
+          maxDynamicContentSize={
+                  isVisible ? SCREEN_HEIGHT * 0.33 : SCREEN_HEIGHT * 0.33
+                }
         children={
-          <View style={styles.sheet}>
+          <View style={[styles.sheet,{marginBottom: isVisible ? 80 : 0}]}>
             <View style={styles.inputContainer}>
               <Image source={IMAGES.link} style={styles.link} />
               <TextInput placeholder="Paste link..." style={styles.linkInput} />
@@ -654,7 +671,7 @@ const NewTrip = () => {
           </View>
         }
       />
-      <InviteFriendsSheet bottomSheetModalRef={bottomSheetInviteModalRef} />
+      <InviteFriendsSheet  isVisible={isVisible} bottomSheetModalRef={bottomSheetInviteModalRef} />
       <ReactNativeModal style={styles.uploadModel} isVisible={uploadModel}>
         <View style={styles.modelContainer}>
           <Image source={IMAGES.doc} style={styles.doc} />
@@ -673,7 +690,12 @@ const NewTrip = () => {
           />
         </View>
       </ReactNativeModal>
-      <ShareTripSheet bottomSheetModalRef={bottomSheetShareModalRef} />
+      <ShareTripSheet isVisible={isVisible} bottomSheetModalRef={bottomSheetShareModalRef} />
+
+      {isVisible && <SafeAreaView edges={['top']} />}
+      <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };
@@ -1189,7 +1211,6 @@ const styles = StyleSheet.create({
     paddingVertical: hp(14),
     paddingHorizontal: wp(18),
   },
-
 
   rowFront: {
     overflow: 'hidden',

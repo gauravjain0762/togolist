@@ -20,6 +20,9 @@ import {CustomHeader, LinearView} from '../../../component';
 import {colors} from '../../../theme/colors';
 import {commonFontStyle, hp, wp} from '../../../theme/fonts';
 import CustomToggle from '../../../component/common/CustomToggle';
+import Animated from 'react-native-reanimated';
+import CustomTabBar from '../../../component/common/CustomTabBar';
+import {useScrollHideAnimation} from '../../../hook/useScrollHideAnimation';
 
 type Props = {};
 
@@ -27,11 +30,22 @@ const NotificationsSetting = (props: Props) => {
   const [likeNotifs, setLikeNotifs] = useState(true);
   const [commentNotifs, setCommentNotifs] = useState(false);
   const [savedNotifs, setSavedNotifs] = useState(false);
-
+  const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+    80,
+    10,
+  );
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
-      <CustomHeader  showBack={true} title="Settings" showSearch={false} showMore={false} />
-      <ScrollView showsVerticalScrollIndicator={false} style={{marginHorizontal: 16, flex: 1}}>
+      <CustomHeader
+        showBack={true}
+        title="Settings"
+        showSearch={false}
+        showMore={false}
+      />
+      <Animated.ScrollView
+        onScroll={scrollHandler}
+        showsVerticalScrollIndicator={false}
+        style={{marginHorizontal: 16, flex: 1}}>
         <LinearView>
           <View style={{padding: 24}}>
             <Text style={styles.header}>Notifications</Text>
@@ -76,7 +90,11 @@ const NotificationsSetting = (props: Props) => {
             </View>
           </View>
         </LinearView>
-      </ScrollView>
+      </Animated.ScrollView>
+
+      <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+        <CustomTabBar />
+      </Animated.View>
     </SafeAreaView>
   );
 };

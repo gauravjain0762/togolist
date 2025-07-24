@@ -207,8 +207,8 @@ export const IMAGES = {
   Archive: require('./icon/tripHome/Archive.png'),
   BucketList: require('./icon/tripHome/BucketList.png'),
   BuildItinerary: require('./icon/tripHome/BuildItinerary.png'),
-  
-  
+  tour1: require('./icon/explore/tour1.png'),
+
   //Image
   explor_bg: require('./image/dummy/explor_bg.png'),
 };
