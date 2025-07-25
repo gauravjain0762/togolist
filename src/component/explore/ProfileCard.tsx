@@ -12,8 +12,8 @@ import {SCREEN_WIDTH, commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {LinearView} from '..';
 import {IMAGES} from '../../assets/Images';
-import { navigateTo } from '../../utils/commonFunction';
-import { SCREEN_NAMES, SCREENS } from '../../navigation/screenNames';
+import {navigateTo} from '../../utils/commonFunction';
+import {SCREEN_NAMES, SCREENS} from '../../navigation/screenNames';
 
 type card = {
   followButton?: boolean;
@@ -29,37 +29,39 @@ const ProfileCard: FC<card> = ({
   ishire = true,
   followStyle,
   followText,
-  showRight
+  showRight,
 }) => {
   return (
-    <TouchableOpacity onPress={()=>{
-      navigateTo(SCREEN_NAMES.PostRequest)
-    }}>
+    <TouchableOpacity
+      onPress={() => {
+        navigateTo(SCREEN_NAMES.PostRequest);
+      }}>
+      <LinearView containerStyle={[styles.card, cardStyle]}>
+        <Image source={IMAGES.profile} style={styles.avatar} />
+        <View style={styles.row}>
+          <Text style={styles.username}>@Emily </Text>
+          {!showRight && (
+            <Image style={styles.badge} source={IMAGES.profile_badge} />
+          )}
+        </View>
+        <View style={styles.stats}>
+          <Image source={IMAGES.favorite} style={styles.fav} />
+          <Text style={styles.statsText}> 96K</Text>
+          <Text style={styles.divider}>|</Text>
+          <Text style={styles.statsText}>58 Lists</Text>
+        </View>
 
-    <LinearView containerStyle={[styles.card, cardStyle]}>
-      <Image source={IMAGES.profile} style={styles.avatar} />
-      <View style={styles.row}>
-        <Text style={styles.username}>@Emily </Text>
-       {!showRight && <Image style={styles.badge} source={IMAGES.profile_badge} />}
-      </View>
-      <View style={styles.stats}>
-        <Image source={IMAGES.favorite} style={styles.fav} />
-        <Text style={styles.statsText}> 96K</Text>
-        <Text style={styles.divider}>|</Text>
-        <Text style={styles.statsText}>58 Lists</Text>
-      </View>
+        {ishire && <Text style={styles.hireText}>Available For Hire</Text>}
+        <Text style={styles.bio}>
+          Avid traveler, sharing hidden gems all across the globe.
+        </Text>
 
-      {ishire && <Text style={styles.hireText}>Available For Hire</Text>}
-      <Text style={styles.bio}>
-        Avid traveler, sharing hidden gems all across the globe.
-      </Text>
-
-      {followButton && (
-        <TouchableOpacity style={[styles.followBtn, followStyle]}>
-          <Text style={[styles.followText, followText]}>Follow</Text>
-        </TouchableOpacity>
-      )}
-    </LinearView>
+        {followButton && (
+          <TouchableOpacity style={[styles.followBtn, followStyle]}>
+            <Text style={[styles.followText, followText]}>Follow</Text>
+          </TouchableOpacity>
+        )}
+      </LinearView>
     </TouchableOpacity>
   );
 };
@@ -70,8 +72,8 @@ const styles = StyleSheet.create({
   card: {
     alignItems: 'center',
     // paddingVertical: hp(24),
-    paddingTop:10,
-    paddingBottom:14,
+    paddingTop: 10,
+    paddingBottom: 14,
     paddingHorizontal: wp(10),
     gap: hp(8),
     flex: 1,

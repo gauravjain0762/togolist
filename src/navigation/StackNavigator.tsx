@@ -1,5 +1,8 @@
 import {FC} from 'react';
-import {CardStyleInterpolators, createStackNavigator} from '@react-navigation/stack';
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack';
 import {useAppDispatch} from '../redux/hooks';
 import {colors} from '../theme/colors';
 import {Text} from 'react-native';
@@ -53,6 +56,8 @@ import TripExplore from '../screens/tripHome/TripExplore';
 import ShapeScreen from '../screens/shape/ShapeScreen';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import UpcomingListDetails from '../screens/profile/UpcomingListDetails';
+import FindGuide from '../screens/search/FindGuide';
+import GalleryScreen from '../screens/search/GalleryScreen';
 
 export type RootStackParamList = {
   TripHome: undefined;
@@ -189,11 +194,10 @@ const StackNavigator: FC = () => {
     <Stack.Navigator
       // screenOptions={{animationEnabled: false}}
       initialRouteName={SCREENS.TabNavigator}
-       screenOptions={{
+      screenOptions={{
         gestureDirection: 'horizontal',
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS, // 👈 right-to-left
-      }}
-    >
+      }}>
       <Stack.Screen
         options={({navigation}) => ({headerShown: false})}
         name={SCREENS.SplashScreen}
@@ -361,7 +365,7 @@ const StackNavigator: FC = () => {
         //   ];
         // }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name={SCREENS.UpcomingListDetails}
         component={UpcomingListDetails}
         options={() => ({
@@ -529,6 +533,16 @@ const StackNavigator: FC = () => {
         options={({navigation}) => ({headerShown: false})}
         name={SCREENS.ShapeScreen}
         component={ShapeScreen}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.FindGuide}
+        component={FindGuide}
+      />
+      <Stack.Screen
+        options={({navigation}) => ({headerShown: false})}
+        name={SCREENS.GalleryScreen}
+        component={GalleryScreen}
       />
     </Stack.Navigator>
   );

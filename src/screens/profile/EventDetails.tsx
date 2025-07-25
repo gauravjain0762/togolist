@@ -543,6 +543,7 @@ const EventDetails = ({route}) => {
                       renderItem={({item}) => (
                         <TravelCard
                           {...item}
+                          onPress={() => navigateTo(SCREENS.GalleryScreen)}
                           BGStyle={[styles.bg, {height: hp(150)}]}
                         />
                       )}

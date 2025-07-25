@@ -34,7 +34,7 @@ const HeaderTextIcon: FC<button> = ({
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-          flex: 1,
+          alignSelf: 'flex-start',
         }}>
         <Text style={[commonFontStyle(700, 20, colors.black), titleStyle]}>
           {title}
@@ -42,7 +42,10 @@ const HeaderTextIcon: FC<button> = ({
         {showDown && (
           <Image
             source={IMAGES.down}
-            style={[styles.downIcon, {transform: [{rotate: !show ? "270deg" : '0deg'}]}]}
+            style={[
+              styles.downIcon,
+              {transform: [{rotate: !show ? '270deg' : '0deg'}]},
+            ]}
           />
         )}
       </TouchableOpacity>
@@ -62,6 +65,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 24,
+    flex: 1,
+    justifyContent: 'space-between',
   },
 
   downIcon: {

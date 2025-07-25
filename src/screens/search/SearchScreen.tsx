@@ -34,6 +34,7 @@ import CustomHeader from '../../component/common/CustomHeader';
 import {
   Button,
   CommonSheet,
+  ExploreProfileCard,
   LinearView,
   Loader,
   ProfileCard,
@@ -329,7 +330,7 @@ const SearchScreen = (props: Props) => {
       setShowSearchBar(true);
       Animated.timing(searchBarAnim, {
         toValue: 1,
-        duration: 100,
+        duration: 0,
         easing: Easing.out(Easing.ease),
         useNativeDriver: true,
       }).start();
@@ -337,7 +338,7 @@ const SearchScreen = (props: Props) => {
       setShowSearchBar(false);
       Animated.timing(searchBarAnim, {
         toValue: 0,
-        duration: 100,
+        duration: 0,
         easing: Easing.in(Easing.ease),
         useNativeDriver: true,
       }).start();
@@ -647,7 +648,7 @@ const SearchScreen = (props: Props) => {
                     title="Find Local Guides"
                     BtnStyle={{paddingVertical: hp(12)}}
                     onPress={() => {
-                      navigateTo(SCREENS.Experience);
+                      navigateTo(SCREENS.FindGuide);
                     }}
                   />
                 </>
@@ -661,13 +662,8 @@ const SearchScreen = (props: Props) => {
               <View style={styles.list}>
                 <FlatList
                   data={[1, 2, 3, 4]}
-                  numColumns={2}
-                  columnWrapperStyle={{
-                    justifyContent: 'space-between',
-                    gap: wp(4),
-                  }}
-                  contentContainerStyle={{gap: wp(4)}}
-                  renderItem={({item, index}) => <ProfileCard />}
+                  contentContainerStyle={{gap: wp(4), paddingVertical: hp(10)}}
+                  renderItem={({item, index}) => <ExploreProfileCard />}
                 />
               </View>
               <ImageBackground
@@ -681,11 +677,16 @@ const SearchScreen = (props: Props) => {
                   }
                 </Text>
                 <TouchableOpacity
-                  onPress={() => navigateTo(SCREENS.ExperienceScreen)}
+                  onPress={() => navigateTo(SCREENS.Experience)}
                   style={styles.hostbtn}>
                   <Text style={styles.hosttitle}>{'Become a Host'}</Text>
                 </TouchableOpacity>
               </ImageBackground>
+              <FlatList
+                data={[1, 2]}
+                contentContainerStyle={{gap: wp(4), paddingVertical: hp(10)}}
+                renderItem={({item, index}) => <ExploreProfileCard />}
+              />
             </View>
           )}
           {activeTab == 'events' && (
@@ -1316,7 +1317,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: wp(16),
     marginTop: hp(12),
-    height: hp(280),
+    height: hp(155),
     gap: hp(8),
   },
   earntitle: {

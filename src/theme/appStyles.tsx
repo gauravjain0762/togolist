@@ -46,9 +46,9 @@ export const AppStyles = StyleSheet.create({
     flexDirection: 'row',
   },
   actionBar: {
-      // flexDirection: 'row',
-      position: 'absolute',
-      bottom: 0,
-      width: '100%',
-    },
+    // flexDirection: 'row',
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+  },
 });

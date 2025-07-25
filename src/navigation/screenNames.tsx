@@ -50,6 +50,8 @@ export const SCREENS = {
   NotificationDetails: 'NotificationDetails',
   TripPlanner: 'TripPlanner',
   TripExplore: 'TripExplore',
+  FindGuide: 'FindGuide',
+  GalleryScreen: 'GalleryScreen',
 };
 
 export interface ScreenNames {
@@ -103,6 +105,8 @@ export interface ScreenNames {
   NotificationDetails: string;
   TripPlanner: string;
   TripExplore: string;
+  FindGuide: string;
+  GalleryScreen: string;
 }
 
 export const SCREEN_NAMES: ScreenNames = {

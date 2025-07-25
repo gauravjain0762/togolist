@@ -19,7 +19,7 @@ import {navigateTo} from '../../utils/commonFunction';
 import {SCREENS} from '../../navigation/screenNames';
 import Animated from 'react-native-reanimated';
 import CustomTabBar from '../../component/common/CustomTabBar';
-import { useScrollHideAnimation } from '../../hook/useScrollHideAnimation';
+import {useScrollHideAnimation} from '../../hook/useScrollHideAnimation';
 
 const cardData = [
   {
@@ -45,11 +45,11 @@ const cardData = [
 ];
 
 const Experience = () => {
-    const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
-      80,
-      10,
-    );
-  
+  const {animatedStyle, scrollHandler, isVisible} = useScrollHideAnimation(
+    80,
+    10,
+  );
+
   const slides = useMemo(() => {
     // This will only re-compute if `data` changes.
     // If `data` is static, this will run only once.
@@ -120,7 +120,7 @@ const Experience = () => {
         titleStyle={styles.headertitle}
       />
       <Animated.ScrollView
-      onScroll={scrollHandler}
+        onScroll={scrollHandler}
         contentContainerStyle={[AppStyles.flexGrow, {gap: hp(8)}]}
         showsVerticalScrollIndicator={false}
         style={styles.scroll}>
@@ -138,7 +138,7 @@ const Experience = () => {
           <Text style={styles.container}>{'Create. Explore. Connect.'}</Text>
           <View style={styles.cardrow}>
             {cardData.map((item, index) => (
-              <View  style={styles.card}>
+              <View style={styles.card}>
                 <Image
                   source={{uri: item.image}}
                   style={styles.cardimg}
@@ -271,7 +271,7 @@ const Experience = () => {
         <GradientBtn BtnStyle={styles.bottombtn} title="Coming Soon..." />
       </Animated.ScrollView>
 
-       <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
+      <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
         <CustomTabBar />
       </Animated.View>
     </SafeAreaView>
