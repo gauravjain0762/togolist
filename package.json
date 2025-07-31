@@ -24,6 +24,7 @@
     "dayjs": "^1.11.13",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
+    "moti": "^0.30.0",
     "react": "19.0.0",
     "react-native": "0.79.2",
     "react-native-android-location-enabler": "^1.2.2",

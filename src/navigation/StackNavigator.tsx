@@ -195,8 +195,8 @@ const StackNavigator: FC = () => {
       // screenOptions={{animationEnabled: false}}
       initialRouteName={SCREENS.TabNavigator}
       screenOptions={{
-        gestureDirection: 'horizontal',
-        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS, // 👈 right-to-left
+        gestureDirection: 'vertical', // Enables the vertical swipe gesture
+        cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS, // This is the key for vertical animation
       }}>
       <Stack.Screen
         options={({navigation}) => ({headerShown: false})}

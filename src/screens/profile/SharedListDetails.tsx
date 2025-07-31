@@ -40,7 +40,11 @@ import AddToListBottomSheet from '../../component/common/AddToListBottomSheet';
 import {useRoute} from '@react-navigation/native';
 import CustomTabBar from '../../component/common/CustomTabBar';
 import {useScrollHideAnimation} from '../../hook/useScrollHideAnimation';
-import Animated from 'react-native-reanimated';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 
 const cards = [
   {
@@ -123,6 +127,16 @@ const SharedListDetails = () => {
   const handleSheetChanges = useCallback((index: number) => {
     console.log('handleSheetChanges', index);
   }, []);
+
+  const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
+  const TouchableOpacityVal = useSharedValue(100);
+  const handlePress = () => {
+    TouchableOpacityVal.value = SCREEN_HEIGHT;
+  };
+  const TouchableStyle = useAnimatedStyle(() => ({
+    height: withSpring(TouchableOpacityVal.value),
+  }));
+
   return (
     <SafeAreaView
       edges={['top', 'bottom']}
@@ -199,7 +213,10 @@ const SharedListDetails = () => {
           </View>
           {/* {showCard && <OptionBar container={styles.optioncontainer} />} */}
           {select == 'List View' && (
-            <Animated.ScrollView style={{flex: 1}}  showsVerticalScrollIndicator={false} onScroll={scrollHandler}>
+            <Animated.ScrollView
+              style={{flex: 1}}
+              showsVerticalScrollIndicator={false}
+              onScroll={scrollHandler}>
               <SwipeListView
                 data={cards}
                 nestedScrollEnabled
@@ -214,11 +231,11 @@ const SharedListDetails = () => {
                         onCardPress={() => {
                           // data?.item?.onPress && data?.item?.onPress();
                           navigateTo(SCREENS.EventDetails, {
-                            showEvent:exploreCard,
+                            showEvent: exploreCard,
                             item: data?.item,
                             data: cards,
                             onGoBack: data => {
-                              setSelect(data)
+                              setSelect(data);
                             },
                           });
                         }}
@@ -239,8 +256,8 @@ const SharedListDetails = () => {
                 swipeToOpenPercent={50}
                 rightOpenValue={-(SCREEN_WIDTH * 0.82)}
                 ListFooterComponent={() => {
-                  if(exploreCard){
-                    return null
+                  if (exploreCard) {
+                    return null;
                   }
                   return (
                     <Button
@@ -277,6 +294,11 @@ const SharedListDetails = () => {
                   setShowCard(false);
                 }}
               />
+              {/* <AnimatedTouchable
+                onPress={handlePress}
+                style={[styles.animatedView, TouchableStyle]}>
+                <Animated.Text>hello</Animated.Text>
+              </AnimatedTouchable> */}
             </Animated.ScrollView>
           )}
 
@@ -362,10 +384,10 @@ const SharedListDetails = () => {
 
       <AddToListBottomSheet
         bottomSheetModalRef={bottomSheetAddListRef}
-         maxDynamicContentSize={true}
-         isVisible={isVisible}
+        maxDynamicContentSize={true}
+        isVisible={isVisible}
         handleSheetChanges={e => handleSheetChanges(e)}
-        />
+      />
       <Animated.View style={[AppStyles.actionBar, animatedStyle]}>
         <CustomTabBar />
       </Animated.View>
@@ -554,5 +576,15 @@ const styles = StyleSheet.create({
   },
   titleStyle1: {
     ...commonFontStyle(500, 14, '#BD2332'),
+  },
+  animatedView: {
+    backgroundColor: 'white',
+    height: hp(100),
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: colors.black,
   },
 });

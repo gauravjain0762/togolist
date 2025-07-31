@@ -6,6 +6,7 @@ import {
   Image,
   ImageBackground,
   Platform,
+  Pressable,
   RefreshControl,
   ScrollView,
   Share,
@@ -55,6 +56,7 @@ import Slider from '@react-native-community/slider';
 import {set} from 'lodash';
 import CollectionModal from '../../component/explore/CollectionModal';
 import AddToListBottomSheet from '../../component/common/AddToListBottomSheet';
+import {AnimatePresence, MotiView} from 'moti';
 
 type Props = {};
 
@@ -218,6 +220,64 @@ const SearchScreen = (props: Props) => {
   const [newListShow, setNewListShow] = useState(false);
   const [newListShowTitle, setNewListShowTitle] = useState('');
   const [showPast, setShowPast] = useState(true);
+  const [showSearchBar, setShowSearchBar] = useState(false);
+  const [searchBarAnim] = useState(new Animated.Value(0)); // 0 = hidden, 1 = visible
+
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const scrollOffsetY = useRef(0);
+  const scrollBounce = useRef(0);
+
+  useEffect(() => {
+    Animated.timing(searchBarAnim, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: true,
+    }).start(() => setShowSearchBar(false));
+  }, []);
+
+  const handleScroll = Animated.event(
+    [{nativeEvent: {contentOffset: {y: scrollY}}}],
+    {
+      useNativeDriver: true,
+      listener: event => {
+        const currentOffset = event.nativeEvent.contentOffset.y;
+
+        console.log(
+          'event.nativeEvent.contentOffset.yevent.nativeEvent.contentOffset.y',
+          event.nativeEvent.contentOffset.y,
+        );
+
+        if (currentOffset > scrollOffsetY.current && currentOffset > 50) {
+          // Scrolling down
+          Animated.timing(searchBarAnim, {
+            toValue: 0,
+            duration: 200,
+            useNativeDriver: true,
+          }).start(() => setShowSearchBar(false));
+        } else if (currentOffset < scrollOffsetY.current - 5) {
+          // Scrolling up
+          setShowSearchBar(true);
+          Animated.timing(searchBarAnim, {
+            toValue: 1,
+            duration: 250,
+            useNativeDriver: true,
+          }).start();
+        }
+
+        scrollOffsetY.current = currentOffset;
+      },
+    },
+  );
+
+  const searchBarTranslateY = searchBarAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-60, 0], // Adjust height as needed
+  });
+
+  const searchBarOpacity = searchBarAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const bottomSheetModalLocationRef = useRef<BottomSheetModal>(null);
@@ -319,42 +379,6 @@ const SearchScreen = (props: Props) => {
     : categories.slice(0, MAX_VISIBLE);
 
   const hiddenCount = categories.length - MAX_VISIBLE;
-  const [showSearchBar, setShowSearchBar] = useState(false);
-
-  const [searchBarAnim] = useState(new Animated.Value(0)); // 0 = hidden, 1 = visible
-
-  const handleScroll = event => {
-    const scrollY = event.nativeEvent.contentOffset.y;
-
-    if (scrollY > 50) {
-      setShowSearchBar(true);
-      Animated.timing(searchBarAnim, {
-        toValue: 1,
-        duration: 0,
-        easing: Easing.out(Easing.ease),
-        useNativeDriver: true,
-      }).start();
-    } else {
-      setShowSearchBar(false);
-      Animated.timing(searchBarAnim, {
-        toValue: 0,
-        duration: 0,
-        easing: Easing.in(Easing.ease),
-        useNativeDriver: true,
-      }).start();
-    }
-  };
-
-  const searchBarTranslateY = searchBarAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-460, 0], // Adjust height as needed
-  });
-
-  const searchBarOpacity = searchBarAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 1],
-  });
-
   return (
     <SafeAreaView edges={['top']} style={[AppStyles.mainWhiteContainer]}>
       {/* <Loader visible={dashboardLoading} /> */}
@@ -375,7 +399,7 @@ const SearchScreen = (props: Props) => {
             // left: 0,
             // right: 0,
             transform: [{translateY: searchBarTranslateY}],
-            // opacity: searchBarOpacity,
+            opacity: searchBarOpacity,
             backgroundColor: colors.white,
             zIndex: 10,
           }}>
