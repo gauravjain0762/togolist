@@ -36,7 +36,7 @@ type header = {
 };
 
 const CustomHeader: FC<header> = ({
-  onBack = () => {},
+  onBack,
   onShare,
   mainHeader,
   title = 'Back',
@@ -58,7 +58,7 @@ const CustomHeader: FC<header> = ({
     <View style={[styles.header, headerStyle]}>
       {showBack ? (
         <TouchableOpacity
-          onPress={() => onBack() || navigationRef.goBack()}
+          onPress={() => (onBack ? onBack() : navigationRef.goBack())}
           style={styles.left}>
           <Image
             source={backImg || IMAGES.back}
@@ -67,8 +67,10 @@ const CustomHeader: FC<header> = ({
           <Text style={[styles.title, titleStyle]}>{title}</Text>
         </TouchableOpacity>
       ) : headerShow ? (
-         <Text style={[styles.title, titleStyle]}>{headerShow}</Text>
-      ) : <View />}
+        <Text style={[styles.title, titleStyle]}>{headerShow}</Text>
+      ) : (
+        <View />
+      )}
       <View style={styles.row}>
         {showSearch && (
           <TouchableOpacity onPress={onSearchPress} style={styles.searchButton}>
@@ -119,11 +121,11 @@ const styles = StyleSheet.create({
     height: 20,
     tintColor: colors.black,
   },
- moreIcon: {
-     width: 22,
+  moreIcon: {
+    width: 22,
     height: 22,
     tintColor: colors.black,
-    resizeMode:'contain'
+    resizeMode: 'contain',
   },
   backIcon: {
     width: 11,

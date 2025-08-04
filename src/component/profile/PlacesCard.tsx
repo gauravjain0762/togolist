@@ -8,12 +8,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {FC, memo, useState} from 'react';
+import React, {FC, forwardRef, memo, useState} from 'react';
 import {IMAGES} from '../../assets/Images';
 import {commonFontStyle, hp, wp} from '../../theme/fonts';
 import {colors} from '../../theme/colors';
 import {AppStyles} from '../../theme/appStyles';
 import {SharedElement} from 'react-native-shared-element';
+import {MotiPressable} from 'moti/interactions';
 
 type card = {
   title: string;
@@ -27,64 +28,60 @@ type card = {
   id: any;
 };
 
-const PlacesCard: FC<card> = ({
-  onCardPress = () => {},
-  title,
-  BGStyle,
-  BgImgStyle,
-  likeCount,
-  location,
-  locationIcon = false,
-  locationStyle,
-  id,
-  onLongPress,
-}) => {
+const PlacesCard = forwardRef<unknown, card>((props, ref) => {
+  const {
+    onCardPress = () => {},
+    title,
+    BGStyle,
+    BgImgStyle,
+    likeCount,
+    location,
+    locationIcon = false,
+    locationStyle,
+    id,
+    onLongPress,
+  } = props;
   const [likeUser, setLikeUser] = useState(false);
   return (
     <TouchableOpacity
       onLongPress={onLongPress}
       activeOpacity={1}
+      ref={ref}
       onPress={onCardPress}>
-      <SharedElement id={`item.${id}.image`}>
-        <ImageBackground
-          source={IMAGES.bg1} // Replace with actual pyramid image URL
-          style={[styles.container, BGStyle]}
-          imageStyle={[styles.image, BgImgStyle]}>
-          <View style={[{gap: wp(4)}]}>
-            <SharedElement id={title}>
-              <Text style={styles.title}>{title}</Text>
-            </SharedElement>
-            <View style={[AppStyles.row, {gap: wp(4)}]}>
-              {locationIcon && (
-                <Image source={IMAGES.wordWide} style={styles.pin} />
-              )}
-              <SharedElement id={location}>
-                <Text style={[styles.location, locationStyle]}>{location}</Text>
-              </SharedElement>
-            </View>
+      <ImageBackground
+        source={IMAGES.bg1} // Replace with actual pyramid image URL
+        style={[styles.container, BGStyle]}
+        imageStyle={[styles.image, BgImgStyle]}>
+        <View style={[{gap: wp(4)}]}>
+          <Text style={styles.title}>{title}</Text>
+          <View style={[AppStyles.row, {gap: wp(4)}]}>
+            {locationIcon && (
+              <Image source={IMAGES.wordWide} style={styles.pin} />
+            )}
+            <Text style={[styles.location, locationStyle]}>{location}</Text>
           </View>
-          <View style={[AppStyles.row, styles.footer]}>
-            <Image source={IMAGES.food} style={styles.food} />
-            <TouchableOpacity
-              onPress={() => {
-                setLikeUser(!likeUser);
-              }}
-              style={[AppStyles.row, {gap: wp(4)}]}>
-              <Image
-                source={IMAGES.favorite}
-                style={[
-                  styles.fav,
-                  {tintColor: likeUser ? '#BD2332' : colors._99999},
-                ]}
-              />
-              <Text style={styles.likeCount}>{likeCount}</Text>
-            </TouchableOpacity>
-          </View>
-        </ImageBackground>
-      </SharedElement>
+        </View>
+        <View style={[AppStyles.row, styles.footer]}>
+          <Image source={IMAGES.food} style={styles.food} />
+          <TouchableOpacity
+            onPress={() => {
+              setLikeUser(!likeUser);
+            }}
+            style={[AppStyles.row, {gap: wp(4)}]}>
+            <Image
+              source={IMAGES.favorite}
+              style={[
+                styles.fav,
+                {tintColor: likeUser ? '#BD2332' : colors._99999},
+              ]}
+            />
+            <Text style={styles.likeCount}>{likeCount}</Text>
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
     </TouchableOpacity>
   );
-};
+});
 
 export default memo(PlacesCard);
 

@@ -93,8 +93,6 @@ const styles = StyleSheet.create({
   },
 });
 
-
-
 //
 //  RNSharedElementTransitionManager.m
 //  react-native-shared-element
