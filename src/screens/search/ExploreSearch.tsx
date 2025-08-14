@@ -249,7 +249,6 @@ const ExploreSearch = () => {
                   marginTop: 8,
                 }}
                 contentContainerStyle={AppStyles.P16}
-                // style={{marginTop: 10}}
                 renderItem={({item}) => <TravelCard {...item} isSave />}
               />
             </View>
