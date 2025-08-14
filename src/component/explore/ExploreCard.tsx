@@ -15,12 +15,20 @@ import {colors} from '../../theme/colors';
 import {IMAGES} from '../../assets/Images';
 
 const {width} = Dimensions.get('window');
-const CARD_WIDTH = (width - 33) / 2; // 16 padding + 16 gap
-const ExploreCard = ({title, location, image, avatar, users, onPress,onLongPress}:any) => {
+const CARD_WIDTH = (width - 16) / 2; // 16 padding + 16 gap
+const ExploreCard = ({
+  title,
+  location,
+  image,
+  avatar,
+  users,
+  onPress,
+  onLongPress,
+}: any) => {
   return (
     <TouchableOpacity
-      onLongPress={()=>{
-        onLongPress && onLongPress()
+      onLongPress={() => {
+        onLongPress && onLongPress();
       }}
       onPress={() => {
         onPress && onPress();
@@ -46,10 +54,10 @@ const styles = StyleSheet.create({
     width: CARD_WIDTH,
     height: 180,
     overflow: 'hidden',
-     borderRadius: 20,
+    borderRadius: 20,
   },
   image: {
-     borderRadius: 20,
+    borderRadius: 20,
     resizeMode: 'cover',
   },
   overlay: {
