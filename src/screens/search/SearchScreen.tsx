@@ -403,7 +403,7 @@ const SearchScreen = (props: Props) => {
             backgroundColor: colors.white,
             zIndex: 10,
           }}>
-          <View style={AppStyles.P16}>
+          <View style={[AppStyles.P16, {paddingHorizontal: wp(8)}]}>
             <SearchBar
               container={styles.searchBox}
               placeholder="Search"
@@ -510,11 +510,12 @@ const SearchScreen = (props: Props) => {
               showsVerticalScrollIndicator={false}
               nestedScrollEnabled
               keyExtractor={(_, index) => index.toString()}
-              contentContainerStyle={AppStyles.P12}
+              contentContainerStyle={{
+                alignItems: 'center',
+              }}
               columnWrapperStyle={{
-                // paddingTop: hp(10),
-                justifyContent: 'space-between',
                 paddingVertical: hp(4),
+                gap: wp(8),
               }}
               renderItem={({item}) => (
                 <ExploreCard
@@ -1059,7 +1060,7 @@ export default SearchScreen;
 
 const styles = StyleSheet.create({
   headerView: {
-    marginHorizontal: wp(16),
+    marginHorizontal: wp(8),
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -1132,7 +1133,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-
     gap: wp(59),
     paddingBottom: hp(12),
     backgroundColor: colors.white,
